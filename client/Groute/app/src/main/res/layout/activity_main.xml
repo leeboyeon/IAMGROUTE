@@ -83,6 +83,7 @@
 
     <FrameLayout
         android:id="@+id/frame_main_layout"
+        android:name="com.ssafy.groute.src.main.home.HomeFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
