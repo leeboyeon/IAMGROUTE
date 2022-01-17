@@ -2,7 +2,6 @@ package com.ssafy.groute.src.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.ssafy.groute.R
 import com.ssafy.groute.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
