@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.ssafy.groute.R
+import com.ssafy.groute.databinding.ActivityLoginBinding
+import com.ssafy.groute.src.main.MainActivity
 
 
 class LoginActivity : AppCompatActivity() {
@@ -23,7 +25,7 @@ class LoginActivity : AppCompatActivity() {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent)
             }
-            2 -> transaction.replace(R.id.frame_login_layout, JoinFragment())
+            2 -> transaction.replace(R.id.frame_login_layout, SignFragment())
                 .addToBackStack(null)
 
             3 -> transaction.replace(R.id.frame_login_layout, LoginFragment())

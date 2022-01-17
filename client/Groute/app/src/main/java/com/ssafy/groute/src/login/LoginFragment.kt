@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ssafy.groute.R
+import com.ssafy.groute.databinding.FragmentLoginBinding
 
 class LoginFragment : Fragment() {
     private lateinit var loginActivity: LoginActivity
