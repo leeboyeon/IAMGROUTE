@@ -81,13 +81,14 @@
             android:src="@drawable/busan" />
     </LinearLayout>
 
-    <androidx.fragment.app.FragmentContainerView
+    <FrameLayout
         android:id="@+id/frame_main_layout"
-        android:name="com.ssafy.groute.src.main.HomeFragment"
+        android:name="com.ssafy.groute.src.main.home.HomeFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavi"/>
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

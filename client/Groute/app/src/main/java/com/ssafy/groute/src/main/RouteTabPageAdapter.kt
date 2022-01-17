@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class RouteTabPageAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
+class RouteTabPageAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     var fragments : ArrayList<Fragment> = ArrayList()
 
     override fun getItemCount(): Int {
