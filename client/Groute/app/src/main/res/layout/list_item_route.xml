@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingLeft="0dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/item_route_layout_iv"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:elevation="6dp"
+        app:cardCornerRadius="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/item_route_iv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/seoul"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/item_route_date_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:text="12 March, 20"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/item_route_layout_iv"
+        app:layout_constraintTop_toTopOf="@+id/item_route_layout_iv" />
+
+    <TextView
+        android:id="@+id/item_route_area_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/black"
+        android:text="[서울]"
+        android:includeFontPadding="false"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/item_route_layout_iv"
+        app:layout_constraintTop_toBottomOf="@+id/item_route_date_tv" />
+
+    <TextView
+        android:id="@+id/item_route_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:text="경복궁, 당일치기 겨울여행"
+        android:textColor="@color/black"
+        android:includeFontPadding="false"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/item_route_layout_iv"
+        app:layout_constraintTop_toBottomOf="@+id/item_route_area_tv" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_route_comment_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toEndOf="@+id/item_route_layout_iv"
+        app:layout_constraintTop_toBottomOf="@+id/item_route_title_tv">
+    <ImageView
+        android:id="@+id/item_route_comment_iv"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/comment"
+        android:backgroundTint="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black"
+        />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Comment"
+            android:textColor="@color/black"
+            android:layout_marginStart="10dp"
+            app:layout_constraintLeft_toRightOf="@id/item_route_comment_iv"
+            app:layout_constraintTop_toTopOf="@id/item_route_comment_iv"
+            app:layout_constraintBottom_toBottomOf="@id/item_route_comment_iv"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/item_route_like_iv"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/like"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toEndOf="@id/item_route_comment_btn"
+        app:layout_constraintTop_toBottomOf="@+id/item_route_title_tv"
+        app:tint="@color/black" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Like"
+        android:textColor="@color/black"
+        android:layout_marginStart="10dp"
+        app:layout_constraintLeft_toRightOf="@id/item_route_like_iv"
+        app:layout_constraintTop_toTopOf="@id/item_route_like_iv"
+        app:layout_constraintBottom_toBottomOf="@id/item_route_like_iv"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
