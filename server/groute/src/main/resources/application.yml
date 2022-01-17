@@ -1,0 +1,21 @@
+server:
+  port: 8888
+
+logging:
+  level:
+    root: warn
+    com.ssafy.groute: debug
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc://localhost:3306/groute?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: ssafy
+    password: ssafy
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+mybatis:
+  type-aliases-package: com.ssafy.groute.dto
+  mapper-locations: mapper/**/*.xml
