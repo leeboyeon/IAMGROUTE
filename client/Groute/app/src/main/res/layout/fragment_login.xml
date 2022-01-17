@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="20dp"
             android:scaleType="fitCenter"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +27,7 @@
             android:id="@+id/editTextTextPersonName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:background="@android:color/transparent"
             android:ems="10"
             android:hint="ID"
@@ -55,105 +55,116 @@
             android:id="@+id/login_btn_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="4dp"
             android:background="@color/main"
             android:text="LOGIN"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
 
         <LinearLayout
-            android:id="@+id/linearLayout2"
+            android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical"
-            android:padding="25dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_btn_login">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <View
+                android:id="@+id/view"
+                android:layout_width="wrap_content"
+                android:layout_height="2px"
                 android:layout_gravity="center"
-                android:layout_marginBottom="20dp"
-                android:orientation="horizontal">
-
-                <View
-                    android:id="@+id/view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="2px"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="#787878" />
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="or" />
-
-                <View
-                    android:id="@+id/view2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="2px"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:background="#787878" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/imageButton"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_weight="1"
-                    android:background="#00E4C3C3"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/glogin" />
-
-                <ImageButton
-                    android:id="@+id/imageButton2"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/kakao" />
-
-                <ImageButton
-                    android:id="@+id/imageButton3"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/naver" />
-            </LinearLayout>
+                android:layout_weight="1"
+                android:background="#787878" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="ID PW 찾기  >" />
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="or" />
 
-            <TextView
-                android:id="@+id/login_tv_join"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="회원가입하기  >" />
-
+            <View
+                android:id="@+id/view2"
+                android:layout_width="wrap_content"
+                android:layout_height="2px"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="#787878" />
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:background="#00E4C3C3"
+                android:scaleType="fitCenter"
+                android:src="@drawable/glogin" />
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/kakao" />
+
+            <ImageButton
+                android:id="@+id/imageButton3"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/naver" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="ID PW 찾기"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+
+        <TextView
+            android:id="@+id/login_tv_join"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="회원가입하기"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
