@@ -1,5 +1,6 @@
 package com.ssafy.groute.src.main
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,9 +12,16 @@ import com.ssafy.groute.databinding.FragmentRouteBinding
 
 class RouteFragment : Fragment() {
     lateinit var binding: FragmentRouteBinding
+    private lateinit var mainActivity: MainActivity
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as MainActivity
     }
 
     override fun onCreateView(
@@ -28,7 +36,7 @@ class RouteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val pagerAdapter = RouteTabPageAdapter(requireActivity())
+        val pagerAdapter = RouteTabPageAdapter(this)
 
         val tabList = arrayListOf("당일치기", "1박 2일", "2박 3일", "3박 4일", "4박 5일")
 
