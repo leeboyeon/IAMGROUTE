@@ -83,7 +83,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/frame_main_layout"
-        android:name="com.ssafy.groute.src.main.HomeFragment"
+        android:name="com.ssafy.groute.src.main.home.HomeFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
