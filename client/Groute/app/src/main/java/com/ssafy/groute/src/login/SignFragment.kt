@@ -49,6 +49,29 @@ class SignFragment : Fragment() {
 
 
     /**
+     * 입력된 password 유효성 검사
+     * @return 유효성 검사 통과 시 true 반환
+     */
+    // 비밀번호 유효성 체크
+    private fun validatedPw() : Boolean {
+        val inputPw = binding.joinEditPw.text.toString()
+
+        if(inputPw.trim().isEmpty()){   // 값이 비어있으면
+            binding.joinTilPw.error = "Required Field"
+            binding.joinEditPw.requestFocus()
+            return false
+        } else if(!Pattern.matches("^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[\$@\$!%*#?&]).{8,50}.\$", inputPw)) {
+            binding.joinTilPw.error = "비밀번호 형식을 확인해주세요."
+            binding.joinEditPw.requestFocus()
+            return false
+        }
+        else {
+            binding.joinTilPw.isErrorEnabled = false
+        }
+        return true
+    }
+
+    /**
      * 입력된 phone number 유효성 검사
      * @return 유효성 검사 통과 시 true 반환
      */
@@ -72,7 +95,6 @@ class SignFragment : Fragment() {
 
 
     companion object {
-
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             SignFragment().apply {
@@ -94,7 +116,7 @@ class SignFragment : Fragment() {
 //                    validatedId()
                 }
                 R.id.join_edit_pw -> {
-//                    validatedPw()
+                    validatedPw()
                 }
                 R.id.join_edit_phone -> {
                     validatedPhone()
