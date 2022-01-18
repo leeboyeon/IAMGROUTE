@@ -8,4 +8,5 @@ public interface UserMapper {
     int registerUser(User user);
 
     User findById(String userId);
+    User findByUidType(String id,String type);
 }
