@@ -8,4 +8,5 @@ public interface UserService {
     public int registerUser(User user);
 
     public User findById(String userId);
+    public User findByUidType(String id, String type);
 }
