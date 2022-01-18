@@ -11,6 +11,7 @@ import com.ssafy.groute.src.main.home.HomeFragment
 import com.ssafy.groute.src.main.my.MyFragment
 import com.ssafy.groute.src.main.route.RouteFragment
 
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var bottomNavigation: BottomNavigationView
