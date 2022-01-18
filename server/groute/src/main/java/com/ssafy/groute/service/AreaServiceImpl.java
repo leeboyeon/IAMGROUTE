@@ -20,8 +20,8 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public Area selectArea(String name) throws Exception {
-        return areaMapper.selectArea(name);
+    public Area selectArea(int id) throws Exception {
+        return areaMapper.selectArea(id);
     }
 
     @Override

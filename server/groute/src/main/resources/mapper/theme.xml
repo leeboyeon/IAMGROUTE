@@ -3,15 +3,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.groute.mapper.ThemeMapper">
-    <insert id="insertTheme" parameterType="String">
+    <insert id="insertTheme" parameterType="Theme">
         insert into theme(name)
         values(#{name})
     </insert>
 
-    <select id="selectTheme" parameterType="String" resultType="Theme">
+    <select id="selectTheme" parameterType="int" resultType="Theme">
         select * from theme
-        where name = #{name}
-        limit 1
+        where id = #{id}
     </select>
 
     <select id="selectAllTheme"  resultType="Theme">
