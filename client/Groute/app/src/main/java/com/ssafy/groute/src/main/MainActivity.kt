@@ -16,6 +16,7 @@ import com.ssafy.groute.src.main.home.HomeFragment
 import com.ssafy.groute.src.main.my.MyFragment
 import com.ssafy.groute.src.main.route.RouteCreateFragment
 import com.ssafy.groute.src.main.route.RouteFragment
+import com.ssafy.groute.src.main.travel.TravelPlanFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -77,6 +78,10 @@ class MainActivity : AppCompatActivity() {
             1 -> {
                 //루트생성화면
                 transaction.replace(R.id.frame_main_layout, RouteCreateFragment())
+                    .addToBackStack(null)
+            }
+            2 -> {
+                transaction.replace(R.id.frame_main_layout, TravelPlanFragment())
                     .addToBackStack(null)
             }
 

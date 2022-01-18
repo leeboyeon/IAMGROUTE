@@ -47,6 +47,13 @@ class MyTravelFragment : Fragment() {
             mytravelAdapter.list = ing
             mytravelAdapter.notifyDataSetChanged()
         }
+
+        mytravelAdapter.setItemClickListener(object : MyTravelAdapter.ItemClickListener{
+            override fun onClick(view: View, position: Int, name: String) {
+                mainActivity.openFragment(2)
+            }
+
+        })
         binding.mytravelRvIng.apply{
             layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
             adapter = mytravelAdapter
