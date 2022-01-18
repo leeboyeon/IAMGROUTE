@@ -29,7 +29,7 @@ public class SwaggerConfig {
                 .groupName(version)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.ssafy.groute.controller"))
-                .paths(PathSelectors.ant("/groute/**"))
+                .paths(PathSelectors.ant("/user/**"))
                 .build()
                 .apiInfo(apiInfo(title, version));
 
