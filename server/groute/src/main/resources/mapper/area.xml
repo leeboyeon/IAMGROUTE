@@ -7,4 +7,14 @@
         insert into area(name, img, lat ,lng)
         values(#{name}, #{img}, #{lat}, #{lng})
     </insert>
+
+    <select id="selectArea" parameterType="String" resultType="Area">
+        select * from area
+        where name = #{name}
+        limit 1
+    </select>
+
+    <select id="selectAllArea"  resultType="Area">
+        select * from area
+    </select>
 </mapper>
