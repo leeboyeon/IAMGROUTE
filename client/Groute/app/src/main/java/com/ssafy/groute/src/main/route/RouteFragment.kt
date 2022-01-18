@@ -17,6 +17,7 @@ class RouteFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mainActivity.hideMainProfileBar(false)
 
     }
 

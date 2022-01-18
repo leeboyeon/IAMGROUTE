@@ -61,6 +61,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // 메인에 상단 프로필 바를 숨기고 싶은 경우
+    fun hideMainProfileBar(state : Boolean) {
+        if(state) binding.mainProfileBar.visibility = View.GONE
+        else binding.mainProfileBar.visibility = View.VISIBLE
+
+    }
+
     // BottomNavigation을 숨기고싶은 경우
     fun hideBottomNav(state : Boolean){
         if(state) bottomNavigation.visibility =  View.GONE
