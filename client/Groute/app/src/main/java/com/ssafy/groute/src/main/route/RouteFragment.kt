@@ -37,7 +37,14 @@ class RouteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initAdapter()
+        binding.routeCreateBtn.setOnClickListener {
+            mainActivity.openFragment(1)
+        }
 
+
+    }
+    fun initAdapter(){
         val pagerAdapter = RouteTabPageAdapter(this)
 
         val tabList = arrayListOf("당일치기", "1박 2일", "2박 3일", "3박 4일", "4박 5일")
@@ -53,8 +60,6 @@ class RouteFragment : Fragment() {
         TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
             tab.text = tabList.get(position)
         }.attach()
-
     }
-
 
 }

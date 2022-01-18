@@ -8,11 +8,7 @@
     tools:context=".src.main.MainActivity">
 
     <LinearLayout
-<<<<<<< HEAD
-        android:id="@+id/main_profile_bar"
-=======
         android:id="@+id/main_profileBar"
->>>>>>> feature/MyFragment_Frontend
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/profilebar_gradient_background"
@@ -93,11 +89,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
-<<<<<<< HEAD
-        app:layout_constraintTop_toBottomOf="@+id/main_profile_bar"
-=======
         app:layout_constraintTop_toBottomOf="@+id/main_profileBar"
->>>>>>> feature/MyFragment_Frontend
         app:layout_constraintBottom_toTopOf="@id/bottomNavi"/>
 
 

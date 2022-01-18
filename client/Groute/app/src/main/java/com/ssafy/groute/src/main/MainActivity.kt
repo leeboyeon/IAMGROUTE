@@ -1,5 +1,6 @@
 package com.ssafy.groute.src.main
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -8,9 +9,12 @@ import androidx.core.view.isVisible
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.ActivityMainBinding
+import com.ssafy.groute.src.login.LoginFragment
+import com.ssafy.groute.src.login.SignFragment
 import com.ssafy.groute.src.main.board.BoardFragment
 import com.ssafy.groute.src.main.home.HomeFragment
 import com.ssafy.groute.src.main.my.MyFragment
+import com.ssafy.groute.src.main.route.RouteCreateFragment
 import com.ssafy.groute.src.main.route.RouteFragment
 
 
@@ -67,7 +71,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    fun openFragment(int: Int){
+        val transaction = supportFragmentManager.beginTransaction()
+        when(int){
+            1 -> {
+                //루트생성화면
+                transaction.replace(R.id.frame_main_layout, RouteCreateFragment())
+                    .addToBackStack(null)
+            }
 
+        }
+        transaction.commit()
+    }
     // 메인에 상단 프로필 바를 숨기고 싶은 경우
     fun hideMainProfileBar(state : Boolean) {
         if(state) binding.mainProfileBar.visibility = View.GONE
