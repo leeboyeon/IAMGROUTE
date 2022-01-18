@@ -35,9 +35,9 @@ public class ThemeController {
 
     @ApiOperation(value = "theme 검색",notes = "이름으로 theme 하나 검색")
     @GetMapping(value = "/detail")
-    public ResponseEntity<?> detailTheme(@RequestParam("name") String name) throws Exception{
+    public ResponseEntity<?> detailTheme(@RequestParam("id") int id) throws Exception{
 
-        Theme res = themeService.selectTheme(name);
+        Theme res = themeService.selectTheme(id);
         if(res==null){
             return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
         }
