@@ -4,11 +4,11 @@
 
 <mapper namespace="com.ssafy.groute.mapper.UserMapper">
     <insert id="registerUser">
-        insert into user(id, password, email, phone, birth)
-        values(#{user.id}, #{user.password}, #{user.email}, #{user.phone}, #{user.birth})
+        insert into user(id, password, email, phone, birth, type, nickname)
+        values(#{id}, #{password}, #{email}, #{phone}, #{birth}, #{type}, #{nickname})
     </insert>
 
-    <select id="findById" resultType="com.ssafy.groute.dto.UserDTO">
+    <select id="findById" resultType="com.ssafy.groute.dto.User">
         select * from user
         where id = #{userId}
     </select>
