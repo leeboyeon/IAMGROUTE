@@ -29,5 +29,15 @@ public class AreaServiceImpl implements AreaService {
         return areaMapper.selectAllArea();
     }
 
+    @Override
+    public void deleteArea(int id) throws Exception {
+        areaMapper.deleteArea(id);
+    }
+
+    @Override
+    public void updateArea(Area area) throws Exception {
+        areaMapper.updateArea(area);
+    }
+
 
 }

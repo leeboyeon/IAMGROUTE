@@ -59,4 +59,32 @@ public class AreaController {
 
         return new ResponseEntity<List<Area>>(res,HttpStatus.OK);
     }
+
+    @ApiOperation(value = "delete area",notes = "area 삭제")
+    @DeleteMapping(value = "/del")
+    public ResponseEntity<?> deleteArea(@RequestParam("id") int id) throws Exception{
+
+        try {
+            areaService.deleteArea(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "updateArea",notes = "area 수정")
+    @PutMapping(value = "/update")
+    public ResponseEntity<?> updateArea(@RequestBody Area area) throws Exception{
+
+        try {
+            areaService.updateArea(area);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+    }
 }

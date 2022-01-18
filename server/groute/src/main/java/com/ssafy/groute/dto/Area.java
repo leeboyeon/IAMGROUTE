@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Area {
-    private String id;
+    private int id;
     private String name;
     private String img;
     private String lat;

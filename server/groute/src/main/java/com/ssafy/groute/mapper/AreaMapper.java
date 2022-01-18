@@ -10,4 +10,6 @@ public interface AreaMapper {
     void insertArea(Area area) throws Exception;
     Area selectArea(String name) throws Exception;
     List<Area> selectAllArea() throws Exception;
+    void deleteArea(int id) throws Exception;
+    void updateArea(Area area) throws Exception;
 }
