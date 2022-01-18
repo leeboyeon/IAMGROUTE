@@ -2,6 +2,7 @@ package com.ssafy.groute.controller;
 
 import com.ssafy.groute.config.security.JwtTokenProvider;
 import com.ssafy.groute.dto.User;
+import com.ssafy.groute.mapper.UserMapper;
 import com.ssafy.groute.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -22,15 +23,11 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
-@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
-    UserMapper userMapper;
 
     @ApiOperation(value = "회원가입", notes = "회원가입")
     @PostMapping(value = "/signup")
@@ -58,7 +55,7 @@ public class UserController {
 
     @ApiOperation(value="로그인", notes="로그인")
     @GetMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User req) throws Exception{
+    public ResponseEntity<?> login(User req) throws Exception{
 
         User selected = userService.findByUidType(req.getId(), req.getType());
 
@@ -73,7 +70,7 @@ public class UserController {
         resultMap.put("id",selected.getId());
         resultMap.put("token",jwtTokenProvider.createToken(String.valueOf(selected.getId()), Collections.singletonList("ROLE_USER")));
 
-        selected.setUpdateDate(req.getToken());
+        selected.setToken(req.getToken());
 
 //        userService.saveUser(selected);
 
