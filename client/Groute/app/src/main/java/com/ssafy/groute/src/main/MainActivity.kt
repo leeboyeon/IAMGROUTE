@@ -6,14 +6,11 @@ import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.ActivityMainBinding
-<<<<<<< HEAD
 import com.ssafy.groute.src.main.board.BoardFragment
 import com.ssafy.groute.src.main.home.HomeFragment
 import com.ssafy.groute.src.main.my.MyFragment
 import com.ssafy.groute.src.main.route.RouteFragment
-=======
-import com.ssafy.groute.src.main.home.HomeFragment
->>>>>>> feature/Sign_update
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
