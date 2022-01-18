@@ -1,4 +1,4 @@
-package com.ssafy.groute.src.main
+package com.ssafy.groute.src.main.route
 
 import android.content.Context
 import android.os.Bundle
@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.databinding.FragmentRouteBinding
+import com.ssafy.groute.src.main.MainActivity
 
 
 class RouteFragment : Fragment() {

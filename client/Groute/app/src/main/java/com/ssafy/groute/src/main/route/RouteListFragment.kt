@@ -1,4 +1,4 @@
-package com.ssafy.groute.src.main
+package com.ssafy.groute.src.main.route
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

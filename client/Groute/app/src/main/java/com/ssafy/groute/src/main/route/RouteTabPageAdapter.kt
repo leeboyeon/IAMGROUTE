@@ -1,9 +1,6 @@
-package com.ssafy.groute.src.main
+package com.ssafy.groute.src.main.route
 
-import android.content.Context
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class RouteTabPageAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {

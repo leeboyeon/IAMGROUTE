@@ -1,4 +1,4 @@
-package com.ssafy.groute.src.main
+package com.ssafy.groute.src.main.route
 
 import android.view.LayoutInflater
 import android.view.View
