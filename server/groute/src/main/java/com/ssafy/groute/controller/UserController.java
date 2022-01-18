@@ -77,8 +77,9 @@ public class UserController {
     @ApiOperation(value="Id 중복 체크", notes="Id 중복 체크")
     @GetMapping("/isUsedId")
     public @ResponseBody
-    Boolean isUsedId(String inputId) throws Exception {
-        if (userService.findById(inputId) != null) {
+    Boolean isUsedId(String id) throws Exception {
+
+        if (userService.findById(id) != null) {
             return true;    // 조회되는 User가 있으면 Id 중복
         } else {
             return false;
