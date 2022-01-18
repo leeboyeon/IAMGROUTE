@@ -42,17 +42,36 @@ class SignFragment : Fragment() {
 
         binding.joinEditId.addTextChangedListener(TextFieldValidation(binding.joinEditId))
         binding.joinEditPw.addTextChangedListener(TextFieldValidation(binding.joinEditPw))
-        binding.joinEditEmail.addTextChangedListener(TextFieldValidation(binding.joinEditEmail))
+        binding.joinEditNick.addTextChangedListener(TextFieldValidation(binding.joinEditNick))
         binding.joinEditPhone.addTextChangedListener(TextFieldValidation(binding.joinEditPhone))
-//        binding.joinEditNickname.addTextChangedListener(TextFieldValidation(binding.joinEditNickname))
+//        binding.joinEditEmail.addTextChangedListener(TextFieldValidation(binding.joinEditEmail))
     }
 
+    /**
+     * 입력된 id 유효성 검사
+     * @return 유효성 검사 통과 시 true 반환
+     */
+    private fun validatedId() : Boolean {
+        val inputId = binding.joinEditId.text.toString()
+
+        if (inputId.trim().isEmpty()) {   // 값이 비어있으면
+            binding.joinTilId.error = "Required Field"
+            binding.joinEditId.requestFocus()
+            return false
+        } else if(!Pattern.matches("^[가-힣ㄱ-ㅎa-zA-Z0-9._-]{4,20}\$", inputId)) {
+            binding.joinTilId.error = "아이디 형식을 확인해주세요.(특수 문자 제외)"
+            binding.joinEditId.requestFocus()
+            return false
+        } else {
+            binding.joinTilId.isErrorEnabled = false
+            return true
+        }
+    }
 
     /**
      * 입력된 password 유효성 검사
      * @return 유효성 검사 통과 시 true 반환
      */
-    // 비밀번호 유효성 체크
     private fun validatedPw() : Boolean {
         val inputPw = binding.joinEditPw.text.toString()
 
@@ -60,15 +79,15 @@ class SignFragment : Fragment() {
             binding.joinTilPw.error = "Required Field"
             binding.joinEditPw.requestFocus()
             return false
-        } else if(!Pattern.matches("^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[\$@\$!%*#?&]).{8,50}.\$", inputPw)) {
+        } else if(!Pattern.matches("^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[\$@!%*#?&]).{8,50}.\$", inputPw)) {
             binding.joinTilPw.error = "비밀번호 형식을 확인해주세요."
             binding.joinEditPw.requestFocus()
             return false
         }
         else {
             binding.joinTilPw.isErrorEnabled = false
+            return true
         }
-        return true
     }
 
     /**
@@ -89,8 +108,8 @@ class SignFragment : Fragment() {
         }
         else {
             binding.joinTilPhone.error = null
+            return true
         }
-        return true
     }
 
 
@@ -113,7 +132,7 @@ class SignFragment : Fragment() {
         override fun afterTextChanged(s: Editable?) {
             when(view.id){
                 R.id.join_edit_id -> {
-//                    validatedId()
+                    validatedId()
                 }
                 R.id.join_edit_pw -> {
                     validatedPw()
