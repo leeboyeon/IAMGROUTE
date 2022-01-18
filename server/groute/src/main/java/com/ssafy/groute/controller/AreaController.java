@@ -38,9 +38,9 @@ public class AreaController {
 
     @ApiOperation(value = "area 검색",notes = "이름으로 area 하나 검색")
     @GetMapping(value = "/detail")
-    public ResponseEntity<?> detailArea(@RequestParam("name") String name) throws Exception{
+    public ResponseEntity<?> detailArea(@RequestParam("id") int id) throws Exception{
 
-        Area res = areaService.selectArea(name);
+        Area res = areaService.selectArea(id);
         if(res==null){
             return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
         }
