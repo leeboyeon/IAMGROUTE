@@ -9,12 +9,14 @@ logging:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc://localhost:3306/groute?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://localhost:3306/groute?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
     username: ssafy
     password: ssafy
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  jwt:
+    secret: DvqcGn8mnFjqSL4a
 
 mybatis:
   type-aliases-package: com.ssafy.groute.dto

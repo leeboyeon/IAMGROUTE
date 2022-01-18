@@ -4,4 +4,9 @@
 
 <mapper namespace="com.ssafy.groute.mapper.UserMapper">
 
+    <select id="findByUidType" resultType="com.ssafy.groute.dto.User">
+        select * from user
+        where id = #{userId} and type = #{type}
+    </select>
+
 </mapper>

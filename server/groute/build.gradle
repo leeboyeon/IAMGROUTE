@@ -34,11 +34,6 @@ dependencies {
 	// https://mvnrepository.com/artifact/io.springfox/springfox-swagger2
 	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
-	implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.6.1'
-	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
-	implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.6.1'
-	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
-	implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.6.1'
 
 }
 
