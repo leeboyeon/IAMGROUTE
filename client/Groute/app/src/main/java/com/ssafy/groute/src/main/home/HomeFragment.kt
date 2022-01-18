@@ -28,6 +28,7 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mainActivity.hideMainProfileBar(false)
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)
