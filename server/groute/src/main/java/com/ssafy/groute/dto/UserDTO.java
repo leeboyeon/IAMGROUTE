@@ -1,6 +1,6 @@
 package com.ssafy.groute.dto;
 
-import com.sun.istack.internal.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,10 +12,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserDTO {
 
-    @NotNull
     private String id;
 
-    @NotNull
     private String password;
 
     private String nickname;
@@ -28,7 +26,6 @@ public class UserDTO {
 
     private String email;
 
-    @NotNull
     private String type;
 
     private String token;
