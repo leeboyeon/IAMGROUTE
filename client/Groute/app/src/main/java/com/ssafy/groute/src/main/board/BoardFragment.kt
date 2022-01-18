@@ -37,7 +37,7 @@ class BoardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        boardRecyclerviewAdapter = BoardRecyclerviewAdapter()
+        boardRecyclerviewAdapter = BoardRecyclerviewAdapter(mainActivity)
 
         binding.boardRv.apply {
             layoutManager = LinearLayoutManager(requireContext())
