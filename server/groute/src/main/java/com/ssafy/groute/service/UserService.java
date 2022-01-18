@@ -9,4 +9,8 @@ public interface UserService {
 
     public User findById(String userId);
     public User findByUidType(String id, String type);
+
+    public int deleteUser(String userId);
+
+    public int updateUser(User user);
 }

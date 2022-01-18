@@ -9,4 +9,8 @@ public interface UserMapper {
 
     User findById(String userId);
     User findByUidType(String id,String type);
+
+    int deleteUser(String userId);
+
+    int updateUser(User user);
 }

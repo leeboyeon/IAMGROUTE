@@ -17,4 +17,14 @@
         where id = #{userId} and type = #{type}
     </select>
 
+    <delete id="deleteUser">
+        delete from user
+        where id = #{userId}
+    </delete>
+
+    <update id="updateUser">
+        update user
+        set id = #{id}, password = #{password}, nickname = #{nickname}, phone = #{phone}, gender = #{gender}, birth = #{birth}, email = #{email}, img = #{img}
+        where id = #{id}
+    </update>
 </mapper>

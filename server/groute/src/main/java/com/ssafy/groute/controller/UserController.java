@@ -8,14 +8,12 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -74,6 +72,61 @@ public class UserController {
 
 //        userService.saveUser(selected);
 
+        return new ResponseEntity<Map<String, Object>>(resultMap,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "회원탈퇴", notes = "회원탈퇴")
+    @DeleteMapping(value = "{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable String userId) throws Exception{
+        // jwt token 인증 필요
+
+
+
+        if (userService.findById(userId) == null) {
+            return ResponseEntity.badRequest().body("존재하지 않는 아이디입니다.");
+        }
+
+        userService.deleteUser(userId);
+        return ResponseEntity.ok("회원탈퇴가 완료 되었습니다.");
+    }
+
+    @ApiOperation(value = "회원수정", notes = "회원수정")
+    @PutMapping(value = "{userId}")
+    public ResponseEntity<?> updateUser(@PathVariable String userId, User userData) throws Exception{
+        User user = userService.findById(userId);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("존재하지 않는 아이디입니다.");
+        }
+
+        user.setId(userData.getId());
+        user.setPassword(userData.getPassword());
+        user.setNickname(userData.getNickname());
+        user.setPhone(userData.getPhone());
+        user.setGender(userData.getGender());
+        user.setBirth(userData.getBirth());
+        user.setEmail(userData.getEmail());
+        user.setImg(userData.getImg());
+
+        userService.updateUser(user);
+//        Map<String, Object> resultMap = new HashMap<>();
+//
+//        resultMap.put("data",user);
+//        return new ResponseEntity<Map<String, Object>>(resultMap,HttpStatus.OK);
+        return ResponseEntity.ok("정보 수정이 완료 되었습니다.");
+
+    }
+
+    @ApiOperation(value = "유저정보", notes = "유저정보")
+    @GetMapping(value = "{userId}")
+    public ResponseEntity<?> detailUser(@PathVariable String userId) throws Exception{
+        User user = userService.findById(userId);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("존재하지 않는 아이디입니다.");
+        }
+
+        Map<String, Object> resultMap = new HashMap<>();
+
+        resultMap.put("data",user);
         return new ResponseEntity<Map<String, Object>>(resultMap,HttpStatus.OK);
     }
 }
