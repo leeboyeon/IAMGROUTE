@@ -12,9 +12,9 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryHolder>(){
     var list = mutableListOf<Category>()
     inner class CategoryHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bindInfo(data : Category){
-//            Glide.with(itemView)
-//                .load("${ApplicationClass.AREA_IMGS_URL}${data.img}")
-//                .into(itemView.findViewById(R.id.main_iv_category))
+            Glide.with(itemView)
+                .load(data.img)
+                .into(itemView.findViewById(R.id.main_iv_category))
 
             itemView.findViewById<TextView>(R.id.main_tv_category).text = data.name
 
