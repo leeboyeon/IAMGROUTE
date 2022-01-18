@@ -9,4 +9,8 @@ interface UserApi {
     // 사용자 로그인
     @GET("/user/login")
     fun login(@Query("id") id: String, @Query("password") password: String): Call<User>
+
+    // id 중복 확인
+    @GET("/user/isUsedId")
+    fun isUsedId(@Query("id") id : String) : Call<Boolean>
 }

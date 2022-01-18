@@ -3,18 +3,21 @@ package com.ssafy.groute.src.login
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentSignBinding
+import com.ssafy.groute.src.service.UserService
+import com.ssafy.groute.util.RetrofitCallback
 import java.util.regex.Pattern
 
-
+private const val TAG = "SignFragment_싸피"
 class SignFragment : Fragment() {
     private lateinit var binding: FragmentSignBinding
-
+    private var isAvailableId = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +51,9 @@ class SignFragment : Fragment() {
     }
 
     /**
-     * 입력된 id 유효성 검사
-     * @return 유효성 검사 통과 시 true 반환
+     * 입력된 id 유효성 검사 및 id 중복 체크
+     * 유효성 검사 통과하면 id 중복 확인
+     * @return id 중복 통과 시 true 반환
      */
     private fun validatedId() : Boolean {
         val inputId = binding.joinEditId.text.toString()
@@ -64,7 +68,9 @@ class SignFragment : Fragment() {
             return false
         } else {
             binding.joinTilId.isErrorEnabled = false
-            return true
+            Log.d(TAG, "validatedId: id = $inputId")
+            UserService().isUsedId(inputId, isUsedIdCallBack())
+            return isAvailableId
         }
     }
 
@@ -144,6 +150,31 @@ class SignFragment : Fragment() {
 //                    validatedNickname()
 //                }
             }
+        }
+    }
+
+    /**
+     * id 중복 확인 callback
+     */
+    inner class isUsedIdCallBack : RetrofitCallback<Boolean> {
+        override fun onError(t: Throwable) {
+            Log.d(TAG, "onError: ")
+        }
+
+        override fun onSuccess(code: Int, responseData: Boolean) {
+            Log.d(TAG, "onSuccess: $responseData")  // true : 중복 O <-> false : 중복 X, 사용 가능
+            if(responseData) {   // true - DB 내에 중복되는 ID가 있으면
+                binding.joinTilId.error = "이미 존재하는 아이디입니다."
+                binding.joinEditId.requestFocus()
+                isAvailableId = false
+            } else {// DB 내에 중복되는 ID가 없으면
+                binding.joinTilId.error = null
+                isAvailableId = true
+            }
+        }
+
+        override fun onFailure(code: Int) {
+            Log.d(TAG, "onFailure: ")
         }
     }
 }
