@@ -81,6 +81,7 @@ class MainActivity : AppCompatActivity() {
                     .addToBackStack(null)
             }
             2 -> {
+                //현재 생성 중인 나의 day별 일정을 볼 수 있는 화면
                 transaction.replace(R.id.frame_main_layout, TravelPlanFragment())
                     .addToBackStack(null)
             }

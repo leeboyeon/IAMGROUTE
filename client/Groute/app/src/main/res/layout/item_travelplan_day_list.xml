@@ -2,10 +2,19 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingTop="10dp"
     android:paddingHorizontal="20dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/item_travelplan_dotted_line1"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:visibility="visible"
+        android:background="@drawable/dotted_line_vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cardview"/>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardview"
@@ -39,12 +48,12 @@
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <TextView
+                    android:id="@+id/item_travelplan_num_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1"
-                    android:textStyle="bold"
                     android:textColor="@color/white"
-                    />
+                    android:textStyle="bold" />
 
 
             </RelativeLayout>
@@ -81,8 +90,10 @@
     </com.google.android.material.card.MaterialCardView>
 
     <RelativeLayout
+        android:id="@+id/item_travelplan_dotted_line2"
         android:layout_width="match_parent"
         android:layout_height="20dp"
+        android:visibility="visible"
         android:background="@drawable/dotted_line_vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardview"
