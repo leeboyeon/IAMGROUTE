@@ -3,6 +3,8 @@ package com.ssafy.groute.src.main
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
+import androidx.core.view.isVisible
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.ActivityMainBinding
@@ -28,24 +30,28 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.Home -> {
+                    binding.mainProfileBar.isVisible = true
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.frame_main_layout, HomeFragment())
                         .commit()
                     true
                 }
                 R.id.Route -> {
+                    binding.mainProfileBar.isVisible = true
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.frame_main_layout, RouteFragment())
                         .commit()
                     true
                 }
                 R.id.Board -> {
+                    binding.mainProfileBar.isVisible = false
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.frame_main_layout, BoardFragment())
                         .commit()
                     true
                 }
                 R.id.My -> {
+                    binding.mainProfileBar.isVisible = false
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.frame_main_layout, MyFragment())
                         .commit()
