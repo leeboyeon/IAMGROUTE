@@ -1,6 +1,6 @@
 package com.ssafy.groute.service;
 
-import com.ssafy.groute.dto.UserDTO;
+import com.ssafy.groute.dto.User;
 import com.ssafy.groute.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +13,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int registerUser(UserDTO user){
+    public int registerUser(User user){
         return userMapper.registerUser(user);
     }
 
     @Override
-    public UserDTO findById(String userId){
+    public User findById(String userId){
         return userMapper.findById(userId);
     }
 }

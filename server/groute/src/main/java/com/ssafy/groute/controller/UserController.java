@@ -1,6 +1,6 @@
 package com.ssafy.groute.controller;
 
-import com.ssafy.groute.dto.UserDTO;
+import com.ssafy.groute.dto.User;
 import com.ssafy.groute.mapper.UserMapper;
 import com.ssafy.groute.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,19 +25,21 @@ public class UserController {
 
     @ApiOperation(value = "회원가입", notes = "회원가입")
     @PostMapping(value = "/signup")
-    public ResponseEntity<?> registerUser(UserDTO dto) throws Exception{
+    public ResponseEntity<?> registerUser(User dto) throws Exception{
 //        UserDTO userChk = userService.findById(dto.getId());
         if (userService.findById(dto.getId()) != null) {
             return ResponseEntity.badRequest().body("아이디가 이미 존재합니다.");
         }
 
-        UserDTO user = new UserDTO();
+        User user = new User();
 
         user.setId(dto.getId());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setEmail(dto.getEmail());
         user.setPhone(dto.getPhone());
         user.setBirth(dto.getBirth());
+        user.setType(dto.getType());
+        user.setNickname(dto.getNickname());
 
 //        userMapper.registerUser(user);
         userService.registerUser(user);

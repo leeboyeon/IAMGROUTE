@@ -1,11 +1,11 @@
 package com.ssafy.groute.service;
 
-import com.ssafy.groute.dto.UserDTO;
+import com.ssafy.groute.dto.User;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface UserService {
-    public int registerUser(UserDTO user);
+    public int registerUser(User user);
 
-    public UserDTO findById(String userId);
+    public User findById(String userId);
 }
