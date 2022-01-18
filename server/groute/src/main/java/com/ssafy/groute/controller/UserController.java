@@ -9,13 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -75,5 +72,16 @@ public class UserController {
 //        userService.saveUser(selected);
 
         return new ResponseEntity<Map<String, Object>>(resultMap,HttpStatus.OK);
+    }
+
+    @ApiOperation(value="Id 중복 체크", notes="Id 중복 체크")
+    @GetMapping("/isUsedId")
+    public @ResponseBody
+    Boolean isUsedId(String inputId) throws Exception {
+        if (userService.findById(inputId) != null) {
+            return true;    // 조회되는 User가 있으면 Id 중복
+        } else {
+            return false;
+        }
     }
 }
