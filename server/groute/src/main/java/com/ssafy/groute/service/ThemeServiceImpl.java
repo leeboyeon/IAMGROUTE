@@ -19,8 +19,8 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public Theme selectTheme(String name) throws Exception {
-        return themeMapper.selectTheme(name);
+    public Theme selectTheme(int id) throws Exception {
+        return themeMapper.selectTheme(id);
     }
 
     @Override

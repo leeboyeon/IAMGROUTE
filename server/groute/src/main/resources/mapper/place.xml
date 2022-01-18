@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.groute.mapper.PlaceMapper">
+    <insert id="insertPlace" parameterType="Place">
+        insert into place(name, type, lat, lng, zipCode, contact, address, description, theme_id, area_id, img, user_id)
+        values(#{name}, #{type}, #{lat}, #{lng}, #{zipCode}, #{contact}, #{address}, #{description}, #{themeId}, #{areaId}, #{img}, #{userId})
+    </insert>
+
+    <resultMap id="PlaceDTO" type="Place">
+        <result column="theme_id" property="themeId"></result>
+        <result column="area_id" property="areaId"></result>
+        <result column="user_id" property="userId"></result>
+    </resultMap>
+    <select id="selectPlace" parameterType="int" resultMap="PlaceDTO">
+        select * from place
+        where id = #{id}
+    </select>
+
+    <select id="selectAllPlace"  resultMap="PlaceDTO">
+        select * from place
+    </select>
+
+    <delete id="deletePlace" parameterType="int">
+        delete from place
+        where id = #{id}
+    </delete>
+
+    <update id="updatePlace" parameterType="Place">
+        update Place
+        set name = #{name}, type = #{type}, lat = #{lat}, lng = #{lng}, zipCode = #{zipCode}, contact = #{contact}, address = #{address}, description = #{description}, theme_id = #{themeId}, area_id = #{areaId}, img = #{img}, user_id = #{userId}
+        where id = #{id}
+    </update>
+</mapper>

@@ -8,9 +8,9 @@
         values(#{name}, #{img}, #{lat}, #{lng})
     </insert>
 
-    <select id="selectArea" parameterType="String" resultType="Area">
+    <select id="selectArea" parameterType="int" resultType="Area">
         select * from area
-        where name = #{name}
+        where id = #{id}
         limit 1
     </select>
 
