@@ -6,7 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.TextView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentBoardBinding
@@ -20,6 +23,11 @@ class TravelPlanFragment : Fragment() {
     lateinit var binding: FragmentTravelPlanBinding
     private lateinit var mainActivity: MainActivity
     lateinit var con : ViewGroup
+    lateinit var addButton: FloatingActionButton
+    lateinit var memoAddButton: FloatingActionButton
+    lateinit var routeRecomButton: FloatingActionButton
+    lateinit var placeAddButton: FloatingActionButton
+    var isFabOpen: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideBottomNav(true)
@@ -43,7 +51,62 @@ class TravelPlanFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
+        floatingButtonEvent()
 
+    }
+
+    // 플로팅 버튼 이벤트 처리
+    fun floatingButtonEvent() {
+        addButton = binding.travelplanAddFb
+        //val closeButton = binding.travelplanCloseFb
+        memoAddButton = binding.travelplanAddMemoFb
+        routeRecomButton = binding.travelplanRecomRouteFb
+        placeAddButton = binding.travelplanAddPlaceFb
+
+        addButton.setOnClickListener{
+            fbAnim()
+        }
+        memoAddButton.setOnClickListener{
+            fbAnim()
+        }
+        routeRecomButton.setOnClickListener {
+            fbAnim()
+        }
+        placeAddButton.setOnClickListener {
+            fbAnim()
+        }
+    }
+
+    // 플로팅 버튼 애니메이션 처리
+    fun fbAnim() {
+        val memoAddLayout = binding.travelplanAddMemoLayout
+        val routeRecomLayout = binding.travelplanRecomRouteLayout
+        val placeAddLayout = binding.travelplanAddPlaceLayout
+
+        val fab_open = AnimationUtils.loadAnimation(requireContext(), R.anim.fab_open)
+        val fab_close = AnimationUtils.loadAnimation(requireContext(), R.anim.fab_close)
+        val rotate_close = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_anticlockwise)
+        val rotate_open = AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_clockwise)
+
+        if(isFabOpen) {
+            addButton.startAnimation(rotate_close)
+            memoAddLayout.startAnimation(fab_close)
+            routeRecomLayout.startAnimation(fab_close)
+            placeAddLayout.startAnimation(fab_close)
+            memoAddButton.isClickable = false
+            routeRecomButton.isClickable = false
+            placeAddLayout.isClickable = false
+            isFabOpen = false
+        } else {
+            addButton.startAnimation(rotate_open)
+            memoAddLayout.startAnimation(fab_open)
+            routeRecomLayout.startAnimation(fab_open)
+            placeAddLayout.startAnimation(fab_open)
+            memoAddButton.isClickable = true
+            routeRecomButton.isClickable = true
+            placeAddLayout.isClickable = true
+            isFabOpen = true
+        }
     }
 
     fun initAdapter(){
