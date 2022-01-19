@@ -146,5 +146,142 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/travelplan_add_memo_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="220dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/travelplan_add_memo_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="메모추가"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/travelplan_add_memo_fb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/memo"
+        app:tint="@color/white"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        android:layout_marginStart="10dp"
+        android:backgroundTint="@color/blue_500"
+        app:layout_constraintTop_toTopOf="@id/travelplan_add_memo_tv"
+        app:layout_constraintBottom_toBottomOf="@id/travelplan_add_memo_tv"
+        app:layout_constraintLeft_toRightOf="@id/travelplan_add_memo_tv"
+        />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/travelplan_recom_route_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:visibility="invisible"
+        android:layout_marginBottom="160dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/travelplan_recom_route_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="루트추천"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/travelplan_recom_route_fb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/navi"
+        app:tint="@color/white"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        android:layout_marginStart="10dp"
+        android:backgroundTint="@color/blue_500"
+        app:layout_constraintTop_toTopOf="@id/travelplan_recom_route_tv"
+        app:layout_constraintBottom_toBottomOf="@id/travelplan_recom_route_tv"
+        app:layout_constraintLeft_toRightOf="@id/travelplan_recom_route_tv"
+        />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/travelplan_add_place_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="100dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/travelplan_add_place_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="장소추가"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/travelplan_add_place_fb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/place"
+        app:tint="@color/white"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        android:layout_marginStart="10dp"
+        android:backgroundTint="@color/blue_500"
+        app:layout_constraintTop_toTopOf="@id/travelplan_add_place_tv"
+        app:layout_constraintBottom_toBottomOf="@id/travelplan_add_place_tv"
+        app:layout_constraintLeft_toRightOf="@id/travelplan_add_place_tv"
+        />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/travelplan_add_fb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/add"
+        app:tint="@color/white"
+        android:visibility="visible"
+        android:backgroundTint="@color/blue_700"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/travelplan_close_fb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/add"
+        app:tint="@color/white"
+        android:visibility="invisible"
+        android:backgroundTint="@color/blue_700"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
