@@ -12,6 +12,7 @@ import com.ssafy.groute.databinding.ActivityMainBinding
 import com.ssafy.groute.src.login.LoginFragment
 import com.ssafy.groute.src.login.SignFragment
 import com.ssafy.groute.src.main.board.BoardFragment
+import com.ssafy.groute.src.main.home.AreaFragment
 import com.ssafy.groute.src.main.home.HomeFragment
 import com.ssafy.groute.src.main.my.MyFragment
 import com.ssafy.groute.src.main.route.RouteCreateFragment
@@ -79,7 +80,10 @@ class MainActivity : AppCompatActivity() {
                 transaction.replace(R.id.frame_main_layout, RouteCreateFragment())
                     .addToBackStack(null)
             }
-
+            2->{
+                transaction.replace(R.id.frame_main_layout, AreaFragment())
+                    .addToBackStack(null)
+            }
         }
         transaction.commit()
     }
