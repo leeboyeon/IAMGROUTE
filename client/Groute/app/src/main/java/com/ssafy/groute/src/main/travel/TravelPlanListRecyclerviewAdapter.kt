@@ -27,9 +27,11 @@ class TravelPlanListRecyclerviewAdapter(val context: Context, private val list: 
 
         @SuppressLint("LongLogTag")
         fun bindInfo(data: TravelPlan, position: Int, flag: Int) {
-            numTv.text = "${position+1}"
+            numTv.text = "${this.layoutPosition+1}"
             placeTv.text = "${data.title}"
             locTv.text = "${data.location}"
+
+            // item의 위치에 따라 점선 보이거나 안보이거나 처리
             if(flag == 0) {
                 dottedLine1.visibility = View.GONE
                 dottedLine2.visibility = View.VISIBLE
@@ -58,7 +60,7 @@ class TravelPlanListRecyclerviewAdapter(val context: Context, private val list: 
         holder.apply {
             if(position == 0) {
                 bindInfo(list[position], position,0)
-            } else if(position == 3){
+            } else if(position == list.size-1){
                 bindInfo(list[position], position, 1)
             } else {
                 bindInfo(list[position], position, 2)
