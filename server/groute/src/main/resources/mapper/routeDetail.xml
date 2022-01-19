@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.groute.mapper.RouteDetailMapper">
+    <insert id="insertRouteDetail" parameterType="RouteDetail">
+        insert into routeDetail(route_id, place_id, priority, memo)
+        values(#{routeId}, #{placeId}, #{priority}, #{memo})
+    </insert>
+
+    <resultMap id="RouteDetailDTO" type="RouteDetail">
+        <result column="route_id" property="routeId"></result>
+        <result column="place_id" property="placeId"></result>
+    </resultMap>
+
+    <select id="selectRouteDetail" parameterType="int" resultMap="RouteDetailDTO">
+        select * from routeDetail
+        where id = #{id}
+    </select>
+
+    <select id="selectAllRouteDetail"  resultMap="RouteDetailDTO">
+        select * from routeDetail
+    </select>
+
+    <delete id="deleteRouteDetail" parameterType="int">
+        delete from routeDetail
+        where id = #{id}
+    </delete>
+
+    <update id="updateRouteDetail" parameterType="RouteDetail">
+        update routeDetail
+        set route_id = #{routeId}, place_id = #{placeId}, priority = #{priority}, memo = #{memo}
+        where id = #{id}
+    </update>
+</mapper>

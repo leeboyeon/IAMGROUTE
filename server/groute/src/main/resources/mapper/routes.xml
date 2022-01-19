@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.groute.mapper.RoutesMapper">
+    <insert id="insertRoutes" parameterType="Routes">
+        insert into routes(route_id, plan_id)
+        values(#{routeId}, #{planId})
+    </insert>
+
+    <resultMap id="RoutesDTO" type="Routes">
+        <result column="route_id" property="routeId"></result>
+        <result column="plan_id" property="planId"></result>
+    </resultMap>
+
+    <select id="selectRoutes" parameterType="int" resultMap="RoutesDTO">
+        select * from routes
+        where id = #{id}
+    </select>
+
+    <select id="selectAllRoutes"  resultMap="RoutesDTO">
+        select * from routes
+    </select>
+
+    <delete id="deleteRoutes" parameterType="int">
+        delete from routes
+        where id = #{id}
+    </delete>
+
+    <update id="updateRoutes" parameterType="Routes">
+        update routes
+        set route_id = #{routeId}, plan_id = #{planId}
+        where id = #{id}
+    </update>
+</mapper>

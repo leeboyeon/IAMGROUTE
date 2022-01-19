@@ -163,7 +163,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `groute`.`route` ;
 
 CREATE TABLE IF NOT EXISTS `groute`.`route` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NULL,
   `day` INT NOT NULL COMMENT '일자별 경로\nday1, day2...',
   `memo` VARCHAR(255) NULL,
@@ -224,16 +224,16 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `groute`.`routeDetail` ;
 
 CREATE TABLE IF NOT EXISTS `groute`.`routeDetail` (
-  `r_id` INT NOT NULL,
+  `route_id` INT NOT NULL,
   `id` INT NOT NULL AUTO_INCREMENT,
   `place_id` INT NOT NULL,
   `priority` INT NOT NULL COMMENT '우선순위에 따라 장소 정렬',
   `memo` VARCHAR(255) NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_route_routeDetail_idx` (`r_id` ASC) VISIBLE,
+  INDEX `fk_route_routeDetail_idx` (`route_id` ASC) VISIBLE,
   INDEX `fk_place_routeDetail_idx` (`place_id` ASC) VISIBLE,
   CONSTRAINT `fk_route_routeDetail`
-    FOREIGN KEY (`r_id`)
+    FOREIGN KEY (`route_id`)
     REFERENCES `groute`.`route` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
