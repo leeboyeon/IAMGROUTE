@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.groute.mapper.PlanShareUserMapper">
+    <insert id="insertPlanShareUser" parameterType="PlanShareUser">
+        insert into planShareUser(plan_id, user_id)
+        values(#{planId}, #{userId})
+    </insert>
+
+    <resultMap id="PlanShareUserDTO" type="PlanShareUser">
+        <result column="plan_id" property="planId"></result>
+        <result column="user_id" property="userId"></result>
+    </resultMap>
+
+    <select id="selectPlanShareUser" parameterType="int" resultMap="PlanShareUserDTO">
+        select * from planShareUser
+        where id = #{id}
+    </select>
+
+    <select id="selectAllPlanShareUser"  resultMap="PlanShareUserDTO">
+        select * from planShareUser
+    </select>
+
+    <delete id="deletePlanShareUser" parameterType="int">
+        delete from planShareUser
+        where id = #{id}
+    </delete>
+
+    <update id="updatePlanShareUser" parameterType="PlanShareUser">
+        update planShareUser
+        set plan_id = #{planId}, user_id = #{userId}
+        where id = #{id}
+    </update>
+</mapper>
