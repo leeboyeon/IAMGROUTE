@@ -12,8 +12,8 @@ import java.util.concurrent.TimeUnit
 private const val TAG = "ApplicationClass_Groute"
 class ApplicationClass : Application() {
     companion object{
-//        const val SERVER_URL = "http://172.30.1.19:8888/"   // Kyunghee
-        const val SERVER_URL = "http://61.85.38.39:8888/"   // Jiwoo
+        const val SERVER_URL = "http://172.30.1.19:8888/"   // Kyunghee
+//        const val SERVER_URL = "http://61.85.38.39:8888/"   // Jiwoo
         lateinit var sharedPreferencesUtil: SharedPreferencesUtil
         lateinit var retrofit: Retrofit
 
