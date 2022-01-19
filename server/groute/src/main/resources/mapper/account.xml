@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.groute.mapper.AccountMapper">
+    <insert id="insertAccount" parameterType="Account">
+        insert into account(spentMoney, description, category, routes_id)
+        values(#{spentMoney}, #{description}, #{category}, #{routesId})
+    </insert>
+
+    <resultMap id="AccountDTO" type="Account">
+        <result column="routes_id" property="routesId"></result>
+    </resultMap>
+    <select id="selectAccount" parameterType="int" resultMap="AccountDTO">
+        select * from account
+        where id = #{id}
+    </select>
+
+    <select id="selectAllAccount"  resultMap="AccountDTO">
+        select * from account
+    </select>
+
+    <delete id="deleteAccount" parameterType="int">
+        delete from account
+        where id = #{id}
+    </delete>
+
+    <update id="updateAccount" parameterType="Account">
+        update Account
+        set spentMoney = #{spentMoney}, description = #{description}, category = #{category}, routes_id = #{routesId}
+        where id = #{id}
+    </update>
+</mapper>
