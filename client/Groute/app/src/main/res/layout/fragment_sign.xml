@@ -138,13 +138,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
+                        android:gravity="top"
                         android:layout_weight="1">
+
                         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                             android:id="@+id/join_autoTv_domain"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:textColorHint="#555555"
-                            android:completionHint="gmail.com"
+                            android:layout_height="55dp"
+                            android:background="@drawable/edittext_background"
                             android:completionThreshold="1">
                         </androidx.appcompat.widget.AppCompatAutoCompleteTextView>
 

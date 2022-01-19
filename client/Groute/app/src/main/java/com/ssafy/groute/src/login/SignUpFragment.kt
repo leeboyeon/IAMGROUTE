@@ -1,6 +1,5 @@
 package com.ssafy.groute.src.login
 
-import android.opengl.Visibility
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,8 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import androidx.core.view.get
-import androidx.core.view.isVisible
+import android.widget.ArrayAdapter
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentSignBinding
 import com.ssafy.groute.src.service.UserService
@@ -58,10 +56,11 @@ class SignFragment : Fragment() {
         binding.joinEditPw.addTextChangedListener(TextFieldValidation(binding.joinEditPw))
         binding.joinEditNick.addTextChangedListener(TextFieldValidation(binding.joinEditNick))
         binding.joinEditPhone.addTextChangedListener(TextFieldValidation(binding.joinEditPhone))
-        binding.joinEditWriteEmail.addTextChangedListener(TextFieldValidation(binding.joinEditWriteEmail))
+        binding.joinEditEmail.addTextChangedListener(TextFieldValidation(binding.joinEditEmail))
+        binding.joinAutoTvDomain.addTextChangedListener(TextFieldValidation(binding.joinAutoTvDomain))
 
-        selectedEmail()
-        selectedBirth()
+        initDomain() // email domain list adapter
+        selectedBirth() // birth spinner selectedItem listener
     }
 
     /**
@@ -157,69 +156,54 @@ class SignFragment : Fragment() {
 
 
     /**
+     * #S06P12D109-79
      * email 입력 데이터 검사
      * @return email 형식이면 email(String), 아니면 null
      */
-    private fun validatedEmail() : String? {
-        val inputEmailId = binding.joinEditEmail.text.toString()
-        var email = ""
+    private fun validatedEmail(){
+        val inputEmail = binding.joinEditEmail.text.toString()
+        val inputDomain = binding.joinAutoTvDomain.text.toString()
 
+        var email = "$inputEmail@$inputDomain"
 
-
-        if (validatedWriteEmail()) {
-            email = inputEmailId + "@" + binding.joinEditWriteEmail.text.toString()
-        }
-
-        // 이메일 패턴 체크
         val pattern = Patterns.EMAIL_ADDRESS
-        Log.d(TAG, "validatedEmail: $email")
-        if (pattern.matcher(email).matches()) {
-            return email
-        } else {
-            return null
+        if(inputEmail.trim().isEmpty()) {
+            binding.joinTilEmail.error = "Required Email Field"
+        } else if(inputDomain.trim().isEmpty()) {
+            binding.joinTilEmail.error = "Required Domain Field"
         }
-    }
-
-    private fun validatedWriteEmail() : Boolean {
-        val inputDomain = binding.joinEditWriteEmail.text.toString()
-
-        if(inputDomain.trim().isEmpty()){
-            binding.joinTilWriteEmail.error = "Required Field"
-            binding.joinEditWriteEmail.requestFocus()
-            return false
+        else if(!Pattern.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}\$", email)) {
+//        else if(pattern.matcher(email).matches()) {
+            binding.joinTilEmail.error = "이메일 형식을 확인해주세요."
         }
         else {
-            binding.joinTilWriteEmail.error = null
-            return true
+            binding.joinTilEmail.error = null
+            binding.joinTilDomain.error = null
+            userEmail = email
+            Log.d(TAG, "validatedEmail: $userEmail")
         }
+
+//        // 이메일 패턴 체크
+//        val pattern = Patterns.EMAIL_ADDRESS
+//        Log.d(TAG, "validatedEmail: $email")
+//        if (pattern.matcher(email).matches()) {
+//            return email
+//        } else {
+//            return null
+//        }
     }
 
     /**
-     * email spinner item 선택 이벤트
+     * #S06P12D109-79
+     * email domain list set Adapter
      */
-    private fun selectedEmail() {
+    private fun initDomain() {
+        // 자동완성으로 보여줄 내용들
+        var domains = arrayOf("gmail.com", "naver.com", "nate.com", "daum.net")
 
-        val emailSpinner = binding.emailSpinner
-        emailSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                when (position) {
-                    // 직접 입력
-                    4 -> {
-                        binding.emailSpinner.visibility = View.GONE
-                        binding.joinTilWriteEmail.visibility = View.VISIBLE
-                    }
-                    else -> {
-
-                    }
-                }
-            }
-        }
+        var adapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_dropdown_item_1line, domains)
+        binding.joinAutoTvDomain.setAdapter(adapter)
     }
-
 
     /**
      * #S06P12D109-25
@@ -336,8 +320,11 @@ class SignFragment : Fragment() {
                 R.id.join_edit_phone -> {
                     validatedPhone()
                 }
-                R.id.join_edit_writeEmail -> {
-                    validatedWriteEmail()
+                R.id.join_edit_email -> {
+                    validatedEmail()
+                }
+                R.id.join_autoTv_domain -> {
+                    validatedEmail()
                 }
             }
         }
