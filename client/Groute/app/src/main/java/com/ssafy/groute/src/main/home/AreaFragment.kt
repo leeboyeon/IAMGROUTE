@@ -149,6 +149,12 @@ class AreaFragment : Fragment() {
             adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
 
+        areaFilterAdapter.setItemClickListener(object : AreaFilterAdapter.ItemClickListener {
+            override fun onClick(view: View, position: Int, name: String) {
+                mainActivity.openFragment(4)
+            }
+
+        })
 
     }
     fun initTab(){
