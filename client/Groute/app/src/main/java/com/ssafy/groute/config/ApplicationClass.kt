@@ -1,6 +1,8 @@
 package com.ssafy.groute.config
 
 import android.app.Application
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.ssafy.groute.util.SharedPreferencesUtil
 import com.ssafy.smartstore.src.main.intercepter.AddCookiesInterceptor
 import com.ssafy.smartstore.src.main.intercepter.ReceivedCookiesInterceptor
@@ -29,9 +31,14 @@ class ApplicationClass : Application() {
             .addInterceptor(ReceivedCookiesInterceptor())
             .connectTimeout(30, TimeUnit.SECONDS).build()
 
+        // Gson 객체 생성 - setLenient 속성 추가
+        val gson : Gson = GsonBuilder()
+            .setLenient()
+            .create()
+        
         retrofit = Retrofit.Builder()
             .baseUrl(SERVER_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttpClient)
             .build()
     }
