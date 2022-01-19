@@ -3,6 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string-array name="birth_year_spinner">
+        <item>year</item>
         <item>2022</item>
         <item>2021</item>
         <item>2020</item>
@@ -39,6 +40,7 @@
     </string-array>
 
     <string-array name="birth_month_spinner">
+        <item>month</item>
         <item>12</item>
         <item>11</item>
         <item>10</item>
@@ -52,7 +54,9 @@
         <item>2</item>
         <item>1</item>
     </string-array>
+
     <string-array name="birth_day_spinner">
+        <item>day</item>
         <item>31</item>
         <item>30</item>
         <item>29</item>
@@ -85,6 +89,7 @@
         <item>2</item>
         <item>1</item>
     </string-array>
+
     <string-array name="email_spinner">
         <item>gmail.com</item>
         <item>naver.com</item>

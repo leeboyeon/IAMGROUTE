@@ -1,13 +1,18 @@
 package com.ssafy.groute.src.login
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import androidx.core.view.get
+import androidx.core.view.isVisible
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentSignBinding
 import com.ssafy.groute.src.service.UserService
@@ -18,6 +23,8 @@ private const val TAG = "SignFragment_싸피"
 class SignFragment : Fragment() {
     private lateinit var binding: FragmentSignBinding
     private var isAvailableId = false
+    private var userEmail : String = ""
+    private var userBirth : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +42,11 @@ class SignFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initListeners()
+
+        binding.joinBtnJoin.setOnClickListener {
+            Log.d(TAG, "onViewCreated: ${validatedEmail()}")
+
+        }
     }
 
 
@@ -42,12 +54,14 @@ class SignFragment : Fragment() {
      * TextInputEditText listener 등록
      */
     private fun initListeners() {
-
         binding.joinEditId.addTextChangedListener(TextFieldValidation(binding.joinEditId))
         binding.joinEditPw.addTextChangedListener(TextFieldValidation(binding.joinEditPw))
         binding.joinEditNick.addTextChangedListener(TextFieldValidation(binding.joinEditNick))
         binding.joinEditPhone.addTextChangedListener(TextFieldValidation(binding.joinEditPhone))
-//        binding.joinEditEmail.addTextChangedListener(TextFieldValidation(binding.joinEditEmail))
+        binding.joinEditWriteEmail.addTextChangedListener(TextFieldValidation(binding.joinEditWriteEmail))
+
+        selectedEmail()
+        selectedBirth()
     }
 
     /**
@@ -97,6 +111,29 @@ class SignFragment : Fragment() {
     }
 
     /**
+     * #S06P12D109-25
+     * 입력된 nickname 길이 및 빈 칸 체크
+     * @return 통과 시 true 반환
+     */
+    private fun validatedNickname() : Boolean{
+        val inputNickname = binding.joinEditNick.text.toString()
+
+        if(inputNickname.trim().isEmpty()){
+            binding.joinTilNick.error = "Required Field"
+            binding.joinEditNick.requestFocus()
+            return false
+        } else if(inputNickname.length > 100) {
+            binding.joinTilNick.error = "Nickname 길이를 100자 이하로 설정해 주세요."
+            binding.joinEditNick.requestFocus()
+            return false
+        }
+        else {
+            binding.joinTilNick.error = null
+            return true
+        }
+    }
+
+    /**
      * 입력된 phone number 유효성 검사
      * @return 유효성 검사 통과 시 true 반환
      */
@@ -116,6 +153,156 @@ class SignFragment : Fragment() {
             binding.joinTilPhone.error = null
             return true
         }
+    }
+
+
+    /**
+     * email 입력 데이터 검사
+     * @return email 형식이면 email(String), 아니면 null
+     */
+    private fun validatedEmail() : String? {
+        val inputEmailId = binding.joinEditEmail.text.toString()
+        var email = ""
+
+
+
+        if (validatedWriteEmail()) {
+            email = inputEmailId + "@" + binding.joinEditWriteEmail.text.toString()
+        }
+
+        // 이메일 패턴 체크
+        val pattern = Patterns.EMAIL_ADDRESS
+        Log.d(TAG, "validatedEmail: $email")
+        if (pattern.matcher(email).matches()) {
+            return email
+        } else {
+            return null
+        }
+    }
+
+    private fun validatedWriteEmail() : Boolean {
+        val inputDomain = binding.joinEditWriteEmail.text.toString()
+
+        if(inputDomain.trim().isEmpty()){
+            binding.joinTilWriteEmail.error = "Required Field"
+            binding.joinEditWriteEmail.requestFocus()
+            return false
+        }
+        else {
+            binding.joinTilWriteEmail.error = null
+            return true
+        }
+    }
+
+    /**
+     * email spinner item 선택 이벤트
+     */
+    private fun selectedEmail() {
+
+        val emailSpinner = binding.emailSpinner
+        emailSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                when (position) {
+                    // 직접 입력
+                    4 -> {
+                        binding.emailSpinner.visibility = View.GONE
+                        binding.joinTilWriteEmail.visibility = View.VISIBLE
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+        }
+    }
+
+
+    /**
+     * #S06P12D109-25
+     * birth spinner item 선택 이벤트
+     * year, month, day가 선택되면 birth 형식으로 변환한다.
+     */
+    private fun selectedBirth() {
+        var year = ""
+        var month = ""
+        var day = ""
+
+        val yearSpinner = binding.joinSpinnerYear
+        val monthSpinner = binding.joinSpinnerMonth
+        val daySpinner = binding.joinSpinnerDay
+
+        // year
+        yearSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                when (position) {
+                    0 -> {
+                        year = ""
+                    }
+                    else -> {
+                        year = yearSpinner.selectedItem.toString()
+                        // birth 형식 맞추기
+                        if(year != "" && month != "" && day != "") {  // 전부 선택 되어서 데이터가 들어있으면
+                            userBirth = "$year-$month-$day"
+                        }
+                    }
+                }
+            }
+        }
+
+        // month
+        monthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                when (position) {
+                    0 -> {
+                        month = ""
+                    }
+                    else -> {
+                        month = monthSpinner.selectedItem.toString()
+                        // birth 형식 맞추기
+                        if(year != "" && month != "" && day != "") {  // 전부 선택 되어 데이터가 들어있으면
+                            userBirth = "$year-$month-$day"
+                        }
+                    }
+                }
+            }
+        }
+
+        // day
+        daySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                when (position) {
+                    0 -> {
+                        day = ""
+                    }
+                    else -> {
+                        day = daySpinner.selectedItem.toString()
+                        // birth 형식 맞추기
+                        if(year != "" && month != "" && day != "") {  // 전부 선택 되어 데이터가 들어있으면
+                            userBirth = "$year-$month-$day"
+                        }
+                    }
+                }
+            }
+        }
+
+
+
     }
 
 
@@ -143,12 +330,15 @@ class SignFragment : Fragment() {
                 R.id.join_edit_pw -> {
                     validatedPw()
                 }
+                R.id.join_edit_nick -> {
+                    validatedNickname()
+                }
                 R.id.join_edit_phone -> {
                     validatedPhone()
                 }
-//                R.id.join_edit_nickname -> {
-//                    validatedNickname()
-//                }
+                R.id.join_edit_writeEmail -> {
+                    validatedWriteEmail()
+                }
             }
         }
     }
