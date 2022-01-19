@@ -12,6 +12,7 @@ import com.ssafy.groute.databinding.ActivityMainBinding
 import com.ssafy.groute.src.login.LoginFragment
 import com.ssafy.groute.src.login.SignFragment
 import com.ssafy.groute.src.main.board.BoardFragment
+import com.ssafy.groute.src.main.home.AreaFragment
 import com.ssafy.groute.src.main.home.HomeFragment
 import com.ssafy.groute.src.main.my.MyFragment
 import com.ssafy.groute.src.main.route.RouteCreateFragment
@@ -80,12 +81,19 @@ class MainActivity : AppCompatActivity() {
                 transaction.replace(R.id.frame_main_layout, RouteCreateFragment())
                     .addToBackStack(null)
             }
+<<<<<<< HEAD
             2 -> {
                 //현재 생성 중인 나의 day별 일정을 볼 수 있는 화면
                 transaction.replace(R.id.frame_main_layout, TravelPlanFragment())
                     .addToBackStack(null)
             }
 
+=======
+            2->{
+                transaction.replace(R.id.frame_main_layout, AreaFragment())
+                    .addToBackStack(null)
+            }
+>>>>>>> feature/AreaFragment_Frontend
         }
         transaction.commit()
     }
