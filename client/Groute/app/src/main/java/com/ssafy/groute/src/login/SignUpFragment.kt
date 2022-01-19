@@ -23,6 +23,7 @@ class SignFragment : Fragment() {
     private var isAvailableId = false
     private var userEmail : String = ""
     private var userBirth : String = ""
+    private var userGender : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +62,7 @@ class SignFragment : Fragment() {
 
         initDomain() // email domain list adapter
         selectedBirth() // birth spinner selectedItem listener
+        selectedGender()    // gender radio group Item Selected
     }
 
     /**
@@ -164,33 +166,22 @@ class SignFragment : Fragment() {
         val inputEmail = binding.joinEditEmail.text.toString()
         val inputDomain = binding.joinAutoTvDomain.text.toString()
 
-        var email = "$inputEmail@$inputDomain"
+        val email = "$inputEmail@$inputDomain"
 
-        val pattern = Patterns.EMAIL_ADDRESS
         if(inputEmail.trim().isEmpty()) {
             binding.joinTilEmail.error = "Required Email Field"
         } else if(inputDomain.trim().isEmpty()) {
             binding.joinTilEmail.error = "Required Domain Field"
         }
         else if(!Pattern.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}\$", email)) {
-//        else if(pattern.matcher(email).matches()) {
             binding.joinTilEmail.error = "이메일 형식을 확인해주세요."
         }
         else {
             binding.joinTilEmail.error = null
             binding.joinTilDomain.error = null
             userEmail = email
-            Log.d(TAG, "validatedEmail: $userEmail")
         }
 
-//        // 이메일 패턴 체크
-//        val pattern = Patterns.EMAIL_ADDRESS
-//        Log.d(TAG, "validatedEmail: $email")
-//        if (pattern.matcher(email).matches()) {
-//            return email
-//        } else {
-//            return null
-//        }
     }
 
     /**
@@ -284,10 +275,27 @@ class SignFragment : Fragment() {
                 }
             }
         }
-
-
-
     }
+
+    /**
+     * S06P12D109-80
+     * radio group 내 선택된 gender item 데이터 변환
+     */
+    private fun selectedGender() {
+        binding.joinGenderGroup.setOnCheckedChangeListener { group, checkedId ->
+            when(checkedId) {
+                R.id.join_radio_man -> {
+                    userGender = "M"
+                    Log.d(TAG, "selectedGender: $userGender")
+                }
+                R.id.join_radio_woman -> {
+                    userGender = "F"
+                    Log.d(TAG, "selectedGender: $userGender")
+                }
+            }
+        }
+    }
+
 
 
     companion object {

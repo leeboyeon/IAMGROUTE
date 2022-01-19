@@ -80,7 +80,7 @@ class HomeFragment : Fragment() {
         })
         categoryAdapter.setItemClickListener(object: CategoryAdapter.ItemClickListener{
             override fun onClick(view: View, position: Int, name: String) {
-                mainActivity.openFragment(2)
+                mainActivity.openFragment(3)
             }
         })
         binding.homeRvBestRoute.apply {
