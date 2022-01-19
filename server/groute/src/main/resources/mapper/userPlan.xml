@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.groute.mapper.UserPlanMapper">
+    <insert id="insertUserPlan" parameterType="UserPlan">
+        insert into userPlan(user_id, title, description, startDate, endDate, totalDate, isPublic)
+        values(#{userId}, #{title}, #{description}, #{startDate}, #{endDate}, #{totalDate}, #{isPublic})
+    </insert>
+
+    <resultMap id="UserPlanDTO" type="UserPlan">
+        <result column="user_id" property="userId"></result>
+    </resultMap>
+    <select id="selectUserPlan" parameterType="int" resultMap="UserPlanDTO">
+        select * from userPlan
+        where id = #{id}
+    </select>
+
+    <select id="selectAllUserPlan"  resultMap="UserPlanDTO">
+        select * from userPlan
+    </select>
+
+    <delete id="deleteUserPlan" parameterType="int">
+        delete from userPlan
+        where id = #{id}
+    </delete>
+
+    <update id="updateUserPlan" parameterType="UserPlan">
+        update userPlan
+        set user_id = #{userId}, title = #{title}, description = #{description}, startDate = #{startDate}, endDate = #{endDate}, totalDate = #{totalDate}, isPublic = #{isPublic}
+        where id = #{id}
+    </update>
+</mapper>
