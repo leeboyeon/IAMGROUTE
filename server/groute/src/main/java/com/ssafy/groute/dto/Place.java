@@ -23,6 +23,8 @@ public class Place {
     private int areaId;
     private String img;
     private String userId;
+    private double rate;
+    private int heartCnt;
 
     @Override
     public String toString() {
