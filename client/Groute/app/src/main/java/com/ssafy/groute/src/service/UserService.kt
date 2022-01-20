@@ -97,7 +97,7 @@ class UserService {
         RetrofitUtil.userService.signUp(user).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 val res = response.body()
-                Log.d("UserService_싸싸피", "onResponse: $response.")
+//                Log.d("UserService_싸싸피", "onResponse: $response.")
                 if(response.code() == 200) {
                     if (res != null) {
                         callback.onSuccess(response.code(), res)
