@@ -45,6 +45,10 @@ class RouteCreateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initAdapter()
+
+        binding.rcBtnSave.setOnClickListener {
+            mainActivity.openFragment(7)
+        }
     }
     fun initAdapter(){
         areaAdapter = AreaAdapter()

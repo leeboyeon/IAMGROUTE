@@ -113,6 +113,10 @@ class MainActivity : AppCompatActivity() {
                 transaction.replace(R.id.frame_main_layout,BoardDetailDetailFragment())
                     .addToBackStack(null)
             }
+            7->{
+                transaction.replace(R.id.frame_main_layout,TravelPlanFragment())
+                    .addToBackStack(null)
+            }
         }
         transaction.commit()
     }
