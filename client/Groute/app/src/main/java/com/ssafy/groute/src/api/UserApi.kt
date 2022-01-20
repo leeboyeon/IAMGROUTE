@@ -1,10 +1,15 @@
 package com.ssafy.groute.src.api
+import android.content.Entity
 import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.response.UserInfoResponse
 import retrofit2.Call
+import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.POST
 import retrofit2.http.Query
+import java.util.*
 
 interface UserApi {
 
@@ -21,4 +26,8 @@ interface UserApi {
     fun getUserInfo(@Path("userId") userId: String): Call<UserInfoResponse>
 
 
+
+    // 회원가입
+    @POST("/user/signup")
+    fun signUp(@Body user:User) : Call<Boolean>
 }
