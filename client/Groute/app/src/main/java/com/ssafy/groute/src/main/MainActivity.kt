@@ -3,9 +3,11 @@ package com.ssafy.groute.src.main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
+import androidx.lifecycle.LifecycleOwner
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ssafy.groute.R
@@ -21,8 +23,10 @@ import com.ssafy.groute.src.main.my.MyFragment
 import com.ssafy.groute.src.main.route.RouteCreateFragment
 import com.ssafy.groute.src.main.route.RouteFragment
 import com.ssafy.groute.src.main.travel.TravelPlanFragment
+import com.ssafy.groute.src.service.UserService
 
 
+private const val TAG = "MainActivity_groute"
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var bottomNavigation: BottomNavigationView
@@ -107,11 +111,19 @@ class MainActivity : AppCompatActivity() {
     fun initProfileBar() {
         var user = ApplicationClass.sharedPreferencesUtil.getUser()
         binding.mainTvUsername.text = "${user.id}님"
-        Glide.with(this)
-            .load("${ApplicationClass.MENU_IMGS_URL}${product.img}")
-        binding.mainIvUserimg
-
+        val userInfo = UserService().getUserInfo(user.id)
+        userInfo.observe(
+            this,
+            {
+                Log.d(TAG, "initProfileBar: ${it.img}")
+                Glide.with(this)
+                    .load("${ApplicationClass.IMGS_URL}${it.img}")
+                    .circleCrop()
+                    .into(binding.mainIvUserimg)
+            }
+        )
     }
+
     // 메인에 상단 프로필 바를 숨기고 싶은 경우
     fun hideMainProfileBar(state : Boolean) {
         if(state) binding.mainProfileBar.visibility = View.GONE

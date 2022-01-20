@@ -127,7 +127,6 @@ public class UserController {
 //        resultMap.put("data",user);
 //        return new ResponseEntity<Map<String, Object>>(resultMap,HttpStatus.OK);
         return ResponseEntity.ok("정보 수정이 완료 되었습니다.");
-
     }
 
     @ApiOperation(value = "유저정보", notes = "유저정보")

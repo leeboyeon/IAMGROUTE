@@ -18,7 +18,7 @@ interface UserApi {
 
     // 사용자의 아이디에 해당하는 사용자 정보를 반환
     @GET("/user/{userId}")
-    fun getUserInfo(@Path("userId") userId: String): Call<MutableList<UserInfoResponse>>
+    fun getUserInfo(@Path("userId") userId: String): Call<UserInfoResponse>
 
 
 }
