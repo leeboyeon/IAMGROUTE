@@ -31,16 +31,40 @@ public class UserController {
 
     @ApiOperation(value = "회원가입", notes = "회원가입")
     @PostMapping(value = "/signup")
-    public ResponseEntity<?> registerUser(User user) throws Exception{
-        if (userService.findById(user.getId()) != null) {
-            return ResponseEntity.badRequest().body("아이디가 이미 존재합니다.");
+    public Boolean registerUser(@RequestBody User dto) throws Exception{
+//        UserDTO userChk = userService.findById(dto.getId());
+        if (userService.findById(dto.getId()) != null) {
+//            return ResponseEntity.badRequest().body("아이디가 이미 존재합니다.");
+            return false;
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User user = new User();
 
+        user.setId(dto.getId());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setNickname(dto.getNickname());
+        user.setPhone(dto.getPhone());
+
+        if(dto.getEmail().equals("")) {
+            user.setEmail(null);
+        } else {
+            user.setEmail(dto.getEmail());
+        }
+        if(dto.getBirth().equals("")) {
+            user.setBirth(null);
+        } else {
+            user.setBirth(dto.getBirth());
+        }
+        if(dto.getGender().equals("")) {
+            user.setGender(null);
+        } else {
+            user.setGender(dto.getGender());
+        }
+        user.setType(dto.getType());
+//        userMapper.registerUser(user);
         userService.registerUser(user);
-        return ResponseEntity.ok("회원가입이 완료 되었습니다.");
-
+//        return ResponseEntity.ok("회원가입이 완료 되었습니다.");
+        return true;
     }
 
     @ApiOperation(value="로그인", notes="로그인")
@@ -62,7 +86,7 @@ public class UserController {
 
         selected.setToken(req.getToken());
 
-        userService.updateUser(selected);
+//        userService.saveUser(selected);
 
         return new ResponseEntity<Map<String, Object>>(resultMap,HttpStatus.OK);
     }
@@ -96,17 +120,29 @@ public class UserController {
 
     @ApiOperation(value = "회원수정", notes = "회원수정")
     @PutMapping(value = "{userId}")
-    public ResponseEntity<?> updateUser(@PathVariable String userId, User user) throws Exception{
-        if (userService.findById(userId) == null) {
+    public ResponseEntity<?> updateUser(@PathVariable String userId, User userData) throws Exception{
+        User user = userService.findById(userId);
+        if (user == null) {
             return ResponseEntity.badRequest().body("존재하지 않는 아이디입니다.");
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setId(userData.getId());
+        user.setPassword(userData.getPassword());
+        user.setNickname(userData.getNickname());
+        user.setPhone(userData.getPhone());
+        user.setGender(userData.getGender());
+        user.setBirth(userData.getBirth());
+        user.setEmail(userData.getEmail());
+        user.setImg(userData.getImg());
 
         userService.updateUser(user);
-
+//        Map<String, Object> resultMap = new HashMap<>();
+//
+//        resultMap.put("data",user);
+//        return new ResponseEntity<Map<String, Object>>(resultMap,HttpStatus.OK);
         return ResponseEntity.ok("정보 수정이 완료 되었습니다.");
     }
+
 
     @ApiOperation(value = "유저정보", notes = "유저정보")
     @GetMapping(value = "{userId}")

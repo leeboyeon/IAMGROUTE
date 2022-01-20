@@ -67,7 +67,7 @@ class SignFragment : Fragment() {
      * @return 가입 가능한 상태이면 user 객체를 반환
      */
     private fun isAvailable() : User? {
-        if((validatedId() && validatedPw() && validatedNickname() && validatedPhone()) && (userEmail != "" || userBirth != "" || userGender != "")) {
+        if((validatedId() && validatedPw() && validatedNickname() && validatedPhone()) || (userEmail != "" || userBirth != "" || userGender != "")) {
 
             val id = binding.joinEditId.text.toString()
             val pw = binding.joinEditPw.text.toString()
@@ -339,9 +339,7 @@ class SignFragment : Fragment() {
             }
 
             override fun onSuccess(code: Int, responseData: Boolean) {
-//                showCustomToast("회원가입이 완료되었습니다. 다시 로그인 해주세요")
-                Log.d(TAG, "onSuccess: 회원가입성공 $responseData")
-                Toast.makeText(requireContext(), responseData.toString(), Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "회원가입이 완료되었습니다. 다시 로그인 해주세요.", Toast.LENGTH_SHORT).show()
                 (requireActivity() as LoginActivity).onBackPressed()
             }
 
