@@ -52,6 +52,8 @@
             android:background="#d1d1d1" />
     </RelativeLayout>
 
+
+
     <ImageView
         android:id="@+id/profile_edit_img"
         android:layout_width="106dp"
@@ -184,18 +186,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_edit_password_tv" />
 
-    <EditText
-        android:id="@+id/profile_edit_nickname_et"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/profile_edit_nickname_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@null"
+        app:boxBackgroundMode="none"
         android:ems="10"
-        android:gravity="start|top"
-        android:text="SSAFY"
-        android:textSize="14sp"
+        android:paddingTop="0dp"
+        app:hintEnabled="false"
         app:layout_constraintEnd_toEndOf="@+id/profile_edit_password_et"
         app:layout_constraintStart_toStartOf="@+id/profile_edit_password_et"
-        app:layout_constraintTop_toTopOf="@+id/profile_edit_nickname_tv" />
+        app:layout_constraintTop_toTopOf="@+id/profile_edit_nickname_tv"
+        >
+
+    <EditText
+        android:id="@+id/profile_edit_nickname_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:gravity="start|top"
+        android:text="SSAFY"
+        android:paddingStart="0dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:textSize="14sp"
+        />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <View
         android:id="@+id/view8"
@@ -205,7 +221,7 @@
         android:layout_marginTop="15dp"
         android:background="#d1d1d1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_edit_nickname_et" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_nickname_layout" />
 
     <TextView
         android:id="@+id/profile_edit_phone_tv"
@@ -218,20 +234,35 @@
         android:textColor="@color/black"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_edit_nickname_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_nickname_layout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/profile_edit_phone_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:boxBackgroundMode="none"
+        android:ems="10"
+        android:paddingTop="0dp"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="@+id/profile_edit_password_et"
+        app:layout_constraintStart_toStartOf="@+id/profile_edit_password_et"
+        app:layout_constraintTop_toTopOf="@+id/profile_edit_phone_tv"
+        >
 
     <EditText
         android:id="@+id/profile_edit_phone_et"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
         android:ems="10"
+        android:paddingStart="0dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
         android:gravity="start|top"
         android:text="010-1234-5678"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/profile_edit_nickname_et"
-        app:layout_constraintStart_toStartOf="@+id/profile_edit_nickname_et"
-        app:layout_constraintTop_toTopOf="@+id/profile_edit_phone_tv" />
+         />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <View
         android:id="@+id/view9"
@@ -241,7 +272,7 @@
         android:layout_marginTop="15dp"
         android:background="#d1d1d1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_edit_phone_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_phone_layout" />
 
     <TextView
         android:id="@+id/profile_edit_email_tv"
@@ -254,20 +285,72 @@
         android:textColor="@color/black"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_edit_phone_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_phone_layout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/profile_edit_email_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:boxBackgroundMode="none"
+        android:ems="7"
+        android:paddingTop="0dp"
+        app:hintEnabled="false"
+        app:layout_constraintStart_toStartOf="@+id/profile_edit_password_et"
+        app:layout_constraintTop_toTopOf="@+id/profile_edit_email_tv"
+        >
 
     <EditText
         android:id="@+id/profile_edit_email_et"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        android:ems="10"
+        android:ems="7"
+        android:paddingStart="0dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
         android:gravity="start|top"
-        android:text="ssafy@gmail.com"
+        android:text="ssafy"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/profile_edit_phone_et"
-        app:layout_constraintStart_toStartOf="@+id/profile_edit_phone_et"
-        app:layout_constraintTop_toTopOf="@+id/profile_edit_email_tv" />
+        />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/profile_edit_email_dot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" @ "
+        app:layout_constraintTop_toTopOf="@id/profile_edit_email_layout"
+        app:layout_constraintBottom_toBottomOf="@id/profile_edit_email_layout"
+        app:layout_constraintLeft_toRightOf="@id/profile_edit_email_layout"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/profile_edit_domain_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:boxBackgroundMode="none"
+        android:ems="7"
+        android:paddingTop="0dp"
+        app:hintEnabled="false"
+        app:layout_constraintTop_toTopOf="@id/profile_edit_email_dot"
+        app:layout_constraintBottom_toBottomOf="@id/profile_edit_email_dot"
+        app:layout_constraintLeft_toRightOf="@id/profile_edit_email_dot"
+        >
+
+    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+        android:id="@+id/profile_edit_email_domain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:ems="7"
+        android:paddingStart="0dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:gravity="start|top"
+        android:text=""
+        android:textSize="14sp"
+        />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <View
         android:id="@+id/view10"
@@ -277,7 +360,7 @@
         android:layout_marginTop="15dp"
         android:background="#d1d1d1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_edit_email_et" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_email_layout" />
 
     <TextView
         android:id="@+id/profile_edit_birth_tv"
@@ -290,7 +373,7 @@
         android:textColor="@color/black"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_edit_email_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_email_layout" />
 
     <LinearLayout
         android:id="@+id/profile_edit_birth_layout"
@@ -300,14 +383,14 @@
         android:ems="10"
         android:gravity="start|top"
         android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@+id/profile_edit_email_et"
-        app:layout_constraintStart_toStartOf="@+id/profile_edit_email_et"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_email_layout"
+        app:layout_constraintStart_toStartOf="@+id/profile_edit_email_layout"
         app:layout_constraintTop_toTopOf="@+id/profile_edit_birth_tv"
         app:layout_constraintBottom_toBottomOf="@+id/profile_edit_birth_tv"
         android:orientation="horizontal">
 
         <Spinner
-            android:id="@+id/join_spinner_year"
+            android:id="@+id/profile_edit_spinner_year"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -317,7 +400,7 @@
             android:entries="@array/birth_year_spinner"/>
 
         <Spinner
-            android:id="@+id/join_spinner_month"
+            android:id="@+id/profile_edit_spinner_month"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -327,7 +410,7 @@
             android:entries="@array/birth_month_spinner" />
 
         <Spinner
-            android:id="@+id/join_spinner_day"
+            android:id="@+id/profile_edit_spinner_day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -368,14 +451,14 @@
             android:text="GENDER" />
 
         <RadioButton
-            android:id="@+id/join_radio_man"
+            android:id="@+id/profile_edit_radio_man"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="남" />
 
         <RadioButton
-            android:id="@+id/join_radio_woman"
+            android:id="@+id/profile_edit_radio_woman"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
