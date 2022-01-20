@@ -13,4 +13,5 @@ public interface CommentMapper {
     List<Comment> selectAllComment() throws Exception;
     void deleteComment(int id) throws Exception;
     void updateComment(Comment comment) throws Exception;
+    List<Comment> selectAllByBoardDetailId(int id) throws Exception;
 }

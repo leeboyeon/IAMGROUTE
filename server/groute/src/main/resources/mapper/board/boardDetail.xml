@@ -48,7 +48,7 @@
 
     <update id="updateBoardDetail" parameterType="BoardDetail">
         update BoardDetail
-        set title = #{title}, content = #{content}, img = #{img}
+        set title = #{title}, content = #{content}, img = #{img}, hitCnt = #{hitCnt}, heartCnt = #{heartCnt}
         where id = #{id}
     </update>
 </mapper>

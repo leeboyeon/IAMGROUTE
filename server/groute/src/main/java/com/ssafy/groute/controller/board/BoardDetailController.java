@@ -1,14 +1,18 @@
 package com.ssafy.groute.controller.board;
 
 import com.ssafy.groute.dto.board.BoardDetail;
+import com.ssafy.groute.dto.board.Comment;
 import com.ssafy.groute.service.board.BoardDetailService;
+import com.ssafy.groute.service.board.CommentService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = { "*" }, methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
@@ -19,6 +23,8 @@ public class BoardDetailController {
 
     @Autowired
     BoardDetailService boardDetailService;
+    @Autowired
+    CommentService commentService;
 
     @ApiOperation(value = "boardDetail 추가",notes = "boardDetail 추가")
     @PostMapping(value = "/insert")
@@ -37,13 +43,16 @@ public class BoardDetailController {
     @ApiOperation(value = "boardDetail 검색",notes = "이름으로 boardDetail 하나 검색")
     @GetMapping(value = "/detail")
     public ResponseEntity<?> detailBoardDetail(@RequestParam("id") int id) throws Exception{
-
-        BoardDetail res = boardDetailService.selectBoardDetail(id);
+        Map<String,Object> res = new HashMap<>();
+        BoardDetail board = boardDetailService.selectBoardDetail(id);
+        List<Comment> comments = commentService.selectAllByBoardDetailId(id);
+        res.put("boardDetail",board);
+        res.put("comments",comments);
         if(res==null){
             return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<BoardDetail>(res,HttpStatus.OK);
+        return new ResponseEntity<Map<String,Object>>(res,HttpStatus.OK);
     }
 
     @ApiOperation(value = "list boardDetail",notes = "모든 boardDetail 반환")

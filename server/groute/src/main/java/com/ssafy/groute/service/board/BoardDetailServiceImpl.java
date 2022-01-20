@@ -21,7 +21,10 @@ public class BoardDetailServiceImpl implements BoardDetailService {
 
     @Override
     public BoardDetail selectBoardDetail(int id) throws Exception {
-        return boardDetailMapper.selectBoardDetail(id);
+        BoardDetail res = boardDetailMapper.selectBoardDetail(id);
+        res.setHitCnt(res.getHitCnt()+1);
+        boardDetailMapper.updateBoardDetail(res);
+        return res;
     }
 
     @Override

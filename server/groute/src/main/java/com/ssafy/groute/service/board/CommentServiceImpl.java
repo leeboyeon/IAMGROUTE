@@ -39,4 +39,9 @@ public class CommentServiceImpl implements CommentService{
     public void updateComment(Comment comment) throws Exception {
         commentMapper.updateComment(comment);
     }
+
+    @Override
+    public List<Comment> selectAllByBoardDetailId(int id) throws Exception {
+        return commentMapper.selectAllByBoardDetailId(id);
+    }
 }

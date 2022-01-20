@@ -21,6 +21,11 @@
         select * from comment
     </select>
 
+    <select id="selectAllByBoardDetailId" parameterType="int" resultMap="CommentDTO">
+        select * from comment
+        where boardDetail_id = #{id}
+    </select>
+
     <delete id="deleteComment" parameterType="int">
         delete from comment
         where id = #{id}
