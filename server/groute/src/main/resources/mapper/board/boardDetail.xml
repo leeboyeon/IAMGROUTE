@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.groute.mapper.board.BoardDetailMapper">
+    <insert id="insertBoardDetail" parameterType="BoardDetail">
+        insert into boardDetail(title, content, img, board_id, user_id)
+        values(#{title}, #{content}, #{img}, #{boardId}, #{userId})
+    </insert>
+
+    <resultMap id="BoardDetailDTO" type="BoardDetail">
+        <result column="board_id" property="boardId"></result>
+        <result column="user_id" property="userId"></result>
+        <result column="create_date" property="createDate"></result>
+        <result column="update_date" property="updateDate"></result>
+    </resultMap>
+    <select id="selectBoardDetail" parameterType="int" resultMap="BoardDetailDTO">
+        select id, title, content, img, heartCnt, hitCnt, board_id, user_id, place_id,
+               case when date_format(create_date, '%Y%m%d') = date_format(now(), '%Y%m%d')
+                        then date_format(create_date, '%H:%i:%s')
+                    else date_format(create_date, '%y.%m.%d')
+                   end create_date,
+               case when date_format(update_date, '%Y%m%d') = date_format(now(), '%Y%m%d')
+                        then date_format(update_date, '%H:%i:%s')
+                    else date_format(update_date, '%y.%m.%d')
+                   end update_date
+               from boardDetail
+        where id = #{id}
+    </select>
+
+    <select id="selectAllBoardDetail"  resultMap="BoardDetailDTO">
+        select id, title, content, img, heartCnt, hitCnt, board_id, user_id, place_id,
+               case when date_format(create_date, '%Y%m%d') = date_format(now(), '%Y%m%d')
+                        then date_format(create_date, '%H:%i:%s')
+                    else date_format(create_date, '%y.%m.%d')
+                   end create_date,
+               case when date_format(update_date, '%Y%m%d') = date_format(now(), '%Y%m%d')
+                        then date_format(update_date, '%H:%i:%s')
+                    else date_format(update_date, '%y.%m.%d')
+                   end update_date
+        from boardDetail
+    </select>
+
+    <delete id="deleteBoardDetail" parameterType="int">
+        delete from boardDetail
+        where id = #{id}
+    </delete>
+
+    <update id="updateBoardDetail" parameterType="BoardDetail">
+        update BoardDetail
+        set title = #{title}, content = #{content}, img = #{img}
+        where id = #{id}
+    </update>
+</mapper>
