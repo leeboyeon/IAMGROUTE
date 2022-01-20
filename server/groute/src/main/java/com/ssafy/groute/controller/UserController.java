@@ -45,14 +45,14 @@ public class UserController {
     @Value("${spring.servlet.multipart.location}")
     private String uploadPath;
 
-    @ApiOperation(value = "프로필사진", notes = "프로필사진")
-    @GetMapping(value = "/image/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> userImage(@PathVariable("imageName") String imagename) throws IOException {
-        InputStream imageStream = new FileInputStream(uploadPath + "/user/" + imagename);
-        byte[] imageByteArray = IOUtils.toByteArray(imageStream);
-        imageStream.close();
-        return new ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK);
-    }
+//    @ApiOperation(value = "프로필사진", notes = "프로필사진")
+//    @GetMapping(value = "/image/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
+//    public ResponseEntity<byte[]> userImage(@PathVariable("imageName") String imagename) throws IOException {
+//        InputStream imageStream = new FileInputStream(uploadPath + "/user/" + imagename);
+//        byte[] imageByteArray = IOUtils.toByteArray(imageStream);
+//        imageStream.close();
+//        return new ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK);
+//    }
 
     @ApiOperation(value = "회원가입", notes = "회원가입")
     @PostMapping(value = "/signup")
@@ -64,11 +64,8 @@ public class UserController {
         if (!file.isEmpty()) {
 //            file.transferTo(new File(file.getOriginalFilename()));
             String fileName = storageService.store(file, uploadPath + "/user");
-            String downloadURI = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/user/image/")
-                    .path(fileName)
-                    .toUriString();
-            user.setImg(downloadURI);
+
+            user.setImg(fileName);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -130,10 +127,16 @@ public class UserController {
     }
 
     @ApiOperation(value = "회원수정", notes = "회원수정")
-    @PutMapping(value = "{userId}")
-    public ResponseEntity<?> updateUser(@PathVariable String userId, User user) throws Exception{
-        if (userService.findById(userId) == null) {
+    @PutMapping(value = "/update")
+    public ResponseEntity<?> updateUser(User user, MultipartFile file) throws Exception{
+        if (userService.findById(user.getId()) == null) {
             return ResponseEntity.badRequest().body("존재하지 않는 아이디입니다.");
+        }
+        if (file.isEmpty()) {
+            user.setImg("");
+        } else {
+            String fileName = storageService.store(file, uploadPath + "/user");
+            user.setImg(fileName);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));

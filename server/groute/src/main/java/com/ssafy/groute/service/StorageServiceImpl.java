@@ -36,16 +36,16 @@ public class StorageServiceImpl implements StorageService{
     public String store(MultipartFile file, String location) throws Exception{
         Path root = Paths.get(location);
         LocalDate date = LocalDate.now();
-        String filename = date + "_" + file.getOriginalFilename();
+        String fileName = date + "_" + file.getOriginalFilename();
         if (!Files.exists(root)) {
             init(location);
         }
 
         InputStream inputStream = file.getInputStream();
-        Files.copy(inputStream, root.resolve(Objects.requireNonNull(file.getOriginalFilename())),
+        Files.copy(inputStream, root.resolve(fileName),
                 StandardCopyOption.REPLACE_EXISTING);
 
-        return filename;
+        return fileName;
     }
 
 //

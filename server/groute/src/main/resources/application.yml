@@ -22,7 +22,7 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
-      location: /resources/images
+      location: ../groute/src/main/resources/images
 
 mybatis:
   type-aliases-package: com.ssafy.groute.dto
