@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
@@ -106,6 +107,10 @@ class MainActivity : AppCompatActivity() {
     fun initProfileBar() {
         var user = ApplicationClass.sharedPreferencesUtil.getUser()
         binding.mainTvUsername.text = "${user.id}님"
+        Glide.with(this)
+            .load("${ApplicationClass.MENU_IMGS_URL}${product.img}")
+        binding.mainIvUserimg
+
     }
     // 메인에 상단 프로필 바를 숨기고 싶은 경우
     fun hideMainProfileBar(state : Boolean) {
