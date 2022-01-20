@@ -77,7 +77,7 @@
         app:layout_constraintTop_toBottomOf="@+id/board_tv_writeContent">
 
         <ImageButton
-            android:id="@+id/imageButton6"
+            android:id="@+id/gooBtn"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:background="@android:color/transparent"
@@ -96,7 +96,7 @@
             android:textStyle="bold" />
 
         <ImageButton
-            android:id="@+id/imageButton7"
+            android:id="@+id/chatBtn"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:background="@android:color/transparent"

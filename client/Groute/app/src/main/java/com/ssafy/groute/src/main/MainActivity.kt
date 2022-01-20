@@ -15,6 +15,8 @@ import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.ActivityMainBinding
 import com.ssafy.groute.src.login.LoginFragment
 import com.ssafy.groute.src.login.SignFragment
+import com.ssafy.groute.src.main.board.BoardDetailDetailFragment
+import com.ssafy.groute.src.main.board.BoardDetailFragment
 import com.ssafy.groute.src.main.board.BoardFragment
 import com.ssafy.groute.src.main.home.AreaFragment
 import com.ssafy.groute.src.main.home.HomeFragment
@@ -101,6 +103,14 @@ class MainActivity : AppCompatActivity() {
             }
             4 -> {
                 transaction.replace(R.id.frame_main_layout, PlaceDetailFragment())
+                    .addToBackStack(null)
+            }
+            5->{
+                transaction.replace(R.id.frame_main_layout, BoardDetailFragment())
+                    .addToBackStack(null)
+            }
+            6->{
+                transaction.replace(R.id.frame_main_layout,BoardDetailDetailFragment())
                     .addToBackStack(null)
             }
         }
