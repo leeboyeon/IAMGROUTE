@@ -17,6 +17,12 @@ spring:
       matching-strategy: ant_path_matcher
   jwt:
     secret: DvqcGn8mnFjqSL4a
+    
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      location: /resources/images
 
 mybatis:
   type-aliases-package: com.ssafy.groute.dto

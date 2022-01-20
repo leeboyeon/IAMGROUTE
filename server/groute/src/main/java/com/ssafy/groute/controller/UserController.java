@@ -3,19 +3,31 @@ package com.ssafy.groute.controller;
 import com.ssafy.groute.config.security.JwtTokenProvider;
 import com.ssafy.groute.dto.User;
 import com.ssafy.groute.mapper.UserMapper;
+import com.ssafy.groute.service.StorageService;
 import com.ssafy.groute.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,12 +40,35 @@ public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final StorageService storageService;
+
+    @Value("${spring.servlet.multipart.location}")
+    private String uploadPath;
+
+    @ApiOperation(value = "프로필사진", notes = "프로필사진")
+    @GetMapping(value = "/image/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> userImage(@PathVariable("imageName") String imagename) throws IOException {
+        InputStream imageStream = new FileInputStream(uploadPath + "/user/" + imagename);
+        byte[] imageByteArray = IOUtils.toByteArray(imageStream);
+        imageStream.close();
+        return new ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK);
+    }
 
     @ApiOperation(value = "회원가입", notes = "회원가입")
     @PostMapping(value = "/signup")
-    public ResponseEntity<?> registerUser(User user) throws Exception{
+    public ResponseEntity<?> registerUser(User user, MultipartFile file) throws Exception{
         if (userService.findById(user.getId()) != null) {
             return ResponseEntity.badRequest().body("아이디가 이미 존재합니다.");
+        }
+
+        if (!file.isEmpty()) {
+//            file.transferTo(new File(file.getOriginalFilename()));
+            String fileName = storageService.store(file, uploadPath + "/user");
+            String downloadURI = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/user/image/")
+                    .path(fileName)
+                    .toUriString();
+            user.setImg(downloadURI);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
