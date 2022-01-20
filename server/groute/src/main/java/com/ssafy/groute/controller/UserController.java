@@ -3,19 +3,31 @@ package com.ssafy.groute.controller;
 import com.ssafy.groute.config.security.JwtTokenProvider;
 import com.ssafy.groute.dto.User;
 import com.ssafy.groute.mapper.UserMapper;
+import com.ssafy.groute.service.StorageService;
 import com.ssafy.groute.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,23 +40,49 @@ public class UserController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final StorageService storageService;
+
+    @Value("${spring.servlet.multipart.location}")
+    private String uploadPath;
+
+//    @ApiOperation(value = "프로필사진", notes = "프로필사진")
+//    @GetMapping(value = "/image/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
+//    public ResponseEntity<byte[]> userImage(@PathVariable("imageName") String imagename) throws IOException {
+//        InputStream imageStream = new FileInputStream(uploadPath + "/user/" + imagename);
+//        byte[] imageByteArray = IOUtils.toByteArray(imageStream);
+//        imageStream.close();
+//        return new ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK);
+//    }
 
     @ApiOperation(value = "회원가입", notes = "회원가입")
     @PostMapping(value = "/signup")
+
     public Boolean registerUser(@RequestBody User dto) throws Exception{
 //        UserDTO userChk = userService.findById(dto.getId());
         if (userService.findById(dto.getId()) != null) {
 //            return ResponseEntity.badRequest().body("아이디가 이미 존재합니다.");
             return false;
         }
-
+        
         User user = new User();
-
         user.setId(dto.getId());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.setNickname(dto.getNickname());
-        user.setPhone(dto.getPhone());
-
+        if (!file.isEmpty()) {
+            String fileName = storageService.store(file, uploadPath + "/user");
+            user.setImg(fileName);
+        } else {
+            user.setImg(null)
+        }
+        if(dto.getNickname().equals("")) {
+            user.setNickname(null);
+        } else {
+            user.setNickname(dto.getNickname());
+        }
+        if(dto.getPhone().equals("")) {
+            user.setPhone(null);
+        } else {
+            user.setPhone(dto.getPhone());
+        }
         if(dto.getEmail().equals("")) {
             user.setEmail(null);
         } else {
@@ -105,42 +143,60 @@ public class UserController {
 
     @ApiOperation(value = "회원탈퇴", notes = "회원탈퇴")
     @DeleteMapping(value = "{userId}")
-    public ResponseEntity<?> deleteUser(@PathVariable String userId) throws Exception{
+    public Boolean deleteUser(@PathVariable String userId) throws Exception{
         // jwt token 인증 필요
 
-
-
         if (userService.findById(userId) == null) {
-            return ResponseEntity.badRequest().body("존재하지 않는 아이디입니다.");
+            return false;
         }
 
         userService.deleteUser(userId);
-        return ResponseEntity.ok("회원탈퇴가 완료 되었습니다.");
+        return true;
     }
 
     @ApiOperation(value = "회원수정", notes = "회원수정")
-    @PutMapping(value = "{userId}")
-    public ResponseEntity<?> updateUser(@PathVariable String userId, User userData) throws Exception{
-        User user = userService.findById(userId);
+    @PutMapping(value = "/update")
+    public Boolean updateUser(User userData) throws Exception{
+        User user = userService.findById(userData.getId());
         if (user == null) {
-            return ResponseEntity.badRequest().body("존재하지 않는 아이디입니다.");
+            return false;
         }
 
-        user.setId(userData.getId());
-        user.setPassword(userData.getPassword());
-        user.setNickname(userData.getNickname());
-        user.setPhone(userData.getPhone());
-        user.setGender(userData.getGender());
-        user.setBirth(userData.getBirth());
-        user.setEmail(userData.getEmail());
-        user.setImg(userData.getImg());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        if (file.isEmpty()) {
+            user.setImg(null);
+        } else {
+            String fileName = storageService.store(file, uploadPath + "/user");
+            user.setImg(fileName);
+        }
+        if(userData.getNickname().equals("")) {
+            user.setNickname(null);
+        } else {
+            user.setNickname(userData.getNickname());
+        }
+        if(userData.getPhone().equals("")) {
+            user.setPhone(null);
+        } else {
+            user.setPhone(userData.getPhone());
+        }
+        if(userData.getEmail().equals("")) {
+            user.setEmail(null);
+        } else {
+            user.setEmail(userData.getEmail());
+        }
+        if(userData.getBirth().equals("")) {
+            user.setBirth(null);
+        } else {
+            user.setBirth(userData.getBirth());
+        }
+        if(userData.getGender().equals("")) {
+            user.setGender(null);
+        } else {
+            user.setGender(userData.getGender());
+        }
 
         userService.updateUser(user);
-//        Map<String, Object> resultMap = new HashMap<>();
-//
-//        resultMap.put("data",user);
-//        return new ResponseEntity<Map<String, Object>>(resultMap,HttpStatus.OK);
-        return ResponseEntity.ok("정보 수정이 완료 되었습니다.");
+        return true;
     }
 
 
