@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.groute.mapper.board.BoardMapper">
+    <insert id="insertBoard" parameterType="Board">
+        insert into board(type)
+        values(#{type})
+    </insert>
+
+    <select id="selectBoard" parameterType="int" resultType="Board">
+        select * from board
+        where id = #{id}
+    </select>
+
+    <select id="selectAllBoard"  resultType="Board">
+        select * from board
+    </select>
+
+    <delete id="deleteBoard" parameterType="int">
+        delete from board
+        where id = #{id}
+    </delete>
+
+    <update id="updateBoard" parameterType="Board">
+        update Board
+        set type = #{type}
+        where id = #{id}
+    </update>
+</mapper>

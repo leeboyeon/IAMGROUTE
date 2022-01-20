@@ -19,5 +19,5 @@ spring:
     secret: DvqcGn8mnFjqSL4a
 
 mybatis:
-  type-aliases-package: com.ssafy.groute.dto
+  type-aliases-package: com.ssafy.groute.dto, com.ssafy.groute.dto.board
   mapper-locations: mapper/**/*.xml
