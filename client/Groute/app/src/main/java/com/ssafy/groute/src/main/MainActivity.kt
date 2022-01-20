@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ssafy.groute.R
+import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.ActivityMainBinding
 import com.ssafy.groute.src.login.LoginFragment
 import com.ssafy.groute.src.login.SignFragment
@@ -73,6 +74,8 @@ class MainActivity : AppCompatActivity() {
                 bottomNavigation.selectedItemId = item.itemId
             }
         }
+
+        initProfileBar()
     }
     fun openFragment(int: Int){
         val transaction = supportFragmentManager.beginTransaction()
@@ -98,6 +101,12 @@ class MainActivity : AppCompatActivity() {
         }
         transaction.commit()
     }
+
+    // 프로필바 사용자 정보 갱신
+    fun initProfileBar() {
+        var user = ApplicationClass.sharedPreferencesUtil.getUser()
+        binding.mainTvUsername.text = "${user.id}님"
+    }
     // 메인에 상단 프로필 바를 숨기고 싶은 경우
     fun hideMainProfileBar(state : Boolean) {
         if(state) binding.mainProfileBar.visibility = View.GONE
@@ -110,4 +119,6 @@ class MainActivity : AppCompatActivity() {
         if(state) bottomNavigation.visibility =  View.GONE
         else bottomNavigation.visibility = View.VISIBLE
     }
+
+
 }

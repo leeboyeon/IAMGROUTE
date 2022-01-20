@@ -28,7 +28,7 @@
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="인사말을 적어봅시다."
+                android:text="안녕하세요."
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:textStyle="bold" />
