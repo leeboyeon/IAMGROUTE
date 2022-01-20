@@ -7,6 +7,8 @@ import com.ssafy.groute.util.RetrofitUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.http.HTTP
+import java.util.function.BiPredicate
 
 class UserService {
     fun login(user: User, callback: RetrofitCallback<User>) {
@@ -52,4 +54,31 @@ class UserService {
             }
         })
     }
+
+    /**
+     * #S06P12D109-24 회원가입
+     * 사용자로 부터 입력받은 사용자 데이터를 서버로 전송한다.
+     * @param user
+     * @return callback
+     */
+    fun signUp(user: User, callback: RetrofitCallback<Boolean>) {
+        RetrofitUtil.userService.signUp(user).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                Log.d("UserService_싸싸피", "onResponse: $response.")
+                if(response.code() == 200) {
+                    if (res != null) {
+                        callback.onSuccess(response.code(), res)
+                    }
+                } else {
+                    callback.onFailure(response.code())
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callback.onError(t)
+            }
+        })
+    }
+
 }

@@ -8,14 +8,15 @@ data class User(
     val password: String,
     val nickname: String,
     val phone: String,
-    val gender: String,
-    val birth: String,
     val email: String,
+    val birth: String,
+    val gender: String,
     val type: String,
     val token: String,
     val img: String
 ) {
     constructor() : this("", "", "", "", "", "", "", "", "", "")
     constructor(id: String, password: String) : this(id, password, "", "", "", "", "", "", "", "")
+    constructor(id: String, password: String, nickname: String, phone:String, email: String, birth: String, gender: String, type: String) : this(id, password, nickname, phone, email, birth, gender, type, "", "")
     constructor(id: String) : this(id, "", "", "", "", "", "", "", "", "")
 }

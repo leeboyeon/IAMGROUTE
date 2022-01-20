@@ -11,10 +11,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentSignBinding
+import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
+import retrofit2.Response
 import java.util.regex.Pattern
 
 private const val TAG = "SignFragment_싸피"
@@ -42,12 +45,40 @@ class SignFragment : Fragment() {
 
         initListeners()
 
+        /**
+         * Join 버튼 클릭 이벤트
+         */
         binding.joinBtnJoin.setOnClickListener {
-            Log.d(TAG, "onViewCreated: ${validatedEmail()}")
+            var user = isAvailable()
+            if(user != null) {
+                Log.d(TAG, "onViewCreated: $user")
+                signUp(user)
+            } else {
+                Toast.makeText(requireContext(), "입력 값을 다시 확인해 주세요", Toast.LENGTH_LONG).show()
+            }
 
         }
     }
 
+    /**
+     * #S06P12D109-24
+     * 필수 데이터 id 유효성 검사 및 중복 확인, pw, nickname, phone 유효성 통과 여부와
+     * 선택 데이터 email, birth, gender 데이터 형식 확인 후 가입 가능한 상태인지 최종 판단
+     * @return 가입 가능한 상태이면 user 객체를 반환
+     */
+    private fun isAvailable() : User? {
+        if((validatedId() && validatedPw() && validatedNickname() && validatedPhone()) && (userEmail != "" || userBirth != "" || userGender != "")) {
+
+            val id = binding.joinEditId.text.toString()
+            val pw = binding.joinEditPw.text.toString()
+            val nn = binding.joinEditNick.text.toString()
+            val phone = binding.joinEditPhone.text.toString()
+            return User(id, pw, nn, phone, userEmail, userBirth, userGender, "none")
+
+        } else {
+            return null
+        }
+    }
 
     /**
      * TextInputEditText listener 등록
@@ -278,7 +309,7 @@ class SignFragment : Fragment() {
     }
 
     /**
-     * S06P12D109-80
+     * #S06P12D109-80
      * radio group 내 선택된 gender item 데이터 변환
      */
     private fun selectedGender() {
@@ -296,6 +327,30 @@ class SignFragment : Fragment() {
         }
     }
 
+    /**
+     * #S06P12D109-24
+     * 서버로 데이터 전송 후 회원 가입이 완료되었으면 로그인 페이지로 전환
+     * @param user
+     */
+    private fun signUp(user: User){
+        UserService().signUp(user, object : RetrofitCallback<Boolean> {
+            override fun onError(t: Throwable) {
+                Log.d(TAG, t.message?:"회원가입 통신오류")
+            }
+
+            override fun onSuccess(code: Int, responseData: Boolean) {
+//                showCustomToast("회원가입이 완료되었습니다. 다시 로그인 해주세요")
+                Log.d(TAG, "onSuccess: 회원가입성공 $responseData")
+                Toast.makeText(requireContext(), responseData.toString(), Toast.LENGTH_LONG).show()
+                (requireActivity() as LoginActivity).onBackPressed()
+            }
+
+            override fun onFailure(code: Int) {
+                Log.d(TAG, "onFailure: resCode $code")
+            }
+
+        })
+    }
 
 
     companion object {
