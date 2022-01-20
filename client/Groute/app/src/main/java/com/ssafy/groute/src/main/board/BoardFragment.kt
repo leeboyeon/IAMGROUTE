@@ -2,6 +2,7 @@ package com.ssafy.groute.src.main.board
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,7 @@ import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentBoardBinding
 import com.ssafy.groute.src.main.MainActivity
 
-
+private const val TAG = "BoardFragment"
 class BoardFragment : Fragment() {
     lateinit var binding: FragmentBoardBinding
     private lateinit var mainActivity: MainActivity
@@ -43,6 +44,10 @@ class BoardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
+        binding.boardTvMore.setOnClickListener {
+            Log.d(TAG, "onViewCreated: ")
+            mainActivity.openFragment(5)
+        }
 
     }
     fun initAdapter(){

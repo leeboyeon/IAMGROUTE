@@ -49,10 +49,20 @@ class BoardRecyclerviewAdapter(val context: Context) : RecyclerView.Adapter<Boar
     override fun onBindViewHolder(holder: BoardHolder, position: Int) {
         holder.apply {
             bindInfo()
+            itemView.setOnClickListener {
+                itemClickListener.onClick(it,position,"name")
+            }
         }
     }
 
     override fun getItemCount(): Int {
         return 6
+    }
+    interface ItemClickListener{
+        fun onClick(view:View, position: Int, name: String)
+    }
+    private lateinit var itemClickListener : ItemClickListener
+    fun setItemClickListener(itemClickListener: ItemClickListener){
+        this.itemClickListener = itemClickListener
     }
 }
