@@ -13,12 +13,14 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.FragmentMyBinding
 import com.ssafy.groute.src.main.MainActivity
+import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
 
 private const val TAG = "MyFragment_groute"
 class MyFragment : Fragment() {
     private lateinit var binding: FragmentMyBinding
     private lateinit var mainActivity:MainActivity
+    private lateinit var userInfoResponse: UserInfoResponse
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +64,7 @@ class MyFragment : Fragment() {
 
         binding.myEditProfileTv.setOnClickListener {
             val intent = Intent(mainActivity, ProfileEditActivity::class.java)
+            intent.putExtra("userData", userInfoResponse)
             startActivity(intent)
         }
     }
@@ -78,6 +81,8 @@ class MyFragment : Fragment() {
                     .load("${ApplicationClass.IMGS_URL}${it.img}")
                     .circleCrop()
                     .into(binding.myProfileImg)
+
+                userInfoResponse = it
             }
         )
     }
