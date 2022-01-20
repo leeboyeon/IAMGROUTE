@@ -44,9 +44,22 @@ public class UserController {
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setNickname(dto.getNickname());
         user.setPhone(dto.getPhone());
-        user.setEmail(dto.getEmail());
-        user.setGender(dto.getGender());
-        user.setBirth(dto.getBirth());
+
+        if(dto.getEmail().equals("")) {
+            user.setEmail(null);
+        } else {
+            user.setEmail(dto.getEmail());
+        }
+        if(dto.getBirth().equals("")) {
+            user.setBirth(null);
+        } else {
+            user.setBirth(dto.getBirth());
+        }
+        if(dto.getGender().equals("")) {
+            user.setGender(null);
+        } else {
+            user.setGender(dto.getGender());
+        }
         user.setType(dto.getType());
 //        userMapper.registerUser(user);
         userService.registerUser(user);

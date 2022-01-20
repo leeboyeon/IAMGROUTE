@@ -67,7 +67,7 @@ class SignFragment : Fragment() {
      * @return 가입 가능한 상태이면 user 객체를 반환
      */
     private fun isAvailable() : User? {
-        if((validatedId() && validatedPw() && validatedNickname() && validatedPhone()) && (userEmail != "" || userBirth != "" || userGender != "")) {
+        if((validatedId() && validatedPw() && validatedNickname() && validatedPhone()) || (userEmail != "" || userBirth != "" || userGender != "")) {
 
             val id = binding.joinEditId.text.toString()
             val pw = binding.joinEditPw.text.toString()
