@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
-import com.ssafy.groute.src.main.home.Category
+import com.ssafy.groute.src.dto.Category
 
 class RouteAreaAdapter : RecyclerView.Adapter<RouteAreaAdapter.RouteAreaHolder>(){
     var list = mutableListOf<Category>()
