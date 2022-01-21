@@ -21,6 +21,7 @@ class MyFragment : Fragment() {
     private lateinit var binding: FragmentMyBinding
     private lateinit var mainActivity:MainActivity
     private lateinit var userInfoResponse: UserInfoResponse
+    private lateinit var intent: Intent
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +38,15 @@ class MyFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         mainActivity.hideBottomNav(false)
+        var user = ApplicationClass.sharedPreferencesUtil.getUser()
+        val userInfo = UserService().getUserInfo(user.id)
+        userInfo.observe(
+            viewLifecycleOwner,
+            {
+                userInfoResponse = it
+            }
+        )
+
     }
 
     override fun onCreateView(
@@ -55,6 +65,8 @@ class MyFragment : Fragment() {
         pagerAdapter.addFragment(SharedTravelFragment())
         pagerAdapter.addFragment(SaveTravelFragment())
 
+        intent = Intent(mainActivity, ProfileEditActivity::class.java)
+
         binding.myVpLayout.adapter = pagerAdapter
         TabLayoutMediator(binding.mypagetablayout, binding.myVpLayout){tab, position ->
             tab.text = tabList.get(position)
@@ -63,7 +75,6 @@ class MyFragment : Fragment() {
         initUserInfo()
 
         binding.myEditProfileTv.setOnClickListener {
-            val intent = Intent(mainActivity, ProfileEditActivity::class.java)
             intent.putExtra("userData", userInfoResponse)
             startActivity(intent)
         }

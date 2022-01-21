@@ -309,7 +309,7 @@
         android:paddingTop="0dp"
         android:paddingBottom="0dp"
         android:gravity="start|top"
-        android:text="ssafy"
+        android:text=""
         android:textSize="14sp"
         />
     </com.google.android.material.textfield.TextInputLayout>

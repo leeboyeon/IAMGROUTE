@@ -77,7 +77,7 @@ class ProfileEditActivity : AppCompatActivity() {
     fun initData(user: UserInfoResponse) {
         if(user.img != null) {
             Glide.with(this)
-                .load("${ApplicationClass.IMGS_URL}${user.img}")
+                .load("${ApplicationClass.IMGS_URL_USER}${user.img}")
                 .circleCrop()
                 .into(binding.profileEditImg)
         }
@@ -88,7 +88,6 @@ class ProfileEditActivity : AppCompatActivity() {
 
         if(user.email != null) {
             if (user.email == "") {
-                binding.profileEditEmailEt.hint = "이메일을 입력해주세요."
             } else {
                 val emailStr = user.email.split("@")
                 binding.profileEditEmailEt.setText(emailStr.get(0))
@@ -194,7 +193,6 @@ class ProfileEditActivity : AppCompatActivity() {
     }
 
     /**
-     * #S06P12D109-24
      * 필수 데이터 id 유효성 검사 및 중복 확인, pw, nickname, phone 유효성 통과 여부와
      * 선택 데이터 email, birth, gender 데이터 형식 확인 후 가입 가능한 상태인지 최종 판단
      * @return 가입 가능한 상태이면 user 객체를 반환
@@ -204,6 +202,7 @@ class ProfileEditActivity : AppCompatActivity() {
         if(validatedNickname() && validatedPhone()) {
             val nickname = binding.profileEditNicknameEt.text.toString()
             val phone = binding.profileEditPhoneEt.text.toString()
+            Log.d(TAG, "isAvailable 사용자 비밀번호: ${user.password}")
             Log.d(TAG, "isAvailable: ${phone}")
             Log.d(TAG, "isAvailable: ${userEmail}")
             Log.d(TAG, "isAvailable: ${userBirth}")
@@ -233,7 +232,6 @@ class ProfileEditActivity : AppCompatActivity() {
     }
 
     /**
-     * #S06P12D109-25
      * 입력된 nickname 길이 및 빈 칸 체크
      * @return 통과 시 true 반환
      */
@@ -279,7 +277,6 @@ class ProfileEditActivity : AppCompatActivity() {
 
 
     /**
-     * #S06P12D109-79
      * email 입력 데이터 검사
      * @return email 형식이면 email(String), 아니면 null
      */
@@ -306,7 +303,6 @@ class ProfileEditActivity : AppCompatActivity() {
     }
 
     /**
-     * #S06P12D109-79
      * email domain list set Adapter
      */
     private fun initDomain() {
@@ -318,7 +314,6 @@ class ProfileEditActivity : AppCompatActivity() {
     }
 
     /**
-     * #S06P12D109-25
      * birth spinner item 선택 이벤트
      * year, month, day가 선택되면 birth 형식으로 변환한다.
      */
@@ -399,16 +394,15 @@ class ProfileEditActivity : AppCompatActivity() {
     }
 
     /**
-     * #S06P12D109-80
      * radio group 내 선택된 gender item 데이터 변환
      */
     private fun selectedGender() {
         binding.profilEditGenderGroup.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId) {
-                com.ssafy.groute.R.id.join_radio_man -> {
+                com.ssafy.groute.R.id.profile_edit_radio_man -> {
                     userGender = "M"
                 }
-                com.ssafy.groute.R.id.join_radio_woman -> {
+                com.ssafy.groute.R.id.profile_edit_radio_woman -> {
                     userGender = "F"
                 }
             }
