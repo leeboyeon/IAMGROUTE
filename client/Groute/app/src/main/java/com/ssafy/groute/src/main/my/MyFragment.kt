@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
+import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.FragmentMyBinding
 import com.ssafy.groute.src.main.MainActivity
@@ -86,16 +87,34 @@ class MyFragment : Fragment() {
         binding.myProfileId.text = "${user.id}"
         val userInfo = UserService().getUserInfo(user.id)
         userInfo.observe(
-            viewLifecycleOwner,
-            {
-                Glide.with(this)
-                    .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
-                    .circleCrop()
-                    .into(binding.myProfileImg)
-
+            viewLifecycleOwner, {
+                if(it.type.equals("sns")){
+                    Log.d(TAG, "initProfileBar_SNS: ${it.img}")
+                    Glide.with(this)
+                        .load(R.drawable.busan)
+                        .circleCrop()
+                        .into(binding.myProfileImg)
+                }else{
+                    Log.d(TAG, "initProfileBar: ${it.img}")
+                    Glide.with(this)
+                        .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
+                        .circleCrop()
+                        .into(binding.myProfileImg)
+                }
                 userInfoResponse = it
             }
         )
+//        userInfo.observe(
+//            viewLifecycleOwner,
+//            {
+//                Glide.with(this)
+//                    .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
+//                    .circleCrop()
+//                    .into(binding.myProfileImg)
+//
+//                userInfoResponse = it
+//            }
+//        )
     }
 
 

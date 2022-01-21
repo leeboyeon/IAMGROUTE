@@ -142,12 +142,22 @@ class ProfileEditActivity : AppCompatActivity() {
 
     @SuppressLint("LongLogTag")
     fun initData(user: UserInfoResponse) {
-        if(user.img != null) {
-            Glide.with(this)
-                .load("${ApplicationClass.IMGS_URL_USER}${user.img}")
-                .circleCrop()
-                .into(binding.profileEditImg)
+        if(user.type.equals("sns")){
+            if(user.img != null) {
+                Glide.with(this)
+                    .load("https:/${user.img}")
+                    .circleCrop()
+                    .into(binding.profileEditImg)
+            }
+        }else{
+            if(user.img != null) {
+                Glide.with(this)
+                    .load("${ApplicationClass.IMGS_URL_USER}${user.img}")
+                    .circleCrop()
+                    .into(binding.profileEditImg)
+            }
         }
+
         binding.profileEditIdEt.setText(user.id)
         binding.profileEditPasswordEt.setText(user.password)
         binding.profileEditNicknameEt.setText(user.nickname)
