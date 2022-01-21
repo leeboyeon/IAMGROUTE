@@ -4,6 +4,7 @@ import com.ssafy.groute.dto.Place;
 import com.ssafy.groute.service.PlaceService;
 import com.ssafy.groute.service.StorageService;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -14,13 +15,14 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/place")
 @CrossOrigin(origins = { "*" }, methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
         RequestMethod.DELETE }, maxAge = 6000)
 public class PlaceController {
     @Autowired
     PlaceService placeService;
-    StorageService storageService;
+    private final StorageService storageService;
 
     @Value("${spring.servlet.multipart.location}")
     private String uploadPath;
