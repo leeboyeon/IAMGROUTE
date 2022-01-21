@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
 }
 
 
@@ -95,5 +96,10 @@ dependencies {
     // 레트로핏 의존성 추가
     implementation 'com.squareup.retrofit2:converter-scalars:2.5.0'
 
+    // firebase
+    implementation platform('com.google.firebase:firebase-bom:29.0.3')
 
+    // google login
+    implementation 'com.google.android.gms:play-services-auth:20.0.1'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.0.1'
 }
