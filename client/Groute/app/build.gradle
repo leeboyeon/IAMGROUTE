@@ -102,4 +102,8 @@ dependencies {
     // google login
     implementation 'com.google.android.gms:play-services-auth:20.0.1'
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.1'
+
+    // naver Login
+    implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'
+
 }

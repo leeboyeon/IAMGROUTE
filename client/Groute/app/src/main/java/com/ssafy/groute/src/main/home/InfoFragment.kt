@@ -1,60 +1,89 @@
 package com.ssafy.groute.src.main.home
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.ssafy.groute.R
+import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.databinding.FragmentInfoBinding
+import com.ssafy.groute.src.dto.Places
+import com.ssafy.groute.src.main.MainActivity
+import com.ssafy.groute.src.service.PlaceService
+import com.ssafy.groute.util.RetrofitCallback
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [InfoFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+private const val TAG = "InfoFragment"
 class InfoFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
+    private var placeId = -1
+    private lateinit var mainActivity : MainActivity
+    private lateinit var binding: FragmentInfoBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mainActivity.hideMainProfileBar(true)
+    }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as MainActivity
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            placeId = it.getInt("placeId", -1)
+            Log.d(TAG, "onAttach: $placeId")
         }
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_info, container, false)
+        binding = FragmentInfoBinding.inflate(layoutInflater,container,false)
+        return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initData()
+    }
+    fun initData(){
+        Log.d(TAG, "initData: $placeId")
+        val placesDetail = PlaceService().getPlace(placeId, placesCallback())
+    }
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment InfoFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(key:String, value:Int) =
             InfoFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putInt(key,value)
                 }
             }
+    }
+    inner class placesCallback : RetrofitCallback<Places> {
+        override fun onError(t: Throwable) {
+            Log.d(TAG, "onError: ")
+        }
+
+        override fun onSuccess(code: Int, responseData: Places) {
+            Log.d(TAG, "onSuccess: ${responseData}")
+            binding.placeDetailTvDescript.text = responseData.description
+            binding.infoTvAddr.text = responseData.address
+            if(responseData.contact == "" || responseData.contact ==null){
+                binding.infoTvPhone.text = "없음"
+            }else{
+                binding.infoTvPhone.text = responseData.contact
+            }
+
+            binding.placeDetailTvBigContent.text = responseData.name+"은"
+            Glide.with(this@InfoFragment)
+                .load("${ApplicationClass.IMGS_URL_PLACE}${responseData.img}")
+                .into(binding.placeDetailIvSomenail)
+        }
+
+        override fun onFailure(code: Int) {
+            Log.d(TAG, "onFailure: $code")
+
+        }
+
     }
 }

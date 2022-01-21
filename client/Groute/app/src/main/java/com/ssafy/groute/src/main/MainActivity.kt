@@ -20,6 +20,7 @@ import com.ssafy.groute.src.main.my.MyFragment
 import com.ssafy.groute.src.main.route.RouteCreateFragment
 import com.ssafy.groute.src.main.route.RouteFragment
 import com.ssafy.groute.src.main.travel.TravelPlanFragment
+import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
 
 
@@ -79,9 +80,9 @@ class MainActivity : AppCompatActivity() {
 
         initProfileBar()
     }
-    fun openFragment(int: Int){
+    fun openFragment(index:Int, key:String, value:Int){
         val transaction = supportFragmentManager.beginTransaction()
-        when(int){
+        when(index){
             1 -> {
                 //루트생성화면
                 transaction.replace(R.id.frame_main_layout, RouteCreateFragment())
@@ -93,11 +94,11 @@ class MainActivity : AppCompatActivity() {
                     .addToBackStack(null)
             }
             3->{
-                transaction.replace(R.id.frame_main_layout, AreaFragment())
+                transaction.replace(R.id.frame_main_layout, AreaFragment.newInstance(key,value))
                     .addToBackStack(null)
             }
             4 -> {
-                transaction.replace(R.id.frame_main_layout, PlaceDetailFragment())
+                transaction.replace(R.id.frame_main_layout, PlaceDetailFragment.newInstance(key, value))
                     .addToBackStack(null)
             }
             5->{
@@ -115,22 +116,35 @@ class MainActivity : AppCompatActivity() {
         }
         transaction.commit()
     }
-
+    fun moveFragment(index:Int, key:String, value:Int){
+        openFragment(index, key, value)
+    }
+    fun moveFragment(index: Int){
+        openFragment(index,"",0)
+    }
     // 프로필바 사용자 정보 갱신
     fun initProfileBar() {
         var user = ApplicationClass.sharedPreferencesUtil.getUser()
         binding.mainTvUsername.text = "${user.id}님"
         val userInfo = UserService().getUserInfo(user.id)
         userInfo.observe(
-            this,
-            {
-                Log.d(TAG, "initProfileBar: ${it.img}")
-                Glide.with(this)
-                    .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
-                    .circleCrop()
-                    .into(binding.mainIvUserimg)
+            this, {
+                if(it.type.equals("sns")){
+                    Log.d(TAG, "initProfileBar_SNS: ${it.img}")
+                    Glide.with(this)
+                        .load(R.drawable.busan)
+                        .circleCrop()
+                        .into(binding.mainIvUserimg)
+                }else{
+                    Log.d(TAG, "initProfileBar: ${it.img}")
+                    Glide.with(this)
+                        .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
+                        .circleCrop()
+                        .into(binding.mainIvUserimg)
+                }
             }
         )
+
     }
 
     // 메인에 상단 프로필 바를 숨기고 싶은 경우

@@ -56,17 +56,11 @@ public class UserController {
 
     @ApiOperation(value = "회원가입", notes = "회원가입")
     @PostMapping(value = "/signup")
-    public Boolean registerUser(User user, MultipartFile file) throws Exception{
+    public Boolean registerUser(User user) throws Exception{
         if (userService.findById(user.getId()) != null) {
             return false;
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        if (file != null) {
-            String fileName = storageService.store(file, uploadPath + "/user");
-            user.setImg(fileName);
-        } else {
-            user.setImg(null);
-        }
         if(user.getPhone() != null && user.getPhone().equals("")) {
             user.setPhone(null);
         }
@@ -130,7 +124,6 @@ public class UserController {
     @ApiOperation(value = "회원수정", notes = "회원수정")
     @PutMapping(value = "/update")
     public Boolean updateUser(User user, MultipartFile file) throws Exception{
-
         if (userService.findById(user.getId()) == null) {
             return false;
         }

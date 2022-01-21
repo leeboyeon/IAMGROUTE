@@ -1,8 +1,10 @@
 package com.ssafy.groute.src.login
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -21,12 +23,16 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.nhn.android.naverlogin.OAuthLogin
+import com.nhn.android.naverlogin.OAuthLoginHandler
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.FragmentLoginBinding
 import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
+import org.json.JSONException
+import org.json.JSONObject
 
 private const val TAG = "LoginFragment_groute"
 class LoginFragment : Fragment() {
@@ -36,6 +42,9 @@ class LoginFragment : Fragment() {
     // google 로그인
     private lateinit var mAuth: FirebaseAuth
     var mGoogleSignInClient: GoogleSignInClient? = null
+
+    // naver 로그인
+    lateinit var mOAuthLoginInstance : OAuthLogin
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +83,16 @@ class LoginFragment : Fragment() {
             initAuth()
         }
 
+        // 네이버 계정으로 로그인 버튼 클릭
+        mOAuthLoginInstance = OAuthLogin.getInstance()
+        mOAuthLoginInstance.init(
+            requireContext(),
+            getString(R.string.naver_client_id),
+            getString(R.string.naver_client_secret),
+            getString(R.string.naver_client_name))
+        binding.loginIbtnNaver.setOnClickListener {
+            mOAuthLoginInstance.startOauthLoginActivity(requireActivity(), mOAuthLoginHandler);
+        }
 
     }
 
@@ -115,6 +134,7 @@ class LoginFragment : Fragment() {
     }
 
 
+    // ---------------------------------------------------------------------------------------------
     /**
      * #S06P12D109-13
      * sns Login - Google 로그인
@@ -171,7 +191,16 @@ class LoginFragment : Fragment() {
                     if(user != null) {
                         // id pw nickname phone email, birth, gender, type img
                         Log.d(TAG, ": ${user.phoneNumber} ${user.email} \t ${user.metadata} \t ${user.photoUrl} ${user.uid}")
-                        val newUser = User(user.email.toString(), user.uid, user.displayName.toString(), user.phoneNumber.toString(), user.email.toString(), "", "", "sns", user.photoUrl.toString())
+                        val id = user.email.toString()
+                        val pw = user.uid
+                        val nickname = user.displayName.toString()
+                        var phone = user.phoneNumber.toString()
+                        val image = user.photoUrl.toString().substring(7)
+                        if(phone.equals("null")) {
+                            phone = ""
+                        }
+                        Log.d(TAG, "firebaseAuthWithGoogle: $image")
+                        val newUser = User(id, pw, nickname, phone, id, "", "", "sns", image)
                         UserService().isUsedId(user.email!!, isUsedIdCallback(newUser))
                     }
                 } else {
@@ -180,6 +209,63 @@ class LoginFragment : Fragment() {
             }
     }
 
+
+    /**
+     * #S06P12D109-14
+     * sns Login - Naver
+     */
+    // ---------------------------------------------------------------------------------------------
+    @SuppressLint("HandlerLeak")
+    val mOAuthLoginHandler: OAuthLoginHandler = object : OAuthLoginHandler() {
+        override fun run(success: Boolean) {
+            if (success) {
+                val accessToken: String = mOAuthLoginInstance.getAccessToken(requireContext())
+                Log.d(TAG, "run: $accessToken")
+                RequestApiTask(requireContext(), mOAuthLoginInstance).execute()
+            } else {
+                val errorCode: String = mOAuthLoginInstance.getLastErrorCode(requireContext()).code
+                val errorDesc = mOAuthLoginInstance.getLastErrorDesc(requireContext())
+                Log.d(TAG, "run: errorCode:" + errorCode + ", errorDesc:" + errorDesc)
+            }
+        }
+    }
+
+
+    inner class RequestApiTask(private val mContext: Context, private val mOAuthLoginModule: OAuthLogin) :
+        AsyncTask<Void?, Void?, String>() {
+        override fun onPreExecute() {}
+
+        override fun onPostExecute(content: String) {
+            try {
+                val loginResult = JSONObject(content)
+                if (loginResult.getString("resultcode") == "00") {
+                    val response = loginResult.getJSONObject("response")
+                    val id = response.getString("email")
+                    val pw = response.getString("id")   // 사용자 식별 정보
+                    val nickname = response.getString("nickname")
+                    val mobile = response.getString("mobile")
+                    val gender = response.getString("gender")
+                    val birthYear = response.getString("birthyear")
+                    val birthDay = response.getString("birthday")
+                    var image = response.getString("profile_image")
+                    Log.d(TAG, "onPostExecute: $response")
+                    image = image.replace("\\", "")
+                    image = image.substring(7)
+                    Log.d(TAG, "onPostExecute: $image")
+                    val newUser = User(id, pw, nickname, mobile, id, "$birthYear-$birthDay", gender, "sns", image)
+                    UserService().isUsedId(id, isUsedIdCallback(newUser))
+                }
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+        }
+
+        override fun doInBackground(vararg params: Void?): String {
+            val url = "https://openapi.naver.com/v1/nid/me"
+            val at = mOAuthLoginModule.getAccessToken(mContext)
+            return mOAuthLoginModule.requestApi(mContext, at, url)
+        }
+    }
 
     /**
      * sns 로그인 시 id(or email)로 id 사용여부(회원인지 아닌지)를 확인

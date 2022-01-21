@@ -50,7 +50,7 @@ class RouteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
         binding.routeCreateBtn.setOnClickListener {
-            mainActivity.openFragment(1)
+            mainActivity.moveFragment(1)
         }
 
 

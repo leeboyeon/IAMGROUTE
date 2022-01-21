@@ -117,7 +117,7 @@ class HomeFragment : Fragment() {
                 categoryAdapter.list = responseData
                 categoryAdapter.setItemClickListener(object : CategoryAdapter.ItemClickListener{
                     override fun onClick(view: View, position: Int, name: String) {
-                        mainActivity.openFragment(3)
+                        mainActivity.moveFragment(3)
                     }
                 })
             }

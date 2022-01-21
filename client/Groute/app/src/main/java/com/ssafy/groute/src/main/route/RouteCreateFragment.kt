@@ -53,7 +53,7 @@ class RouteCreateFragment : Fragment() {
         initAdapter()
 
         binding.rcBtnSave.setOnClickListener {
-            mainActivity.openFragment(7)
+            mainActivity.moveFragment(7)
         }
     }
     fun initAdapter(){
@@ -91,7 +91,7 @@ class RouteCreateFragment : Fragment() {
                 categoryAdapter.list = responseData
                 categoryAdapter.setItemClickListener(object : CategoryAdapter.ItemClickListener{
                     override fun onClick(view: View, position: Int, name: String) {
-                        mainActivity.openFragment(3)
+                        mainActivity.moveFragment(3)
                     }
                 })
             }
