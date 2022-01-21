@@ -94,4 +94,13 @@ public class PlaceController {
 
         return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
     }
+
+
+    @ApiOperation(value = "place 검색",notes = "이름으로 place 하나 검색")
+    @GetMapping(value = "/file")
+    public ResponseEntity<?> modifyfileName() throws Exception{
+
+        placeService.modifyImgNames();
+        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+    }
 }
