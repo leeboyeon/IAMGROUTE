@@ -20,6 +20,7 @@ import com.ssafy.groute.src.main.my.MyFragment
 import com.ssafy.groute.src.main.route.RouteCreateFragment
 import com.ssafy.groute.src.main.route.RouteFragment
 import com.ssafy.groute.src.main.travel.TravelPlanFragment
+import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
 
 
@@ -126,28 +127,23 @@ class MainActivity : AppCompatActivity() {
         var user = ApplicationClass.sharedPreferencesUtil.getUser()
         binding.mainTvUsername.text = "${user.id}님"
         val userInfo = UserService().getUserInfo(user.id)
-        if(user.type.equals("sns")){
-            userInfo.observe(
-                this,{
+        userInfo.observe(
+            this, {
+                if(it.type.equals("sns")){
                     Log.d(TAG, "initProfileBar_SNS: ${it.img}")
                     Glide.with(this)
                         .load(R.drawable.busan)
                         .circleCrop()
                         .into(binding.mainIvUserimg)
-                }
-            )
-        }else{
-            userInfo.observe(
-                this,
-                {
+                }else{
                     Log.d(TAG, "initProfileBar: ${it.img}")
                     Glide.with(this)
                         .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
                         .circleCrop()
                         .into(binding.mainIvUserimg)
                 }
-            )
-        }
+            }
+        )
 
     }
 
