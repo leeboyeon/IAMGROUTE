@@ -2,12 +2,15 @@ package com.ssafy.groute.src.main.my
 
 import android.R
 import android.annotation.SuppressLint
+import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
@@ -44,6 +47,7 @@ class ProfileEditActivity : AppCompatActivity() {
         binding.profileEditFinish.setOnClickListener {
             var user = isAvailable(userData)
             if(user != null) {
+                finish()
                 updateUser(user)
             } else {
                 Toast.makeText(this, "입력 값을 다시 확인해 주세요", Toast.LENGTH_LONG).show()
@@ -52,38 +56,78 @@ class ProfileEditActivity : AppCompatActivity() {
 
     }
 
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        val focusView = currentFocus
+        if(focusView != null) {
+            val rect = Rect()
+            focusView.getGlobalVisibleRect(rect)
+            var x = ev?.x
+            var y = ev?.y
+            if(!rect.contains(x!!.toInt(), y!!.toInt())) {
+                val imm : InputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                if(imm != null)
+                    imm.hideSoftInputFromWindow(focusView.windowToken, 0)
+                focusView.clearFocus()
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
     @SuppressLint("LongLogTag")
     fun initData(user: UserInfoResponse) {
-        Glide.with(this)
-            .load("${ApplicationClass.IMGS_URL}${user.img}")
-            .circleCrop()
-            .into(binding.profileEditImg)
+        if(user.img != null) {
+            Glide.with(this)
+                .load("${ApplicationClass.IMGS_URL}${user.img}")
+                .circleCrop()
+                .into(binding.profileEditImg)
+        }
         binding.profileEditIdEt.setText(user.id)
         binding.profileEditPasswordEt.setText(user.password)
         binding.profileEditNicknameEt.setText(user.nickname)
         binding.profileEditPhoneEt.setText(user.phone)
 
-        if(user.email == "") {
-            binding.profileEditEmailEt.hint = "이메일을 입력해주세요."
-        } else {
-            val emailStr = user.email.split("@")
-            binding.profileEditEmailEt.setText(emailStr.get(0))
-            binding.profileEditEmailDomain.setText(emailStr.get(1))
+        if(user.email != null) {
+            if (user.email == "") {
+                binding.profileEditEmailEt.hint = "이메일을 입력해주세요."
+            } else {
+                val emailStr = user.email.split("@")
+                binding.profileEditEmailEt.setText(emailStr.get(0))
+                binding.profileEditEmailDomain.setText(emailStr.get(1))
+            }
         }
 
-        if(user.birth != ""){
-            val birthStr = user.birth.split("-")
-            binding.profileEditSpinnerYear.setSelection(getSpinnerIndex(binding.profileEditSpinnerYear, birthStr.get(0)))
-            binding.profileEditSpinnerMonth.setSelection(getSpinnerIndex(binding.profileEditSpinnerMonth, birthStr.get(1)))
-            binding.profileEditSpinnerDay.setSelection(getSpinnerIndex(binding.profileEditSpinnerDay, birthStr.get(2)))
-            Log.d(TAG, "initData: ${birthStr.get(0)}  ${birthStr.get(1)}  ${birthStr.get(2)}")
+        if(user.birth != null) {
+            if (user.birth != "") {
+                val birthStr = user.birth.split("-")
+                binding.profileEditSpinnerYear.setSelection(
+                    getSpinnerIndex(
+                        binding.profileEditSpinnerYear,
+                        birthStr.get(0)
+                    )
+                )
+                binding.profileEditSpinnerMonth.setSelection(
+                    getSpinnerIndex(
+                        binding.profileEditSpinnerMonth,
+                        birthStr.get(1)
+                    )
+                )
+                binding.profileEditSpinnerDay.setSelection(
+                    getSpinnerIndex(
+                        binding.profileEditSpinnerDay,
+                        birthStr.get(2)
+                    )
+                )
+                Log.d(TAG, "initData: ${birthStr.get(0)}  ${birthStr.get(1)}  ${birthStr.get(2)}")
+            }
         }
 
-        if(user.gender != ""){
-            if(user.gender == "M") {
-                binding.profileEditRadioMan.isChecked = true
-            } else if(user.gender == "F") {
-                binding.profileEditRadioWoman.isChecked = true
+        if(user.gender != null) {
+            if (user.gender != "") {
+                if (user.gender == "M") {
+                    binding.profileEditRadioMan.isChecked = true
+                } else if (user.gender == "F") {
+                    binding.profileEditRadioWoman.isChecked = true
+                }
             }
         }
     }
@@ -130,11 +174,10 @@ class ProfileEditActivity : AppCompatActivity() {
     }
 
     inner class userUpdateCallback: RetrofitCallback<Boolean> {
-
         override fun onSuccess(code: Int, responseData: Boolean) {
             if(responseData) {
                 Toast.makeText(this@ProfileEditActivity, "프로필 정보가 수정되었습니다.", Toast.LENGTH_SHORT).show()
-                finish()
+
             } else {
                 Toast.makeText(this@ProfileEditActivity, "프로필 정보 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
@@ -156,11 +199,24 @@ class ProfileEditActivity : AppCompatActivity() {
      * 선택 데이터 email, birth, gender 데이터 형식 확인 후 가입 가능한 상태인지 최종 판단
      * @return 가입 가능한 상태이면 user 객체를 반환
      */
+    @SuppressLint("LongLogTag")
     private fun isAvailable(user: UserInfoResponse) : User? {
         if(validatedNickname() && validatedPhone()) {
             val nickname = binding.profileEditNicknameEt.text.toString()
             val phone = binding.profileEditPhoneEt.text.toString()
+            Log.d(TAG, "isAvailable: ${phone}")
+            Log.d(TAG, "isAvailable: ${userEmail}")
+            Log.d(TAG, "isAvailable: ${userBirth}")
+            Log.d(TAG, "isAvailable: ${userGender}")
+            if(userEmail == null)
+                userEmail = ""
+            if(userBirth == null)
+                userBirth = ""
+            if(userGender == null)
+                userGender = ""
             return User(user.id, user.password, nickname, phone, userEmail, userBirth, userGender, "none")
+
+            //phone, birth, gender sns
 
         } else {
             return null
