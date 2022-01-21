@@ -2,11 +2,14 @@ package com.ssafy.groute.controller;
 
 import com.ssafy.groute.dto.Place;
 import com.ssafy.groute.service.PlaceService;
+import com.ssafy.groute.service.StorageService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,11 +20,23 @@ import java.util.List;
 public class PlaceController {
     @Autowired
     PlaceService placeService;
+    StorageService storageService;
+
+    @Value("${spring.servlet.multipart.location}")
+    private String uploadPath;
 
     @ApiOperation(value = "place 추가",notes = "place 추가")
     @PostMapping(value = "/insert")
-    public ResponseEntity<?> insertPlace(@RequestBody Place req){
-
+    public ResponseEntity<?> insertPlace(@RequestBody Place req, MultipartFile file){
+        if (!file.isEmpty()) {
+            try {
+                String fileName = storageService.store(file, uploadPath + "/place");
+                req.setImg(fileName);
+            }catch (Exception e){
+                e.printStackTrace();
+                return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            }
+        }
         try {
             placeService.insertPlace(req);
         }catch (Exception e){
@@ -72,8 +87,18 @@ public class PlaceController {
 
     @ApiOperation(value = "updatePlace",notes = "place 수정")
     @PutMapping(value = "/update")
-    public ResponseEntity<?> updatePlace(@RequestBody Place place) throws Exception{
-
+    public ResponseEntity<?> updatePlace(@RequestBody Place place, MultipartFile file) throws Exception{
+        if (!file.isEmpty()) {
+            try {
+                String fileName = storageService.store(file, uploadPath + "/place");
+                place.setImg(fileName);
+            }catch (Exception e){
+                e.printStackTrace();
+                return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            }
+        } else {
+            place.setImg("");
+        }
         try {
             placeService.updatePlace(place);
         }catch (Exception e){

@@ -56,52 +56,41 @@ public class UserController {
 
     @ApiOperation(value = "회원가입", notes = "회원가입")
     @PostMapping(value = "/signup")
-
-    public Boolean registerUser(@RequestBody User dto) throws Exception{
-//        UserDTO userChk = userService.findById(dto.getId());
-        if (userService.findById(dto.getId()) != null) {
-//            return ResponseEntity.badRequest().body("아이디가 이미 존재합니다.");
+    public Boolean registerUser(User user, MultipartFile file) throws Exception{
+        if (userService.findById(user.getId()) != null) {
             return false;
         }
-        
-        User user = new User();
-        user.setId(dto.getId());
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         if (!file.isEmpty()) {
             String fileName = storageService.store(file, uploadPath + "/user");
             user.setImg(fileName);
-        } else {
-            user.setImg(null)
         }
-        if(dto.getNickname().equals("")) {
-            user.setNickname(null);
-        } else {
-            user.setNickname(dto.getNickname());
-        }
-        if(dto.getPhone().equals("")) {
-            user.setPhone(null);
-        } else {
-            user.setPhone(dto.getPhone());
-        }
-        if(dto.getEmail().equals("")) {
-            user.setEmail(null);
-        } else {
-            user.setEmail(dto.getEmail());
-        }
-        if(dto.getBirth().equals("")) {
-            user.setBirth(null);
-        } else {
-            user.setBirth(dto.getBirth());
-        }
-        if(dto.getGender().equals("")) {
-            user.setGender(null);
-        } else {
-            user.setGender(dto.getGender());
-        }
-        user.setType(dto.getType());
-//        userMapper.registerUser(user);
+//        if(dto.getNickname().equals("")) {
+//            user.setNickname(null);
+//        } else {
+//            user.setNickname(dto.getNickname());
+//        }
+//        if(dto.getPhone().equals("")) {
+//            user.setPhone(null);
+//        } else {
+//            user.setPhone(dto.getPhone());
+//        }
+//        if(dto.getEmail().equals("")) {
+//            user.setEmail(null);
+//        } else {
+//            user.setEmail(dto.getEmail());
+//        }
+//        if(dto.getBirth().equals("")) {
+//            user.setBirth(null);
+//        } else {
+//            user.setBirth(dto.getBirth());
+//        }
+//        if(dto.getGender().equals("")) {
+//            user.setGender(null);
+//        } else {
+//            user.setGender(dto.getGender());
+//        }
         userService.registerUser(user);
-//        return ResponseEntity.ok("회원가입이 완료 되었습니다.");
         return true;
     }
 
@@ -156,13 +145,13 @@ public class UserController {
 
     @ApiOperation(value = "회원수정", notes = "회원수정")
     @PutMapping(value = "/update")
-    public Boolean updateUser(User userData) throws Exception{
+    public Boolean updateUser(User userData, MultipartFile file) throws Exception{
         User user = userService.findById(userData.getId());
         if (user == null) {
             return false;
         }
 
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setPassword(passwordEncoder.encode(userData.getPassword()));
         if (file.isEmpty()) {
             user.setImg(null);
         } else {
