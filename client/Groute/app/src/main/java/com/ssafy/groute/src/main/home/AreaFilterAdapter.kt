@@ -14,27 +14,30 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
+import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.src.dto.Places
+import com.ssafy.groute.util.CommonUtils
 
 private const val TAG = "AreaFilterAdapter"
-class AreaFilterAdapter (item:ArrayList<Place>) : RecyclerView.Adapter<AreaFilterAdapter.AreaViewHolder>(),
+class AreaFilterAdapter (item:List<Places>) : RecyclerView.Adapter<AreaFilterAdapter.AreaViewHolder>(),
     Filterable {
     private var unFilteredList = item
     private var filteredList = item
     private var context:Context?=null
-    var list = mutableListOf<Place>()
+    var list = listOf<Places>()
     var isHeart = false
     inner class AreaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val heartlottie = itemView.findViewById<LottieAnimationView>(R.id.area_abtn_heart)
 
-        fun bindInfo(data : Place){
+        fun bindInfo(data : Places){
             Glide.with(itemView)
-                .load(data.img)
+                .load(R.drawable.normalimg)
                 .into(itemView.findViewById(R.id.areaPlace_iv_img))
 
-            itemView.findViewById<TextView>(R.id.areaPlace_tv_name).text =data.name
-            itemView.findViewById<TextView>(R.id.areaPlace_tv_content).text = data.content
+            itemView.findViewById<TextView>(R.id.areaPlace_tv_name).text =CommonUtils.getFormattedTitle(data.name)
+            itemView.findViewById<TextView>(R.id.areaPlace_tv_content).text = CommonUtils.getFormattedDesript(data.description)
 //            itemView.findViewById<TextView>(R.id.areaPlace_rb_rating) = data.review
-            itemView.findViewById<TextView>(R.id.areaPlace_tv_info).text = data.info
+            itemView.findViewById<TextView>(R.id.areaPlace_tv_info).text = data.type
 
             heartlottie.setOnClickListener {
                 val animator = ValueAnimator.ofFloat(0f,0.5f).setDuration(500)
@@ -57,7 +60,7 @@ class AreaFilterAdapter (item:ArrayList<Place>) : RecyclerView.Adapter<AreaFilte
         holder.apply {
             bindInfo(filteredList[position])
             itemView.setOnClickListener {
-                itemClickListener.onClick(it,position,list[position].name)
+                itemClickListener.onClick(it,position, filteredList[position].id)
             }
         }
     }
@@ -66,7 +69,7 @@ class AreaFilterAdapter (item:ArrayList<Place>) : RecyclerView.Adapter<AreaFilte
         return filteredList.size
     }
     interface ItemClickListener{
-        fun onClick(view:View, position: Int, name: String)
+        fun onClick(view:View, position: Int, id: Int)
     }
     private lateinit var itemClickListener : ItemClickListener
     fun setItemClickListener(itemClickListener: ItemClickListener){
@@ -81,10 +84,10 @@ class AreaFilterAdapter (item:ArrayList<Place>) : RecyclerView.Adapter<AreaFilte
                 filteredList = if(charString.isEmpty()){
                     unFilteredList
                 }else{
-                    val filteringList = ArrayList<Place>()
+                    val filteringList = ArrayList<Places>()
                     for(item in unFilteredList!!){
 //                        Log.d(TAG, "performFiltering: ${item}")
-                        if(item!!.info.contains(charString)) filteringList.add(item)
+                        if(item!!.type.contains(charString)) filteringList.add(item)
                     }
                     filteringList
                 }
@@ -95,7 +98,7 @@ class AreaFilterAdapter (item:ArrayList<Place>) : RecyclerView.Adapter<AreaFilte
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                filteredList = results?.values as ArrayList<Place>
+                filteredList = results?.values as ArrayList<Places>
                 notifyDataSetChanged()
             }
 

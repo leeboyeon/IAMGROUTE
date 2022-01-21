@@ -50,7 +50,7 @@ class MyTravelFragment : Fragment() {
 
         mytravelAdapter.setItemClickListener(object : MyTravelAdapter.ItemClickListener{
             override fun onClick(view: View, position: Int, name: String) {
-                mainActivity.openFragment(2)
+                mainActivity.moveFragment(2)
             }
 
         })
