@@ -63,7 +63,7 @@ class MyFragment : Fragment() {
             viewLifecycleOwner,
             {
                 Glide.with(this)
-                    .load("${ApplicationClass.IMGS_URL}${it.img}")
+                    .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
                     .circleCrop()
                     .into(binding.myProfileImg)
             }

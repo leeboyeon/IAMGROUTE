@@ -1,20 +1,15 @@
 package com.ssafy.groute.src.main
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
 import androidx.core.view.isVisible
-import androidx.lifecycle.LifecycleOwner
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.ActivityMainBinding
-import com.ssafy.groute.src.login.LoginFragment
-import com.ssafy.groute.src.login.SignFragment
 import com.ssafy.groute.src.main.board.BoardDetailDetailFragment
 import com.ssafy.groute.src.main.board.BoardDetailFragment
 import com.ssafy.groute.src.main.board.BoardFragment
@@ -131,7 +126,7 @@ class MainActivity : AppCompatActivity() {
             {
                 Log.d(TAG, "initProfileBar: ${it.img}")
                 Glide.with(this)
-                    .load("${ApplicationClass.IMGS_URL}${it.img}")
+                    .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
                     .circleCrop()
                     .into(binding.mainIvUserimg)
             }

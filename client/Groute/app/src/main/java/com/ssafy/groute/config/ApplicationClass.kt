@@ -16,7 +16,8 @@ class ApplicationClass : Application() {
     companion object{
 //        const val SERVER_URL = "http://172.30.1.19:8888/"   // Kyunghee
         const val SERVER_URL = "http://61.85.38.39:8888/"   // Jiwoo
-        const val IMGS_URL = "${SERVER_URL}imgs/user/"
+        const val IMGS_URL_USER = "${SERVER_URL}imgs/user/"
+        const val IMGS_URL_AREA = "${SERVER_URL}imgs/area/"
         lateinit var sharedPreferencesUtil: SharedPreferencesUtil
         lateinit var retrofit: Retrofit
 
