@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
                 if(it.type.equals("sns")){
                     Log.d(TAG, "initProfileBar_SNS: ${it.img}")
                     Glide.with(this)
-                        .load(R.drawable.busan)
+                        .load(it.img)
                         .circleCrop()
                         .into(binding.mainIvUserimg)
                 }else{

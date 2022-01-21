@@ -54,9 +54,10 @@ public class UserController {
 //        return new ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK);
 //    }
 
+//사진 안바꾸고 완료 눌렀을 때 에러나는 부분 처리하기
     @ApiOperation(value = "회원가입", notes = "회원가입")
     @PostMapping(value = "/signup")
-    public Boolean registerUser(User user) throws Exception{
+    public Boolean registerUser(@RequestBody User user) throws Exception{
         if (userService.findById(user.getId()) != null) {
             return false;
         }

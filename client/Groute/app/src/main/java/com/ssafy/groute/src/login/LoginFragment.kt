@@ -195,7 +195,7 @@ class LoginFragment : Fragment() {
                         val pw = user.uid
                         val nickname = user.displayName.toString()
                         var phone = user.phoneNumber.toString()
-                        val image = user.photoUrl.toString().substring(7)
+                        val image = user.photoUrl.toString()
                         if(phone.equals("null")) {
                             phone = ""
                         }
@@ -248,10 +248,7 @@ class LoginFragment : Fragment() {
                     val birthYear = response.getString("birthyear")
                     val birthDay = response.getString("birthday")
                     var image = response.getString("profile_image")
-                    Log.d(TAG, "onPostExecute: $response")
                     image = image.replace("\\", "")
-                    image = image.substring(7)
-                    Log.d(TAG, "onPostExecute: $image")
                     val newUser = User(id, pw, nickname, mobile, id, "$birthYear-$birthDay", gender, "sns", image)
                     UserService().isUsedId(id, isUsedIdCallback(newUser))
                 }
