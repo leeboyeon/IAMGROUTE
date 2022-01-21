@@ -31,7 +31,7 @@ class AreaFilterAdapter (item:List<Places>) : RecyclerView.Adapter<AreaFilterAda
 
         fun bindInfo(data : Places){
             Glide.with(itemView)
-                .load(R.drawable.normalimg)
+                .load("${ApplicationClass.IMGS_URL_PLACE}${data.img}")
                 .into(itemView.findViewById(R.id.areaPlace_iv_img))
 
             itemView.findViewById<TextView>(R.id.areaPlace_tv_name).text =CommonUtils.getFormattedTitle(data.name)

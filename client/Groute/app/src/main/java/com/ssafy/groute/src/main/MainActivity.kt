@@ -126,16 +126,29 @@ class MainActivity : AppCompatActivity() {
         var user = ApplicationClass.sharedPreferencesUtil.getUser()
         binding.mainTvUsername.text = "${user.id}님"
         val userInfo = UserService().getUserInfo(user.id)
-        userInfo.observe(
-            this,
-            {
-                Log.d(TAG, "initProfileBar: ${it.img}")
-                Glide.with(this)
-                    .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
-                    .circleCrop()
-                    .into(binding.mainIvUserimg)
-            }
-        )
+        if(user.type.equals("sns")){
+            userInfo.observe(
+                this,{
+                    Log.d(TAG, "initProfileBar_SNS: ${it.img}")
+                    Glide.with(this)
+                        .load(R.drawable.busan)
+                        .circleCrop()
+                        .into(binding.mainIvUserimg)
+                }
+            )
+        }else{
+            userInfo.observe(
+                this,
+                {
+                    Log.d(TAG, "initProfileBar: ${it.img}")
+                    Glide.with(this)
+                        .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
+                        .circleCrop()
+                        .into(binding.mainIvUserimg)
+                }
+            )
+        }
+
     }
 
     // 메인에 상단 프로필 바를 숨기고 싶은 경우
