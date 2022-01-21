@@ -1,6 +1,7 @@
 package com.ssafy.groute.src.response
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class UserInfoResponse(
     @SerializedName("id") var id: String,
@@ -21,4 +22,4 @@ data class UserInfoResponse(
     @SerializedName("credentialsNonExpired") var credentialsNonExpired: Boolean,
     @SerializedName("accountNonLocked") var accountNonLocked: Boolean,
     @SerializedName("accountNonExpired") var accountNonExpired: Boolean
-)
+) : Serializable

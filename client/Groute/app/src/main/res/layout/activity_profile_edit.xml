@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_grey"
+    >
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/white"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:includeFontPadding="false"
+            android:text="프로필 수정"
+            android:textColor="#000000"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/profile_edit_finish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:includeFontPadding="false"
+            android:text="완료"
+            android:textColor="@color/blue_700"
+            android:textSize="17sp" />
+
+        <View
+            android:id="@+id/view6"
+            android:layout_width="match_parent"
+            android:layout_height="0.3dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="#d1d1d1" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="-193dp"
+            android:background="#d1d1d1" />
+    </RelativeLayout>
+
+
+
+    <ImageView
+        android:id="@+id/profile_edit_img"
+        android:layout_width="106dp"
+        android:layout_height="106dp"
+        android:layout_marginStart="127dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="127dp"
+        android:layout_marginBottom="15dp"
+        android:src="@drawable/profile"
+        app:layout_constraintBottom_toTopOf="@+id/profile_edit_change_img_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+
+    <TextView
+        android:id="@+id/profile_edit_change_img_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="127dp"
+        android:layout_marginEnd="127dp"
+        android:layout_marginBottom="35dp"
+        android:includeFontPadding="false"
+        android:text="프로필 사진 바꾸기"
+        android:textColor="@color/blue_700"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/profile_edit_id_et"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <View
+        android:id="@+id/view5"
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_marginTop="255dp"
+        android:background="#d1d1d1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+    <TextView
+        android:id="@+id/profile_edit_id_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:includeFontPadding="false"
+        android:text="ID"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view5" />
+
+
+    <TextView
+        android:id="@+id/profile_edit_password_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:includeFontPadding="false"
+        android:text="PASSWORD"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_id_tv" />
+
+    <EditText
+        android:id="@+id/profile_edit_id_et"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@null"
+        android:ems="10"
+        android:enabled="false"
+        android:hint="SSAFY"
+        android:inputType="text"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/profile_edit_id_tv"
+        app:layout_constraintTop_toTopOf="@+id/view5" />
+
+
+    <View
+        android:id="@+id/view7"
+        android:layout_width="284dp"
+        android:layout_height="0.6dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="15dp"
+        android:background="#d1d1d1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_id_et" />
+
+    <EditText
+        android:id="@+id/profile_edit_password_et"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:ems="10"
+        android:gravity="start|top"
+        android:text="12345678"
+        android:inputType="textPassword"
+        android:enabled="false"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/profile_edit_id_et"
+        app:layout_constraintStart_toStartOf="@+id/profile_edit_id_et"
+        app:layout_constraintTop_toTopOf="@+id/profile_edit_password_tv" />
+    <View
+        android:id="@+id/view12"
+        android:layout_width="284dp"
+        android:layout_height="0.6dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="15dp"
+        android:background="#d1d1d1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_password_et" />
+
+    <TextView
+        android:id="@+id/profile_edit_nickname_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:includeFontPadding="false"
+        android:text="NICKNAME"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_password_tv" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/profile_edit_nickname_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:boxBackgroundMode="none"
+        android:ems="10"
+        android:paddingTop="0dp"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="@+id/profile_edit_password_et"
+        app:layout_constraintStart_toStartOf="@+id/profile_edit_password_et"
+        app:layout_constraintTop_toTopOf="@+id/profile_edit_nickname_tv"
+        >
+
+    <EditText
+        android:id="@+id/profile_edit_nickname_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:gravity="start|top"
+        android:text="SSAFY"
+        android:paddingStart="0dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:textSize="14sp"
+        />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View
+        android:id="@+id/view8"
+        android:layout_width="284dp"
+        android:layout_height="0.6dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="15dp"
+        android:background="#d1d1d1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_nickname_layout" />
+
+    <TextView
+        android:id="@+id/profile_edit_phone_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:includeFontPadding="false"
+        android:text="PHONE"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_nickname_layout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/profile_edit_phone_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:boxBackgroundMode="none"
+        android:ems="10"
+        android:paddingTop="0dp"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="@+id/profile_edit_password_et"
+        app:layout_constraintStart_toStartOf="@+id/profile_edit_password_et"
+        app:layout_constraintTop_toTopOf="@+id/profile_edit_phone_tv"
+        >
+
+    <EditText
+        android:id="@+id/profile_edit_phone_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:ems="10"
+        android:paddingStart="0dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:gravity="start|top"
+        android:text="010-1234-5678"
+        android:textSize="14sp"
+         />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View
+        android:id="@+id/view9"
+        android:layout_width="284dp"
+        android:layout_height="0.6dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="15dp"
+        android:background="#d1d1d1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_phone_layout" />
+
+    <TextView
+        android:id="@+id/profile_edit_email_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:includeFontPadding="false"
+        android:text="EMAIL"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_phone_layout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/profile_edit_email_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:boxBackgroundMode="none"
+        android:ems="7"
+        android:paddingTop="0dp"
+        app:hintEnabled="false"
+        app:layout_constraintStart_toStartOf="@+id/profile_edit_password_et"
+        app:layout_constraintTop_toTopOf="@+id/profile_edit_email_tv"
+        >
+
+    <EditText
+        android:id="@+id/profile_edit_email_et"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:ems="7"
+        android:paddingStart="0dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:gravity="start|top"
+        android:text=""
+        android:textSize="14sp"
+        />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/profile_edit_email_dot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" @ "
+        app:layout_constraintTop_toTopOf="@id/profile_edit_email_layout"
+        app:layout_constraintBottom_toBottomOf="@id/profile_edit_email_layout"
+        app:layout_constraintLeft_toRightOf="@id/profile_edit_email_layout"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/profile_edit_domain_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:boxBackgroundMode="none"
+        android:ems="7"
+        android:paddingTop="0dp"
+        app:hintEnabled="false"
+        app:layout_constraintTop_toTopOf="@id/profile_edit_email_dot"
+        app:layout_constraintBottom_toBottomOf="@id/profile_edit_email_dot"
+        app:layout_constraintLeft_toRightOf="@id/profile_edit_email_dot"
+        >
+
+    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+        android:id="@+id/profile_edit_email_domain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:ems="7"
+        android:paddingStart="0dp"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:gravity="start|top"
+        android:text=""
+        android:textSize="14sp"
+        />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View
+        android:id="@+id/view10"
+        android:layout_width="284dp"
+        android:layout_height="0.6dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="15dp"
+        android:background="#d1d1d1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_email_layout" />
+
+    <TextView
+        android:id="@+id/profile_edit_birth_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:includeFontPadding="false"
+        android:text="BIRTH"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_email_layout" />
+
+    <LinearLayout
+        android:id="@+id/profile_edit_birth_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:ems="10"
+        android:gravity="start|top"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_email_layout"
+        app:layout_constraintStart_toStartOf="@+id/profile_edit_email_layout"
+        app:layout_constraintTop_toTopOf="@+id/profile_edit_birth_tv"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_edit_birth_tv"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/profile_edit_spinner_year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:textSize="14sp"
+            android:background="@drawable/edittext_background"
+            android:entries="@array/birth_year_spinner"/>
+
+        <Spinner
+            android:id="@+id/profile_edit_spinner_month"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:textSize="14sp"
+            android:background="@drawable/edittext_background"
+            android:entries="@array/birth_month_spinner" />
+
+        <Spinner
+            android:id="@+id/profile_edit_spinner_day"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:textSize="14sp"
+            android:background="@drawable/edittext_background"
+            android:entries="@array/birth_day_spinner" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view11"
+        android:layout_width="284dp"
+        android:layout_height="0.6dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="15dp"
+        android:background="#d1d1d1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_birth_layout" />
+
+
+    <RadioGroup
+        android:id="@+id/profil_edit_genderGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_edit_birth_tv"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:text="GENDER" />
+
+        <RadioButton
+            android:id="@+id/profile_edit_radio_man"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="남" />
+
+        <RadioButton
+            android:id="@+id/profile_edit_radio_woman"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="여" />
+    </RadioGroup>
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:layout_marginTop="20dp"
+        android:background="#d1d1d1"
+        app:layout_constraintTop_toBottomOf="@+id/profil_edit_genderGroup" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
