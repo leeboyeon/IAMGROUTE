@@ -169,7 +169,7 @@ class ProfileEditActivity : AppCompatActivity() {
     }
 
     fun updateUser(user: User) {
-        UserService().updateUserInfo(user.id, user, userUpdateCallback())
+        UserService().updateUserInfo(user, userUpdateCallback())
 
     }
 
@@ -214,10 +214,7 @@ class ProfileEditActivity : AppCompatActivity() {
                 userBirth = ""
             if(userGender == null)
                 userGender = ""
-            return User(user.id, user.password, nickname, phone, userEmail, userBirth, userGender, "none")
-
-            //phone, birth, gender sns
-
+            return User(user.id, user.password, nickname, phone, userEmail, userBirth, userGender, user.type)
         } else {
             return null
         }

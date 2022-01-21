@@ -118,9 +118,9 @@ class UserService {
      * @param userId
      * @param user
      */
-    fun updateUserInfo(userId: String, user: User, callback: RetrofitCallback<Boolean>) {
+    fun updateUserInfo(user: User, callback: RetrofitCallback<Boolean>) {
         Log.d(TAG, "사용자 정보 수정: $user")
-        RetrofitUtil.userService.updateUser(userId, user).enqueue(object : Callback<Boolean> {
+        RetrofitUtil.userService.updateUser(user).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 val res = response.body()
                 if (response.code() == 200) {

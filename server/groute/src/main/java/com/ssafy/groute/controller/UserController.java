@@ -71,7 +71,7 @@ public class UserController {
             String fileName = storageService.store(file, uploadPath + "/user");
             user.setImg(fileName);
         } else {
-            user.setImg(null)
+            user.setImg(null);
         }
         if(dto.getNickname().equals("")) {
             user.setNickname(null);

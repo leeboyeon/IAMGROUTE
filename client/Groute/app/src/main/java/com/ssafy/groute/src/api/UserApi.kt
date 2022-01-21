@@ -26,6 +26,6 @@ interface UserApi {
     fun signUp(@Body user:User) : Call<Boolean>
 
     // 사용자 정보 수정
-    @PUT("/user/{userId}")
-    fun updateUser(@Path("userId") userId: String, @Body user: User): Call<Boolean>
+    @PUT("/user/update")
+    fun updateUser( @Body user: User): Call<Boolean>
 }
