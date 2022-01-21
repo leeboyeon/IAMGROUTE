@@ -38,17 +38,4 @@ public class PlaceServiceImpl implements PlaceService {
         placeMapper.updatePlace(place);
     }
 
-    @Override
-    public void modifyImgNames() throws Exception {
-        List<Place> places = placeMapper.selectAllPlace();
-
-        for(Place p: places){
-            File file = new File("C:/Users/pdj16/Desktop/place/"+p.getName()+".jpg");
-            File newFile = new File("C:/Users/pdj16/Desktop/place/"+p.getType()+"/"+p.getName()+".jpg");
-            if(file.renameTo(newFile)){
-            }else{
-                System.out.println("fail: "+newFile.getPath());
-            }
-        }
-    }
 }

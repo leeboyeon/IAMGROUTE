@@ -12,5 +12,4 @@ public interface PlaceService {
     List<Place> selectAllPlace() throws Exception;
     void deletePlace(int id) throws Exception;
     void updatePlace(Place place) throws Exception;
-    void modifyImgNames() throws Exception;
 }
