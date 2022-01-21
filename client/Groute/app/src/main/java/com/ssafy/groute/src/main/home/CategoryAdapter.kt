@@ -7,13 +7,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
+import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.src.dto.Category
 
 class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryHolder>(){
-    var list = mutableListOf<Category>()
+    var list = listOf<Category>()
     inner class CategoryHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bindInfo(data : Category){
             Glide.with(itemView)
-                .load(data.img)
+                .load("${ApplicationClass.IMGS_URL_AREA}${data.img}")
                 .into(itemView.findViewById(R.id.main_iv_category))
 
             itemView.findViewById<TextView>(R.id.main_tv_category).text = data.name

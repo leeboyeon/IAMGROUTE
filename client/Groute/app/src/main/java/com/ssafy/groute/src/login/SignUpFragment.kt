@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,10 +13,10 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentSignBinding
+import com.ssafy.groute.src.dto.Category
 import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
-import retrofit2.Response
 import java.util.regex.Pattern
 
 private const val TAG = "SignFragment_싸피"

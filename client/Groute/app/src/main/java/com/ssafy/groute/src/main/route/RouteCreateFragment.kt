@@ -2,23 +2,29 @@ package com.ssafy.groute.src.main.route
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentRouteCreateBinding
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.main.home.Category
+import com.ssafy.groute.src.dto.Category
+import com.ssafy.groute.src.main.home.CategoryAdapter
+import com.ssafy.groute.src.service.AreaService
+import com.ssafy.groute.util.RetrofitCallback
 
 
+private const val TAG = "RouteCreateFragment"
 class RouteCreateFragment : Fragment() {
     private lateinit var binding: FragmentRouteCreateBinding
     private lateinit var mainActivity:MainActivity
 
-    private var areaAdapter:AreaAdapter = AreaAdapter()
+    private var categoryAdapter:CategoryAdapter = CategoryAdapter()
     private var memberAdapter:MemberAdapter = MemberAdapter()
 
     val area = mutableListOf<Category>()
@@ -51,28 +57,8 @@ class RouteCreateFragment : Fragment() {
         }
     }
     fun initAdapter(){
-        areaAdapter = AreaAdapter()
-        area.apply {
-            add(Category(img = R.drawable.jeju, name="제주"))
-            add(Category(img = R.drawable.busan, name="부산"))
-            add(Category(img = R.drawable.kangwondo, name="강원"))
-            add(Category(img = R.drawable.keungju, name="경주"))
-            add(Category(img = R.drawable.chungbuk, name="충북"))
-            add(Category(img = R.drawable.keongkido, name="경기"))
-            add(Category(img = R.drawable.deagu, name="대구"))
-            add(Category(img = R.drawable.yeosu, name="여수"))
-            add(Category(img = R.drawable.jeonju, name="전주"))
-            add(Category(img = R.drawable.incheon, name="인천"))
+        getData()
 
-            areaAdapter.list = area
-            areaAdapter.notifyDataSetChanged()
-        }
-
-        binding.routecreateRvArea.apply {
-            layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
-            adapter = areaAdapter
-            adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        }
 
         memberAdapter = MemberAdapter()
         member.apply {
@@ -89,5 +75,36 @@ class RouteCreateFragment : Fragment() {
         }
 
     }
+    fun getData(){
+        AreaService().getAreas(AreaCallback())
+    }
+    inner class AreaCallback: RetrofitCallback<List<Category>> {
 
+        override fun onError(t: Throwable) {
+            Log.d(TAG, "onError: $t")
+        }
+
+        override fun onSuccess(code: Int, responseData: List<Category>) {
+            Log.d(TAG, "onSuccess: ${responseData}")
+            responseData.let{
+                categoryAdapter = CategoryAdapter()
+                categoryAdapter.list = responseData
+                categoryAdapter.setItemClickListener(object : CategoryAdapter.ItemClickListener{
+                    override fun onClick(view: View, position: Int, name: String) {
+                        mainActivity.openFragment(3)
+                    }
+                })
+            }
+            binding.routecreateRvArea.apply {
+                layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+                adapter = categoryAdapter
+                adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+            }
+        }
+
+        override fun onFailure(code: Int) {
+            Log.d(TAG, "onFailure: ")
+        }
+
+    }
 }

@@ -56,52 +56,25 @@ public class UserController {
 
     @ApiOperation(value = "회원가입", notes = "회원가입")
     @PostMapping(value = "/signup")
-
-    public Boolean registerUser(@RequestBody User dto) throws Exception{
-//        UserDTO userChk = userService.findById(dto.getId());
-        if (userService.findById(dto.getId()) != null) {
-//            return ResponseEntity.badRequest().body("아이디가 이미 존재합니다.");
+    public Boolean registerUser(User user, MultipartFile file) throws Exception{
+        if (userService.findById(user.getId()) != null) {
             return false;
         }
-        
-        User user = new User();
-        user.setId(dto.getId());
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        if (!file.isEmpty()) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (file != null) {
             String fileName = storageService.store(file, uploadPath + "/user");
             user.setImg(fileName);
         } else {
             user.setImg(null);
         }
-        if(dto.getNickname().equals("")) {
-            user.setNickname(null);
-        } else {
-            user.setNickname(dto.getNickname());
-        }
-        if(dto.getPhone().equals("")) {
+        if(user.getPhone() != null && user.getPhone().equals("")) {
             user.setPhone(null);
-        } else {
-            user.setPhone(dto.getPhone());
         }
-        if(dto.getEmail().equals("")) {
-            user.setEmail(null);
-        } else {
-            user.setEmail(dto.getEmail());
-        }
-        if(dto.getBirth().equals("")) {
+        if(user.getBirth() != null && user.getBirth().equals("")) {
             user.setBirth(null);
-        } else {
-            user.setBirth(dto.getBirth());
         }
-        if(dto.getGender().equals("")) {
-            user.setGender(null);
-        } else {
-            user.setGender(dto.getGender());
-        }
-        user.setType(dto.getType());
-//        userMapper.registerUser(user);
+
         userService.registerUser(user);
-//        return ResponseEntity.ok("회원가입이 완료 되었습니다.");
         return true;
     }
 
@@ -156,43 +129,24 @@ public class UserController {
 
     @ApiOperation(value = "회원수정", notes = "회원수정")
     @PutMapping(value = "/update")
-    public Boolean updateUser(User userData) throws Exception{
-        User user = userService.findById(userData.getId());
-        if (user == null) {
+    public Boolean updateUser(User user, MultipartFile file) throws Exception{
+
+        if (userService.findById(user.getId()) == null) {
             return false;
         }
 
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        if (file.isEmpty()) {
-            user.setImg(null);
-        } else {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (file != null) {
             String fileName = storageService.store(file, uploadPath + "/user");
             user.setImg(fileName);
-        }
-        if(userData.getNickname().equals("")) {
-            user.setNickname(null);
         } else {
-            user.setNickname(userData.getNickname());
+            user.setImg(null);
         }
-        if(userData.getPhone().equals("")) {
+        if(user.getPhone() != null && user.getPhone().equals("")) {
             user.setPhone(null);
-        } else {
-            user.setPhone(userData.getPhone());
         }
-        if(userData.getEmail().equals("")) {
-            user.setEmail(null);
-        } else {
-            user.setEmail(userData.getEmail());
-        }
-        if(userData.getBirth().equals("")) {
+        if(user.getBirth() != null && user.getBirth().equals("")) {
             user.setBirth(null);
-        } else {
-            user.setBirth(userData.getBirth());
-        }
-        if(userData.getGender().equals("")) {
-            user.setGender(null);
-        } else {
-            user.setGender(userData.getGender());
         }
 
         userService.updateUser(user);
