@@ -46,7 +46,7 @@ class BoardFragment : Fragment() {
         initAdapter()
         binding.boardTvMore.setOnClickListener {
             Log.d(TAG, "onViewCreated: ")
-            mainActivity.openFragment(5)
+            mainActivity.moveFragment(5)
         }
 
     }

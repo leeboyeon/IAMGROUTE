@@ -95,9 +95,11 @@ class AreaFragment : Fragment() {
     companion object {
 
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(key:String, value:Int) =
             AreaFragment().apply {
-
+                arguments = Bundle().apply {
+                    putInt(key, value)
+                }
             }
     }
     inner class PlaceCallback:RetrofitCallback<List<Places>>{
@@ -106,13 +108,13 @@ class AreaFragment : Fragment() {
         }
 
         override fun onSuccess(code: Int, responseData: List<Places>) {
-            Log.d(TAG, "onSuccess: ${responseData}")
+//            Log.d(TAG, "onSuccess: ${responseData}")
             responseData.let{
                 areaFilterAdapter = AreaFilterAdapter(responseData)
                 areaFilterAdapter.list = responseData
                 areaFilterAdapter.setItemClickListener(object : AreaFilterAdapter.ItemClickListener{
-                    override fun onClick(view: View, position: Int, name: String) {
-                        mainActivity.openFragment(4)
+                    override fun onClick(view: View, position: Int, placeId: Int) {
+                        mainActivity.moveFragment(4,"placeId", placeId)
                     }
 
                 })
