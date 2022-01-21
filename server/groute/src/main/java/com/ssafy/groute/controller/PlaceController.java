@@ -27,16 +27,13 @@ public class PlaceController {
 
     @ApiOperation(value = "place 추가",notes = "place 추가")
     @PostMapping(value = "/insert")
-    public ResponseEntity<?> insertPlace(@RequestBody Place req, MultipartFile file){
-        if (!file.isEmpty()) {
-            try {
-                String fileName = storageService.store(file, uploadPath + "/place");
-                req.setImg(fileName);
-            }catch (Exception e){
-                e.printStackTrace();
-                return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
-            }
-        }
+    public ResponseEntity<?> insertPlace(@RequestBody Place req) throws Exception{
+//        if (file != null) {
+//            String fileName = storageService.store(file, uploadPath + "/place");
+//            req.setImg(fileName);
+//        } else {
+//            req.setImg(null);
+//        }
         try {
             placeService.insertPlace(req);
         }catch (Exception e){
@@ -87,18 +84,7 @@ public class PlaceController {
 
     @ApiOperation(value = "updatePlace",notes = "place 수정")
     @PutMapping(value = "/update")
-    public ResponseEntity<?> updatePlace(@RequestBody Place place, MultipartFile file) throws Exception{
-        if (!file.isEmpty()) {
-            try {
-                String fileName = storageService.store(file, uploadPath + "/place");
-                place.setImg(fileName);
-            }catch (Exception e){
-                e.printStackTrace();
-                return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
-            }
-        } else {
-            place.setImg("");
-        }
+    public ResponseEntity<?> updatePlace(@RequestBody Place place) throws Exception{
         try {
             placeService.updatePlace(place);
         }catch (Exception e){
