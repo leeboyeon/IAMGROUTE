@@ -24,7 +24,7 @@
 
     <update id="updateUser">
         update user
-        password = #{password}, nickname = #{nickname}, phone = #{phone}, gender = #{gender}, birth = #{birth}, email = #{email}, img = #{img}, type = #{type}, token = #{token}
+        set password = #{password}, nickname = #{nickname}, phone = #{phone}, gender = #{gender}, birth = #{birth}, email = #{email}, img = #{img}, type = #{type}, token = #{token}
         where id = #{id}
     </update>
 </mapper>
