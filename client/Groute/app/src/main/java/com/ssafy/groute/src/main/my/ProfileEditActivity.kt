@@ -2,9 +2,17 @@ package com.ssafy.groute.src.main.my
 
 import android.R
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.graphics.Rect
+import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.FileUtils
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -15,6 +23,8 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.ActivityProfileEditBinding
@@ -22,6 +32,13 @@ import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.IOException
+import java.io.InputStream
 import java.util.regex.Pattern
 
 private const val TAG = "ProfileEditActivity_groute"
@@ -30,6 +47,9 @@ class ProfileEditActivity : AppCompatActivity() {
     private var userEmail : String = ""
     private var userBirth : String = ""
     private var userGender : String? = ""
+    lateinit var imgUri: Uri
+    private val OPEN_GALLERY = 1
+    private val PERMISSION_GALLERY = 101
     @SuppressLint("LongLogTag")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +74,54 @@ class ProfileEditActivity : AppCompatActivity() {
             }
         }
 
+        // 프로필 이미지 수정 버튼 클릭
+        binding.profileEditChangeImgTv.setOnClickListener {
+            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            intent.setType("image/*")
+            filterActivityLauncher.launch(intent)
+        }
+
     }
+
+    // 갤러리에서 이미지 클릭한 후
+    @SuppressLint("LongLogTag")
+    private val filterActivityLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if(it.resultCode == RESULT_OK && it.data !=null) {
+                var currentImageUri = it.data?.data
+                try {
+                    currentImageUri?.let {
+                        if(Build.VERSION.SDK_INT < 28) {
+                            val bitmap = MediaStore.Images.Media.getBitmap(
+                                this.contentResolver,
+                                currentImageUri
+                            )
+                            Log.d(TAG, "filterActivityLauncher: $bitmap")
+                            binding.profileEditImg.setImageBitmap(bitmap)
+                        } else {
+                            val source = ImageDecoder.createSource(this.contentResolver, currentImageUri)
+                            val bitmap = ImageDecoder.decodeBitmap(source)
+                            Log.d(TAG, "filterActivityLauncher :$currentImageUri $bitmap")
+                            //binding.profileEditImg.setImageBitmap(bitmap)
+                            Glide.with(this)
+                                .load(currentImageUri)
+                                .circleCrop()
+                                .into(binding.profileEditImg)
+                            imgUri = currentImageUri
+                        }
+                    }
+
+                }catch(e:Exception) {
+                    e.printStackTrace()
+                }
+            } else if(it.resultCode == RESULT_CANCELED){
+                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
+            }else{
+                Log.d("ActivityResult","something wrong")
+            }
+        }
+
+
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         val focusView = currentFocus
@@ -168,7 +235,20 @@ class ProfileEditActivity : AppCompatActivity() {
     }
 
     fun updateUser(user: User) {
-        UserService().updateUserInfo(user, userUpdateCallback())
+        val file = File(imgUri.path)
+        var inputStream: InputStream? = null
+        try {
+            inputStream = this.contentResolver.openInputStream(imgUri)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        var bitmap = BitmapFactory.decodeStream(inputStream)
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 20, byteArrayOutputStream)
+        var requestBody = RequestBody.create(MediaType.parse("image/jpg"), byteArrayOutputStream.toByteArray())
+        var uploadFile = MultipartBody.Part.createFormData("img", file.name, requestBody)
+
+        UserService().updateUserInfo(user, uploadFile, userUpdateCallback())
 
     }
 

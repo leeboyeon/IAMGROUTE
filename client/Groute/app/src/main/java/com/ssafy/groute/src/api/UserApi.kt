@@ -2,6 +2,7 @@ package com.ssafy.groute.src.api
 import android.content.Entity
 import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.response.UserInfoResponse
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -26,6 +27,7 @@ interface UserApi {
     fun signUp(@Body user:User) : Call<Boolean>
 
     // 사용자 정보 수정
+    @Multipart
     @PUT("/user/update")
-    fun updateUser( @Body user: User): Call<Boolean>
+    fun updateUser(@Body user: User, @Part img: MultipartBody.Part): Call<Boolean>
 }

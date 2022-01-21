@@ -7,6 +7,7 @@ import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -118,9 +119,9 @@ class UserService {
      * @param userId
      * @param user
      */
-    fun updateUserInfo(user: User, callback: RetrofitCallback<Boolean>) {
-        Log.d(TAG, "사용자 정보 수정: $user")
-        RetrofitUtil.userService.updateUser(user).enqueue(object : Callback<Boolean> {
+    fun updateUserInfo(user: User, img: MultipartBody.Part, callback: RetrofitCallback<Boolean>) {
+        Log.d(TAG, "사용자 정보 수정: $user 이미지: ${user.img}  ${img.body()}")
+        RetrofitUtil.userService.updateUser(user, img).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 val res = response.body()
                 if (response.code() == 200) {
