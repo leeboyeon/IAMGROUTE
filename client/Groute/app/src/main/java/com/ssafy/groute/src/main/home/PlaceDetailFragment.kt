@@ -132,6 +132,7 @@ class PlaceDetailFragment : Fragment() {
 
         override fun onSuccess(code: Int, responseData: Places) {
             binding.placeDetailTvName.text = responseData.name
+            binding.placeDetailTvStar.text = responseData.rate.toFloat().toString()
             places = responseData
         }
 

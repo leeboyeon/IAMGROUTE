@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ssafy.groute">
-
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
     <application
         android:name=".config.ApplicationClass"
         android:allowBackup="true"
@@ -12,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Groute"
         android:usesCleartextTraffic="true">
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="956742d6721a84ca6d77fd8ea88f59ec"/>
         <activity
             android:name=".src.main.my.ProfileEditActivity"
             android:exported="false" />
@@ -29,9 +36,6 @@
         </activity>
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+
 
 </manifest>

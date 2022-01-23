@@ -13,10 +13,12 @@
         android:layout_height="wrap_content"
         android:background="@drawable/profilebar_gradient_background"
         android:gravity="center"
-        android:visibility="visible"
         android:orientation="horizontal"
         android:padding="20dp"
-        tools:ignore="MissingConstraints">
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -85,20 +87,23 @@
 
     <FrameLayout
         android:id="@+id/frame_main_layout"
-        android:name="com.ssafy.groute.src.main.home.HomeFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavi"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_profileBar"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavi"/>
+        app:layout_constraintTop_toBottomOf="@+id/main_profileBar" />
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottomnav_item"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frame_main_layout"
+        app:menu="@menu/bottomnav_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

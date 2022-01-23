@@ -106,4 +106,9 @@ dependencies {
     // naver Login
     implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'
 
+    //kakao Map
+//    compile files('libs/libDaumMapAndroid.jar')
+    implementation fileTree(include:['*.jar'], dir: 'libs')
+    implementation files('libs/libDaumMapAndroid.jar')
+
 }

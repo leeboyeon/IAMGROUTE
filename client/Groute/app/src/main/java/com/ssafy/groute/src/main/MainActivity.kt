@@ -1,7 +1,11 @@
 package com.ssafy.groute.src.main
 
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.content.pm.Signature
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
@@ -22,6 +26,8 @@ import com.ssafy.groute.src.main.route.RouteFragment
 import com.ssafy.groute.src.main.travel.TravelPlanFragment
 import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 
 private const val TAG = "MainActivity_groute"
@@ -41,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.Home -> {
+//                    binding.mainProfileBar.visibility = true
                     binding.mainProfileBar.isVisible = true
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.frame_main_layout, HomeFragment())
@@ -79,6 +86,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         initProfileBar()
+
+        getHashKey()
     }
     fun openFragment(index:Int, key:String, value:Int){
         val transaction = supportFragmentManager.beginTransaction()
@@ -159,6 +168,25 @@ class MainActivity : AppCompatActivity() {
         if(state) bottomNavigation.visibility =  View.GONE
         else bottomNavigation.visibility = View.VISIBLE
     }
-
+    fun getHashKey(){
+        var packageInfo :PackageInfo = PackageInfo()
+        try{
+            packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+        }catch(e:PackageManager.NameNotFoundException){
+            e.printStackTrace()
+        }
+        
+        for(signature:Signature in packageInfo.signatures){
+            try{
+                var md: MessageDigest = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                Log.d(TAG, "getHashKey: ${Base64.encodeToString(md.digest(), Base64.DEFAULT)}")
+                Log.e(TAG, "getHashKey: ${Base64.encodeToString(md.digest(), Base64.DEFAULT)}")
+            }catch (e:NoSuchAlgorithmException){
+                Log.d(TAG, "getHashKey: ${signature},  ${e}")
+                Log.e(TAG, "getHashKey: ${signature},  ${e}")
+            }
+        }
+    }
 
 }
