@@ -3,6 +3,8 @@ package com.ssafy.groute.src.login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import com.kakao.sdk.common.util.Utility
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.ActivityLoginBinding
 import com.ssafy.groute.src.main.MainActivity
@@ -14,6 +16,10 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // kakao 플랫폼 키 해시 등록
+//        var keyHash = Utility.getKeyHash(this)
+//        Log.d("kakaoKeyHash", "onCreate: $keyHash")
     }
 
     fun openFragment(int: Int){
