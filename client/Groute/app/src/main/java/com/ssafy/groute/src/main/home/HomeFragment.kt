@@ -61,31 +61,13 @@ class HomeFragment : Fragment() {
             bestrouteAdatper.list = bests
             bestrouteAdatper.notifyDataSetChanged()
         }
-//        catelists.apply {
-//            add(Category(img = R.drawable.jeju, name="제주"))
-//            add(Category(img = R.drawable.busan, name="부산"))
-//            add(Category(img = R.drawable.kangwondo, name="강원"))
-//            add(Category(img = R.drawable.keungju, name="경주"))
-//            add(Category(img = R.drawable.chungbuk, name="충북"))
-//            add(Category(img = R.drawable.keongkido, name="경기"))
-//            add(Category(img = R.drawable.deagu, name="대구"))
-//            add(Category(img = R.drawable.yeosu, name="여수"))
-//            add(Category(img = R.drawable.jeonju, name="전주"))
-//            add(Category(img = R.drawable.incheon, name="인천"))
-//
-//            categoryAdapter.list = catelists
-//            categoryAdapter.notifyDataSetChanged()
-//        }
+
         bestrouteAdatper.setItemClickListener(object : BestRouteAdapter.ItemClickListener{
             override fun onClick(view: View, position: Int, name: String) {
                 //event
             }
         })
-//        categoryAdapter.setItemClickListener(object: CategoryAdapter.ItemClickListener{
-//            override fun onClick(view: View, position: Int, name: String) {
-//                mainActivity.openFragment(3)
-//            }
-//        })
+
         binding.homeRvBestRoute.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
             adapter = bestrouteAdatper

@@ -53,4 +53,22 @@ class PlaceService {
 
         })
     }
+    
+    fun updatePlace(place: Places, callback:RetrofitCallback<Boolean>){
+        RetrofitUtil.placeService.updatePlace(place).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if(response.code() == 200){
+                    Log.d(TAG, "onResponse: UpdateSuccess!!")
+                }else{
+                    Log.d(TAG, "onResponse: FAIL")
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                Log.d(TAG, "onFailure: $t")
+            }
+
+        })
+    }
 }
