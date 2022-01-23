@@ -106,4 +106,13 @@ dependencies {
     // naver Login
     implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'
 
+    // 카카오 모듈 SDK 설정
+//    implementation "com.kakao.sdk:v2-user:2.8.3" // 카카오 로그인
+    implementation "com.kakao.sdk:v2-user-rx:2.4.2" // 카카오 로그인
+
+    // RxAndroid, RxKotlin
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.17'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
+
 }

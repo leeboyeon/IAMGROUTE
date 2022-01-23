@@ -23,6 +23,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.kakao.sdk.common.model.ClientError
+import com.kakao.sdk.common.model.ClientErrorCause
+import com.kakao.sdk.user.UserApiClient
+import com.kakao.sdk.user.rx
 import com.nhn.android.naverlogin.OAuthLogin
 import com.nhn.android.naverlogin.OAuthLoginHandler
 import com.ssafy.groute.R
@@ -31,6 +35,11 @@ import com.ssafy.groute.databinding.FragmentLoginBinding
 import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -45,6 +54,9 @@ class LoginFragment : Fragment() {
 
     // naver 로그인
     lateinit var mOAuthLoginInstance : OAuthLogin
+
+    // kakao 로그인
+//    private var disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +81,7 @@ class LoginFragment : Fragment() {
         val id = view.findViewById<EditText>(R.id.editTextTextPersonName)
         val pass = view.findViewById<EditText>(R.id.editTextTextPersonName2)
 
+
         binding.loginTvJoin.setOnClickListener{
             loginActivity.openFragment(2)
         }
@@ -92,6 +105,41 @@ class LoginFragment : Fragment() {
             getString(R.string.naver_client_name))
         binding.loginIbtnNaver.setOnClickListener {
             mOAuthLoginInstance.startOauthLoginActivity(requireActivity(), mOAuthLoginHandler);
+        }
+
+        // 카카오 계정으로 로그인 버튼 클릭
+        var disposables = CompositeDisposable()
+        binding.loginIbtnKakao.setOnClickListener {
+            // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
+            if (UserApiClient.instance.isKakaoTalkLoginAvailable(requireContext())) {
+                UserApiClient.rx.loginWithKakaoTalk(requireContext())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .onErrorResumeNext { error ->
+                        // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
+                        // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
+                        if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                            Single.error(error)
+                        } else {
+                            // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
+                            UserApiClient.rx.loginWithKakaoAccount(requireContext())
+                        }
+                    }.observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ token ->
+                        Log.i(TAG, "로그인 성공 ${token.accessToken}")
+                        successKakao()
+                    }, { error ->
+                        Log.e(TAG, "로그인 실패", error)
+                    }).addTo(disposables)
+            } else {
+                UserApiClient.rx.loginWithKakaoAccount(requireContext())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ token ->
+                        Log.i(TAG, "로그인 성공 ${token.accessToken}")
+                        successKakao()
+                    }, { error ->
+                        Log.e(TAG, "로그인 실패", error)
+                    }).addTo(disposables)
+            }
         }
 
     }
@@ -262,6 +310,43 @@ class LoginFragment : Fragment() {
             val at = mOAuthLoginModule.getAccessToken(mContext)
             return mOAuthLoginModule.requestApi(mContext, at, url)
         }
+    }
+
+
+    /**
+     * #S06P12D109-6
+     * sns Login - Kakao
+     */
+    // ---------------------------------------------------------------------------------------------
+    private fun successKakao() {
+        var disposables = CompositeDisposable()
+        // 사용자 정보 요청 (기본)
+        UserApiClient.rx.me()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ user ->
+                Log.i(TAG, "사용자 정보 요청 성공" +
+                        "\n회원번호: ${user.id}" +  // pw
+                        "\n이메일: ${user.kakaoAccount?.email}" +  // id, email
+                        "\n닉네임: ${user.kakaoAccount?.profile?.nickname}" +  // nickname
+                        "\n프로필사진: ${user.kakaoAccount?.profile?.thumbnailImageUrl}" +   // image
+                        "\n성별 : ${user.kakaoAccount?.gender}" +
+                        "\n생일 : ${user.kakaoAccount?.birthyear} - ${user.kakaoAccount?.birthday}")
+
+                val id = user.kakaoAccount?.email.toString()
+                val pw = user.id.toString()
+                val nickname = user.kakaoAccount?.profile?.nickname.toString()
+                var gender = user.kakaoAccount?.gender.toString()
+                val image = user.kakaoAccount?.profile?.thumbnailImageUrl.toString()
+                if(gender.equals("null")) {
+                    gender = ""
+                }
+                val newUser = User(id, pw, nickname, "", id, "", gender, "sns", image)
+                UserService().isUsedId(id, isUsedIdCallback(newUser))
+            }, { error ->
+                Log.e(TAG, "사용자 정보 요청 실패", error)
+            })
+            .addTo(disposables)
     }
 
     /**

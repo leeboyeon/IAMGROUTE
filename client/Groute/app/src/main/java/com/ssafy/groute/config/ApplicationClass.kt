@@ -3,6 +3,8 @@ package com.ssafy.groute.config
 import android.app.Application
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.kakao.sdk.common.KakaoSdk
+import com.ssafy.groute.R
 import com.ssafy.groute.util.SharedPreferencesUtil
 import com.ssafy.smartstore.src.main.intercepter.AddCookiesInterceptor
 import com.ssafy.smartstore.src.main.intercepter.ReceivedCookiesInterceptor
@@ -46,6 +48,9 @@ class ApplicationClass : Application() {
             .addConverterFactory(ScalarsConverterFactory.create())
             .client(okHttpClient)
             .build()
+
+        // Kakao SDK 초기화
+        KakaoSdk.init(this, getString(R.string.kakao_nativeapp_key))
     }
 
 }
