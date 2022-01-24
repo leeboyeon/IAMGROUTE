@@ -14,11 +14,13 @@ import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.src.dto.BoardDetail
+import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_FREE_TYPE
+import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_QUESTION_TYPE
 import com.ssafy.groute.src.main.route.RouteThemeRecyclerviewAdapter
 import com.ssafy.groute.src.service.UserService
 import de.hdodenhof.circleimageview.CircleImageView
 
-class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: List<BoardDetail>) : RecyclerView.Adapter<BoardRecyclerviewAdapter.BoardHolder>(){
+class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: List<BoardDetail>, var boardType: Int) : RecyclerView.Adapter<BoardRecyclerviewAdapter.BoardHolder>(){
     lateinit var ThemeAdapter: RouteThemeRecyclerviewAdapter
     inner class BoardHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val profileIv = itemView.findViewById<ImageView>(R.id.item_board_profile_iv)
@@ -32,6 +34,14 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
         val themeList = arrayListOf("#힐링", "#로맨틱")
 
         fun bindInfo(data: BoardDetail) {
+            if(boardType == BOARD_FREE_TYPE) {
+                thumbnailIv.visibility = View.VISIBLE
+                Glide.with(itemView)
+                    .load(data.img)
+                    .into(thumbnailIv)
+            } else if(boardType == BOARD_QUESTION_TYPE) {
+                thumbnailIv.visibility = View.GONE
+            }
             val userInfo = UserService().getUserInfo(data.userId)
             userInfo.observe(
                 lifecycleOwner, {
@@ -42,9 +52,6 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
                     uidTv.text = it.nickname
                 }
             )
-            Glide.with(itemView)
-                .load(data.img)
-                .into(thumbnailIv)
             titleTv.text = data.title
             contentTv.text = data.content
             reviewTv.text = data.hitCnt.toString()

@@ -68,6 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="169.8dp"
                 android:scaleType="fitXY"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_board_profile_iv"

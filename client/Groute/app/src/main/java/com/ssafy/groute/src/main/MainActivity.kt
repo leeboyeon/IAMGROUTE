@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity() {
                     .addToBackStack(null)
             }
             5->{
-                transaction.replace(R.id.frame_main_layout, BoardDetailFragment())
+                transaction.replace(R.id.frame_main_layout, BoardDetailFragment.newInstance(key, value))
                     .addToBackStack(null)
             }
             6->{

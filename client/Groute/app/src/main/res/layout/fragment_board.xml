@@ -82,7 +82,7 @@
                             android:textSize="16sp" />
 
                         <TextView
-                            android:id="@+id/board_tv_more"
+                            android:id="@+id/board_tv_more_free"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="more than" />
@@ -139,7 +139,7 @@
                             android:textSize="16sp" />
 
                         <TextView
-                            android:id="@+id/board_tv_more2"
+                            android:id="@+id/board_tv_more_question"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="more than" />

@@ -23,11 +23,12 @@ class BoardFragment : Fragment() {
     private var magazineAdapter: MagazineAdapter = MagazineAdapter()
     lateinit var boardFreeAdapter : BoardAdapter
     lateinit var boardQuestionAdapter : BoardAdapter
-    val boardFreeList = arrayListOf<BoardDetail>()
-    val boardQuestionList = arrayListOf<BoardDetail>()
-
     val magazines = arrayListOf<Magazine>()
-    val boards = arrayListOf<Board>()
+
+    companion object{
+        const val BOARD_FREE_TYPE = 2 // 자유게시판 타입
+        const val BOARD_QUESTION_TYPE = 3 // 질문게시판 타입
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -50,9 +51,14 @@ class BoardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
-        binding.boardTvMore.setOnClickListener {
+        binding.boardTvMoreFree.setOnClickListener {
             Log.d(TAG, "onViewCreated: ")
-            mainActivity.moveFragment(5)
+            mainActivity.moveFragment(5, "boardId", BOARD_FREE_TYPE)
+        }
+
+        binding.boardTvMoreQuestion.setOnClickListener {
+            Log.d(TAG, "onViewCreated: ")
+            mainActivity.moveFragment(5, "boardId", BOARD_QUESTION_TYPE)
         }
 
     }
@@ -73,37 +79,34 @@ class BoardFragment : Fragment() {
 
         }
 
-        val boardList = BoardService().getBoardList()
-        boardList.observe(
+        val boardFreeList = BoardService().getBoardDetailList(BOARD_FREE_TYPE)
+        boardFreeList.observe(
             viewLifecycleOwner,
-            { boardList ->
-                boardList.let {
-                    Log.d(TAG, "initData boardList size : ${boardList.size}")
-                    boardFreeList.clear()
-                    boardQuestionList.clear()
-                    for(i in 0 until boardList.size) {
-                        if(boardList.get(i).boardId == 2) { // 자유게시판 글
-                            boardFreeList.add(boardList.get(i))
-                            Log.d(TAG, "initAdapter: ${boardList.get(i).title}")
-                        } else if(boardList.get(i).boardId == 3) { // 질문게시판 글
-                            boardQuestionList.add(boardList.get(i))
-                            Log.d(TAG, "initAdapter: ${boardList.get(i).title}")
-                        }
-                    }
+            { boardFreeList ->
+                boardFreeList.let {
+                    boardFreeAdapter = BoardAdapter(viewLifecycleOwner, boardFreeList)
                 }
-                boardFreeAdapter = BoardAdapter(viewLifecycleOwner, boardFreeList)
-                boardQuestionAdapter = BoardAdapter(viewLifecycleOwner, boardQuestionList)
+
                 binding.boardRvFree.apply{
                     layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
                     adapter = boardFreeAdapter
                     adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+                }
+            }
+        )
+
+        val boardQuestionList = BoardService().getBoardDetailList(BOARD_QUESTION_TYPE)
+        boardQuestionList.observe(
+            viewLifecycleOwner,
+            {   boardQuestionList ->
+                boardQuestionList.let {
+                    boardQuestionAdapter = BoardAdapter(viewLifecycleOwner, boardQuestionList)
                 }
                 binding.boardRvQuestion.apply{
                     layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
                     adapter = boardQuestionAdapter
                     adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
                 }
-
             }
         )
     }

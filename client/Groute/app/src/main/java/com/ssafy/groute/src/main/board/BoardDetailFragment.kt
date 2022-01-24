@@ -13,6 +13,9 @@ import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentBoardDetailBinding
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.main.MainActivity
+import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_FREE_TYPE
+import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_QUESTION_TYPE
+import com.ssafy.groute.src.service.BoardService
 
 private const val TAG = "BoardDetailFragment"
 class BoardDetailFragment : Fragment() {
@@ -20,9 +23,15 @@ class BoardDetailFragment : Fragment() {
     private lateinit var mainActivity: MainActivity
     private lateinit var boardRecyclerAdapter:BoardRecyclerviewAdapter
     private lateinit var boardDetailList : MutableList<BoardDetail>
+    private var boardId = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
+
+        arguments?.let {
+            boardId = it.getInt("boardId", -1)
+            Log.d(TAG, "onCreate: $boardId")
+        }
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -39,29 +48,43 @@ class BoardDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: ")
+        if(boardId == BOARD_FREE_TYPE) {
+            binding.boardDetailBoardNameTv.text = "자유게시판"
+        } else if(boardId == BOARD_QUESTION_TYPE) {
+            binding.boardDetailBoardNameTv.text = "질문게시판"
+        }
         initAdapter()
     }
     fun initAdapter(){
-        boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, boardDetailList)
-        binding.boardDetailRvListitem.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-            adapter = boardRecyclerAdapter
-            adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        }
-        boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
-            override fun onClick(view: View, position: Int, name: String) {
-                mainActivity.moveFragment(6)
-            }
+        val boardDetailList = BoardService().getBoardDetailList(boardId)
+        boardDetailList.observe(
+            viewLifecycleOwner,
+            {   boardDetailList ->
+                boardDetailList.let {
+                    boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, boardDetailList, boardId)
+                }
+                binding.boardDetailRvListitem.apply {
+                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+                    adapter = boardRecyclerAdapter
+                    adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+                }
+                boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
+                    override fun onClick(view: View, position: Int, name: String) {
+                        mainActivity.moveFragment(6)
+                    }
 
-        })
+                })
+            }
+        )
 
     }
     companion object {
-
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(key: String, value: Int) =
             BoardDetailFragment().apply {
-
+                arguments = Bundle().apply {
+                    putInt(key, value)
+                }
             }
     }
 }
