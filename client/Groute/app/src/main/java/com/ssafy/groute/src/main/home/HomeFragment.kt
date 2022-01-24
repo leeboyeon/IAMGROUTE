@@ -7,15 +7,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenResumed
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentHomeBinding
 import com.ssafy.groute.src.dto.Category
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.AreaService
+import com.ssafy.groute.util.MainViewModel
 import com.ssafy.groute.util.RetrofitCallback
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 private const val TAG = "HomeFragment"
 class HomeFragment : Fragment() {
@@ -27,6 +36,11 @@ class HomeFragment : Fragment() {
     private lateinit var mainActivity : MainActivity
     val catelists = mutableListOf<Category>()
     val bests = mutableListOf<BestRoute>()
+
+    // 롤링 배너
+    private lateinit var bannerViewPagerAdapter: BannerViewPagerAdapter
+    private lateinit var mainViewModel: MainViewModel
+    private var isRunning = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +62,14 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdatper()
+
+        // 롤링 배너
+        mainViewModel = ViewModelProvider(mainActivity).get(MainViewModel::class.java)
+        val bannerList = arrayListOf<Int>(R.drawable.banner1, R.drawable.banner2, R.drawable.banner3)
+        mainViewModel.setBannerItems(bannerList)
+        initViewPager()
+        subscribeObservers()
+        autoScrollViewPage()
     }
     fun initAdatper(){
         getData()
@@ -76,6 +98,45 @@ class HomeFragment : Fragment() {
 
 
     }
+
+    private fun initViewPager() {
+        binding.viewPager2.apply {
+            bannerViewPagerAdapter = BannerViewPagerAdapter()
+            adapter = bannerViewPagerAdapter
+            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    isRunning = true
+
+                }
+            })
+        }
+    }
+
+    private fun subscribeObservers() {
+        mainViewModel.bannerItemList.observe(mainActivity, Observer{ bannerItemList ->
+            bannerViewPagerAdapter.submitList(bannerItemList)
+
+        })
+
+        mainViewModel.currentPosition.observe(mainActivity, Observer { currentPosition ->
+            binding.viewPager2.currentItem = currentPosition
+        })
+    }
+
+    private fun autoScrollViewPage() {
+        lifecycleScope.launch{
+            whenResumed {
+                while(isRunning) {
+                    delay(3000)
+                    mainViewModel.getcurrentPosition()?.let {
+                        mainViewModel.setCurrentPosition((it.plus(1)) % 3)
+                    }
+                }
+            }
+        }
+    }
+
     fun getData(){
         AreaService().getAreas(AreaCallback())
     }
