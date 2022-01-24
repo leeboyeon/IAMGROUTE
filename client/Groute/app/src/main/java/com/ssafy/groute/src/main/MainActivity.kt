@@ -1,5 +1,6 @@
 package com.ssafy.groute.src.main
 
+import android.Manifest
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
@@ -8,6 +9,8 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.View
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -26,6 +29,8 @@ import com.ssafy.groute.src.main.route.RouteFragment
 import com.ssafy.groute.src.main.travel.TravelPlanFragment
 import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
+import com.ssafy.groute.util.LocationPermissionManager
+import com.ssafy.groute.util.LocationServiceManager
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
@@ -34,6 +39,13 @@ private const val TAG = "MainActivity_groute"
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var bottomNavigation: BottomNavigationView
+    // 모든 퍼미션 관련 배열
+    private val requiredPermissions = arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+    )
+    lateinit var locationServiceManager: LocationServiceManager
+    lateinit var locationPermissionManager: LocationPermissionManager
+    private val PERMISSIONS_CODE = 100
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -88,6 +100,17 @@ class MainActivity : AppCompatActivity() {
         initProfileBar()
 
         getHashKey()
+        // Location
+        locationPermissionManager = LocationPermissionManager(this)
+        locationServiceManager = LocationServiceManager(this)
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(
+                this,
+                requiredPermissions,
+                PERMISSIONS_CODE
+            )
+        }
     }
     fun openFragment(index:Int, key:String, value:Int){
         val transaction = supportFragmentManager.beginTransaction()
@@ -188,5 +211,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            PERMISSIONS_CODE -> {
+                if(grantResults.isNotEmpty()) {
+                    for((i, permission) in permissions.withIndex()) {
+                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                            //권한 획득 실패
+                            Log.i(TAG, "$permission 권한 획득에 실패하였습니다.")
+                            finish()
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
