@@ -13,4 +13,5 @@ public interface BoardDetailService {
     List<BoardDetail> selectAllBoardDetail() throws Exception;
     void deleteBoardDetail(int id) throws Exception;
     void updateBoardDetail(BoardDetail boardDetail) throws Exception;
+    List<BoardDetail> selectBoardDetailSeparetedByTag(int boardId) throws Exception;
 }

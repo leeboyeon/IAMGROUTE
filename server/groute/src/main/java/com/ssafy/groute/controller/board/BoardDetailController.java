@@ -76,6 +76,17 @@ public class BoardDetailController {
         return new ResponseEntity<List<BoardDetail>>(res,HttpStatus.OK);
     }
 
+    @ApiOperation(value = "list boardDetail division",notes = "boardDetail를 구분하여 반환")
+    @GetMapping(value = "/list/division")
+    public ResponseEntity<?> listBoardDetailDivision(@RequestParam("boardId") int boardId) throws Exception{
+        List<BoardDetail> res = boardDetailService.selectBoardDetailSeparetedByTag(boardId);
+        if(res==null){
+            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<List<BoardDetail>>(res,HttpStatus.OK);
+    }
+
     @ApiOperation(value = "delete boardDetail",notes = "boardDetail 삭제")
     @DeleteMapping(value = "/del")
     public ResponseEntity<?> deleteBoardDetail(@RequestParam("id") int id) throws Exception{
