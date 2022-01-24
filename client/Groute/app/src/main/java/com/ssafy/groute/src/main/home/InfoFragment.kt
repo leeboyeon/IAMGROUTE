@@ -15,7 +15,7 @@ import com.ssafy.groute.src.dto.Places
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.util.RetrofitCallback
-
+import net.daum.mf.map.api.MapView
 private const val TAG = "InfoFragment"
 class InfoFragment : Fragment() {
     private var placeId = -1
@@ -45,9 +45,15 @@ class InfoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initData()
     }
+    fun createMap(){
+        val mapView = MapView(requireContext())
+        binding.kakaoMapView.addView(mapView)
+
+    }
     fun initData(){
         Log.d(TAG, "initData: $placeId")
         val placesDetail = PlaceService().getPlace(placeId, placesCallback())
+        createMap()
     }
     companion object {
 
