@@ -20,6 +20,7 @@ import com.ssafy.groute.databinding.ActivityMainBinding
 import com.ssafy.groute.src.main.board.BoardDetailDetailFragment
 import com.ssafy.groute.src.main.board.BoardDetailFragment
 import com.ssafy.groute.src.main.board.BoardFragment
+import com.ssafy.groute.src.main.board.BoardWriteFragment
 import com.ssafy.groute.src.main.home.AreaFragment
 import com.ssafy.groute.src.main.home.HomeFragment
 import com.ssafy.groute.src.main.home.PlaceDetailFragment
@@ -143,6 +144,10 @@ class MainActivity : AppCompatActivity() {
             }
             7->{
                 transaction.replace(R.id.frame_main_layout,TravelPlanFragment())
+                    .addToBackStack(null)
+            }
+            8->{
+                transaction.replace(R.id.frame_main_layout,BoardWriteFragment())
                     .addToBackStack(null)
             }
         }

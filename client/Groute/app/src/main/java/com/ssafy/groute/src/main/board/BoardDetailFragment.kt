@@ -27,11 +27,15 @@ class BoardDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
+<<<<<<< HEAD
 
         arguments?.let {
             boardId = it.getInt("boardId", -1)
             Log.d(TAG, "onCreate: $boardId")
         }
+=======
+        mainActivity.hideBottomNav(true)
+>>>>>>> feature/BoardF_create
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -54,6 +58,10 @@ class BoardDetailFragment : Fragment() {
             binding.boardDetailBoardNameTv.text = "질문게시판"
         }
         initAdapter()
+
+        binding.boardDetailBtnWrite.setOnClickListener {
+            mainActivity.moveFragment(8)
+        }
     }
     fun initAdapter(){
         val boardDetailList = BoardService().getBoardDetailList(boardId)
