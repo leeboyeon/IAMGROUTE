@@ -51,7 +51,7 @@
                 app:layout_constraintLeft_toRightOf="@id/item_board_profile_iv"
                 />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <!--<androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/item_board_theme_rv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
                 app:layout_constraintTop_toTopOf="@id/item_board_uid_tv"
                 app:layout_constraintBottom_toBottomOf="@id/item_board_uid_tv"
                 app:layout_constraintLeft_toRightOf="@id/item_board_uid_tv"
-                android:layout_marginStart="20dp" />
+                android:layout_marginStart="20dp" />-->
 
             <ImageView
                 android:id="@+id/item_board_iv"

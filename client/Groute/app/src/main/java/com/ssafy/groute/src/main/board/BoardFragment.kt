@@ -26,8 +26,8 @@ class BoardFragment : Fragment() {
     val magazines = arrayListOf<Magazine>()
 
     companion object{
-        const val BOARD_FREE_TYPE = 2 // 자유게시판 타입
-        const val BOARD_QUESTION_TYPE = 3 // 질문게시판 타입
+        const val BOARD_FREE_TYPE = 1 // 자유게시판 타입
+        const val BOARD_QUESTION_TYPE = 2 // 질문게시판 타입
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
