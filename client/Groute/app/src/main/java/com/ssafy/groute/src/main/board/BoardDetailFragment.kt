@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
@@ -15,6 +16,7 @@ import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_FREE_TYPE
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_QUESTION_TYPE
+import com.ssafy.groute.src.response.BoardDetailResponse
 import com.ssafy.groute.src.service.BoardService
 
 private const val TAG = "BoardDetailFragment"
@@ -24,6 +26,8 @@ class BoardDetailFragment : Fragment() {
     private lateinit var boardRecyclerAdapter:BoardRecyclerviewAdapter
     private lateinit var boardDetailList : MutableList<BoardDetail>
     private var boardId = -1
+    private var boardDetailId = -1
+    val liveData = MutableLiveData<List<BoardDetailResponse>>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -59,6 +63,12 @@ class BoardDetailFragment : Fragment() {
         binding.boardDetailBtnWrite.setOnClickListener {
             mainActivity.moveFragment(8)
         }
+
+        if(boardRecyclerAdapter.isEdit == true){
+            val fragmentbundle = Bundle()
+            fragmentbundle.putBoolean("isEdit", true)
+            mainActivity.moveFragment(8,"boardDetailId", boardDetailId)
+        }
     }
     fun initAdapter(){
         val boardDetailList = BoardService().getBoardDetailList(boardId)
@@ -66,7 +76,7 @@ class BoardDetailFragment : Fragment() {
             viewLifecycleOwner,
             {   boardDetailList ->
                 boardDetailList.let {
-                    boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, boardDetailList, boardId)
+                    boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, boardDetailList, boardId, requireContext(), this::initData)
                 }
                 binding.boardDetailRvListitem.apply {
                     layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
@@ -82,6 +92,19 @@ class BoardDetailFragment : Fragment() {
             }
         )
 
+    }
+    private fun initData(){
+        liveData.observe(requireActivity(), {
+            binding.boardDetailRvListitem.adapter = liveData.value?.let{
+                BoardRecyclerviewAdapter(
+                    viewLifecycleOwner,
+                    boardDetailList,
+                    boardId,
+                    requireContext(),
+                    this::initData
+                )
+            }
+        })
     }
     companion object {
         @JvmStatic

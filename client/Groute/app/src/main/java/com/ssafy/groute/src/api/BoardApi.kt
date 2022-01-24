@@ -2,10 +2,7 @@ package com.ssafy.groute.src.api
 
 import com.ssafy.groute.src.dto.BoardDetail
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Query
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface BoardApi {
 
@@ -13,12 +10,15 @@ interface BoardApi {
     @GET("/boardDetail/list")
     fun listBoard() : Call<MutableList<BoardDetail>>
 
-
     // 게시판 타입에 따른 리스트 조회
     @GET("/boardDetail/list/division")
     fun listBoardDetail(@Query("boardId") boardId : Int) : Call<MutableList<BoardDetail>>
 
+    // 게시판에 글쓰기
     @POST("/boardDetail/insert")
     fun insertBoardDetail(@Body boardDetail:BoardDetail) : Call<Boolean>
 
+    // 게시판 글삭제
+    @DELETE("/boardDetail/del")
+    fun deleteBoardDetail(@Query("boardDetailId") boardDetailId: Int) : Call<Boolean>
 }

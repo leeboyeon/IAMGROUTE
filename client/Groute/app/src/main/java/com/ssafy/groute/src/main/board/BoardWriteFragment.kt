@@ -24,10 +24,18 @@ private const val TAG = "BoardWriteFragment"
 class BoardWriteFragment : Fragment() {
     private lateinit var binding: FragmentBoardWriteBinding
     private lateinit var mainActivity:MainActivity
+
+    private var boardDetailId = -1
+    private var isEdit = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
         mainActivity.hideBottomNav(true)
+        arguments?.let{
+            boardDetailId = it.getInt("boardDetailId", -1)
+            isEdit = it.getBoolean("isEdit")
+        }
+
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)

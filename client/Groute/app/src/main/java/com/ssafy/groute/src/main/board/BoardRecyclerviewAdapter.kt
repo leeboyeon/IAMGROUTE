@@ -2,10 +2,7 @@ package com.ssafy.groute.src.main.board
 
 import android.content.Context
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MenuInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
@@ -19,11 +16,16 @@ import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_FREE_TYPE
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_QUESTION_TYPE
 import com.ssafy.groute.src.main.route.RouteThemeRecyclerviewAdapter
+import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.UserService
+import com.ssafy.groute.util.RetrofitCallback
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlin.reflect.KFunction
 
-class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: List<BoardDetail>, var boardType: Int) : RecyclerView.Adapter<BoardRecyclerviewAdapter.BoardHolder>(){
+private const val TAG = "BoardRecyclerviewAdapte"
+class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: List<BoardDetail>, var boardType: Int, var context:Context, val kFunction0:() -> Unit) : RecyclerView.Adapter<BoardRecyclerviewAdapter.BoardHolder>(){
     lateinit var ThemeAdapter: RouteThemeRecyclerviewAdapter
+    var isEdit = false
     inner class BoardHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val profileIv = itemView.findViewById<ImageView>(R.id.item_board_profile_iv)
         val uidTv = itemView.findViewById<TextView>(R.id.item_board_uid_tv)
@@ -34,7 +36,7 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
         val likeTv = itemView.findViewById<TextView>(R.id.item_board_like_num_tv)
         //val themeRv = itemView.findViewById<RecyclerView>(R.id.item_board_theme_rv)
         //val themeList = arrayListOf("#힐링", "#로맨틱")
-
+        val more = itemView.findViewById<ImageButton>(R.id.boardDetail_ibtn_more)
         fun bindInfo(data: BoardDetail) {
             if(boardType == BOARD_FREE_TYPE) {
                 thumbnailIv.visibility = View.VISIBLE
@@ -63,6 +65,29 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
 //                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 //                adapter = ThemeAdapter
 //            }
+
+            more.setOnClickListener {
+                val popup:PopupMenu = PopupMenu(context,more)
+                MenuInflater(context).inflate(R.menu.board_menu_item, popup.menu)
+
+                popup.show()
+                popup.setOnMenuItemClickListener {
+                    when(it.itemId){
+                        R.id.menu_edit -> {
+                            isEdit = true
+                            return@setOnMenuItemClickListener true
+                        }
+                        R.id.menu_delete ->{
+                            BoardService().deleteBoardDetail(data.id, DeleteCallback())
+                            return@setOnMenuItemClickListener true
+                        }else->{
+                            return@setOnMenuItemClickListener false
+                        }
+                    }
+                }
+            }
+
+
         }
     }
 
@@ -77,11 +102,7 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
             itemView.setOnClickListener {
                 itemClickListener.onClick(it,position,"name")
             }
-            more.setOnClickListener {
-                var popup:PopupMenu = PopupMenu(MainActivity(),itemView)
-                MenuInflater(MainActivity()).inflate(R.menu.board_menu_item, popup.menu)
-                popup.show()
-            }
+
         }
     }
 
@@ -94,5 +115,22 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
     private lateinit var itemClickListener : ItemClickListener
     fun setItemClickListener(itemClickListener: ItemClickListener){
         this.itemClickListener = itemClickListener
+    }
+    inner class DeleteCallback:RetrofitCallback<Boolean> {
+        override fun onError(t: Throwable) {
+            Log.d(TAG, "onError: ")
+        }
+
+        override fun onSuccess(code: Int, responseData: Boolean) {
+            if(responseData){
+                Toast.makeText(context,"삭제되었습니다.",Toast.LENGTH_SHORT).show()
+                kFunction0()
+            }
+        }
+
+        override fun onFailure(code: Int) {
+            Log.d(TAG, "onFailure: ")
+        }
+
     }
 }
