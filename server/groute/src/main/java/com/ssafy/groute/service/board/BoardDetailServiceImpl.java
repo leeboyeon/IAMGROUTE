@@ -3,6 +3,7 @@ package com.ssafy.groute.service.board;
 
 import com.ssafy.groute.dto.board.BoardDetail;
 
+import com.ssafy.groute.dto.board.BoardDetailLike;
 import com.ssafy.groute.mapper.board.BoardDetailMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

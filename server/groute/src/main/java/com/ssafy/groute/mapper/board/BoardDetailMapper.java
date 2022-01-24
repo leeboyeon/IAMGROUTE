@@ -1,5 +1,6 @@
 package com.ssafy.groute.mapper.board;
 import com.ssafy.groute.dto.board.BoardDetail;
+import com.ssafy.groute.dto.board.BoardDetailLike;
 import org.apache.ibatis.annotations.Mapper;
 
 

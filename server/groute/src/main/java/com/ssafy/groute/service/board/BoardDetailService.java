@@ -1,6 +1,7 @@
 package com.ssafy.groute.service.board;
 
 import com.ssafy.groute.dto.board.BoardDetail;
+import com.ssafy.groute.dto.board.BoardDetailLike;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
