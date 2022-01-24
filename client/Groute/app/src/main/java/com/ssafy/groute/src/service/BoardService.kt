@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.groute.src.dto.BoardDetail
+import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil
 import retrofit2.Call
 import retrofit2.Callback
@@ -35,4 +36,23 @@ class BoardService {
         return responseLiveData
     }
 
+    fun insertBoardDetail(boardDetail:BoardDetail, callback: RetrofitCallback<Boolean>){
+        RetrofitUtil.boardService.insertBoardDetail(boardDetail).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if(response.code() == 200){
+                    if(res != null){
+                        callback.onSuccess(response.code(), res)
+                    }
+                }else{
+                    callback.onFailure(response.code())
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callback.onError(t)
+            }
+
+        })
+    }
 }

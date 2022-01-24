@@ -19,7 +19,7 @@
             android:padding="5dp">
 
             <ImageButton
-                android:id="@+id/imageButton3"
+                android:id="@+id/boardWrite_ibtn_cancle"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_marginLeft="20dp"
@@ -121,7 +121,7 @@
                 android:layout_weight="1" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button"
+                android:id="@+id/boardDetail_btn_complete"
                 android:layout_width="70dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"

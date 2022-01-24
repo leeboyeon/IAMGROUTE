@@ -21,6 +21,7 @@ class BoardDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
+        mainActivity.hideBottomNav(true)
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)
