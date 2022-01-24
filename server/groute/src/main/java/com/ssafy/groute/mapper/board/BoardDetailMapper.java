@@ -14,4 +14,5 @@ public interface BoardDetailMapper {
     List<BoardDetail> selectBoardDetailSeparetedByTag(int boardId) throws Exception;
     void deleteBoardDetail(int id) throws Exception;
     void updateBoardDetail(BoardDetail boardDetail) throws Exception;
+    void updateBoardDetailHitCntOrLike(BoardDetail boardDetail) throws Exception;
 }

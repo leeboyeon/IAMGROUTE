@@ -62,7 +62,13 @@
 
     <update id="updateBoardDetail" parameterType="BoardDetail">
         update BoardDetail
-        set title = #{title}, content = #{content}, img = #{img}, hitCnt = #{hitCnt}, heartCnt = #{heartCnt}
+        set title = #{title}, content = #{content}, img = #{img}, board_id = #{boardId}, update_date = now()
+        where id = #{id}
+    </update>
+
+    <update id="updateBoardDetailHitCntOrLike" parameterType="BoardDetail">
+        update BoardDetail
+        set hitCnt = #{hitCnt}, heartCnt = #{heartCnt}
         where id = #{id}
     </update>
 </mapper>
