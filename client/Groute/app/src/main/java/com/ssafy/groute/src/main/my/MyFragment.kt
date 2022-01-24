@@ -89,12 +89,11 @@ class MyFragment : Fragment() {
         userInfo.observe(
             viewLifecycleOwner, {
                 if(it.type.equals("sns")){
-                    Log.d(TAG, "initProfileBar_SNS: ${it.img}")
                     Glide.with(this)
-                        .load(R.drawable.busan)
+                        .load(it.img)
                         .circleCrop()
                         .into(binding.myProfileImg)
-                }else{
+                } else{
                     Log.d(TAG, "initProfileBar: ${it.img}")
                     Glide.with(this)
                         .load("${ApplicationClass.IMGS_URL_USER}${it.img}")

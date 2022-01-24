@@ -25,10 +25,13 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.ActivityProfileEditBinding
 import com.ssafy.groute.src.dto.User
+import com.ssafy.groute.src.login.SignFragment
 import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
@@ -40,14 +43,19 @@ import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.util.regex.Pattern
+import org.apache.commons.io.FilenameUtils
 
-private const val TAG = "ProfileEditActivity_groute"
+
+
+
+private const val TAG = "ProfileEditA_groute"
 class ProfileEditActivity : AppCompatActivity() {
     lateinit var binding: ActivityProfileEditBinding
     private var userEmail : String = ""
     private var userBirth : String = ""
-    private var userGender : String? = ""
-    lateinit var imgUri: Uri
+    private var userGender : String = ""
+    private lateinit var imgUri: Uri
+    private var fileExtension : String? = ""
     private val OPEN_GALLERY = 1
     private val PERMISSION_GALLERY = 101
     @SuppressLint("LongLogTag")
@@ -56,13 +64,27 @@ class ProfileEditActivity : AppCompatActivity() {
         binding = ActivityProfileEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         val userData = intent.getSerializableExtra("userData") as UserInfoResponse
         Log.d(TAG, "onCreate: $userData")
         initData(userData)
         initListeners()
         userBirth = userData.birth
         userEmail = userData.email
-        userGender = userData.gender
+        userGender = userData.gender.toString()
+
+//        android:src="@drawable/profile"
+//        imgUri = Uri.parse("content://com.android.providers.downloads.documents/document/${userData.img}")
+//        imgUri = Uri.parse(userData.img)
+//        Log.d(TAG, "onCreate: $imgUri")
+        if (::imgUri.isInitialized) {
+            //처리할 코드
+            Log.d(TAG, "onCreate: $imgUri")
+        } else {
+            imgUri = Uri.EMPTY
+            Log.d(TAG, "fileUri가 초기화  $imgUri")
+
+        }
 
         binding.profileEditFinish.setOnClickListener {
             var user = isAvailable(userData)
@@ -89,6 +111,7 @@ class ProfileEditActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if(it.resultCode == RESULT_OK && it.data !=null) {
                 var currentImageUri = it.data?.data
+
                 try {
                     currentImageUri?.let {
                         if(Build.VERSION.SDK_INT < 28) {
@@ -96,18 +119,30 @@ class ProfileEditActivity : AppCompatActivity() {
                                 this.contentResolver,
                                 currentImageUri
                             )
-                            Log.d(TAG, "filterActivityLauncher: $bitmap")
-                            binding.profileEditImg.setImageBitmap(bitmap)
+                            Glide.with(this)
+                                .load(currentImageUri)
+                                .circleCrop()
+                                .into(binding.profileEditImg)
+                            imgUri = currentImageUri
+
+                            fileExtension = contentResolver.getType(currentImageUri)
+                            Log.d(TAG, "filterActivityLauncher_1:$currentImageUri\n$imgUri\n$fileExtension")
+
                         } else {
                             val source = ImageDecoder.createSource(this.contentResolver, currentImageUri)
                             val bitmap = ImageDecoder.decodeBitmap(source)
-                            Log.d(TAG, "filterActivityLauncher :$currentImageUri $bitmap")
+                            Log.d(TAG, "filterActivityLauncher_2 :$currentImageUri ${bitmap.width} ")
                             //binding.profileEditImg.setImageBitmap(bitmap)
                             Glide.with(this)
                                 .load(currentImageUri)
                                 .circleCrop()
                                 .into(binding.profileEditImg)
                             imgUri = currentImageUri
+//                            Log.d(TAG, "filterAL: ${imgUri}")
+                            fileExtension = contentResolver.getType(currentImageUri)
+                            Log.d(TAG, "filterActivityLauncher_1:$currentImageUri\n$imgUri\n" +
+                                    "$fileExtension")
+
                         }
                     }
 
@@ -116,6 +151,7 @@ class ProfileEditActivity : AppCompatActivity() {
                 }
             } else if(it.resultCode == RESULT_CANCELED){
                 Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
+                imgUri = Uri.EMPTY
             }else{
                 Log.d("ActivityResult","something wrong")
             }
@@ -140,16 +176,16 @@ class ProfileEditActivity : AppCompatActivity() {
         return super.dispatchTouchEvent(ev)
     }
 
-    @SuppressLint("LongLogTag")
+    // 사용자 정보 화면에 초기화
     fun initData(user: UserInfoResponse) {
         if(user.type.equals("sns")){
             if(user.img != null) {
                 Glide.with(this)
-                    .load("https:/${user.img}")
+                    .load(user.img)
                     .circleCrop()
                     .into(binding.profileEditImg)
             }
-        }else{
+        } else{
             if(user.img != null) {
                 Glide.with(this)
                     .load("${ApplicationClass.IMGS_URL_USER}${user.img}")
@@ -165,6 +201,8 @@ class ProfileEditActivity : AppCompatActivity() {
 
         if(user.email != null) {
             if (user.email == "") {
+                binding.profileEditEmailEt.setText("")
+                binding.profileEditEmailDomain.setText("")
             } else {
                 val emailStr = user.email.split("@")
                 binding.profileEditEmailEt.setText(emailStr.get(0))
@@ -193,7 +231,6 @@ class ProfileEditActivity : AppCompatActivity() {
                         birthStr.get(2)
                     )
                 )
-                Log.d(TAG, "initData: ${birthStr.get(0)}  ${birthStr.get(1)}  ${birthStr.get(2)}")
             }
         }
 
@@ -245,20 +282,39 @@ class ProfileEditActivity : AppCompatActivity() {
     }
 
     fun updateUser(user: User) {
-        val file = File(imgUri.path)
-        var inputStream: InputStream? = null
-        try {
-            inputStream = this.contentResolver.openInputStream(imgUri)
-        } catch (e: IOException) {
-            e.printStackTrace()
+        // 사진 선택 안하고 사용자 정보 수정 시 user 정보만 서버로 전송
+        if(imgUri == Uri.EMPTY) {
+            Log.d(TAG, "updateUser: ${user}")
+            val gson : Gson = Gson()
+            var json = gson.toJson(user)
+            var requestBody_user = RequestBody.create(MediaType.parse("text/plain"), json)
+            Log.d(TAG, "updateUser_requestBodyuser: ${requestBody_user.contentType()}")
+            UserService().updateUserInfo(requestBody_user, userUpdateCallback())
         }
-        var bitmap = BitmapFactory.decodeStream(inputStream)
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 20, byteArrayOutputStream)
-        var requestBody = RequestBody.create(MediaType.parse("image/jpg"), byteArrayOutputStream.toByteArray())
-        var uploadFile = MultipartBody.Part.createFormData("img", file.name, requestBody)
+        // 사진 선택 + 사용자 정보 수정 시 사용자 정보와 파일 같이 서버로 전송
+        else {
+            val file = File(imgUri.path!!)
+            Log.d(TAG, "filePath: ${file.path} \n${file.name}\n${fileExtension}")
 
-        UserService().updateUserInfo(user, uploadFile, userUpdateCallback())
+            var inputStream: InputStream? = null
+            try {
+                inputStream = this.contentResolver.openInputStream(imgUri)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 20, byteArrayOutputStream)  // 압축해서 저장
+            val requestBody = RequestBody.create(MediaType.parse("image/*"), byteArrayOutputStream.toByteArray())
+            fileExtension = fileExtension?.substring(6)
+            val uploadFile = MultipartBody.Part.createFormData("img", "${file.name}.$fileExtension", requestBody)
+            val gson : Gson = Gson()
+            val json = gson.toJson(user)
+            val requestBody_user = RequestBody.create(MediaType.parse("text/plain"), json)
+
+            UserService().updateUserInfo(requestBody_user, uploadFile, userUpdateCallback())
+        }
+
 
     }
 
@@ -292,18 +348,26 @@ class ProfileEditActivity : AppCompatActivity() {
         if(validatedNickname() && validatedPhone()) {
             val nickname = binding.profileEditNicknameEt.text.toString()
             val phone = binding.profileEditPhoneEt.text.toString()
-            Log.d(TAG, "isAvailable 사용자 비밀번호: ${user.password}")
-            Log.d(TAG, "isAvailable: ${phone}")
-            Log.d(TAG, "isAvailable: ${userEmail}")
-            Log.d(TAG, "isAvailable: ${userBirth}")
-            Log.d(TAG, "isAvailable: ${userGender}")
-            if(userEmail == null)
+//            Log.d(TAG, "isAvailable 사용자 비밀번호: ${user.password}")
+//            Log.d(TAG, "isAvailable: ${phone}")
+//            Log.d(TAG, "isAvailable: ${userEmail}")
+//            Log.d(TAG, "isAvailable: ${userBirth}")
+//            Log.d(TAG, "isAvailable: ${userGender}")
+            if(userEmail == "")
                 userEmail = ""
             if(userBirth == null)
                 userBirth = ""
-            if(userGender == null)
+            if(!(userGender == "M" || userGender == "F"))
                 userGender = ""
-            return User(user.id, user.password, nickname, phone, userEmail, userBirth, userGender, user.type)
+
+            var userImg : String = ""
+            if(user.img == null) {
+                userImg = ""
+            } else {
+                userImg = user.img!!
+            }
+
+            return User(user.id, user.password, nickname, phone, userEmail, userBirth, userGender, user.type, userImg)
         } else {
             return null
         }

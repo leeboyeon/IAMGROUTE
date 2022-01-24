@@ -1,33 +1,23 @@
 package com.ssafy.groute.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.groute.config.security.JwtTokenProvider;
 import com.ssafy.groute.dto.User;
-import com.ssafy.groute.mapper.UserMapper;
 import com.ssafy.groute.service.StorageService;
 import com.ssafy.groute.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
-import javax.validation.Valid;
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,10 +27,15 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final StorageService storageService;
+
+    @Autowired
+    private ObjectMapper mapper;
 
     @Value("${spring.servlet.multipart.location}")
     private String uploadPath;
@@ -124,26 +119,28 @@ public class UserController {
 
     @ApiOperation(value = "회원수정", notes = "회원수정")
     @PutMapping(value = "/update")
-    public Boolean updateUser(User user, MultipartFile file) throws Exception{
-        if (userService.findById(user.getId()) == null) {
+    public Boolean updateUser(@RequestPart(value = "user") String user, @RequestPart(value = "img", required = false) MultipartFile img) throws Exception{
+        User inputUser = mapper.readValue(user, User.class);
+
+        if (userService.findById(inputUser.getId()) == null) {
             return false;
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        if (file != null) {
-            String fileName = storageService.store(file, uploadPath + "/user");
-            user.setImg(fileName);
+        if (img != null) {
+            String fileName = storageService.store(img, uploadPath + "/user");
+            inputUser.setImg(fileName);
         } else {
-            user.setImg(null);
-        }
-        if(user.getPhone() != null && user.getPhone().equals("")) {
-            user.setPhone(null);
-        }
-        if(user.getBirth() != null && user.getBirth().equals("")) {
-            user.setBirth(null);
+            inputUser.setImg(null);
         }
 
-        userService.updateUser(user);
+        if(inputUser.getPhone() != null && inputUser.getPhone().equals("")) {
+            inputUser.setPhone(null);
+        }
+        if(inputUser.getBirth() != null && inputUser.getBirth().equals("")) {
+            inputUser.setBirth(null);
+        }
+
+        userService.updateUser(inputUser);
         return true;
     }
 

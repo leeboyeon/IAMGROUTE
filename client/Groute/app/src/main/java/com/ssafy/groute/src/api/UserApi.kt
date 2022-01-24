@@ -3,10 +3,12 @@ import android.content.Entity
 import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.response.UserInfoResponse
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 import java.util.*
+import kotlin.collections.HashMap
 
 interface UserApi {
 
@@ -26,8 +28,14 @@ interface UserApi {
     @POST("/user/signup")
     fun signUp(@Body user:User) : Call<Boolean>
 
-    // 사용자 정보 수정
+    // 사용자 정보 수정 - 이미지 X
     @Multipart
     @PUT("/user/update")
-    fun updateUser(@Body user: User, @Part img: MultipartBody.Part): Call<Boolean>
+    fun updateUser(@Part("user") user : RequestBody): Call<Boolean>
+    
+    // 사용자 정보 수정 - 사용자 정보 + 이미지
+    @Multipart
+    @PUT("/user/update")
+    fun updateUser(@Part("user") user : RequestBody, @Part img: MultipartBody.Part): Call<Boolean>
+
 }

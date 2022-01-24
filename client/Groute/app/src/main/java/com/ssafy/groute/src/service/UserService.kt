@@ -8,6 +8,7 @@ import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -114,14 +115,38 @@ class UserService {
         })
     }
 
+
     /**
      * 사용자의 정보를 수정한다.
      * @param userId
      * @param user
      */
-    fun updateUserInfo(user: User, img: MultipartBody.Part, callback: RetrofitCallback<Boolean>) {
-        Log.d(TAG, "사용자 정보 수정: $user 이미지: ${user.img}  ${img.body()}")
+    fun updateUserInfo(user: RequestBody, img: MultipartBody.Part, callback: RetrofitCallback<Boolean>) {
+        Log.d(TAG, "사용자 정보 수정: $user 이미지: ${user}  ${img.body()}")
         RetrofitUtil.userService.updateUser(user, img).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if (response.code() == 200) {
+                    Log.d(TAG, "${res}")
+                } else {
+                    Log.d(TAG, "사용자 정보 수정 onResponse: Error Code : ${response.code()}")
+                }
+            }
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                Log.d(TAG, "사용자 정보 수정 onFailure: $t")
+            }
+        })
+    }
+
+
+    /**
+     * 사용자의 정보를 수정한다.
+     * @param userId
+     * @param user
+     */
+    fun updateUserInfo(user: RequestBody, callback: RetrofitCallback<Boolean>) {
+        Log.d(TAG, "사용자 정보 수정: $user 이미지: ${user}")
+        RetrofitUtil.userService.updateUser(user).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 val res = response.body()
                 if (response.code() == 200) {
