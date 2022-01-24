@@ -52,8 +52,6 @@ public class BoardDetailController {
     public ResponseEntity<?> detailBoardDetail(@RequestParam("id") int id) throws Exception{
         Map<String,Object> res = new HashMap<>();
         BoardDetail board = boardDetailService.selectBoardDetail(id);
-        int boardDetailLike = boardDetailLikeService.findLikeByBDId(id);
-        board.setHeartCnt(boardDetailLike);
         List<Comment> comments = commentService.selectAllByBoardDetailId(id);
         res.put("boardDetail",board);
         res.put("comments",comments);

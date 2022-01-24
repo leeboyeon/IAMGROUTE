@@ -24,7 +24,7 @@ public class BoardDetailServiceImpl implements BoardDetailService {
     public BoardDetail selectBoardDetail(int id) throws Exception {
         BoardDetail res = boardDetailMapper.selectBoardDetail(id);
         res.setHitCnt(res.getHitCnt()+1);
-        boardDetailMapper.updateBoardDetail(res);
+        boardDetailMapper.updateBoardDetailHitCntOrLike(res);
         return res;
     }
 
