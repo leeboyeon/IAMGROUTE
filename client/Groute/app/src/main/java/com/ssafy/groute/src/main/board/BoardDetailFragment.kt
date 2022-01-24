@@ -38,6 +38,10 @@ class BoardDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: ")
         initAdapter()
+
+        binding.boardDetailBtnWrite.setOnClickListener {
+            mainActivity.moveFragment(8)
+        }
     }
     fun initAdapter(){
         boardRecyclerAdapter = BoardRecyclerviewAdapter(requireContext())
