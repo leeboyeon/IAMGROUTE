@@ -42,4 +42,9 @@ public class BoardDetailServiceImpl implements BoardDetailService {
     public void updateBoardDetail(BoardDetail boardDetail) throws Exception {
         boardDetailMapper.updateBoardDetail(boardDetail);
     }
+
+    @Override
+    public List<BoardDetail> selectBoardDetailSeparetedByTag(int boardId) throws Exception {
+        return boardDetailMapper.selectBoardDetailSeparetedByTag(boardId);
+    }
 }
