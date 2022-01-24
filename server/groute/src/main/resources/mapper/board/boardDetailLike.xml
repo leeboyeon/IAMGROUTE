@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.groute.mapper.board.BoardDetailLikeMapper">
+    <insert id="insertBoardDetailLike" parameterType="BoardDetailLike">
+        insert into boardDetailLike(user_id, boardDetail_id)
+        values(#{userId}, #{boardDetailId})
+    </insert>
+
+    <resultMap id="BoardDetailLikeDTO" type="BoardDetailLike">
+        <result column="board_id" property="boardId"></result>
+        <result column="user_id" property="userId"></result>
+    </resultMap>
+
+    <select id="findBoardLikeByUIdBDId" resultMap="BoardDetailLikeDTO">
+        select *
+        from BoardDetailLike
+        where user_id = #{userId} and BoardDetail_id = #{boardDetailId}
+    </select>
+
+    <delete id="deleteBoardDetailLike" parameterType="BoardDetailLike">
+        delete from boardDetailLike
+        where id = #{id}
+    </delete>
+
+    <select id="findLikeByBDId" resultType="int">
+        select count(*)
+        from BoardDetailLike
+        where boardDetail_id = #{boardDetailId}
+    </select>
+</mapper>

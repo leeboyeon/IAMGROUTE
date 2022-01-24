@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.27, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: groute
+-- Host: localhost    Database: groute
 -- ------------------------------------------------------
--- Server version	8.0.26
+-- Server version	8.0.27
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -129,6 +129,34 @@ CREATE TABLE `boarddetail` (
 LOCK TABLES `boarddetail` WRITE;
 /*!40000 ALTER TABLE `boarddetail` DISABLE KEYS */;
 /*!40000 ALTER TABLE `boarddetail` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `boarddetaillike`
+--
+
+DROP TABLE IF EXISTS `boarddetaillike`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `boarddetaillike` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `boardDetail_id` int NOT NULL,
+  `user_id` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_boarddetail_boarddetaillike_idx` (`boardDetail_id`),
+  KEY `fk_user_boarddetaillike_idx` (`user_id`),
+  CONSTRAINT `fk_boarddetail_boarddetaillike` FOREIGN KEY (`boardDetail_id`) REFERENCES `boarddetail` (`id`),
+  CONSTRAINT `fk_user_boarddetaillike` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `boarddetaillike`
+--
+
+LOCK TABLES `boarddetaillike` WRITE;
+/*!40000 ALTER TABLE `boarddetaillike` DISABLE KEYS */;
+/*!40000 ALTER TABLE `boarddetaillike` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -416,4 +444,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-21 14:51:55
+-- Dump completed on 2022-01-24 14:45:52

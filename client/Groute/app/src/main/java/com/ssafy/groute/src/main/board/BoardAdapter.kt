@@ -47,7 +47,7 @@ class BoardAdapter(var lifecycleOwner: LifecycleOwner, var boardList: List<Board
         holder.apply {
             bindInfo(boardList[position])
             itemView.setOnClickListener {
-                itemClickListener.onClick(it, position, boardList[position].title)
+                itemClickListener.onClick(it, position, boardList[position].id)
             }
         }
     }
@@ -57,7 +57,7 @@ class BoardAdapter(var lifecycleOwner: LifecycleOwner, var boardList: List<Board
     }
 
     interface ItemClickListener{
-        fun onClick(view: View, position: Int, name: String)
+        fun onClick(view: View, position: Int, id:Int)
     }
     private lateinit var itemClickListener : ItemClickListener
     fun setItemClickListener(itemClickListener: ItemClickListener){
