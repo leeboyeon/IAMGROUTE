@@ -14,6 +14,7 @@ import com.ssafy.groute.src.dto.Places
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.util.RetrofitCallback
+import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
@@ -53,17 +54,20 @@ class InfoFragment : Fragment() {
         initData()
     }
     fun createMap(){
-//        val mapView = MapView(requireContext())
-//        binding.kakaoMapView.addView(mapView)
         val mapView = MapView(requireContext())
-        val mapViewContainer:ViewGroup = binding.kakaoMapView
-        mapViewContainer.addView(mapView)
-        val mapPoint = MapPoint.mapPointWithCONGCoord(lat,lng)
+        binding.kakaoMapView.addView(mapView)
+        val mapPoint = MapPoint.mapPointWithGeoCoord(lat,lng)
         Log.d(TAG, "createMap: $lat  // $lng")
-
         mapView.setMapCenterPoint(mapPoint, true)
         mapView.setZoomLevel(3, true)
 
+        val marker = MapPOIItem()
+        marker.itemName = binding.placeDetailTvBigContent.text.toString()
+        marker.mapPoint = mapPoint
+        marker.markerType = MapPOIItem.MarkerType.BluePin
+        marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
+
+        mapView.addPOIItem(marker)
     }
     fun initData(){
         Log.d(TAG, "initData: $placeId")
@@ -104,6 +108,8 @@ class InfoFragment : Fragment() {
             lng = responseData.lng.toDouble()
 
             createMap()
+
+
         }
 
         override fun onFailure(code: Int) {
