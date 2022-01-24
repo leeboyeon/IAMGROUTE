@@ -61,14 +61,14 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center" />
 
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/airplaneLottie"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="right"
-                    app:lottie_autoPlay="true"
-                    app:lottie_fileName="airplane.json"
-                    app:lottie_loop="true" />
+<!--                <com.airbnb.lottie.LottieAnimationView-->
+<!--                    android:id="@+id/airplaneLottie"-->
+<!--                    android:layout_width="25dp"-->
+<!--                    android:layout_height="25dp"-->
+<!--                    android:layout_gravity="right"-->
+<!--                    app:lottie_autoPlay="true"-->
+<!--                    app:lottie_fileName="airplane.json"-->
+<!--                    app:lottie_loop="true" />-->
 
             </FrameLayout>
 
