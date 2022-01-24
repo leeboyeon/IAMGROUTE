@@ -1,27 +1,38 @@
 package com.ssafy.groute.src.main.board
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
+import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.src.dto.BoardDetail
+import com.ssafy.groute.src.service.UserService
 
-class BoardAdapter : RecyclerView.Adapter<BoardAdapter.BoardHolder>(){
-    var list = mutableListOf<Board>()
+private const val TAG = "BoardAdapter_groute"
+class BoardAdapter(var lifecycleOwner: LifecycleOwner, var boardList: List<BoardDetail>) : RecyclerView.Adapter<BoardAdapter.BoardHolder>(){
     inner class BoardHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun bindInfo(data : Board){
-            Glide.with(itemView)
-                .load(data.userImg)
-                .into(itemView.findViewById(R.id.board_iv_userImg))
-
-            itemView.findViewById<TextView>(R.id.board_tv_write_userNick).text = data.userNick
+        fun bindInfo(data : BoardDetail){
+            val userInfo = UserService().getUserInfo(data.userId)
+            userInfo.observe(
+                lifecycleOwner, {
+                    Glide.with(itemView)
+                        .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
+                        .circleCrop()
+                        .into(itemView.findViewById(R.id.board_iv_userImg))
+                    Log.d(TAG, "bindInfo : ${it.img}  ${it.nickname}")
+                    itemView.findViewById<TextView>(R.id.board_tv_write_userNick).text = it.nickname
+                }
+            )
             itemView.findViewById<TextView>(R.id.board_tv_writeTitle).text = data.title
             itemView.findViewById<TextView>(R.id.board_tv_writeContent).text = data.content
             itemView.findViewById<TextView>(R.id.board_tv_writeDate).text = data.createDate
-            itemView.findViewById<TextView>(R.id.board_tv_goodCnt).text = data.goodCnt.toString()
-            itemView.findViewById<TextView>(R.id.board_tv_chatCnt).text = data.chatCnt.toString()
+            itemView.findViewById<TextView>(R.id.board_tv_goodCnt).text = data.heartCnt.toString()
+            itemView.findViewById<TextView>(R.id.board_tv_chatCnt).text = data.hitCnt.toString()
 
         }
 
@@ -34,15 +45,15 @@ class BoardAdapter : RecyclerView.Adapter<BoardAdapter.BoardHolder>(){
 
     override fun onBindViewHolder(holder: BoardHolder, position: Int) {
         holder.apply {
-            bindInfo(list[position])
+            bindInfo(boardList[position])
             itemView.setOnClickListener {
-                itemClickListener.onClick(it, position, list[position].title)
+                itemClickListener.onClick(it, position, boardList[position].title)
             }
         }
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return boardList.size
     }
 
     interface ItemClickListener{

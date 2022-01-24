@@ -12,14 +12,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentBoardBinding
+import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.main.MainActivity
+import com.ssafy.groute.src.service.BoardService
 
 private const val TAG = "BoardFragment"
 class BoardFragment : Fragment() {
     lateinit var binding: FragmentBoardBinding
     private lateinit var mainActivity: MainActivity
     private var magazineAdapter: MagazineAdapter = MagazineAdapter()
-    private var boardAdapter : BoardAdapter = BoardAdapter()
+    lateinit var boardFreeAdapter : BoardAdapter
+    lateinit var boardQuestionAdapter : BoardAdapter
+    val boardFreeList = arrayListOf<BoardDetail>()
+    val boardQuestionList = arrayListOf<BoardDetail>()
 
     val magazines = arrayListOf<Magazine>()
     val boards = arrayListOf<Board>()
@@ -27,6 +32,7 @@ class BoardFragment : Fragment() {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
     }
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -43,11 +49,16 @@ class BoardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initData()
         initAdapter()
         binding.boardTvMore.setOnClickListener {
             Log.d(TAG, "onViewCreated: ")
             mainActivity.moveFragment(5)
         }
+
+    }
+
+    fun initData() {
 
     }
     fun initAdapter(){
@@ -66,43 +77,39 @@ class BoardFragment : Fragment() {
             adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 
         }
-        boardAdapter = BoardAdapter()
 
-        boards.apply {
-            add(Board(userImg = R.drawable.user,
-                userNick = "김싸피",
-                title = "OO카페 어때요?",
-                content = "갈려고 하는데 평이 너무 안좋아서 ㅠㅠ 혹시 커피맛 괜찮ㅎ나....",
-            createDate = "01/19 13:19",
-            goodCnt = 50,
-            chatCnt = 11))
-            add(Board(userImg = R.drawable.user,
-                userNick = "김싸피",
-                title = "OO카페 어때요?",
-                content = "갈려고 하는데 평이 너무 안좋아서 ㅠㅠ 혹시 커피맛 괜찮ㅎ나....",
-                createDate = "01/19 13:19",
-                goodCnt = 50,
-                chatCnt = 11))
-            add(Board(userImg = R.drawable.user,
-                userNick = "김싸피",
-                title = "OO카페 어때요?",
-                content = "갈려고 하는데 평이 너무 안좋아서 ㅠㅠ 혹시 커피맛 괜찮ㅎ나....",
-                createDate = "01/19 13:19",
-                goodCnt = 50,
-                chatCnt = 11))
+        val boardList = BoardService().getBoardList()
+        boardList.observe(
+            viewLifecycleOwner,
+            { boardList ->
+                boardList.let {
+                    Log.d(TAG, "initData boardList size : ${boardList.size}")
+                    boardFreeList.clear()
+                    boardQuestionList.clear()
+                    for(i in 0 until boardList.size) {
+                        if(boardList.get(i).boardId == 2) { // 자유게시판 글
+                            boardFreeList.add(boardList.get(i))
+                            Log.d(TAG, "initAdapter: ${boardList.get(i).title}")
+                        } else if(boardList.get(i).boardId == 3) { // 질문게시판 글
+                            boardQuestionList.add(boardList.get(i))
+                            Log.d(TAG, "initAdapter: ${boardList.get(i).title}")
+                        }
+                    }
+                }
+                boardFreeAdapter = BoardAdapter(viewLifecycleOwner, boardFreeList)
+                boardQuestionAdapter = BoardAdapter(viewLifecycleOwner, boardQuestionList)
+                binding.boardRvFree.apply{
+                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+                    adapter = boardFreeAdapter
+                    adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+                }
+                binding.boardRvQuestion.apply{
+                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+                    adapter = boardQuestionAdapter
+                    adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+                }
 
-            boardAdapter.list = boards
-            boardAdapter.notifyDataSetChanged()
-        }
-        binding.boardRvFree.apply{
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-            adapter = boardAdapter
-            adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        }
-        binding.boardRvQuestion.apply{
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-            adapter = boardAdapter
-            adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        }
+            }
+        )
     }
 }

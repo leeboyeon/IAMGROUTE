@@ -1,6 +1,6 @@
 package com.ssafy.groute.src.dto
 
-data class Board(
+data class BoardDetail(
     val id: Int,
     val title: String,
     val content: String,
