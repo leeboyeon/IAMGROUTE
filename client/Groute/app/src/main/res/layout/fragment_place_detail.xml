@@ -18,11 +18,11 @@
             android:background="@color/white"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
+            app:navigationIcon="@drawable/backicon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/leftarrows">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/placeDetail_tv_name"
