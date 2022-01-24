@@ -36,8 +36,8 @@ class BoardService {
         return responseLiveData
     }
 
-    fun getBoardDetailList(boardId: Int): LiveData<List<BoardDetail>> {
-        val responseLiveData: MutableLiveData<List<BoardDetail>> = MutableLiveData()
+    fun getBoardDetailList(boardId: Int): LiveData<MutableList<BoardDetail>> {
+        val responseLiveData: MutableLiveData<MutableList<BoardDetail>> = MutableLiveData()
         val boardDetailListRequest: Call<MutableList<BoardDetail>> = RetrofitUtil.boardService.listBoardDetail(boardId)
         boardDetailListRequest.enqueue(object : Callback<MutableList<BoardDetail>> {
             override fun onResponse(call: Call<MutableList<BoardDetail>>, response: Response<MutableList<BoardDetail>>) {

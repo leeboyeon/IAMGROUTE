@@ -21,4 +21,7 @@ interface BoardApi {
     // 게시판 글삭제
     @DELETE("/boardDetail/del")
     fun deleteBoardDetail(@Query("boardDetailId") boardDetailId: Int) : Call<Boolean>
+
+    @GET("/boardDetail/detail")
+    fun getListBoardDetail() : Call<MutableList<BoardDetail>>
 }

@@ -24,10 +24,11 @@ class BoardDetailFragment : Fragment() {
     private lateinit var binding: FragmentBoardDetailBinding
     private lateinit var mainActivity: MainActivity
     private lateinit var boardRecyclerAdapter:BoardRecyclerviewAdapter
-    private lateinit var boardDetailList : MutableList<BoardDetail>
+    private var boardDetailList = mutableListOf<BoardDetail>()
+
     private var boardId = -1
     private var boardDetailId = -1
-    val liveData = MutableLiveData<List<BoardDetailResponse>>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -64,11 +65,6 @@ class BoardDetailFragment : Fragment() {
             mainActivity.moveFragment(8)
         }
 
-        if(boardRecyclerAdapter.isEdit == true){
-            val fragmentbundle = Bundle()
-            fragmentbundle.putBoolean("isEdit", true)
-            mainActivity.moveFragment(8,"boardDetailId", boardDetailId)
-        }
     }
     fun initAdapter(){
         val boardDetailList = BoardService().getBoardDetailList(boardId)
@@ -76,7 +72,7 @@ class BoardDetailFragment : Fragment() {
             viewLifecycleOwner,
             {   boardDetailList ->
                 boardDetailList.let {
-                    boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, boardDetailList, boardId, requireContext(), this::initData)
+                    boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, boardDetailList, boardId, requireContext())
                 }
                 binding.boardDetailRvListitem.apply {
                     layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
@@ -89,23 +85,19 @@ class BoardDetailFragment : Fragment() {
                     }
 
                 })
+                if(boardRecyclerAdapter.isEdit == true){
+                    val fragmentbundle = Bundle()
+                    fragmentbundle.putBoolean("isEdit", true)
+                    boardDetailId = boardRecyclerAdapter.boardDetailId
+                    mainActivity.moveFragment(8,"boardDetailId", boardDetailId)
+                }
+
             }
         )
 
+
     }
-    private fun initData(){
-        liveData.observe(requireActivity(), {
-            binding.boardDetailRvListitem.adapter = liveData.value?.let{
-                BoardRecyclerviewAdapter(
-                    viewLifecycleOwner,
-                    boardDetailList,
-                    boardId,
-                    requireContext(),
-                    this::initData
-                )
-            }
-        })
-    }
+
     companion object {
         @JvmStatic
         fun newInstance(key: String, value: Int) =

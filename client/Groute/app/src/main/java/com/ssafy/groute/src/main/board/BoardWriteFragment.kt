@@ -51,7 +51,10 @@ class BoardWriteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Log.d(TAG, "onViewCreated: ${boardDetailId}  ${isEdit}")
+        if(isEdit == true){
+            binding.boardWriteEtTitle.setText("edit")
+        }
         initButton()
     }
     fun initButton(){

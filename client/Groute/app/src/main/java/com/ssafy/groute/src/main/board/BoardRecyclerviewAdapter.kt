@@ -23,9 +23,10 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlin.reflect.KFunction
 
 private const val TAG = "BoardRecyclerviewAdapte"
-class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: List<BoardDetail>, var boardType: Int, var context:Context, val kFunction0:() -> Unit) : RecyclerView.Adapter<BoardRecyclerviewAdapter.BoardHolder>(){
+class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: MutableList<BoardDetail>, var boardType: Int, var context:Context) : RecyclerView.Adapter<BoardRecyclerviewAdapter.BoardHolder>(){
     lateinit var ThemeAdapter: RouteThemeRecyclerviewAdapter
     var isEdit = false
+    var boardDetailId:Int = -1
     inner class BoardHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val profileIv = itemView.findViewById<ImageView>(R.id.item_board_profile_iv)
         val uidTv = itemView.findViewById<TextView>(R.id.item_board_uid_tv)
@@ -66,26 +67,7 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
 //                adapter = ThemeAdapter
 //            }
 
-            more.setOnClickListener {
-                val popup:PopupMenu = PopupMenu(context,more)
-                MenuInflater(context).inflate(R.menu.board_menu_item, popup.menu)
 
-                popup.show()
-                popup.setOnMenuItemClickListener {
-                    when(it.itemId){
-                        R.id.menu_edit -> {
-                            isEdit = true
-                            return@setOnMenuItemClickListener true
-                        }
-                        R.id.menu_delete ->{
-                            BoardService().deleteBoardDetail(data.id, DeleteCallback())
-                            return@setOnMenuItemClickListener true
-                        }else->{
-                            return@setOnMenuItemClickListener false
-                        }
-                    }
-                }
-            }
 
 
         }
@@ -103,6 +85,28 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
                 itemClickListener.onClick(it,position,"name")
             }
 
+            more.setOnClickListener {
+                val popup:PopupMenu = PopupMenu(context,more)
+                MenuInflater(context).inflate(R.menu.board_menu_item, popup.menu)
+
+                popup.show()
+                popup.setOnMenuItemClickListener {
+                    when(it.itemId){
+                        R.id.menu_edit -> {
+                            isEdit = true
+                            boardDetailId = boardList[position].id
+                            return@setOnMenuItemClickListener true
+                        }
+                        R.id.menu_delete ->{
+                            BoardService().deleteBoardDetail(boardList[position].id, DeleteCallback(position))
+                            Log.d(TAG, "onBindViewHolder: ${boardList[position].id}")
+                            return@setOnMenuItemClickListener true
+                        }else->{
+                        return@setOnMenuItemClickListener false
+                    }
+                    }
+                }
+            }
         }
     }
 
@@ -116,7 +120,7 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
     fun setItemClickListener(itemClickListener: ItemClickListener){
         this.itemClickListener = itemClickListener
     }
-    inner class DeleteCallback:RetrofitCallback<Boolean> {
+    inner class DeleteCallback(var position:Int):RetrofitCallback<Boolean> {
         override fun onError(t: Throwable) {
             Log.d(TAG, "onError: ")
         }
@@ -124,12 +128,12 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
         override fun onSuccess(code: Int, responseData: Boolean) {
             if(responseData){
                 Toast.makeText(context,"삭제되었습니다.",Toast.LENGTH_SHORT).show()
-                kFunction0()
+                boardList.removeAt(position)
             }
         }
 
         override fun onFailure(code: Int) {
-            Log.d(TAG, "onFailure: ")
+            Log.d(TAG, "onFailure: ${code}")
         }
 
     }
