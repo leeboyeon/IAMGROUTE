@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentBoardDetailBinding
+import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.main.MainActivity
 
 private const val TAG = "BoardDetailFragment"
@@ -18,6 +19,7 @@ class BoardDetailFragment : Fragment() {
     private lateinit var binding: FragmentBoardDetailBinding
     private lateinit var mainActivity: MainActivity
     private lateinit var boardRecyclerAdapter:BoardRecyclerviewAdapter
+    private lateinit var boardDetailList : MutableList<BoardDetail>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -40,7 +42,7 @@ class BoardDetailFragment : Fragment() {
         initAdapter()
     }
     fun initAdapter(){
-        boardRecyclerAdapter = BoardRecyclerviewAdapter(requireContext())
+        boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, boardDetailList)
         binding.boardDetailRvListitem.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
             adapter = boardRecyclerAdapter

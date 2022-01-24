@@ -49,16 +49,11 @@ class BoardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initData()
         initAdapter()
         binding.boardTvMore.setOnClickListener {
             Log.d(TAG, "onViewCreated: ")
             mainActivity.moveFragment(5)
         }
-
-    }
-
-    fun initData() {
 
     }
     fun initAdapter(){
