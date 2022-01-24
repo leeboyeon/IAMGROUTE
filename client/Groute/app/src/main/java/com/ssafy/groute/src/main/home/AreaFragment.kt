@@ -51,8 +51,6 @@ class AreaFragment : Fragment() {
 
     fun initAdapter(){
         PlaceService().getPlaces(PlaceCallback())
-
-
     }
     fun initTab(){
         initAdapter()

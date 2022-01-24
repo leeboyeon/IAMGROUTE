@@ -8,19 +8,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
-import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.FragmentInfoBinding
 import com.ssafy.groute.src.dto.Places
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.util.RetrofitCallback
+import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
+
+
+
 private const val TAG = "InfoFragment"
 class InfoFragment : Fragment() {
     private var placeId = -1
     private lateinit var mainActivity : MainActivity
     private lateinit var binding: FragmentInfoBinding
+
+    var lat:Double = 0.0
+    var lng:Double = 0.0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -46,14 +53,22 @@ class InfoFragment : Fragment() {
         initData()
     }
     fun createMap(){
+//        val mapView = MapView(requireContext())
+//        binding.kakaoMapView.addView(mapView)
         val mapView = MapView(requireContext())
-        binding.kakaoMapView.addView(mapView)
+        val mapViewContainer:ViewGroup = binding.kakaoMapView
+        mapViewContainer.addView(mapView)
+        val mapPoint = MapPoint.mapPointWithCONGCoord(lat,lng)
+        Log.d(TAG, "createMap: $lat  // $lng")
+
+        mapView.setMapCenterPoint(mapPoint, true)
+        mapView.setZoomLevel(3, true)
 
     }
     fun initData(){
         Log.d(TAG, "initData: $placeId")
         val placesDetail = PlaceService().getPlace(placeId, placesCallback())
-        createMap()
+
     }
     companion object {
 
@@ -84,6 +99,11 @@ class InfoFragment : Fragment() {
             Glide.with(this@InfoFragment)
                 .load("${ApplicationClass.IMGS_URL_PLACE}${responseData.img}")
                 .into(binding.placeDetailIvSomenail)
+
+            lat = responseData.lat.toDouble()
+            lng = responseData.lng.toDouble()
+
+            createMap()
         }
 
         override fun onFailure(code: Int) {
