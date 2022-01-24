@@ -70,15 +70,16 @@
             tools:layout_editor_absoluteX="37dp"
             tools:listitem="@layout/list_item_board" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/boardDetail_btn_write"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="0dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="15dp"
             android:background="@drawable/drawable_write_button_background"
             android:drawableLeft="@drawable/drawable_layerlist_write"
+            android:paddingLeft="10dp"
             android:text="글쓰기"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
