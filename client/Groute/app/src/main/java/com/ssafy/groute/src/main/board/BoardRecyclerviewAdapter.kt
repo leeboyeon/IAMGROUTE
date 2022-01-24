@@ -32,9 +32,9 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
         val contentTv = itemView.findViewById<TextView>(R.id.item_board_content_tv)
         val reviewTv = itemView.findViewById<TextView>(R.id.item_board_review_num_tv)
         val likeTv = itemView.findViewById<TextView>(R.id.item_board_like_num_tv)
-        val themeRv = itemView.findViewById<RecyclerView>(R.id.item_board_theme_rv)
-        val themeList = arrayListOf("#힐링", "#로맨틱")
-        val more = itemView.findViewById<ImageButton>(R.id.boardDetail_ibtn_more)
+        //val themeRv = itemView.findViewById<RecyclerView>(R.id.item_board_theme_rv)
+        //val themeList = arrayListOf("#힐링", "#로맨틱")
+
         fun bindInfo(data: BoardDetail) {
             if(boardType == BOARD_FREE_TYPE) {
                 thumbnailIv.visibility = View.VISIBLE
@@ -58,14 +58,11 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
             contentTv.text = data.content
             reviewTv.text = data.hitCnt.toString()
             likeTv.text = data.heartCnt.toString()
-            ThemeAdapter = RouteThemeRecyclerviewAdapter(themeList)
-            themeRv.apply {
-                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                adapter = ThemeAdapter
-            }
-
-            more.isVisible = data.userId == ApplicationClass.sharedPreferencesUtil.getUser().id
-
+//            ThemeAdapter = RouteThemeRecyclerviewAdapter(themeList)
+//            themeRv.apply {
+//                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+//                adapter = ThemeAdapter
+//            }
         }
     }
 
