@@ -11,4 +11,8 @@ data class BoardDetail(
     val hitCnt: Int,
     val boardId: Int,
     val userId: String
-)
+){
+    constructor(title:String,content:String,img:String, boardId:Int, userId:String):this(0,title,content,img,"","",0,0, boardId,userId)
+
+}
+

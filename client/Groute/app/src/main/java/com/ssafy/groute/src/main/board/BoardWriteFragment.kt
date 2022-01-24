@@ -53,25 +53,15 @@ class BoardWriteFragment : Fragment() {
         binding.boardDetailBtnComplete.setOnClickListener {
             val title = binding.boardWriteEtTitle.text.toString()
             val content = binding.boardWriteEtContent.text.toString()
-            val now:Long = System.currentTimeMillis()
-            val date: Date = Date(now)
-            val createTime =  SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(date)
-            val heartCnt = 0
             var boardId = 1
             var img = ""
-            var updateDate = createTime
             var userId = ApplicationClass.sharedPreferencesUtil.getUser().id
 
             val boardDetail = BoardDetail(
-                id = 0,
-                boardId = boardId,
                 title = title,
                 content = content,
                 img = img,
-                createDate = createTime,
-                updateDate = updateDate,
-                heartCnt = heartCnt,
-                hitCnt = 0,
+                boardId=boardId,
                 userId = userId
             )
             boardWrite(boardDetail)
