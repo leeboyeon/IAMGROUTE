@@ -41,6 +41,20 @@
         from boardDetail
     </select>
 
+    <select id="selectBoardDetailSeparetedByTag"  resultMap="BoardDetailDTO">
+        select id, title, content, img, heartCnt, hitCnt, board_id, user_id, place_id,
+            case when date_format(create_date, '%Y%m%d') = date_format(now(), '%Y%m%d')
+                    then date_format(create_date, '%H:%i:%s')
+                else date_format(create_date, '%y.%m.%d')
+                end create_date,
+            case when date_format(update_date, '%Y%m%d') = date_format(now(), '%Y%m%d')
+                    then date_format(update_date, '%H:%i:%s')
+                else date_format(update_date, '%y.%m.%d')
+                end update_date
+        from boardDetail
+        where board_id = #{boardId}
+    </select>
+
     <delete id="deleteBoardDetail" parameterType="int">
         delete from boardDetail
         where id = #{id}
@@ -48,7 +62,13 @@
 
     <update id="updateBoardDetail" parameterType="BoardDetail">
         update BoardDetail
-        set title = #{title}, content = #{content}, img = #{img}, hitCnt = #{hitCnt}, heartCnt = #{heartCnt}
+        set title = #{title}, content = #{content}, img = #{img}, board_id = #{boardId}, update_date = now()
+        where id = #{id}
+    </update>
+
+    <update id="updateBoardDetailHitCntOrLike" parameterType="BoardDetail">
+        update BoardDetail
+        set hitCnt = #{hitCnt}, heartCnt = #{heartCnt}
         where id = #{id}
     </update>
 </mapper>

@@ -6,6 +6,9 @@
     <insert id="insertRoute" parameterType="Route">
         insert into route(name, day, memo, isCustom)
         values(#{name}, #{day}, #{memo}, #{isCustom})
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            select last_insert_id()
+        </selectKey>
     </insert>
 
     <select id="selectRoute" parameterType="int" resultType="Route">

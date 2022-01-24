@@ -37,4 +37,16 @@ public class RouteDetailServiceImpl implements RouteDetailService{
     public void updateRouteDetail(RouteDetail routeDetail) throws Exception {
         routeDetailMapper.updateRouteDetail(routeDetail);
     }
+
+    @Override
+    public List<RouteDetail> selectByRouteId(int routeId) throws Exception {
+        return routeDetailMapper.selectByRouteId(routeId);
+    }
+
+    @Override
+    public List<RouteDetail> selectByPlaceId(int placeId) throws Exception {
+        return routeDetailMapper.selectByPlaceId(placeId);
+    }
+
+
 }

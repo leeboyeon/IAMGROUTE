@@ -52,8 +52,6 @@ public class BoardDetailController {
     public ResponseEntity<?> detailBoardDetail(@RequestParam("id") int id) throws Exception{
         Map<String,Object> res = new HashMap<>();
         BoardDetail board = boardDetailService.selectBoardDetail(id);
-        int boardDetailLike = boardDetailLikeService.findLikeByBDId(id);
-        board.setHeartCnt(boardDetailLike);
         List<Comment> comments = commentService.selectAllByBoardDetailId(id);
         res.put("boardDetail",board);
         res.put("comments",comments);
@@ -69,6 +67,17 @@ public class BoardDetailController {
     public ResponseEntity<?> listBoardDetail() throws Exception{
 
         List<BoardDetail> res = boardDetailService.selectAllBoardDetail();
+        if(res==null){
+            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<List<BoardDetail>>(res,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "list boardDetail division",notes = "boardDetail를 구분하여 반환")
+    @GetMapping(value = "/list/division")
+    public ResponseEntity<?> listBoardDetailDivision(@RequestParam("boardId") int boardId) throws Exception{
+        List<BoardDetail> res = boardDetailService.selectBoardDetailSeparetedByTag(boardId);
         if(res==null){
             return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
         }

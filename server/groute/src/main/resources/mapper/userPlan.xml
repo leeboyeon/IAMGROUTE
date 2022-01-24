@@ -6,6 +6,9 @@
     <insert id="insertUserPlan" parameterType="UserPlan">
         insert into userPlan(user_id, title, description, startDate, endDate, totalDate, isPublic)
         values(#{userId}, #{title}, #{description}, #{startDate}, #{endDate}, #{totalDate}, #{isPublic})
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            select last_insert_id()
+        </selectKey>
     </insert>
 
     <resultMap id="UserPlanDTO" type="UserPlan">

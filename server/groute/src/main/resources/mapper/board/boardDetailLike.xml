@@ -29,4 +29,10 @@
         from BoardDetailLike
         where boardDetail_id = #{boardDetailId}
     </select>
+
+    <select id="findLikeById" resultType="int">
+        select boardDetail_id
+        from BoardDetailLike
+        where id = #{id}
+    </select>
 </mapper>

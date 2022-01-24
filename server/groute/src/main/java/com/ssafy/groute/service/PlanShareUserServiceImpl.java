@@ -36,4 +36,14 @@ public class PlanShareUserServiceImpl implements PlanShareUserService {
     public void updatePlanShareUser(PlanShareUser planShareUser) throws Exception {
         planShareUserMapper.updatePlanShareUser(planShareUser);
     }
+
+    @Override
+    public List<PlanShareUser> selectByUserId(String userId) throws Exception {
+        return planShareUserMapper.selectByUserId(userId);
+    }
+
+    @Override
+    public List<PlanShareUser> selectByPlanId(int planId) throws Exception {
+        return planShareUserMapper.selectByPlanId(planId);
+    }
 }
