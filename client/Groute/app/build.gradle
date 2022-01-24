@@ -30,6 +30,14 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'armeabi-v7a', 'x86_64'
+            universalApk true
+        }
+    }
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -115,9 +123,8 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.17'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
     //kakao Map
-//    compile files('libs/libDaumMapAndroid.jar')
-    implementation fileTree(include:['*.jar'], dir: 'libs')
-    implementation files('libs/libDaumMapAndroid.jar')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile files('libs/libDaumMapAndroid.jar')
     //TedPermission
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.2.3'
 }
