@@ -20,7 +20,6 @@ class MagazineAdapter : RecyclerView.Adapter<MagazineAdapter.MagazineHolder>(){
             itemView.findViewById<TextView>(R.id.magazine_tv_title).text = data.title
 
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MagazineHolder{

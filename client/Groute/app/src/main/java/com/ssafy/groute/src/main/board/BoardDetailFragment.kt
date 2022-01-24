@@ -8,12 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentBoardDetailBinding
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.main.MainActivity
+import com.ssafy.groute.src.main.MainViewModel
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_FREE_TYPE
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_QUESTION_TYPE
 import com.ssafy.groute.src.response.BoardDetailResponse
@@ -28,7 +30,7 @@ class BoardDetailFragment : Fragment() {
 
     private var boardId = -1
     private var boardDetailId = -1
-
+    private var viewModel: MainViewModel = MainViewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -79,18 +81,23 @@ class BoardDetailFragment : Fragment() {
                     adapter = boardRecyclerAdapter
                     adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
                 }
+                boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, boardDetailList, boardId, requireContext()).apply {
+                    modifyListener = object : BoardRecyclerviewAdapter.ItemModifyListener{
+                        override fun onClick(position: Int) {
+                            mainActivity.moveFragment(8,"boardDetailId",boardDetailList[position].id)
+                        }
+
+                    }
+                }
                 boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
                     override fun onClick(view: View, position: Int, name: String) {
                         mainActivity.moveFragment(6)
                     }
 
                 })
-                if(boardRecyclerAdapter.isEdit == true){
-                    val fragmentbundle = Bundle()
-                    fragmentbundle.putBoolean("isEdit", true)
-                    boardDetailId = boardRecyclerAdapter.boardDetailId
-                    mainActivity.moveFragment(8,"boardDetailId", boardDetailId)
-                }
+                Log.d(TAG, "initAdapter: ${boardRecyclerAdapter.isEdit}")
+
+
 
             }
         )
