@@ -5,12 +5,13 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.R
+
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.FragmentPlaceDetailBinding
 import com.ssafy.groute.src.dto.Places
@@ -19,6 +20,10 @@ import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
+
+
+
+
 
 private const val TAG = "PlaceDetailFragment"
 class PlaceDetailFragment : Fragment() {
@@ -30,6 +35,8 @@ class PlaceDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
+
+
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -63,26 +70,31 @@ class PlaceDetailFragment : Fragment() {
         initData()
 
         binding.placeDetailAbtnHeart.setOnClickListener {
+            val animator = ValueAnimator.ofFloat(0f,0.5f).setDuration(500)
+            animator.addUpdateListener { animation ->
+                binding.placeDetailAbtnHeart.progress = animation.animatedValue as Float
+            }
+            animator.start()
+//            val place:Places = Places(
+//                places.address,
+//                places.areaId,
+//                places.contact,
+//                places.description,
+//                places.heartCnt+1,
+//                placeId,
+//                places.img,
+//                places.lat,
+//                places.lng,
+//                places.name,
+//                places.rate,
+//                places.themeId,
+//                places.type,
+//                ApplicationClass.sharedPreferencesUtil.getUser().id,
+//                places.zipCode
+//            )
+//
+//            updatePlace(place)
 
-            val place:Places = Places(
-                places.address,
-                places.areaId,
-                places.contact,
-                places.description,
-                places.heartCnt+1,
-                placeId,
-                places.img,
-                places.lat,
-                places.lng,
-                places.name,
-                places.rate,
-                places.themeId,
-                places.type,
-                ApplicationClass.sharedPreferencesUtil.getUser().id,
-                places.zipCode
-            )
-
-            updatePlace(place)
         }
 
     }
@@ -92,6 +104,22 @@ class PlaceDetailFragment : Fragment() {
     fun initData(){
         Log.d(TAG, "initData: $placeId")
         val placesDetail = PlaceService().getPlace(placeId, placesCallback())
+
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+        when(item.itemId){
+            android.R.id.home -> {
+//                finish()
+//                (requireActivity()).onBackPressed()
+                requireActivity().finish()
+//                (activity as AppCompatActivity?)!!.onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
     companion object {
         @JvmStatic
@@ -109,11 +137,7 @@ class PlaceDetailFragment : Fragment() {
 
         override fun onSuccess(code: Int, responseData: Boolean) {
             if(responseData){
-                val animator = ValueAnimator.ofFloat(0f,0.5f).setDuration(500)
-                animator.addUpdateListener { animation ->
-                    binding.placeDetailAbtnHeart.progress = animation.animatedValue as Float
-                }
-                animator.start()
+
                 Log.d(TAG, "onSuccess: 업데이트 성공")
             }else{
                 Log.d(TAG, "onSuccess: 통신오류")
