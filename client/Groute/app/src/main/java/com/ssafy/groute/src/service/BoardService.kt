@@ -36,8 +36,8 @@ class BoardService {
         return responseLiveData
     }
 
-    fun getBoardDetailList(boardId: Int): LiveData<List<BoardDetail>> {
-        val responseLiveData: MutableLiveData<List<BoardDetail>> = MutableLiveData()
+    fun getBoardDetailList(boardId: Int): LiveData<MutableList<BoardDetail>> {
+        val responseLiveData: MutableLiveData<MutableList<BoardDetail>> = MutableLiveData()
         val boardDetailListRequest: Call<MutableList<BoardDetail>> = RetrofitUtil.boardService.listBoardDetail(boardId)
         boardDetailListRequest.enqueue(object : Callback<MutableList<BoardDetail>> {
             override fun onResponse(call: Call<MutableList<BoardDetail>>, response: Response<MutableList<BoardDetail>>) {
@@ -66,6 +66,26 @@ class BoardService {
                 if(response.code() == 200){
                     if(res != null){
                         callback.onSuccess(response.code(), res)
+                    }
+                }else{
+                    callback.onFailure(response.code())
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callback.onError(t)
+            }
+
+        })
+    }
+
+    fun deleteBoardDetail(boardDetailId:Int, callback: RetrofitCallback<Boolean>){
+        RetrofitUtil.boardService.deleteBoardDetail(boardDetailId).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if(response.code() == 200){
+                    if(res!=null){
+                        callback.onSuccess(response.code(),res)
                     }
                 }else{
                     callback.onFailure(response.code())
