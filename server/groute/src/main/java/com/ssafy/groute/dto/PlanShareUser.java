@@ -14,4 +14,8 @@ public class PlanShareUser {
     private String userId;
     private int planId;
 
+    public PlanShareUser(String userId, int userPlanId) {
+        this.userId = userId;
+        this.planId = userPlanId;
+    }
 }

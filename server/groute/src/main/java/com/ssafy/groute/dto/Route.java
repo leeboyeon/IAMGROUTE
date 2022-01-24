@@ -15,4 +15,11 @@ public class Route {
     private int day;
     private String memo;
     private String isCustom;
+
+    public Route(String name, int day, String memo, String isCustom) {
+        this.name = name;
+        this.day = day;
+        this.memo = memo;
+        this.isCustom = isCustom;
+    }
 }

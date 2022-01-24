@@ -32,4 +32,14 @@
         set route_id = #{routeId}, plan_id = #{planId}
         where id = #{id}
     </update>
+
+    <select id="selectByPlanId" parameterType="int" resultMap="RoutesDTO">
+        select * from routes
+        where plan_id = #{planId}
+    </select>
+
+    <select id="selectByRouteId" parameterType="int" resultMap="RoutesDTO">
+        select * from routes
+        where route_id = #{RouteId}
+    </select>
 </mapper>
