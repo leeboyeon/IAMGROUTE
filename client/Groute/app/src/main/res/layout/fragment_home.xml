@@ -54,12 +54,12 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-<!--                    <com.airbnb.lottie.LottieAnimationView-->
-<!--                        android:layout_width="25dp"-->
-<!--                        android:layout_height="25dp"-->
-<!--                        app:lottie_autoPlay="true"-->
-<!--                        app:lottie_fileName="best.json"-->
-<!--                        app:lottie_loop="true" />-->
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_fileName="best.json"
+                        app:lottie_loop="true" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
