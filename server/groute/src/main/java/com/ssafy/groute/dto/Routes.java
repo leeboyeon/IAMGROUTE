@@ -13,4 +13,9 @@ public class Routes {
     private int id;
     private int routeId;
     private int planId;
+
+    public Routes(int routeId, int planId) {
+        this.routeId = routeId;
+        this.planId = planId;
+    }
 }

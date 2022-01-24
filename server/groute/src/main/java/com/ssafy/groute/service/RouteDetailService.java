@@ -12,4 +12,6 @@ public interface RouteDetailService {
     List<RouteDetail> selectAllRouteDetail() throws Exception;
     void deleteRouteDetail(int id) throws Exception;
     void updateRouteDetail(RouteDetail routeDetail) throws Exception;
+    List<RouteDetail> selectByRouteId(int routeId) throws Exception;
+    List<RouteDetail> selectByPlaceId(int placeId) throws Exception;
 }

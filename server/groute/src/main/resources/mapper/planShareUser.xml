@@ -32,4 +32,14 @@
         set plan_id = #{planId}, user_id = #{userId}
         where id = #{id}
     </update>
+
+    <select id="selectByUserId" parameterType="String" resultMap="PlanShareUserDTO">
+        select * from planShareUser
+        where user_id = #{userId}
+    </select>
+
+    <select id="selectByPlanId" parameterType="int" resultMap="PlanShareUserDTO">
+        select * from planShareUser
+        where plan_id = #{planId}
+    </select>
 </mapper>

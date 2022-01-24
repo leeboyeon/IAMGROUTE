@@ -32,4 +32,14 @@
         set route_id = #{routeId}, place_id = #{placeId}, priority = #{priority}, memo = #{memo}
         where id = #{id}
     </update>
+
+    <select id="selectByRouteId" parameterType="int" resultMap="RouteDetailDTO">
+        select * from routeDetail
+        where route_id = #{routeId}
+    </select>
+
+    <select id="selectByPlaceId" parameterType="int" resultMap="RouteDetailDTO">
+        select * from routeDetail
+        where place_id = #{placeId}
+    </select>
 </mapper>

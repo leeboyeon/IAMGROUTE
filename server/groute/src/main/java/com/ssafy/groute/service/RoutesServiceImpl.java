@@ -37,4 +37,14 @@ public class RoutesServiceImpl implements RoutesService {
     public void updateRoutes(Routes routes) throws Exception {
         routesMapper.updateRoutes(routes);
     }
+
+    @Override
+    public List<Routes> selectByRouteId(int routeId) throws Exception {
+        return routesMapper.selectByRouteId(routeId);
+    }
+
+    @Override
+    public List<Routes> selectByPlanId(int planId) throws Exception {
+        return routesMapper.selectByPlanId(planId);
+    }
 }
