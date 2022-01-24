@@ -3,10 +3,11 @@ package com.ssafy.groute.src.main.board
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.src.dto.BoardDetail
+import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_FREE_TYPE
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_QUESTION_TYPE
 import com.ssafy.groute.src.main.route.RouteThemeRecyclerviewAdapter
@@ -32,7 +34,7 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
         val likeTv = itemView.findViewById<TextView>(R.id.item_board_like_num_tv)
         val themeRv = itemView.findViewById<RecyclerView>(R.id.item_board_theme_rv)
         val themeList = arrayListOf("#힐링", "#로맨틱")
-
+        val more = itemView.findViewById<ImageButton>(R.id.boardDetail_ibtn_more)
         fun bindInfo(data: BoardDetail) {
             if(boardType == BOARD_FREE_TYPE) {
                 thumbnailIv.visibility = View.VISIBLE
@@ -61,6 +63,9 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = ThemeAdapter
             }
+
+            more.isVisible = data.userId == ApplicationClass.sharedPreferencesUtil.getUser().id
+
         }
     }
 
@@ -74,6 +79,11 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
             bindInfo(boardList[position])
             itemView.setOnClickListener {
                 itemClickListener.onClick(it,position,"name")
+            }
+            more.setOnClickListener {
+                var popup:PopupMenu = PopupMenu(MainActivity(),itemView)
+                MenuInflater(MainActivity()).inflate(R.menu.board_menu_item, popup.menu)
+                popup.show()
             }
         }
     }

@@ -154,7 +154,7 @@
                 app:layout_constraintLeft_toRightOf="@id/item_board_like_iv"/>
 
             <ImageButton
-                android:id="@+id/imageButton3"
+                android:id="@+id/boardDetail_ibtn_more"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginEnd="20dp"
@@ -163,6 +163,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/morecion" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
