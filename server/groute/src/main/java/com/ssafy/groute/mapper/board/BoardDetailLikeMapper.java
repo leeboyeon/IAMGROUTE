@@ -8,4 +8,5 @@ public interface BoardDetailLikeMapper {
     void insertBoardDetailLike(String userId, int boardDetailId) throws Exception;
     int findLikeByBDId(int boardDetailId) throws Exception;
     int findLikeById(int id) throws Exception;
+    void deleteAllBoardDetailLike(int boardDetailId) throws Exception;
 }

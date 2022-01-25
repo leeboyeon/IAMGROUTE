@@ -44,4 +44,9 @@ public class CommentServiceImpl implements CommentService{
     public List<Comment> selectAllByBoardDetailId(int id) throws Exception {
         return commentMapper.selectAllByBoardDetailId(id);
     }
+
+    @Override
+    public void deleteAllComment(int boardDetailId) throws Exception {
+        commentMapper.deleteAllComment(boardDetailId);
+    }
 }
