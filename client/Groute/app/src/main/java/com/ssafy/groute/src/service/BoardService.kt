@@ -98,4 +98,42 @@ class BoardService {
 
         })
     }
+
+    fun boardLike(boardDetailId: Int, userId: String, callback: RetrofitCallback<Any>){
+        RetrofitUtil.boardService.likeBoard(boardDetailId, userId).enqueue(object : Callback<Any> {
+            override fun onResponse(call: Call<Any>, response: Response<Any>) {
+                val res = response.body()
+                if(response.code() == 200){
+                    if(res != null){
+                        callback.onSuccess(response.code(), res)
+                    }
+                }else{
+                    callback.onFailure(response.code())
+                }
+            }
+            override fun onFailure(call: Call<Any>, t: Throwable) {
+                callback.onError(t)
+            }
+
+        })
+    }
+
+    fun isBoardLike(boardDetailId: Int, userId: String, callback: RetrofitCallback<Boolean>){
+        RetrofitUtil.boardService.isLikeBoard(boardDetailId, userId).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if(response.code() == 200){
+                    if(res != null){
+                        callback.onSuccess(response.code(), res)
+                    }
+                }else{
+                    callback.onFailure(response.code())
+                }
+            }
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callback.onError(t)
+            }
+
+        })
+    }
 }

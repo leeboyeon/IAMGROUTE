@@ -25,6 +25,11 @@ interface BoardApi {
     @GET("/boardDetail/detail")
     fun getListBoardDetail() : Call<MutableList<BoardDetail>>
 
+    // 게시판 글 찜하기
     @POST("/boardDetail/like")
-    fun likeBoard(@Query("boardDetailId") boardDetailId: Int, @Query("userId") userId: String) : Call
+    fun likeBoard(@Query("boardDetailId") boardDetailId: Int, @Query("userId") userId: String) : Call<Any>
+
+    // 찜하기 여부
+    @POST("/boardDetail/isLike")
+    fun isLikeBoard(@Query("boardDetailId") boardDetailId: Int, @Query("userId") userId: String) : Call<Boolean>
 }

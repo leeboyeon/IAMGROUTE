@@ -127,4 +127,7 @@ dependencies {
     compile files('libs/libDaumMapAndroid.jar')
     //TedPermission
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.2.3'
+
+    // viewModel & LiveData
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
 }

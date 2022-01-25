@@ -7,14 +7,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
+import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.FragmentBoardBinding
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.BoardService
+import com.ssafy.groute.util.RetrofitCallback
 
 private const val TAG = "BoardFragment"
 class BoardFragment : Fragment() {
@@ -24,6 +27,8 @@ class BoardFragment : Fragment() {
     lateinit var boardFreeAdapter : BoardAdapter
     lateinit var boardQuestionAdapter : BoardAdapter
     val magazines = arrayListOf<Magazine>()
+    lateinit var userId: String
+    var isLike = false
 
     companion object{
         const val BOARD_FREE_TYPE = 1 // 자유게시판 타입
@@ -50,6 +55,7 @@ class BoardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        userId = ApplicationClass.sharedPreferencesUtil.getUser().id
         initAdapter()
         binding.boardTvMoreFree.setOnClickListener {
             Log.d(TAG, "onViewCreated: ")
@@ -84,7 +90,8 @@ class BoardFragment : Fragment() {
             viewLifecycleOwner,
             { boardFreeList ->
                 boardFreeList.let {
-                    boardFreeAdapter = BoardAdapter(viewLifecycleOwner, boardFreeList)
+                    boardFreeAdapter = BoardAdapter(requireContext(), viewLifecycleOwner)
+                    boardFreeAdapter.boardList = boardFreeList
                 }
 
                 binding.boardRvFree.apply{
@@ -92,6 +99,14 @@ class BoardFragment : Fragment() {
                     adapter = boardFreeAdapter
                     adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
                 }
+
+                boardFreeAdapter.setItemClickListener(object : BoardAdapter.ItemClickListener{
+                    override fun onClick(view: View, position: Int, id: Int) {
+                        boardLike(id, userId)
+                        boardQuestionAdapter.setBoardList(boardFreeList)
+                    }
+
+                })
             }
         )
 
@@ -100,14 +115,42 @@ class BoardFragment : Fragment() {
             viewLifecycleOwner,
             {   boardQuestionList ->
                 boardQuestionList.let {
-                    boardQuestionAdapter = BoardAdapter(viewLifecycleOwner, boardQuestionList)
+                    boardQuestionAdapter = BoardAdapter(requireContext(), viewLifecycleOwner)
+                    boardQuestionAdapter.boardList = boardQuestionList
                 }
                 binding.boardRvQuestion.apply{
                     layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
                     adapter = boardQuestionAdapter
                     adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
                 }
+
+                boardQuestionAdapter.setItemClickListener(object : BoardAdapter.ItemClickListener {
+                    override fun onClick(view: View, position: Int, id: Int) {
+                        boardLike(id, userId)
+                        boardQuestionAdapter.setBoardList(boardQuestionList)
+                    }
+
+                })
             }
         )
     }
+
+    fun boardLike(boardDetailId: Int, userId: String) {
+        BoardService().boardLike(boardDetailId, userId, object : RetrofitCallback<Any> {
+            override fun onError(t: Throwable) {
+                Log.d(TAG, "onError: 게시판 찜하기 에러")
+            }
+
+            override fun onSuccess(code: Int, responseData: Any) {
+                boardFreeAdapter.notifyDataSetChanged()
+                boardQuestionAdapter.notifyDataSetChanged()
+            }
+
+            override fun onFailure(code: Int) {
+                Log.d(TAG, "onFailure: ")
+            }
+
+        })
+    }
+
 }
