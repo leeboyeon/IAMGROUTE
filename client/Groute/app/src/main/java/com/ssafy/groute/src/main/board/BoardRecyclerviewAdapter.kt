@@ -96,6 +96,7 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
                 popup.setOnMenuItemClickListener {
                     when(it.itemId){
                         R.id.menu_edit -> {
+                            
                             itemmodifyListener.onClick(bindingAdapterPosition)
                             return@setOnMenuItemClickListener true
                         }
