@@ -33,7 +33,7 @@ class BoardWriteFragment : Fragment() {
         mainActivity.hideBottomNav(true)
         arguments?.let{
             boardDetailId = it.getInt("boardDetailId", -1)
-            isEdit = it.getBoolean("isEdit")
+            Log.d(TAG, "onCreate: ${boardDetailId}")
         }
 
     }
@@ -52,10 +52,12 @@ class BoardWriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: ${boardDetailId}  ${isEdit}")
-        if(isEdit == true){
-            binding.boardWriteEtTitle.setText("edit")
-        }
+
         initButton()
+
+        if(boardDetailId > 0){
+            binding.boardWriteEtTitle.setText("TEXT")
+        }
     }
     fun initButton(){
         binding.boardWriteIbtnCancle.setOnClickListener {

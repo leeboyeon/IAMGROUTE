@@ -26,7 +26,8 @@ private const val TAG = "BoardRecyclerviewAdapte"
 class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: MutableList<BoardDetail>, var boardType: Int, var context:Context) : RecyclerView.Adapter<BoardRecyclerviewAdapter.BoardHolder>(){
     lateinit var ThemeAdapter: RouteThemeRecyclerviewAdapter
     var isEdit = false
-    var boardDetailId:Int = -1
+
+    lateinit var itemmodifyListener: ItemModifyListener
     inner class BoardHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val profileIv = itemView.findViewById<ImageView>(R.id.item_board_profile_iv)
         val uidTv = itemView.findViewById<TextView>(R.id.item_board_uid_tv)
@@ -38,7 +39,9 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
         //val themeRv = itemView.findViewById<RecyclerView>(R.id.item_board_theme_rv)
         //val themeList = arrayListOf("#힐링", "#로맨틱")
         val more = itemView.findViewById<ImageButton>(R.id.boardDetail_ibtn_more)
+
         fun bindInfo(data: BoardDetail) {
+
             if(boardType == BOARD_FREE_TYPE) {
                 thumbnailIv.visibility = View.VISIBLE
                 Glide.with(itemView)
@@ -93,8 +96,7 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
                 popup.setOnMenuItemClickListener {
                     when(it.itemId){
                         R.id.menu_edit -> {
-                            isEdit = true
-                            boardDetailId = boardList[position].id
+                            itemmodifyListener.onClick(bindingAdapterPosition)
                             return@setOnMenuItemClickListener true
                         }
                         R.id.menu_delete ->{
@@ -136,5 +138,12 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
             Log.d(TAG, "onFailure: ${code}")
         }
 
+    }
+
+    interface ItemModifyListener{
+        fun onClick(position: Int)
+    }
+    fun setModifyClickListener(itemModifyListener: ItemModifyListener){
+        this.itemmodifyListener = itemmodifyListener
     }
 }
