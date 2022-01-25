@@ -86,9 +86,7 @@ class BoardAdapter(val context: Context, var lifecycleOwner: LifecycleOwner) : R
     override fun onBindViewHolder(holder: BoardHolder, position: Int) {
         holder.apply {
             bindInfo(boardList[position])
-            itemView.setOnClickListener {
-                itemClickListener.onClick(it, position, boardList[position].id)
-            }
+
         }
     }
 

@@ -59,6 +59,8 @@ class BoardService {
         return responseLiveData
     }
 
+
+
     fun insertBoardDetail(boardDetail:BoardDetail, callback: RetrofitCallback<Boolean>){
         RetrofitUtil.boardService.insertBoardDetail(boardDetail).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
