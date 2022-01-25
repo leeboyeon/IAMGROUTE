@@ -62,9 +62,9 @@ class BoardDetailFragment : Fragment() {
             binding.boardDetailBoardNameTv.text = "질문게시판"
         }
         initAdapter()
-
+        //그냥 글쓰기
         binding.boardDetailBtnWrite.setOnClickListener {
-            mainActivity.moveFragment(8)
+            mainActivity.moveFragment(8,"boardId",boardId)
         }
 
     }
@@ -81,23 +81,19 @@ class BoardDetailFragment : Fragment() {
                     adapter = boardRecyclerAdapter
                     adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
                 }
-                boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, boardDetailList, boardId, requireContext()).apply {
-                    itemmodifyListener = object : BoardRecyclerviewAdapter.ItemModifyListener{
-                        override fun onClick(position: Int) {
-                            mainActivity.moveFragment(8,"boardDetailId",boardDetailList[position].id)
-                        }
-
+                boardRecyclerAdapter.setModifyClickListener(object : BoardRecyclerviewAdapter.ItemModifyListener{
+                    override fun onClick(position: Int) {
+                        mainActivity.moveFragment(8,"boardDetailId",boardDetailList[position].id)
                     }
-                }
+
+                })
                 boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
                     override fun onClick(view: View, position: Int, name: String) {
-                        mainActivity.moveFragment(6)
+                        mainActivity.moveFragment(6,"boardDetailId", boardDetailList[position].id)
                     }
 
                 })
                 Log.d(TAG, "initAdapter: ${boardRecyclerAdapter.isEdit}")
-
-
 
             }
         )

@@ -59,8 +59,6 @@ class BoardService {
         return responseLiveData
     }
 
-
-
     fun insertBoardDetail(boardDetail:BoardDetail, callback: RetrofitCallback<Boolean>){
         RetrofitUtil.boardService.insertBoardDetail(boardDetail).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
@@ -132,6 +130,50 @@ class BoardService {
                     callback.onFailure(response.code())
                 }
             }
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callback.onError(t)
+            }
+
+        })
+    }
+
+    fun getListBoardDetail(id:Int, callback: RetrofitCallback<Map<String,Any>>){
+        RetrofitUtil.boardService.getListBoardDetail(id).enqueue(object : Callback<Map<String,Any>> {
+            override fun onResponse(
+                call: Call<Map<String, Any>>,
+                response: Response<Map<String, Any>>
+            ) {
+                val res = response.body()
+                if(response.code() == 200){
+                    if(res != null){
+                        callback.onSuccess(response.code(), res)
+                    }
+                }else{
+                    callback.onFailure(response.code())
+                }
+            }
+
+            override fun onFailure(call: Call<Map<String, Any>>, t: Throwable) {
+                callback.onError(t)
+            }
+
+
+        })
+    }
+
+    fun modifyBoardDetail(boardDetail: BoardDetail, callback: RetrofitCallback<Boolean>){
+        RetrofitUtil.boardService.modifyBoardDetail(boardDetail).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if(response.code() == 200){
+                    if(res != null){
+                        callback.onSuccess(response.code(),res)
+                    }
+                }else{
+                    callback.onFailure(response.code())
+                }
+            }
+
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
                 callback.onError(t)
             }

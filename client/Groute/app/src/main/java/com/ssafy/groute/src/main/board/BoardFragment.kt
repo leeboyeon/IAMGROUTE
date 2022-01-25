@@ -112,44 +112,40 @@ class BoardFragment : Fragment() {
             adapter = boardFreeAdapter
             adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
+                binding.boardRvFree.apply{
+                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+                    adapter = boardFreeAdapter
+                    adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+                }
+                boardFreeAdapter.setItemClickListener(object: BoardAdapter.ItemClickListener{
+                    override fun onClick(view: View, position: Int, id: Int) {
+                        mainActivity.moveFragment(6,"boardDetailId", boardFreeList[position].id)
+                    }
 
-        boardFreeAdapter.setItemClickListener(object : BoardAdapter.ItemClickListener{
-            override fun onClick(view: View, position: Int, id: Int) {
-                boardLike(id, userId)
-                //boardQuestionAdapter.setBoardList(boardFreeList)
+                })
             }
+        )
 
-        })
+        val boardQuestionList = BoardService().getBoardDetailList(BOARD_QUESTION_TYPE)
+        boardQuestionList.observe(
+            viewLifecycleOwner,
+            {   boardQuestionList ->
+                boardQuestionList.let {
+                    boardQuestionAdapter = BoardAdapter(viewLifecycleOwner, boardQuestionList)
+                }
+                binding.boardRvQuestion.apply{
+                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+                    adapter = boardQuestionAdapter
+                    adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+                }
+                boardQuestionAdapter.setItemClickListener(object:BoardAdapter.ItemClickListener{
+                    override fun onClick(view: View, position: Int, id: Int) {
+                        mainActivity.moveFragment(6,"boardDetailId", boardQuestionList[position].id)
+                    }
 
-        //var boardQuestionList = BoardService().getBoardDetailList(BOARD_QUESTION_TYPE)
-//        boardQuestionList.observe(
-//            viewLifecycleOwner,
-//            {   boardQuestionList ->
-//                boardQuestionList.let {
-//                    boardQuestionAdapter = BoardAdapter(requireContext(), viewLifecycleOwner)
-//                    boardQuestionAdapter.boardList = boardQuestionList
-//                }
-//
-//            }
-//        )
-
-        boardQuestionAdapter = BoardAdapter(requireContext(), viewLifecycleOwner)
-        //boardViewModel.setBoardList(boardQuestionList)
-        boardViewModel.boardQuestionList.observe(viewLifecycleOwner, Observer { boardQuestionAdapter.setBoardList(it) })
-        boardViewModel.getBoardDetailList(BOARD_QUESTION_TYPE)
-        binding.boardRvQuestion.apply{
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-            adapter = boardQuestionAdapter
-            adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        }
-
-        boardQuestionAdapter.setItemClickListener(object : BoardAdapter.ItemClickListener {
-            override fun onClick(view: View, position: Int, id: Int) {
-                boardLike(id, userId)
-                //boardQuestionAdapter.setBoardList(boardQuestionList)
+                })
             }
-
-        })
+        )
     }
 
     fun boardLike(boardDetailId: Int, userId: String) {
