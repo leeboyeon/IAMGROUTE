@@ -24,4 +24,7 @@ interface BoardApi {
 
     @GET("/boardDetail/detail")
     fun getListBoardDetail() : Call<MutableList<BoardDetail>>
+
+    @POST("/boardDetail/like")
+    fun likeBoard(@Query("boardDetailId") boardDetailId: Int, @Query("userId") userId: String) : Call
 }
