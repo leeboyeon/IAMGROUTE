@@ -1,6 +1,7 @@
 package com.ssafy.groute.service;
 
 import com.ssafy.groute.dto.Place;
+import com.ssafy.groute.dto.PlaceLike;
 import com.ssafy.groute.mapper.PlaceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,5 +38,11 @@ public class PlaceServiceImpl implements PlaceService {
     public void updatePlace(Place place) throws Exception {
         placeMapper.updatePlace(place);
     }
+
+    @Override
+    public void likePlace(PlaceLike placeLike) throws Exception {
+        placeMapper.likePlace(placeLike);
+    }
+
 
 }

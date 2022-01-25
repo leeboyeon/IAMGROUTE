@@ -1,6 +1,7 @@
 package com.ssafy.groute.mapper;
 
 import com.ssafy.groute.dto.Place;
+import com.ssafy.groute.dto.PlaceLike;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -12,4 +13,5 @@ public interface PlaceMapper {
     List<Place> selectAllPlace() throws Exception;
     void deletePlace(int id) throws Exception;
     void updatePlace(Place place) throws Exception;
+    void likePlace(PlaceLike placeLike) throws Exception;
 }

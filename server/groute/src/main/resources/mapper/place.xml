@@ -32,4 +32,9 @@
         set name = #{name}, type = #{type}, lat = #{lat}, lng = #{lng}, zipCode = #{zipCode}, contact = #{contact}, address = #{address}, description = #{description}, theme_id = #{themeId}, area_id = #{areaId}, img = #{img}, user_id = #{userId}
         where id = #{id}
     </update>
+
+    <insert id="likePlace" parameterType="PlaceLike">
+        insert into placelike(user_id, place_id)
+        values (#{userId},#{placeId})
+    </insert>
 </mapper>
