@@ -27,7 +27,7 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
     lateinit var ThemeAdapter: RouteThemeRecyclerviewAdapter
     var isEdit = false
 
-    lateinit var modifyListener: ItemModifyListener
+    lateinit var itemmodifyListener: ItemModifyListener
     inner class BoardHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val profileIv = itemView.findViewById<ImageView>(R.id.item_board_profile_iv)
         val uidTv = itemView.findViewById<TextView>(R.id.item_board_uid_tv)
@@ -96,7 +96,7 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
                 popup.setOnMenuItemClickListener {
                     when(it.itemId){
                         R.id.menu_edit -> {
-                            modifyListener.onClick(bindingAdapterPosition)
+                            itemmodifyListener.onClick(bindingAdapterPosition)
                             return@setOnMenuItemClickListener true
                         }
                         R.id.menu_delete ->{
@@ -142,5 +142,8 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
 
     interface ItemModifyListener{
         fun onClick(position: Int)
+    }
+    fun setModifyClickListener(itemModifyListener: ItemModifyListener){
+        this.itemmodifyListener = itemmodifyListener
     }
 }

@@ -82,7 +82,7 @@ class BoardDetailFragment : Fragment() {
                     adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
                 }
                 boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, boardDetailList, boardId, requireContext()).apply {
-                    modifyListener = object : BoardRecyclerviewAdapter.ItemModifyListener{
+                    itemmodifyListener = object : BoardRecyclerviewAdapter.ItemModifyListener{
                         override fun onClick(position: Int) {
                             mainActivity.moveFragment(8,"boardDetailId",boardDetailList[position].id)
                         }
