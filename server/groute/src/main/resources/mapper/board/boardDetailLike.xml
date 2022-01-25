@@ -4,7 +4,7 @@
 
 <mapper namespace="com.ssafy.groute.mapper.board.BoardDetailLikeMapper">
     <insert id="insertBoardDetailLike" parameterType="BoardDetailLike">
-        insert into boardDetailLike(user_id, boardDetail_id)
+        insert into boarddetaillike(user_id, boardDetail_id)
         values(#{userId}, #{boardDetailId})
     </insert>
 
@@ -15,29 +15,29 @@
 
     <select id="findBoardLikeByUIdBDId" resultMap="BoardDetailLikeDTO">
         select *
-        from BoardDetailLike
+        from boarddetaillike
         where user_id = #{userId} and BoardDetail_id = #{boardDetailId}
     </select>
 
     <delete id="deleteBoardDetailLike" parameterType="BoardDetailLike">
-        delete from boardDetailLike
+        delete from boarddetaillike
         where id = #{id}
     </delete>
 
     <select id="findLikeByBDId" resultType="int">
         select count(*)
-        from BoardDetailLike
+        from boarddetaillike
         where boardDetail_id = #{boardDetailId}
     </select>
 
     <select id="findLikeById" resultType="int">
         select boardDetail_id
-        from BoardDetailLike
+        from boarddetaillike
         where id = #{id}
     </select>
 
     <delete id="deleteAllBoardDetailLike" parameterType="int">
-        delete from boardDetailLike
+        delete from boarddetaillike
         where boardDetail_id = #{boardDetailId}
     </delete>
 </mapper>

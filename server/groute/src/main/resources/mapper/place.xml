@@ -28,7 +28,7 @@
     </delete>
 
     <update id="updatePlace" parameterType="Place">
-        update Place
+        update place
         set name = #{name}, type = #{type}, lat = #{lat}, lng = #{lng}, zipCode = #{zipCode}, contact = #{contact}, address = #{address}, description = #{description}, theme_id = #{themeId}, area_id = #{areaId}, img = #{img}, user_id = #{userId}
         where id = #{id}
     </update>

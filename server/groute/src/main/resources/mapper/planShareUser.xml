@@ -4,7 +4,7 @@
 
 <mapper namespace="com.ssafy.groute.mapper.PlanShareUserMapper">
     <insert id="insertPlanShareUser" parameterType="PlanShareUser">
-        insert into planShareUser(plan_id, user_id)
+        insert into planshareuser(plan_id, user_id)
         values(#{planId}, #{userId})
     </insert>
 
@@ -14,32 +14,32 @@
     </resultMap>
 
     <select id="selectPlanShareUser" parameterType="int" resultMap="PlanShareUserDTO">
-        select * from planShareUser
+        select * from planshareuser
         where id = #{id}
     </select>
 
     <select id="selectAllPlanShareUser"  resultMap="PlanShareUserDTO">
-        select * from planShareUser
+        select * from planshareuser
     </select>
 
     <delete id="deletePlanShareUser" parameterType="int">
-        delete from planShareUser
+        delete from planshareuser
         where id = #{id}
     </delete>
 
     <update id="updatePlanShareUser" parameterType="PlanShareUser">
-        update planShareUser
+        update planshareuser
         set plan_id = #{planId}, user_id = #{userId}
         where id = #{id}
     </update>
 
     <select id="selectByUserId" parameterType="String" resultMap="PlanShareUserDTO">
-        select * from planShareUser
+        select * from planshareuser
         where user_id = #{userId}
     </select>
 
     <select id="selectByPlanId" parameterType="int" resultMap="PlanShareUserDTO">
-        select * from planShareUser
+        select * from planshareuser
         where plan_id = #{planId}
     </select>
 </mapper>
