@@ -147,7 +147,7 @@ class MainActivity : AppCompatActivity() {
                     .addToBackStack(null)
             }
             8->{
-                transaction.replace(R.id.frame_main_layout,BoardWriteFragment())
+                transaction.replace(R.id.frame_main_layout,BoardWriteFragment.newInstance(key, value))
                     .addToBackStack(null)
             }
         }

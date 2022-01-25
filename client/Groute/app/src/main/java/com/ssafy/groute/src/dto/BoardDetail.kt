@@ -13,6 +13,6 @@ data class BoardDetail(
     val userId: String
 ){
     constructor(title:String,content:String,img:String, boardId:Int, userId:String):this(0,title,content,img,"","",0,0, boardId,userId)
-
+    constructor(title:String,content:String,img:String, boardId:Int, userId:String, id:Int): this(id,title,content,img,"","",0,0, boardId,userId)
 }
 

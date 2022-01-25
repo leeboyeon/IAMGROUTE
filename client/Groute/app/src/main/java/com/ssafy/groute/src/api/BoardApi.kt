@@ -23,5 +23,8 @@ interface BoardApi {
     fun deleteBoardDetail(@Query("id") id: Int) : Call<Boolean>
 
     @GET("/boardDetail/detail")
-    fun getListBoardDetail() : Call<MutableList<BoardDetail>>
+    fun getListBoardDetail(@Query("id") id:Int) : Call<Map<String,Any>>
+
+    @PUT("boardDetail/update")
+    fun modifyBoardDetail(@Body boardDetail:BoardDetail) : Call<Boolean>
 }
