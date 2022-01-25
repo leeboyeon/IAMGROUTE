@@ -89,7 +89,7 @@ class BoardDetailFragment : Fragment() {
                 })
                 boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
                     override fun onClick(view: View, position: Int, name: String) {
-                        mainActivity.moveFragment(6)
+                        mainActivity.moveFragment(6,"boardDetailId", boardDetailList[position].id)
                     }
 
                 })

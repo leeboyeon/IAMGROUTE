@@ -92,6 +92,12 @@ class BoardFragment : Fragment() {
                     adapter = boardFreeAdapter
                     adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
                 }
+                boardFreeAdapter.setItemClickListener(object: BoardAdapter.ItemClickListener{
+                    override fun onClick(view: View, position: Int, id: Int) {
+                        mainActivity.moveFragment(6,"boardDetailId", boardFreeList[position].id)
+                    }
+
+                })
             }
         )
 
@@ -107,6 +113,12 @@ class BoardFragment : Fragment() {
                     adapter = boardQuestionAdapter
                     adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
                 }
+                boardQuestionAdapter.setItemClickListener(object:BoardAdapter.ItemClickListener{
+                    override fun onClick(view: View, position: Int, id: Int) {
+                        mainActivity.moveFragment(6,"boardDetailId", boardQuestionList[position].id)
+                    }
+
+                })
             }
         )
     }

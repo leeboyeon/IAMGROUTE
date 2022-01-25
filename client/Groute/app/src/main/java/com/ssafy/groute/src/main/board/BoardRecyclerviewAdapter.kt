@@ -41,15 +41,20 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
         val more = itemView.findViewById<ImageButton>(R.id.boardDetail_ibtn_more)
 
         fun bindInfo(data: BoardDetail) {
-
-            if(boardType == BOARD_FREE_TYPE) {
+            if(data.img == null || data.img == ""){
+                thumbnailIv.visibility = View.GONE
+            }else{
                 thumbnailIv.visibility = View.VISIBLE
                 Glide.with(itemView)
                     .load(data.img)
                     .into(thumbnailIv)
-            } else if(boardType == BOARD_QUESTION_TYPE) {
-                thumbnailIv.visibility = View.GONE
             }
+//            if(boardType == BOARD_FREE_TYPE) {
+//
+//            } else if(boardType == BOARD_QUESTION_TYPE) {
+//                thumbnailIv.visibility = View.GONE
+//            }
+            Log.d(TAG, "bindInfo: ${data.userId}")
             val userInfo = UserService().getUserInfo(data.userId)
             userInfo.observe(
                 lifecycleOwner, {
@@ -58,6 +63,7 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
                         .circleCrop()
                         .into(profileIv)
                     uidTv.text = it.nickname
+                    Log.d(TAG, "bindInfo: ${it.nickname}")
                 }
             )
             titleTv.text = data.title
