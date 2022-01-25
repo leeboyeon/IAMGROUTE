@@ -11,6 +11,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -87,11 +89,20 @@ public class BoardDetailController {
 
     @ApiOperation(value = "delete boardDetail",notes = "boardDetail 삭제")
     @DeleteMapping(value = "/del")
+    @Transactional
     public ResponseEntity<?> deleteBoardDetail(@RequestParam("id") int id) throws Exception{
+        BoardDetail boardDetail = boardDetailService.selectBoardDetail(id);
         try {
+            if(boardDetail.getHeartCnt() > 0) {
+                boardDetailLikeService.deleteAllBoardDetailLike(id);
+            }
+            if(commentService.selectAllByBoardDetailId(id) != null) {
+                commentService.deleteAllComment(id);
+            }
             boardDetailService.deleteBoardDetail(id);
         }catch (Exception e){
             e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -112,7 +123,17 @@ public class BoardDetailController {
         return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
     }
 
-    @ApiOperation(value = "boardDetail like",notes = "boardDetail like")
+    @ApiOperation(value = "boardDetail like 확인",notes = "boardDetail like 확인")
+    @PostMapping(value = "/isLike")
+    public boolean boardDetailIsLike(@RequestParam("userId") String userId, @RequestParam("boardDetailId") int boardDetailId) throws Exception{
+        BoardDetailLike boardDetailLike = boardDetailLikeService.findBoardLikeByUIdBDId(userId, boardDetailId);
+        if (boardDetailLike != null) {
+            return true;
+        }
+        return false;
+    }
+
+        @ApiOperation(value = "boardDetail like",notes = "boardDetail like")
     @PostMapping(value = "/like")
     public ResponseEntity<?> boardDetailLike(@RequestParam("userId") String userId, @RequestParam("boardDetailId") int boardDetailId) throws Exception{
         BoardDetailLike boardDetailLike = boardDetailLikeService.findBoardLikeByUIdBDId(userId, boardDetailId);

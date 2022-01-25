@@ -7,6 +7,8 @@ import com.ssafy.groute.mapper.board.BoardDetailMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BoardDetailLikeServiceImpl implements BoardDetailLikeService{
     @Autowired
@@ -39,5 +41,10 @@ public class BoardDetailLikeServiceImpl implements BoardDetailLikeService{
     @Override
     public int findLikeByBDId(int boardDetailId) throws Exception {
         return boardDetailLikeMapper.findLikeByBDId(boardDetailId);
+    }
+
+    @Override
+    public void deleteAllBoardDetailLike(int boardDetailId) throws Exception{
+        boardDetailLikeMapper.deleteAllBoardDetailLike(boardDetailId);
     }
 }

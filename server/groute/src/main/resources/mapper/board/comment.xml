@@ -36,4 +36,9 @@
         set content = #{content}, level = #{level}, groupNum = #{groupNum}, order = #{order}, boardDetail_id = #{boardDetailId}, #{userId}, user_id = #{userId}
         where id = #{id}
     </update>
+
+    <delete id="deleteAllComment" parameterType="int">
+        delete from comment
+        where boardDetail_id = #{boardDetailId}
+    </delete>
 </mapper>

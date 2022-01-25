@@ -35,4 +35,9 @@
         from BoardDetailLike
         where id = #{id}
     </select>
+
+    <delete id="deleteAllBoardDetailLike" parameterType="int">
+        delete from boardDetailLike
+        where boardDetail_id = #{boardDetailId}
+    </delete>
 </mapper>
