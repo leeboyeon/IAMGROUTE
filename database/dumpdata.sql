@@ -1,8 +1,12 @@
--- MySQL dump 10.13  Distrib 8.0.27, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
 --
--- Host: localhost    Database: groute
+-- Host: 127.0.0.1    Database: groute
 -- ------------------------------------------------------
--- Server version	8.0.27
+-- Server version	8.0.26
+
+drop schema if exists groute;
+CREATE SCHEMA IF NOT EXISTS `groute` DEFAULT CHARACTER SET utf8 ;
+USE `groute` ;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -235,6 +239,62 @@ INSERT INTO `place` VALUES (1,'도라지식당','음식점','33.4927114054','126
 UNLOCK TABLES;
 
 --
+-- Table structure for table `placelike`
+--
+
+DROP TABLE IF EXISTS `placelike`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `placelike` (
+  `user_id` varchar(100) NOT NULL,
+  `place_id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  KEY `fk_user_has_place_place1_idx` (`place_id`),
+  KEY `fk_user_has_place_user1_idx` (`user_id`),
+  CONSTRAINT `fk_user_has_place_place1` FOREIGN KEY (`place_id`) REFERENCES `place` (`id`),
+  CONSTRAINT `fk_user_has_place_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `placelike`
+--
+
+LOCK TABLES `placelike` WRITE;
+/*!40000 ALTER TABLE `placelike` DISABLE KEYS */;
+/*!40000 ALTER TABLE `placelike` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `planlike`
+--
+
+DROP TABLE IF EXISTS `planlike`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `planlike` (
+  `user_id` varchar(100) NOT NULL,
+  `userplan_id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  KEY `fk_user_has_userplan_userplan1_idx` (`userplan_id`),
+  KEY `fk_user_has_userplan_user1_idx` (`user_id`),
+  CONSTRAINT `fk_user_has_userplan_user1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `fk_user_has_userplan_userplan1` FOREIGN KEY (`userplan_id`) REFERENCES `userplan` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `planlike`
+--
+
+LOCK TABLES `planlike` WRITE;
+/*!40000 ALTER TABLE `planlike` DISABLE KEYS */;
+/*!40000 ALTER TABLE `planlike` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `planshareuser`
 --
 
@@ -444,4 +504,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-24 14:45:52
+-- Dump completed on 2022-01-25 11:26:38
