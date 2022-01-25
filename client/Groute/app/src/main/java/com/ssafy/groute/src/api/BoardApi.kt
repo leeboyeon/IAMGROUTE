@@ -32,6 +32,8 @@ interface BoardApi {
     // 찜하기 여부
     @POST("/boardDetail/isLike")
     fun isLikeBoard(@Query("boardDetailId") boardDetailId: Int, @Query("userId") userId: String) : Call<Boolean>
+
+    @GET("/boardDetail/detail")
     fun getListBoardDetail(@Query("id") id:Int) : Call<Map<String,Any>>
 
     @PUT("boardDetail/update")

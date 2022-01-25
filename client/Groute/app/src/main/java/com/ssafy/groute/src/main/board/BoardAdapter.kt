@@ -69,9 +69,17 @@ class BoardAdapter(val context: Context, var lifecycleOwner: LifecycleOwner) : R
                     Log.d(TAG, "onFailure: ")
                 }
             })
+            itemView.findViewById<TextView>(R.id.board_tv_writeTitle).setOnClickListener {
+                itemClickListener.onClick(it, layoutPosition, data.id)
+            }
+
+            itemView.findViewById<TextView>(R.id.board_tv_writeContent).setOnClickListener {
+                itemClickListener.onClick(it, layoutPosition, data.id)
+            }
+
 
             goodBtn.setOnClickListener {
-                itemClickListener.onClick(it, layoutPosition, data.id)
+                goodBtnClickListener.onClick(it, layoutPosition, data.id)
             }
 
         }
@@ -98,8 +106,13 @@ class BoardAdapter(val context: Context, var lifecycleOwner: LifecycleOwner) : R
         fun onClick(view: View, position: Int, id:Int)
     }
     private lateinit var itemClickListener : ItemClickListener
+    private lateinit var goodBtnClickListener: ItemClickListener
 
     fun setItemClickListener(itemClickListener: ItemClickListener){
         this.itemClickListener = itemClickListener
+    }
+
+    fun setLikeBtnClickListener(itemClickListener: ItemClickListener) {
+        this.goodBtnClickListener = itemClickListener
     }
 }
