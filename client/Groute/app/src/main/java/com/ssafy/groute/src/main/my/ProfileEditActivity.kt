@@ -45,7 +45,6 @@ import java.io.InputStream
 import java.util.regex.Pattern
 
 
-
 private const val TAG = "ProfileEditA_groute"
 class ProfileEditActivity : AppCompatActivity() {
     lateinit var binding: ActivityProfileEditBinding
@@ -351,7 +350,7 @@ class ProfileEditActivity : AppCompatActivity() {
 //            Log.d(TAG, "isAvailable: ${userEmail}")
 //            Log.d(TAG, "isAvailable: ${userBirth}")
 //            Log.d(TAG, "isAvailable: ${userGender}")
-            if(userEmail == "")
+            if(userEmail == null)
                 userEmail = ""
             if(userBirth == null)
                 userBirth = ""

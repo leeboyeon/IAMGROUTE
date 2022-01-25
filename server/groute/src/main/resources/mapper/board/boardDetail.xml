@@ -4,7 +4,7 @@
 
 <mapper namespace="com.ssafy.groute.mapper.board.BoardDetailMapper">
     <insert id="insertBoardDetail" parameterType="BoardDetail">
-        insert into boardDetail(title, content, img, board_id, user_id)
+        insert into boarddetail(title, content, img, board_id, user_id)
         values(#{title}, #{content}, #{img}, #{boardId}, #{userId})
     </insert>
 
@@ -24,7 +24,7 @@
                         then date_format(update_date, '%H:%i:%s')
                     else date_format(update_date, '%y.%m.%d')
                    end update_date
-               from boardDetail
+               from boarddetail
         where id = #{id}
     </select>
 
@@ -38,7 +38,7 @@
                         then date_format(update_date, '%H:%i:%s')
                     else date_format(update_date, '%y.%m.%d')
                    end update_date
-        from boardDetail
+        from boarddetail
     </select>
 
     <select id="selectBoardDetailSeparetedByTag"  resultMap="BoardDetailDTO">
@@ -51,23 +51,23 @@
                     then date_format(update_date, '%H:%i:%s')
                 else date_format(update_date, '%y.%m.%d')
                 end update_date
-        from boardDetail
+        from boarddetail
         where board_id = #{boardId}
     </select>
 
     <delete id="deleteBoardDetail" parameterType="int">
-        delete from boardDetail
+        delete from boarddetail
         where id = #{id}
     </delete>
 
     <update id="updateBoardDetail" parameterType="BoardDetail">
-        update BoardDetail
+        update boarddetail
         set title = #{title}, content = #{content}, img = #{img}, board_id = #{boardId}, update_date = now()
         where id = #{id}
     </update>
 
     <update id="updateBoardDetailHitCntOrLike" parameterType="BoardDetail">
-        update BoardDetail
+        update boarddetail
         set hitCnt = #{hitCnt}, heartCnt = #{heartCnt}
         where id = #{id}
     </update>

@@ -26,7 +26,7 @@
     </delete>
 
     <update id="updateAccount" parameterType="Account">
-        update Account
+        update account
         set spentMoney = #{spentMoney}, description = #{description}, category = #{category}, routes_id = #{routesId}
         where id = #{id}
     </update>

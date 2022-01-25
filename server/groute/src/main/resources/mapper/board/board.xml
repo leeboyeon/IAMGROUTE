@@ -23,7 +23,7 @@
     </delete>
 
     <update id="updateBoard" parameterType="Board">
-        update Board
+        update board
         set type = #{type}
         where id = #{id}
     </update>

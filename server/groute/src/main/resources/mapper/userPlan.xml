@@ -4,7 +4,7 @@
 
 <mapper namespace="com.ssafy.groute.mapper.UserPlanMapper">
     <insert id="insertUserPlan" parameterType="UserPlan">
-        insert into userPlan(user_id, title, description, startDate, endDate, totalDate, isPublic)
+        insert into userplan(user_id, title, description, startDate, endDate, totalDate, isPublic)
         values(#{userId}, #{title}, #{description}, #{startDate}, #{endDate}, #{totalDate}, #{isPublic})
         <selectKey resultType="int" keyProperty="id" order="AFTER">
             select last_insert_id()
@@ -15,21 +15,21 @@
         <result column="user_id" property="userId"></result>
     </resultMap>
     <select id="selectUserPlan" parameterType="int" resultMap="UserPlanDTO">
-        select * from userPlan
+        select * from userplan
         where id = #{id}
     </select>
 
     <select id="selectAllUserPlan"  resultMap="UserPlanDTO">
-        select * from userPlan
+        select * from userplan
     </select>
 
     <delete id="deleteUserPlan" parameterType="int">
-        delete from userPlan
+        delete from userplan
         where id = #{id}
     </delete>
 
     <update id="updateUserPlan" parameterType="UserPlan">
-        update userPlan
+        update userplan
         set user_id = #{userId}, title = #{title}, description = #{description}, startDate = #{startDate}, endDate = #{endDate}, totalDate = #{totalDate}, isPublic = #{isPublic}
         where id = #{id}
     </update>
