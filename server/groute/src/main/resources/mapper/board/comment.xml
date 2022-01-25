@@ -32,7 +32,7 @@
     </delete>
 
     <update id="updateComment" parameterType="Comment">
-        update Comment
+        update comment
         set content = #{content}, level = #{level}, groupNum = #{groupNum}, order = #{order}, boardDetail_id = #{boardDetailId}, #{userId}, user_id = #{userId}
         where id = #{id}
     </update>

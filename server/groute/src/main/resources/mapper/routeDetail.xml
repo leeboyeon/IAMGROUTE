@@ -4,7 +4,7 @@
 
 <mapper namespace="com.ssafy.groute.mapper.RouteDetailMapper">
     <insert id="insertRouteDetail" parameterType="RouteDetail">
-        insert into routeDetail(route_id, place_id, priority, memo)
+        insert into routedetail(route_id, place_id, priority, memo)
         values(#{routeId}, #{placeId}, #{priority}, #{memo})
     </insert>
 
@@ -14,32 +14,32 @@
     </resultMap>
 
     <select id="selectRouteDetail" parameterType="int" resultMap="RouteDetailDTO">
-        select * from routeDetail
+        select * from routedetail
         where id = #{id}
     </select>
 
     <select id="selectAllRouteDetail"  resultMap="RouteDetailDTO">
-        select * from routeDetail
+        select * from routedetail
     </select>
 
     <delete id="deleteRouteDetail" parameterType="int">
-        delete from routeDetail
+        delete from routedetail
         where id = #{id}
     </delete>
 
     <update id="updateRouteDetail" parameterType="RouteDetail">
-        update routeDetail
+        update routedetail
         set route_id = #{routeId}, place_id = #{placeId}, priority = #{priority}, memo = #{memo}
         where id = #{id}
     </update>
 
     <select id="selectByRouteId" parameterType="int" resultMap="RouteDetailDTO">
-        select * from routeDetail
+        select * from routedetail
         where route_id = #{routeId}
     </select>
 
     <select id="selectByPlaceId" parameterType="int" resultMap="RouteDetailDTO">
-        select * from routeDetail
+        select * from routedetail
         where place_id = #{placeId}
     </select>
 </mapper>
