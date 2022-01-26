@@ -26,14 +26,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/imageView3"
+            <ImageButton
+                android:id="@+id/imageButton3"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginRight="10dp"
+                android:background="@android:color/transparent"
                 android:scaleType="centerInside"
-                android:src="@drawable/boardicon1"
-                app:srcCompat="@drawable/backicon" />
+                android:src="@drawable/backicon" />
 
             <TextView
                 android:id="@+id/board_detail_board_name_tv"
