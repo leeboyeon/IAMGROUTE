@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.groute.src.dto.BoardDetail
+import com.ssafy.groute.src.response.BoardDetailWithCommentResponse
 import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil
 import retrofit2.Call
@@ -179,5 +180,27 @@ class BoardService {
             }
 
         })
+    }
+
+    fun getBoardDetailWithComment(id: Int): LiveData<MutableList<BoardDetailWithCommentResponse>> {
+        val responseLiveData: MutableLiveData<MutableList<BoardDetailWithCommentResponse>> = MutableLiveData()
+        val boardDetailWithCommentRequest: Call<MutableList<BoardDetailWithCommentResponse>> = RetrofitUtil.boardService.getBoardDetailWithComment(id)
+        boardDetailWithCommentRequest.enqueue(object : Callback<MutableList<BoardDetailWithCommentResponse>> {
+            override fun onResponse(call: Call<MutableList<BoardDetailWithCommentResponse>>, response: Response<MutableList<BoardDetailWithCommentResponse>>) {
+                val res = response.body()
+                if(response.code() == 200){
+                    if (res != null) {
+                        responseLiveData.value = res
+                        Log.d(TAG, "onResponse: $res")
+                    }
+                } else {
+                    Log.d(TAG, "onResponse: Error Code ${response.code()}")
+                }
+            }
+            override fun onFailure(call: Call<MutableList<BoardDetailWithCommentResponse>>, t: Throwable) {
+                Log.d(TAG, t.message ?: "통신오류")
+            }
+        })
+        return responseLiveData
     }
 }

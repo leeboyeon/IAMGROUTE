@@ -1,6 +1,7 @@
 package com.ssafy.groute.src.api
 
 import com.ssafy.groute.src.dto.BoardDetail
+import com.ssafy.groute.src.response.BoardDetailWithCommentResponse
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -23,7 +24,7 @@ interface BoardApi {
     fun deleteBoardDetail(@Query("id") id: Int) : Call<Boolean>
 
     @GET("/boardDetail/detail")
-    fun getListBoardDetail() : Call<MutableList<BoardDetail>>
+    fun getBoardDetailWithComment(id: Int) : Call<MutableList<BoardDetailWithCommentResponse>>
 
     // 게시판 글 찜하기
     @POST("/boardDetail/like")
