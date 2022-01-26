@@ -27,7 +27,11 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
     lateinit var ThemeAdapter: RouteThemeRecyclerviewAdapter
     var isEdit = false
 
-
+    @JvmName("setBoardList1")
+    fun setBoardList(list : List<BoardDetail>){
+        this.boardList = list.toMutableList()
+        notifyDataSetChanged()
+    }
     inner class BoardHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val profileIv = itemView.findViewById<ImageView>(R.id.item_board_profile_iv)
         val uidTv = itemView.findViewById<TextView>(R.id.item_board_uid_tv)

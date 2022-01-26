@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
@@ -20,6 +22,7 @@ import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_FREE_TYPE
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_QUESTION_TYPE
 import com.ssafy.groute.src.response.BoardDetailResponse
 import com.ssafy.groute.src.service.BoardService
+import com.ssafy.groute.util.BoardViewModel
 
 private const val TAG = "BoardDetailFragment"
 class BoardDetailFragment : Fragment() {
@@ -68,37 +71,42 @@ class BoardDetailFragment : Fragment() {
         }
 
     }
-    fun initAdapter(){
-        val boardDetailList = BoardService().getBoardDetailList(boardId)
-        boardDetailList.observe(
-            viewLifecycleOwner,
-            {   boardDetailList ->
-                boardDetailList.let {
-                    boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, boardDetailList, boardId, requireContext())
+    fun initViewModel(id : Int){
+        val boardViewModel = ViewModelProvider(this).get(BoardViewModel::class.java)
+        if(id == 1){
+            boardViewModel.getFreelist().observe(viewLifecycleOwner, Observer {
+                if(it != null){
+                    boardRecyclerAdapter.setBoardList(it)
+                    boardRecyclerAdapter.notifyDataSetChanged()
                 }
-                binding.boardDetailRvListitem.apply {
-                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-                    adapter = boardRecyclerAdapter
-                    adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-                }
-                boardRecyclerAdapter.setModifyClickListener(object : BoardRecyclerviewAdapter.ItemModifyListener{
-                    override fun onClick(position: Int) {
-                        mainActivity.moveFragment(8,"boardDetailId",boardDetailList[position].id)
-                    }
 
-                })
                 boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
                     override fun onClick(view: View, position: Int, name: String) {
-                        mainActivity.moveFragment(6,"boardDetailId", boardDetailList[position].id)
+                        mainActivity.moveFragment(6,"boardDetailId", boardViewModel.freeList.value!!.get(position).id)
                     }
-
                 })
-                Log.d(TAG, "initAdapter: ${boardRecyclerAdapter.isEdit}")
+            })
+        }else if(id == 2){
+            boardViewModel.getQuestionlist().observe(viewLifecycleOwner, Observer {
+                if(it != null){
+                    boardRecyclerAdapter.setBoardList(it)
+                    boardRecyclerAdapter.notifyDataSetChanged()
+                }
 
-            }
-        )
+                boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
+                    override fun onClick(view: View, position: Int, name: String) {
+                        mainActivity.moveFragment(6,"boardDetailId", boardViewModel.questionList.value!!.get(position).id)
+                    }
+                })
+            })
+        }
 
-
+    }
+    fun initAdapter(){
+        initViewModel(boardId)
+        binding.boardDetailRvListitem.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, boardDetailList, boardId, requireContext())
+        binding.boardDetailRvListitem.adapter = boardRecyclerAdapter
     }
 
     companion object {
