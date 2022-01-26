@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserPlanServiceImpl implements UserPlanService {
@@ -23,6 +25,8 @@ public class UserPlanServiceImpl implements UserPlanService {
     AccountMapper accountMapper;
     @Autowired
     RouteDetailMapper routeDetailMapper;
+    @Autowired
+    PlaceMapper placeMapper;
 
     @Override
     @Transactional
@@ -39,8 +43,24 @@ public class UserPlanServiceImpl implements UserPlanService {
     }
 
     @Override
-    public UserPlan selectUserPlan(int id) throws Exception {
-        return userPlanMapper.selectUserPlan(id);
+    public Map<String,Object> selectUserPlan(int id) throws Exception {
+        Map<String,Object> res = new HashMap<>();
+        UserPlan userPlan = userPlanMapper.selectUserPlan(id);
+        res.put("userPlan",userPlan);
+        List<Routes> routesList = routesMapper.selectByPlanId(userPlan.getId());
+        List<Route> routeList = new ArrayList<>();
+        for(Routes r: routesList) {
+            Route route = routeMapper.selectRoute(r.getRouteId());
+            List<RouteDetail> routeDetailList = routeDetailMapper.selectByRouteId(r.getRouteId());
+            for(RouteDetail routeDetail: routeDetailList){
+                routeDetailList.get(routeDetail.getPriority()-1)
+                        .setPlace(placeMapper.selectPlace(routeDetail.getPlaceId()));
+            }
+            route.setRouteDetailList(routeDetailList);;
+            routeList.add(route);
+        }
+        res.put("routeList",routeList);
+        return res;
     }
 
     @Override

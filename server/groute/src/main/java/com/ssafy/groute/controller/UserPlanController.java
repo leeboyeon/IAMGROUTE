@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/plan")
@@ -35,16 +36,16 @@ public class UserPlanController {
         return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
     }
 
-    @ApiOperation(value = "userPlan 검색",notes = "id로 userPlan 하나 검색")
+    @ApiOperation(value = "userPlan 검색",notes = "id로 userPlan 상세 정보 반환")
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> detailUserPlan(@PathVariable("id") int id) throws Exception{
 
-        UserPlan res = userPlanService.selectUserPlan(id);
+        Map<String,Object> res = userPlanService.selectUserPlan(id);
         if(res==null){
             return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<UserPlan>(res,HttpStatus.OK);
+        return new ResponseEntity<Map<String,Object>>(res,HttpStatus.OK);
     }
 
     @ApiOperation(value = "list userPlan",notes = "모든 userPlan 반환")
@@ -94,7 +95,7 @@ public class UserPlanController {
         try {
             routeDetailService.insertRouteDetail(routeDetail);
         }catch (Exception e){
-//            e.printStackTrace();
+            e.printStackTrace();
             return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
         }
 

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,6 +17,7 @@ public class Route {
     private int day;
     private String memo;
     private String isCustom;
+    private List<RouteDetail> routeDetailList;
 
     public Route(String name, int day, String memo, String isCustom) {
         this.name = name;
