@@ -43,6 +43,11 @@ class BoardFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        mainActivity.hideBottomNav(false)
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity

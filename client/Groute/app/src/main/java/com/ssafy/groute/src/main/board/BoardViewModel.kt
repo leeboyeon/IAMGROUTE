@@ -32,14 +32,26 @@ class BoardViewModel : ViewModel(){
     fun getBoardFreeList(owner: LifecycleOwner) {
         BoardService().getBoardDetailList(BOARD_FREE_TYPE).observe(owner, Observer {
             Log.d(TAG, "getBoardFreeList: $it")
-            setFreeList(it)
+            val tmpList: ArrayList<BoardDetail> = arrayListOf()
+            if(it != null) {
+                for (i in 0..4) {
+                    tmpList.add(it.get(i))
+                }
+            }
+            setFreeList(tmpList)
         })
     }
 
     fun getBoardQuestionList(owner: LifecycleOwner) {
         BoardService().getBoardDetailList(BOARD_QUESTION_TYPE).observe(owner, Observer {
             Log.d(TAG, "getBoardQuestionList: $it")
-            setQuestionList(it)
+            val tmpList: ArrayList<BoardDetail> = arrayListOf()
+            if(it != null) {
+                for (i in 0..4) {
+                    tmpList.add(it.get(i))
+                }
+            }
+            setQuestionList(tmpList)
         })
     }
 
