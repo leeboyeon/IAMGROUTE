@@ -93,6 +93,7 @@ class BoardDetailDetailFragment : Fragment() {
             }
 
             override fun onSuccess(code: Int, responseData: Map<String, Any>) {
+
                 Log.d(TAG, "onSuccess: ${JSONObject(responseData).getJSONObject("boardDetail")}")
                 Log.d(TAG, "onSuccess: ${JSONObject(responseData)}")
 
