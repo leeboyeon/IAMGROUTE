@@ -27,7 +27,7 @@ class BoardAdapter(val context: Context, var lifecycleOwner: LifecycleOwner) : R
     var boardList = mutableListOf<BoardDetail>()
 
     @JvmName("setBoardList1")
-    fun setBoardList(list: List<BoardDetail>) {
+    fun setBoardList(list: ArrayList<BoardDetail>) {
         this.boardList = list.toMutableList()
         notifyDataSetChanged()
     }
@@ -44,7 +44,6 @@ class BoardAdapter(val context: Context, var lifecycleOwner: LifecycleOwner) : R
                         .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
                         .circleCrop()
                         .into(itemView.findViewById(R.id.board_iv_userImg))
-                    Log.d(TAG, "bindInfo : ${it.img}  ${it.nickname}")
                     itemView.findViewById<TextView>(R.id.board_tv_write_userNick).text = it.nickname
                 }
             )

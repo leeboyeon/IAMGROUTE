@@ -82,7 +82,11 @@ class BoardFragment : Fragment() {
         val boardViewModel = ViewModelProvider(this).get(BoardViewModel::class.java)
         boardViewModel.getFreelist().observe(viewLifecycleOwner, Observer {
             if(it != null){
-                boardFreeAdapter.setBoardList(it)
+                val tmpList:ArrayList<BoardDetail> = arrayListOf()
+                for(i in 0..4){
+                    tmpList.add(it.get(i))
+                }
+                boardFreeAdapter.setBoardList(tmpList)
                 boardFreeAdapter.notifyDataSetChanged()
             }else{
                 Toast.makeText(requireContext(),"Error List null",Toast.LENGTH_SHORT).show()
@@ -103,7 +107,11 @@ class BoardFragment : Fragment() {
         //질문게시판
         boardViewModel.getQuestionlist().observe(viewLifecycleOwner, Observer {
             if(it != null){
-                boardQuestionAdapter.setBoardList(it)
+                val tmpList:ArrayList<BoardDetail> = arrayListOf()
+                for(i in 0..4){
+                    tmpList.add(it.get(i))
+                }
+                boardQuestionAdapter.setBoardList(tmpList)
                 boardQuestionAdapter.notifyDataSetChanged()
             }
 
