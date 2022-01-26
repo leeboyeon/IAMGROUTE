@@ -24,7 +24,7 @@ interface BoardApi {
     fun deleteBoardDetail(@Query("id") id: Int) : Call<Boolean>
 
     @GET("/boardDetail/detail")
-    fun getBoardDetailWithComment(id: Int) : Call<MutableList<BoardDetailWithCommentResponse>>
+    fun getBoardDetailWithComment(@Query("id") id: Int) : Call<BoardDetailWithCommentResponse>
 
     // 게시판 글 찜하기
     @POST("/boardDetail/like")

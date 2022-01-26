@@ -182,11 +182,12 @@ class BoardService {
         })
     }
 
-    fun getBoardDetailWithComment(id: Int): LiveData<MutableList<BoardDetailWithCommentResponse>> {
-        val responseLiveData: MutableLiveData<MutableList<BoardDetailWithCommentResponse>> = MutableLiveData()
-        val boardDetailWithCommentRequest: Call<MutableList<BoardDetailWithCommentResponse>> = RetrofitUtil.boardService.getBoardDetailWithComment(id)
-        boardDetailWithCommentRequest.enqueue(object : Callback<MutableList<BoardDetailWithCommentResponse>> {
-            override fun onResponse(call: Call<MutableList<BoardDetailWithCommentResponse>>, response: Response<MutableList<BoardDetailWithCommentResponse>>) {
+    fun getBoardDetailWithComment(id: Int): LiveData<BoardDetailWithCommentResponse> {
+        val responseLiveData: MutableLiveData<BoardDetailWithCommentResponse> = MutableLiveData()
+        val boardDetailWithCommentRequest: Call<BoardDetailWithCommentResponse> = RetrofitUtil.boardService.getBoardDetailWithComment(id)
+        Log.d(TAG, "getBoardDetailWithComment: $id")
+        boardDetailWithCommentRequest.enqueue(object : Callback<BoardDetailWithCommentResponse> {
+            override fun onResponse(call: Call<BoardDetailWithCommentResponse>, response: Response<BoardDetailWithCommentResponse>) {
                 val res = response.body()
                 if(response.code() == 200){
                     if (res != null) {
@@ -197,7 +198,7 @@ class BoardService {
                     Log.d(TAG, "onResponse: Error Code ${response.code()}")
                 }
             }
-            override fun onFailure(call: Call<MutableList<BoardDetailWithCommentResponse>>, t: Throwable) {
+            override fun onFailure(call: Call<BoardDetailWithCommentResponse>, t: Throwable) {
                 Log.d(TAG, t.message ?: "통신오류")
             }
         })

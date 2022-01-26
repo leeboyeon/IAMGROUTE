@@ -8,14 +8,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentBoardDetailDetailBinding
+import com.ssafy.groute.src.dto.BoardDetail
+import com.ssafy.groute.src.dto.Comment
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.BoardService
+import com.ssafy.groute.src.service.CommentService
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
 import org.json.JSONObject
@@ -24,8 +28,9 @@ private const val TAG = "BoardDetailDetailFragme"
 class BoardDetailDetailFragment : Fragment() {
     private lateinit var binding: FragmentBoardDetailDetailBinding
     private lateinit var mainActivity: MainActivity
-    private var commentAdapter:CommentAdapter = CommentAdapter()
-    private val lists = arrayListOf<Comment>()
+    private lateinit var commentAdapter:CommentAdapter
+    private var commentCount = 0
+    private var userId : Any= ""
 
     private var boardDetailId = -1
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,17 +62,17 @@ class BoardDetailDetailFragment : Fragment() {
     }
     fun initData(){
         getListBoardDetail(boardDetailId)
+        commentWrite(boardDetailId)
     }
     fun initAdapter(){
-        commentAdapter = CommentAdapter()
-        lists.apply {
-            add(Comment(userImg = R.drawable.user, userNick = "보연팀장", comment = "지우가 세상에서 젤 너무해.. 디자인 토할거같아요.."))
-            add(Comment(userImg = R.drawable.user, userNick = "보연팀장", comment = "지우가 세상에서 젤 너무해.. 디자인 토할거같아요.."))
-            add(Comment(userImg = R.drawable.user, userNick = "보연팀장", comment = "지우가 세상에서 젤 너무해.. 디자인 토할거같아요.."))
-            add(Comment(userImg = R.drawable.user, userNick = "보연팀장", comment = "지우가 세상에서 젤 너무해.. 디자인 토할거같아요.."))
-            commentAdapter.list = lists
-            commentAdapter.notifyDataSetChanged()
-        }
+        commentAdapter = CommentAdapter(viewLifecycleOwner)
+        val boardDetailWithComment = BoardService().getBoardDetailWithComment(boardDetailId)
+        boardDetailWithComment.observe(
+            viewLifecycleOwner, {
+                commentCount = it.commentList.size
+                commentAdapter.setCommentList(it.commentList)
+            }
+        )
         binding.boardDetailRvComment.apply{
             layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
             adapter = commentAdapter
@@ -99,7 +104,7 @@ class BoardDetailDetailFragment : Fragment() {
                 val boardDetail = JSONObject(responseData).getJSONObject("boardDetail")
                 val title = boardDetail.get("title")
                 val content = boardDetail.get("content")
-                val userId = boardDetail.get("userId")
+                userId = boardDetail.get("userId")
                 val img = boardDetail.get("img")
 
                 binding.boardDetailTvUserName.setText(userId.toString())
@@ -120,6 +125,30 @@ class BoardDetailDetailFragment : Fragment() {
             }
 
         })
+    }
+
+    fun commentWrite(boardDetailId: Int) {
+        binding.commentWriteTv.setOnClickListener {
+            if(binding.commentWriteEt.text.toString() == "") {
+                Toast.makeText(mainActivity, "댓글을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            } else {
+                var comment = Comment(boardDetailId, binding.commentWriteEt.text.toString(), commentCount + 1, userId.toString())
+                CommentService().insertBoardComment(comment, object : RetrofitCallback<Any> {
+                    override fun onError(t: Throwable) {
+                        Log.d(TAG, "onError: 댓글 쓰기 에러")
+                    }
+                    override fun onSuccess(code: Int, responseData: Any) {
+                        Toast.makeText(requireContext(),"댓글 쓰기 성공",Toast.LENGTH_SHORT).show()
+                    }
+
+                    override fun onFailure(code: Int) {
+                        Log.d(TAG, "onFailure: 댓글 쓰기 실패")
+                    }
+
+                })
+
+            }
+        }
     }
     companion object {
         @JvmStatic

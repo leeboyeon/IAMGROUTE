@@ -7,5 +7,5 @@ import java.io.Serializable
 
 data class BoardDetailWithCommentResponse(
     @SerializedName("boardDetail") var boardDetail: BoardDetail,
-    @SerializedName("comments") var comment: Comment,
+    @SerializedName("comments") var commentList: List<Comment>,
 ) : Serializable
