@@ -8,9 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
@@ -19,8 +19,6 @@ import com.ssafy.groute.databinding.FragmentBoardBinding
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.BoardService
-import com.ssafy.groute.util.BoardViewModel
-import com.ssafy.groute.util.MainViewModel
 import com.ssafy.groute.util.RetrofitCallback
 
 private const val TAG = "BoardFragment"
@@ -32,18 +30,18 @@ class BoardFragment : Fragment() {
     lateinit var boardQuestionAdapter : BoardAdapter
     val magazines = arrayListOf<Magazine>()
     lateinit var userId: String
-//    private lateinit var boardViewModel: BoardViewModel
+    private lateinit var boardViewModel: BoardViewModel
 
     companion object{
         const val BOARD_FREE_TYPE = 1 // 자유게시판 타입
         const val BOARD_QUESTION_TYPE = 2 // 질문게시판 타입
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
 
     }
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -54,7 +52,10 @@ class BoardFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentBoardBinding.inflate(inflater, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_board, container, false)
+        boardViewModel = ViewModelProvider(this).get(BoardViewModel::class.java)
+        binding.lifecycleOwner = this
+        binding.boardViewModel = boardViewModel
         return binding.root
     }
 
@@ -73,59 +74,8 @@ class BoardFragment : Fragment() {
             Log.d(TAG, "onViewCreated: ")
             mainActivity.moveFragment(5, "boardId", BOARD_QUESTION_TYPE)
         }
-
-
     }
 
-    fun initViewModel(){
-        //자유게시판
-        val boardViewModel = ViewModelProvider(this).get(BoardViewModel::class.java)
-        boardViewModel.getFreelist().observe(viewLifecycleOwner, Observer {
-            if(it != null){
-                boardFreeAdapter.setBoardList(it)
-                boardFreeAdapter.notifyDataSetChanged()
-            }else{
-                Toast.makeText(requireContext(),"Error List null",Toast.LENGTH_SHORT).show()
-            }
-
-            boardFreeAdapter.setItemClickListener(object: BoardAdapter.ItemClickListener{
-                override fun onClick(view: View, position: Int, id: Int) {
-                    mainActivity.moveFragment(6,"boardDetailId", boardViewModel.freeList.value!!.get(position).id)
-                }
-            })
-
-            boardFreeAdapter.setLikeBtnClickListener(object : BoardAdapter.ItemClickListener {
-                override fun onClick(view: View, position: Int, id: Int) {
-                    boardLike(id, userId)
-                }
-            })
-        })
-        //질문게시판
-        boardViewModel.getQuestionlist().observe(viewLifecycleOwner, Observer {
-            if(it != null){
-                boardQuestionAdapter.setBoardList(it)
-                boardQuestionAdapter.notifyDataSetChanged()
-            }
-
-            boardQuestionAdapter.setItemClickListener(object:BoardAdapter.ItemClickListener{
-                override fun onClick(view: View, position: Int, id: Int) {
-                    mainActivity.moveFragment(6,"boardDetailId", boardViewModel.questionList.value!!.get(position).id)
-                }
-            })
-
-            boardQuestionAdapter.setLikeBtnClickListener(object : BoardAdapter.ItemClickListener {
-                override fun onClick(view: View, position: Int, id: Int) {
-                    boardLike(id, userId)
-                }
-            })
-
-        })
-    }
-    fun initFreeRecyclerview(){
-        binding.boardRvFree.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        boardFreeAdapter = BoardAdapter(requireContext(),viewLifecycleOwner)
-        binding.boardRvFree.adapter = boardFreeAdapter
-    }
     fun initMagazineRecyclerview(){
         magazineAdapter = MagazineAdapter()
 
@@ -143,16 +93,49 @@ class BoardFragment : Fragment() {
 
         }
     }
+
+    fun initFreeRecyclerview(){
+        boardViewModel.getBoardFreeList(this)
+        binding.boardRvFree.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        boardFreeAdapter = BoardAdapter(requireContext(),viewLifecycleOwner)
+        boardFreeAdapter.setHasStableIds(true)
+        binding.boardRvFree.adapter = boardFreeAdapter
+
+        boardFreeAdapter.setItemClickListener(object: BoardAdapter.ItemClickListener{
+            override fun onClick(view: View, position: Int, id: Int) {
+                mainActivity.moveFragment(6,"boardDetailId", boardViewModel.boardFreeList.value!!.get(position).id)
+            }
+        })
+
+        boardFreeAdapter.setLikeBtnClickListener(object : BoardAdapter.ItemClickListener {
+            override fun onClick(view: View, position: Int, id: Int) {
+                boardLike(id, userId)
+            }
+        })
+    }
     fun initQuestionRecyclerView(){
+        boardViewModel.getBoardQuestionList(this)
         binding.boardRvQuestion.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         boardQuestionAdapter = BoardAdapter(requireContext(),viewLifecycleOwner)
+        boardQuestionAdapter.setHasStableIds(true)
         binding.boardRvQuestion.adapter = boardQuestionAdapter
+
+        boardQuestionAdapter.setItemClickListener(object:BoardAdapter.ItemClickListener{
+            override fun onClick(view: View, position: Int, id: Int) {
+                mainActivity.moveFragment(6,"boardDetailId", boardViewModel.boardQuestionList.value!!.get(position).id)
+            }
+        })
+
+        boardQuestionAdapter.setLikeBtnClickListener(object : BoardAdapter.ItemClickListener {
+            override fun onClick(view: View, position: Int, id: Int) {
+                boardLike(id, userId)
+            }
+        })
     }
     fun initAdapter(){
         initMagazineRecyclerview()
         initFreeRecyclerview()
         initQuestionRecyclerView()
-        initViewModel()
     }
 
     fun boardLike(boardDetailId: Int, userId: String) {
@@ -162,7 +145,8 @@ class BoardFragment : Fragment() {
             }
 
             override fun onSuccess(code: Int, responseData: Any) {
-                initAdapter()
+                boardViewModel.getBoardFreeList(viewLifecycleOwner)
+                boardViewModel.getBoardQuestionList(viewLifecycleOwner)
             }
 
             override fun onFailure(code: Int) {

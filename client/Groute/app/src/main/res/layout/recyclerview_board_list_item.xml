@@ -7,6 +7,7 @@
         <variable
             name="boardDetail"
             type="com.ssafy.groute.src.dto.BoardDetail" />
+
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

@@ -37,15 +37,16 @@ class BoardService {
         return responseLiveData
     }
 
-    fun getBoardDetailList(boardId: Int): LiveData<MutableList<BoardDetail>> {
-        val responseLiveData: MutableLiveData<MutableList<BoardDetail>> = MutableLiveData()
+    fun getBoardDetailList(boardId: Int): MutableLiveData<MutableList<BoardDetail>> {
+        var responseLiveData: MutableLiveData<MutableList<BoardDetail>> = MutableLiveData()
         val boardDetailListRequest: Call<MutableList<BoardDetail>> = RetrofitUtil.boardService.listBoardDetail(boardId)
         boardDetailListRequest.enqueue(object : Callback<MutableList<BoardDetail>> {
             override fun onResponse(call: Call<MutableList<BoardDetail>>, response: Response<MutableList<BoardDetail>>) {
-                val res = response.body()
+                var res = response.body()
                 if(response.code() == 200){
                     if (res != null) {
-                        responseLiveData.value = res
+                        responseLiveData.postValue(res)
+                        //responseLiveData.value = res
                         Log.d(TAG, "onResponse: $res")
                     }
                 } else {
@@ -54,11 +55,34 @@ class BoardService {
             }
 
             override fun onFailure(call: Call<MutableList<BoardDetail>>, t: Throwable) {
+                responseLiveData.postValue(null)
                 Log.d(TAG, t.message ?: "통신오류")
             }
         })
         return responseLiveData
     }
+//    suspend fun getBoardDetailList(boardId: Int): MutableList<BoardDetail> {
+//        var list = mutableListOf<BoardDetail>()
+//        val boardDetailListRequest: Call<MutableList<BoardDetail>> = RetrofitUtil.boardService.listBoardDetail(boardId)
+//        boardDetailListRequest.enqueue(object : Callback<MutableList<BoardDetail>> {
+//            override fun onResponse(call: Call<MutableList<BoardDetail>>, response: Response<MutableList<BoardDetail>>) {
+//                val res = response.body()
+//                if(response.code() == 200){
+//                    if (res != null) {
+//                        list = res
+//                        Log.d(TAG, "onResponse: $res")
+//                    }
+//                } else {
+//                    Log.d(TAG, "onResponse: Error Code ${response.code()}")
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<MutableList<BoardDetail>>, t: Throwable) {
+//                Log.d(TAG, t.message ?: "통신오류")
+//            }
+//        })
+//        return list
+//    }
 
     fun insertBoardDetail(boardDetail:BoardDetail, callback: RetrofitCallback<Boolean>){
         RetrofitUtil.boardService.insertBoardDetail(boardDetail).enqueue(object : Callback<Boolean> {

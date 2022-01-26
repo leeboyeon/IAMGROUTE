@@ -26,10 +26,13 @@ class BoardAdapter(val context: Context, var lifecycleOwner: LifecycleOwner) : R
 
     var boardList = mutableListOf<BoardDetail>()
 
-    @JvmName("setBoardList1")
-    fun setBoardList(list: List<BoardDetail>) {
-        this.boardList = list.toMutableList()
-        notifyDataSetChanged()
+    fun setList(list: List<BoardDetail>?) {
+        if (list == null) {
+            this.boardList = ArrayList()
+        } else {
+            this.boardList = list.toMutableList()!!
+            notifyDataSetChanged()
+        }
     }
     // 현재 로그인한 유저의 아이디
     val userId = ApplicationClass.sharedPreferencesUtil.getUser().id
@@ -81,6 +84,7 @@ class BoardAdapter(val context: Context, var lifecycleOwner: LifecycleOwner) : R
 
             goodBtn.setOnClickListener {
                 goodBtnClickListener.onClick(it, layoutPosition, data.id)
+
             }
 
         }
@@ -97,6 +101,10 @@ class BoardAdapter(val context: Context, var lifecycleOwner: LifecycleOwner) : R
             bindInfo(boardList[position])
 
         }
+    }
+
+    override fun getItemId(position: Int): Long {
+        return boardList.get(position).id.toLong()
     }
 
     override fun getItemCount(): Int {
