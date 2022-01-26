@@ -4,24 +4,25 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.dto.User
+import com.ssafy.groute.src.response.UserInfoResponse
+import com.ssafy.groute.src.service.BoardService
+import com.ssafy.groute.src.service.UserService
+import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
+open class MainViewModel : ViewModel() {
+    val userInfo = UserService().getUserInfo(ApplicationClass.sharedPreferencesUtil.getUser().id)
+
+    private var users = MutableLiveData<LiveData<UserInfoResponse>>().apply {
+        value = userInfo
+    }
+
+    fun getUser() :LiveData<UserInfoResponse>{
+        return userInfo
+    }
 
 
-//    val boardDetailList = mutableListOf<BoardDetail>()
-//    val liveboardDetailList = MutableLiveData<MutableList<BoardDetail>>().apply {
-//        value = boardDetailList
-//    }
-//
-//    fun removeBoardDetailItem(position: Int){
-//        boardDetailList.removeAt(position)
-//        liveboardDetailList.value = boardDetailList
-//    }
-//    fun insertBoardDetailItem(boardDetail: BoardDetail){
-//        boardDetailList.add(boardDetail)
-//        liveboardDetailList.value = boardDetailList
-//    }
 }

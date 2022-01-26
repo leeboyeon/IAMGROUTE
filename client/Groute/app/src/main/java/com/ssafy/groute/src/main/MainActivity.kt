@@ -9,10 +9,12 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.View
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ssafy.groute.R
@@ -39,6 +41,7 @@ import java.security.NoSuchAlgorithmException
 
 private const val TAG = "MainActivity_groute"
 class MainActivity : AppCompatActivity() {
+    private val viewModel : MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
     private lateinit var bottomNavigation: BottomNavigationView
     // 모든 퍼미션 관련 배열
@@ -115,6 +118,9 @@ class MainActivity : AppCompatActivity() {
                 PERMISSIONS_CODE
             )
         }
+
+        binding.lifecycleOwner = this
+        binding.viewModeluser = viewModel
     }
     fun openFragment(index:Int, key:String, value:Int){
         val transaction = supportFragmentManager.beginTransaction()
@@ -165,25 +171,24 @@ class MainActivity : AppCompatActivity() {
     // 프로필바 사용자 정보 갱신
     fun initProfileBar() {
         var user = ApplicationClass.sharedPreferencesUtil.getUser()
-//        binding.mainTvUsername.text = "${user.id}님"
-        val userInfo = UserService().getUserInfo(user.id)
-        userInfo.observe(
-            this, {
-                if(it.type.equals("sns")){
-                    Log.d(TAG, "initProfileBar_SNS: ${it.img}")
-                    Glide.with(this)
-                        .load(it.img)
-                        .circleCrop()
-                        .into(binding.mainIvUserimg)
-                } else{
-                    Log.d(TAG, "initProfileBar: ${it.img}")
-                    Glide.with(this)
-                        .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
-                        .circleCrop()
-                        .into(binding.mainIvUserimg)
-                }
+
+        viewModel.getUser().observe(this, Observer {
+            binding.mainTvUsername.text = it.nickname.toString()
+            if(it.type.equals("sns")){
+                Log.d(TAG, "initProfileBar_SNS: ${it.img}")
+                Glide.with(this)
+                    .load(it.img)
+                    .circleCrop()
+                    .into(binding.mainIvUserimg)
+            } else{
+                Log.d(TAG, "initProfileBar: ${it.img}")
+                Glide.with(this)
+                    .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
+                    .circleCrop()
+                    .into(binding.mainIvUserimg)
             }
-        )
+        })
+
 
     }
 

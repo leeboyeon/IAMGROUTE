@@ -10,7 +10,9 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
@@ -19,7 +21,6 @@ import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
-
 private const val TAG = "BoardAdapter_groute"
 class BoardAdapter(val context: Context, var lifecycleOwner: LifecycleOwner) : RecyclerView.Adapter<BoardAdapter.BoardHolder>(){
 
