@@ -26,7 +26,6 @@ class BoardViewModel : ViewModel(){
     fun getBoardDetailList(boardId: Int)  {
         //var boardDetailList =  mutableListOf<BoardDetail>()
         val boardDetailListRequest: Call<MutableList<BoardDetail>> = RetrofitUtil.boardService.listBoardDetail(boardId)
-
         boardDetailListRequest.enqueue(object : Callback<MutableList<BoardDetail>> {
             override fun onResponse(call: Call<MutableList<BoardDetail>>, response: Response<MutableList<BoardDetail>>) {
                 val res = response.body()

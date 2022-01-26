@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.R
@@ -23,11 +25,13 @@ class MyFragment : Fragment() {
     private lateinit var mainActivity:MainActivity
     private lateinit var userInfoResponse: UserInfoResponse
     private lateinit var intent: Intent
+    private lateinit var viewModel: MyViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
+
 
     }
 
@@ -54,7 +58,11 @@ class MyFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMyBinding.inflate(inflater,container,false)
+        //binding = FragmentMyBinding.inflate(inflater,container,false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my, container, false)
+        viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+        binding.vm = viewModel
+        binding.lifecycleOwner = this
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,26 +91,27 @@ class MyFragment : Fragment() {
 
     // 마이페이지 사용자 정보 갱신
     fun initUserInfo() {
-        var user = ApplicationClass.sharedPreferencesUtil.getUser()
-        binding.myProfileId.text = "${user.id}"
-        val userInfo = UserService().getUserInfo(user.id)
-        userInfo.observe(
-            viewLifecycleOwner, {
-                if(it.type.equals("sns")){
-                    Glide.with(this)
-                        .load(it.img)
-                        .circleCrop()
-                        .into(binding.myProfileImg)
-                } else{
-                    Log.d(TAG, "initProfileBar: ${it.img}")
-                    Glide.with(this)
-                        .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
-                        .circleCrop()
-                        .into(binding.myProfileImg)
-                }
-                userInfoResponse = it
-            }
-        )
+//        var user = ApplicationClass.sharedPreferencesUtil.getUser()
+        viewModel.initData(this)
+        //binding.myProfileId.text = "${user.id}"
+//        val userInfo = UserService().getUserInfo(user.id)
+//        userInfo.observe(
+//            viewLifecycleOwner, {
+//                if(it.type.equals("sns")){
+//                    Glide.with(this)
+//                        .load(it.img)
+//                        .circleCrop()
+//                        .into(binding.myProfileImg)
+//                } else{
+//                    Log.d(TAG, "initProfileBar: ${it.img}")
+//                    Glide.with(this)
+//                        .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
+//                        .circleCrop()
+//                        .into(binding.myProfileImg)
+//                }
+//                userInfoResponse = it
+//            }
+//        )
 //        userInfo.observe(
 //            viewLifecycleOwner,
 //            {

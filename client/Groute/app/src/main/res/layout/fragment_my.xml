@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".src.main.my.MyFragment">
+    >
+
+    <data>
+        <variable
+            name="vm"
+            type="com.ssafy.groute.src.main.my.MyViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -37,7 +41,7 @@
                 android:layout_height="150dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="15dp"
-                android:src="@drawable/yeosu" />
+                imageRes="@{vm.img}"/>
 
             <TextView
                 android:id="@+id/my_profile_id"
@@ -46,7 +50,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
-                android:text="김싸피"
+                android:text="@{vm.nick}"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -84,4 +88,4 @@
             app:layout_constraintTop_toBottomOf="@+id/mypagetablayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+</layout>
