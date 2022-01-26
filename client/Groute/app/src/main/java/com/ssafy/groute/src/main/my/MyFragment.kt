@@ -91,38 +91,7 @@ class MyFragment : Fragment() {
 
     // 마이페이지 사용자 정보 갱신
     fun initUserInfo() {
-//        var user = ApplicationClass.sharedPreferencesUtil.getUser()
         viewModel.initData(this)
-        //binding.myProfileId.text = "${user.id}"
-//        val userInfo = UserService().getUserInfo(user.id)
-//        userInfo.observe(
-//            viewLifecycleOwner, {
-//                if(it.type.equals("sns")){
-//                    Glide.with(this)
-//                        .load(it.img)
-//                        .circleCrop()
-//                        .into(binding.myProfileImg)
-//                } else{
-//                    Log.d(TAG, "initProfileBar: ${it.img}")
-//                    Glide.with(this)
-//                        .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
-//                        .circleCrop()
-//                        .into(binding.myProfileImg)
-//                }
-//                userInfoResponse = it
-//            }
-//        )
-//        userInfo.observe(
-//            viewLifecycleOwner,
-//            {
-//                Glide.with(this)
-//                    .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
-//                    .circleCrop()
-//                    .into(binding.myProfileImg)
-//
-//                userInfoResponse = it
-//            }
-//        )
     }
 
 
