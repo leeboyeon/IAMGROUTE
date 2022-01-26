@@ -1,7 +1,9 @@
 package com.ssafy.groute.mapper.board;
 
 import com.ssafy.groute.dto.board.BoardDetailLike;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface BoardDetailLikeMapper {
     BoardDetailLike findBoardLikeByUIdBDId(String userId, int boardDetailId) throws Exception;
     void deleteBoardDetailLike(int id) throws Exception;
@@ -9,4 +11,5 @@ public interface BoardDetailLikeMapper {
     int findLikeByBDId(int boardDetailId) throws Exception;
     int findLikeById(int id) throws Exception;
     void deleteAllBoardDetailLike(int boardDetailId) throws Exception;
+    void deleteAllBoardDetailLikeByUId(String userId) throws Exception;
 }

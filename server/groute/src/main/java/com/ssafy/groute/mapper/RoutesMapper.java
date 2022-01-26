@@ -14,4 +14,6 @@ public interface RoutesMapper {
     void updateRoutes(Routes routes) throws Exception;
     List<Routes> selectByRouteId(int routeId) throws Exception;
     List<Routes> selectByPlanId(int planId) throws Exception;
+    List<Integer> findAllRoutesIdsByPId(int planId) throws Exception;
+    void deleteAllRoutesByPId(int planId) throws Exception;
 }

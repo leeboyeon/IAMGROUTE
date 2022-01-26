@@ -18,4 +18,6 @@ public class UserPlan {
     private String endDate;
     private int totalDate;
     private String isPublic;
+    private Double rate;
+    private int heartCnt;
 }

@@ -26,22 +26,4 @@ public class Place {
     private double rate;
     private int heartCnt;
 
-    @Override
-    public String toString() {
-        return "Place{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", lat='" + lat + '\'' +
-                ", lng='" + lng + '\'' +
-                ", zipCode='" + zipCode + '\'' +
-                ", contact='" + contact + '\'' +
-                ", address='" + address + '\'' +
-                ", description='" + description + '\'' +
-                ", themeId=" + themeId +
-                ", areaId=" + areaId +
-                ", img='" + img + '\'' +
-                ", userId='" + userId + '\'' +
-                '}';
-    }
 }

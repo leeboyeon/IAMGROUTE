@@ -41,4 +41,9 @@
         delete from comment
         where boardDetail_id = #{boardDetailId}
     </delete>
+
+    <delete id="deleteAllCommentByUId" parameterType="String">
+        delete from comment
+        where user_id = #{userId}
+    </delete>
 </mapper>

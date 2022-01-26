@@ -42,4 +42,14 @@
         select * from routes
         where route_id = #{RouteId}
     </select>
+
+    <select id="findAllRoutesIdsByPId" parameterType="int" resultType="int">
+        select id from routes
+        where plan_id = #{planId}
+    </select>
+
+    <delete id="deleteAllRoutesByPId" parameterType="int">
+        delete from routes
+        where plan_id = #{planId}
+    </delete>
 </mapper>

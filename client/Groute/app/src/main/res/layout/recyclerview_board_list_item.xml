@@ -74,13 +74,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/board_tv_writeContent">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/gooBtn"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:background="@android:color/transparent"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/good" />
+            android:src="@drawable/good2"
+            app:tint="@color/black" />
 
         <TextView
             android:id="@+id/board_tv_goodCnt"

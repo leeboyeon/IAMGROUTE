@@ -41,8 +41,21 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public void likePlace(PlaceLike placeLike) throws Exception {
-        placeMapper.likePlace(placeLike);
+        PlaceLike p = placeMapper.isLike(placeLike);
+        Place place = placeMapper.selectPlace(placeLike.getPlaceId());
+        if(p==null) {
+            placeMapper.likePlace(placeLike);
+            place.setHeartCnt(place.getHeartCnt()+1);
+            placeMapper.updatePlace(place);
+        }else{
+            placeMapper.unLikePlace(p.getId());
+            place.setHeartCnt(place.getHeartCnt()-1);
+            placeMapper.updatePlace(place);
+        }
     }
 
-
+    @Override
+    public PlaceLike isLike(PlaceLike placeLike) throws Exception {
+        return placeMapper.isLike(placeLike);
+    }
 }
