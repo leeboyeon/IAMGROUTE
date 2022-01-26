@@ -7,21 +7,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentBoardDetailBinding
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.main.MainViewModel
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_FREE_TYPE
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_QUESTION_TYPE
-import com.ssafy.groute.src.response.BoardDetailResponse
-import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.util.BoardViewModel
 
 private const val TAG = "BoardDetailFragment"
@@ -73,6 +68,7 @@ class BoardDetailFragment : Fragment() {
     }
     fun initViewModel(id : Int){
         val boardViewModel = ViewModelProvider(this).get(BoardViewModel::class.java)
+
         if(id == 1){
             boardViewModel.getFreelist().observe(viewLifecycleOwner, Observer {
                 if(it != null){
@@ -107,8 +103,12 @@ class BoardDetailFragment : Fragment() {
         binding.boardDetailRvListitem.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, boardDetailList, boardId, requireContext())
         binding.boardDetailRvListitem.adapter = boardRecyclerAdapter
-    }
 
+    }
+    fun refreshFragment(){
+        val ft:FragmentTransaction = requireFragmentManager().beginTransaction()
+        ft.detach(this).attach(this).commit()
+    }
     companion object {
         @JvmStatic
         fun newInstance(key: String, value: Int) =
@@ -118,4 +118,10 @@ class BoardDetailFragment : Fragment() {
                 }
             }
     }
+    override fun onResume() {
+        super.onResume()
+        initAdapter()
+        refreshFragment()
+    }
+
 }

@@ -4,23 +4,17 @@ import android.content.Context
 import android.util.Log
 import android.view.*
 import android.widget.*
-import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.src.dto.BoardDetail
-import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_FREE_TYPE
-import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_QUESTION_TYPE
 import com.ssafy.groute.src.main.route.RouteThemeRecyclerviewAdapter
 import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
-import de.hdodenhof.circleimageview.CircleImageView
-import kotlin.reflect.KFunction
 
 private const val TAG = "BoardRecyclerviewAdapte"
 class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: MutableList<BoardDetail>, var boardType: Int, var context:Context) : RecyclerView.Adapter<BoardRecyclerviewAdapter.BoardHolder>(){
@@ -28,7 +22,7 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
     var isEdit = false
 
     @JvmName("setBoardList1")
-    fun setBoardList(list : List<BoardDetail>){
+    fun setBoardList(list: List<BoardDetail>){
         this.boardList = list.toMutableList()
         notifyDataSetChanged()
     }
