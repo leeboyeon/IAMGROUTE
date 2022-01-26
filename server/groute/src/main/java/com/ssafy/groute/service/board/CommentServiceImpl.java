@@ -12,8 +12,6 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService{
     @Autowired
     CommentMapper commentMapper;
-    @Autowired
-    BoardDetailMapper boardDetailMapper;
 
     @Override
     public void insertComment(Comment comment) throws Exception {
@@ -43,10 +41,5 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public List<Comment> selectAllByBoardDetailId(int id) throws Exception {
         return commentMapper.selectAllByBoardDetailId(id);
-    }
-
-    @Override
-    public void deleteAllComment(int boardDetailId) throws Exception {
-        commentMapper.deleteAllComment(boardDetailId);
     }
 }
