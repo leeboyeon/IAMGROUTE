@@ -30,7 +30,7 @@
 
     <update id="updateUserPlan" parameterType="UserPlan">
         update userplan
-        set user_id = #{userId}, title = #{title}, description = #{description}, startDate = #{startDate}, endDate = #{endDate}, totalDate = #{totalDate}, isPublic = #{isPublic}
+        set user_id = #{userId}, title = #{title}, description = #{description}, startDate = #{startDate}, endDate = #{endDate}, totalDate = #{totalDate}, isPublic = #{isPublic}, heartCnt = #{heartCnt}
         where id = #{id}
     </update>
 
@@ -43,4 +43,23 @@
         delete from userplan
         where user_id = #{userId}
     </delete>
+
+    <resultMap id="PlanLikeDTO" type="PlanLike">
+        <result column="userplan_id" property="userPlanId"></result>
+        <result column="user_id" property="userId"></result>
+    </resultMap>
+    <insert id="likePlan" parameterType="PlanLike">
+        insert into planlike(user_id, userplan_id)
+        values (#{userId},#{userPlanId})
+    </insert>
+
+    <delete id="unLikePlan" parameterType="int">
+        delete from planlike
+        where id = #{id}
+    </delete>
+
+    <select id="isLike" parameterType="PlanLike" resultMap="PlanLikeDTO">
+        select * from planlike
+        where user_id = #{userId} and userplan_id = #{userPlanId}
+    </select>
 </mapper>

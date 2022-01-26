@@ -16,4 +16,6 @@ public interface PlaceMapper {
     void likePlace(PlaceLike placeLike) throws Exception;
     void deleteAllPlaceByUId(String userId) throws Exception;
     List<Integer> findAllPlaceByUId(String userId) throws Exception;
+    void unLikePlace(int id) throws Exception;
+    PlaceLike isLike(PlaceLike placeLike) throws Exception;
 }

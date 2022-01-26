@@ -1,6 +1,7 @@
 package com.ssafy.groute.controller;
 
 import com.ssafy.groute.dto.Place;
+import com.ssafy.groute.dto.PlaceLike;
 import com.ssafy.groute.service.PlaceService;
 import com.ssafy.groute.service.StorageService;
 import io.swagger.annotations.ApiOperation;
@@ -96,4 +97,33 @@ public class PlaceController {
 
         return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
+
+    @ApiOperation(value = "isLike",notes = "해당 place 좋아요 했는지")
+    @PostMapping(value ="/isLike")
+    public ResponseEntity<?> isLike(@RequestBody PlaceLike placeLike){
+        try {
+            PlaceLike p = placeService.isLike(placeLike);
+            if(p == null){
+                return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+        }
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "placeLike",notes = "해당 place 좋아요 또는 좋아요취소")
+    @PostMapping(value = "/like")
+    public ResponseEntity<?> placeLike(@RequestBody PlaceLike placeLike){
+        try {
+            placeService.likePlace(placeLike);
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+    }
+
 }

@@ -29,10 +29,14 @@
 
     <update id="updatePlace" parameterType="Place">
         update place
-        set name = #{name}, type = #{type}, lat = #{lat}, lng = #{lng}, zipCode = #{zipCode}, contact = #{contact}, address = #{address}, description = #{description}, theme_id = #{themeId}, area_id = #{areaId}, img = #{img}, user_id = #{userId}
+        set name = #{name}, type = #{type}, lat = #{lat}, lng = #{lng}, zipCode = #{zipCode}, contact = #{contact}, address = #{address}, description = #{description}, theme_id = #{themeId}, area_id = #{areaId}, img = #{img}, user_id = #{userId}, heartCnt = #{heartCnt}
         where id = #{id}
     </update>
 
+    <resultMap id="PlaceLikeDTO" type="PlaceLike">
+        <result column="place_id" property="placeId"></result>
+        <result column="user_id" property="userId"></result>
+    </resultMap>
     <insert id="likePlace" parameterType="PlaceLike">
         insert into placelike(user_id, place_id)
         values (#{userId},#{placeId})
@@ -47,4 +51,13 @@
         delete from place
         where user_id = #{userId}
     </delete>
+    <delete id="unLikePlace" parameterType="int">
+        delete from placelike
+        where id = #{id}
+    </delete>
+    
+    <select id="isLike" parameterType="PlaceLike" resultMap="PlaceLikeDTO">
+        select * from placelike
+        where user_id = #{userId} and place_id = #{placeId}
+    </select>
 </mapper>

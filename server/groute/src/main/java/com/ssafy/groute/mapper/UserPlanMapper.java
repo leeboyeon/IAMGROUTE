@@ -1,5 +1,7 @@
 package com.ssafy.groute.mapper;
 
+import com.ssafy.groute.dto.PlaceLike;
+import com.ssafy.groute.dto.PlanLike;
 import com.ssafy.groute.dto.UserPlan;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -14,4 +16,7 @@ public interface UserPlanMapper {
     void updateUserPlan(UserPlan userPlan) throws Exception;
     void deleteAllUserPlanByUId(String userId) throws Exception;
     List<Integer> findAllPlanIdsByUId(String userId) throws Exception;
+    void likePlan(PlanLike planLike) throws Exception;
+    void unLikePlan(int id) throws Exception;
+    PlanLike isLike(PlanLike planLike) throws Exception;
 }
