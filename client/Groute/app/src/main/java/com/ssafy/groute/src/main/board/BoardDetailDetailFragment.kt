@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
+import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.FragmentBoardDetailDetailBinding
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.dto.Comment
@@ -85,7 +86,7 @@ class BoardDetailDetailFragment : Fragment() {
         userInfo.observe(
             viewLifecycleOwner, {
                 Glide.with(this)
-                    .load(it.img)
+                    .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
                     .circleCrop()
                     .into(binding.boardDetailIvUserImg)
             }
@@ -99,18 +100,23 @@ class BoardDetailDetailFragment : Fragment() {
 
             override fun onSuccess(code: Int, responseData: Map<String, Any>) {
 
-                Log.d(TAG, "onSuccess: ${JSONObject(responseData).getJSONObject("boardDetail")}")
-                Log.d(TAG, "onSuccess: ${JSONObject(responseData)}")
-
                 val boardDetail = JSONObject(responseData).getJSONObject("boardDetail")
-                val title = boardDetail.get("title")
+                var title = boardDetail.get("title")
                 val content = boardDetail.get("content")
                 userId = boardDetail.get("userId")
                 val img = boardDetail.get("img")
+                val boardId = boardDetail.get("boardId").toString().substring(0,1)
 
-                binding.boardDetailTvUserName.setText(userId.toString())
-                binding.boardDtailTvTitle.setText(title.toString())
-                binding.boardDetailTvContent.setText(content.toString())
+                var bd = BoardDetail(
+                    title.toString(),
+                    content.toString(),
+                    img.toString(),
+                    boardId.toInt(),
+                    userId.toString()
+                )
+
+                binding.boardDetail = bd
+
                 getUserInfo(userId.toString())
                 if(img == "" || img == null){
                     binding.boardDetailIvImg.visibility = GONE

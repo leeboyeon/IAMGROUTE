@@ -2,6 +2,7 @@ package com.ssafy.groute.src.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.groute.config.ApplicationClass
@@ -23,6 +24,5 @@ open class MainViewModel : ViewModel() {
     fun getUser() :LiveData<UserInfoResponse>{
         return userInfo
     }
-
 
 }

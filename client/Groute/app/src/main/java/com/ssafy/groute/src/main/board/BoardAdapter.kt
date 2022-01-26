@@ -47,7 +47,6 @@ class BoardAdapter(val context: Context, var lifecycleOwner: LifecycleOwner) : R
                         .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
                         .circleCrop()
                         .into(itemView.findViewById(R.id.board_iv_userImg))
-                    Log.d(TAG, "bindInfo : ${it.img}  ${it.nickname}")
                     itemView.findViewById<TextView>(R.id.board_tv_write_userNick).text = it.nickname
                 }
             )
