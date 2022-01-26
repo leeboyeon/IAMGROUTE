@@ -8,6 +8,7 @@ import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_FREE_TYPE
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_QUESTION_TYPE
 import com.ssafy.groute.src.service.BoardService
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,6 +20,7 @@ class BoardViewModel : ViewModel(){
     val errorMessage = MutableLiveData<String>()
     var freeList =  BoardService().getBoardDetailList(1)
     var questionList = BoardService().getBoardDetailList(2)
+
 
     private var questionBoards = MutableLiveData<LiveData<MutableList<BoardDetail>>>().apply {
         value = questionList
@@ -32,6 +34,7 @@ class BoardViewModel : ViewModel(){
     fun getQuestionlist() : LiveData<MutableList<BoardDetail>>{
         return questionList
     }
+
     fun getBoardDetailList(boardId: Int)  {
         //var boardDetailList =  mutableListOf<BoardDetail>()
         val boardDetailListRequest: Call<MutableList<BoardDetail>> = RetrofitUtil.boardService.listBoardDetail(boardId)

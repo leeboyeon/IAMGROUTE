@@ -2,8 +2,8 @@ package com.ssafy.groute.src.dto
 
 data class BoardDetail(
     val id: Int,
-    val title: String,
-    val content: String,
+    var title: String,
+    var content: String,
     val img: String,
     val createDate: String,
     val updateDate: String,
