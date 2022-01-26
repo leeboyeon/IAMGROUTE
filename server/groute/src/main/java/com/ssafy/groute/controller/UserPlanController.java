@@ -1,9 +1,6 @@
 package com.ssafy.groute.controller;
 
-import com.ssafy.groute.dto.Place;
-import com.ssafy.groute.dto.RouteDetail;
-import com.ssafy.groute.dto.User;
-import com.ssafy.groute.dto.UserPlan;
+import com.ssafy.groute.dto.*;
 import com.ssafy.groute.service.RouteDetailService;
 import com.ssafy.groute.service.UserPlanService;
 import io.swagger.annotations.ApiOperation;
@@ -114,5 +111,33 @@ public class UserPlanController {
         }
 
         return new ResponseEntity<List<UserPlan>>(res,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "isLike",notes = "해당 plan 좋아요 했는지")
+    @PostMapping(value ="/isLike")
+    public ResponseEntity<?> isLike(@RequestBody PlanLike planLike){
+        try {
+            PlanLike p = userPlanService.isLike(planLike);
+            if(p == null){
+                return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+        }
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "planLike",notes = "해당 plan 좋아요 또는 좋아요취소")
+    @PostMapping(value = "/like")
+    public ResponseEntity<?> placeLike(@RequestBody PlanLike planLike){
+        try {
+            userPlanService.likePlan(planLike);
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
     }
 }

@@ -12,5 +12,5 @@ import lombok.Setter;
 public class PlaceLike {
     private int id;
     private String userId;
-    private String placeId;
+    private int placeId;
 }

@@ -1,5 +1,6 @@
 package com.ssafy.groute.service;
 
+import com.ssafy.groute.dto.PlanLike;
 import com.ssafy.groute.dto.User;
 import com.ssafy.groute.dto.UserPlan;
 import org.springframework.stereotype.Service;
@@ -14,4 +15,6 @@ public interface UserPlanService {
     void deleteUserPlan(int id) throws Exception;
     void updateUserPlan(UserPlan userPlan) throws Exception;
     List<UserPlan> selectAllUserPlanById(String id) throws Exception;
+    void likePlan(PlanLike planLike) throws Exception;
+    PlanLike isLike(PlanLike planLike) throws Exception;
 }

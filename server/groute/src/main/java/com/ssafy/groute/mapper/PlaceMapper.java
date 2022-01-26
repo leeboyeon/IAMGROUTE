@@ -14,4 +14,6 @@ public interface PlaceMapper {
     void deletePlace(int id) throws Exception;
     void updatePlace(Place place) throws Exception;
     void likePlace(PlaceLike placeLike) throws Exception;
+    void unLikePlace(int id) throws Exception;
+    PlaceLike isLike(PlaceLike placeLike) throws Exception;
 }
