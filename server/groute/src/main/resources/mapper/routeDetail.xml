@@ -42,4 +42,9 @@
         select * from routeDetail
         where place_id = #{placeId}
     </select>
+
+    <delete id="deleteAllRouteDetailByPId" parameterType="int">
+        delete from routedetail
+        where place_id = #{placeId}
+    </delete>
 </mapper>

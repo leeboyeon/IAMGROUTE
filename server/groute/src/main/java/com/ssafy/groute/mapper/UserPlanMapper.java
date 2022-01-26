@@ -12,4 +12,6 @@ public interface UserPlanMapper {
     List<UserPlan> selectAllUserPlan() throws Exception;
     void deleteUserPlan(int id) throws Exception;
     void updateUserPlan(UserPlan userPlan) throws Exception;
+    void deleteAllUserPlanByUId(String userId) throws Exception;
+    List<Integer> findAllPlanIdsByUId(String userId) throws Exception;
 }

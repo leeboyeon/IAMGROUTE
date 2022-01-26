@@ -33,4 +33,14 @@
         set user_id = #{userId}, title = #{title}, description = #{description}, startDate = #{startDate}, endDate = #{endDate}, totalDate = #{totalDate}, isPublic = #{isPublic}
         where id = #{id}
     </update>
+
+    <select id="findAllPlanIdsByUId" parameterType="String" resultType="int">
+        select id from userplan
+        where user_id = #{userId}
+    </select>
+
+    <delete id="deleteAllUserPlanByUId" parameterType="String">
+        delete from userplan
+        where user_id = #{userId}
+    </delete>
 </mapper>

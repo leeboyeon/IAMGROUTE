@@ -71,4 +71,9 @@
         set hitCnt = #{hitCnt}, heartCnt = #{heartCnt}
         where id = #{id}
     </update>
+
+    <delete id="deleteAllBoardDetailByUid" parameterType="String">
+        delete from boarddetail
+        where user_id = #{userId}
+    </delete>
 </mapper>
