@@ -6,11 +6,12 @@ import com.ssafy.groute.dto.UserPlan;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public interface UserPlanService {
     void insertUserPlan(UserPlan userPlan, List<String> userIds) throws Exception;
-    UserPlan selectUserPlan(int id) throws Exception;
+    Map<String,Object> selectUserPlan(int id) throws Exception;
     List<UserPlan> selectAllUserPlan() throws Exception;
     void deleteUserPlan(int id) throws Exception;
     void updateUserPlan(UserPlan userPlan) throws Exception;
