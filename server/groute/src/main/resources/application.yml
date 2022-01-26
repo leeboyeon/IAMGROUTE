@@ -17,7 +17,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/groute?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://i6d109.p.ssafy.io:3306/groute?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
     username: ssafy
     password: ssafy
   mvc:
