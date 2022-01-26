@@ -12,4 +12,5 @@ public interface AccountMapper {
     List<Account> selectAllAccount() throws Exception;
     void deleteAccount(int id) throws Exception;
     void updateAccount(Account account) throws Exception;
+    void deleteAllAccountByRId(int routesId) throws Exception;
 }

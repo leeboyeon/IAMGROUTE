@@ -30,4 +30,9 @@
         set spentMoney = #{spentMoney}, description = #{description}, category = #{category}, routes_id = #{routesId}
         where id = #{id}
     </update>
+
+    <delete id="deleteAllAccountByRId" parameterType="int">
+        delete from account
+        where routes_id = #{routesId}
+    </delete>
 </mapper>

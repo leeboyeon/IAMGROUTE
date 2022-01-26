@@ -42,4 +42,9 @@
         select * from planshareuser
         where plan_id = #{planId}
     </select>
+
+    <delete id="deleteAllPlanShareUserByUId" parameterType="String">
+        delete from planshareuser
+        where user_id = #{userId}
+    </delete>
 </mapper>

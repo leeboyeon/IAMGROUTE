@@ -37,4 +37,14 @@
         insert into placelike(user_id, place_id)
         values (#{userId},#{placeId})
     </insert>
+
+    <select id="findAllPlaceByUId" parameterType="String" resultType="int">
+        select id from place
+        where user_id = #{userId}
+    </select>
+
+    <delete id="deleteAllPlaceByUId" parameterType="String">
+        delete from place
+        where user_id = #{userId}
+    </delete>
 </mapper>

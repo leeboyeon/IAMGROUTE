@@ -5,12 +5,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface UserService {
-    public int registerUser(User user);
-
-    public User findById(String userId);
-    public User findByUidType(String id, String type);
-
-    public int deleteUser(String userId);
-
-    public int updateUser(User user);
+    void registerUser(User user);
+    User findById(String userId);
+    User findByUidType(String id, String type);
+    void deleteUser(String userId) throws Exception;
+    void updateUser(User user);
 }
