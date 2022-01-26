@@ -13,7 +13,7 @@
         <result column="user_id" property="userId"></result>
     </resultMap>
 
-    <select id="findBoardLikeByUIdBDId" resultMap="BoardDetailLikeDTO">
+    <select id="findBoardLikeByUIdBoardDetailId" resultMap="BoardDetailLikeDTO">
         select *
         from boarddetaillike
         where user_id = #{userId} and BoardDetail_id = #{boardDetailId}
@@ -36,7 +36,7 @@
         where id = #{id}
     </select>
 
-    <delete id="deleteAllBoardDetailLike" parameterType="int">
+    <delete id="deleteAllBoardDetailLikeByBoardDetailId" parameterType="int">
         delete from boarddetaillike
         where boardDetail_id = #{boardDetailId}
     </delete>

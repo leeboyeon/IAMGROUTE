@@ -9,5 +9,4 @@ public interface BoardDetailLikeService {
     void deleteBoardDetailLike(int id) throws Exception;
     void insertBoardDetailLike(String userId, int boardDetailId) throws Exception;
     int findLikeByBDId(int boardDetailId) throws Exception;
-    void deleteAllBoardDetailLike(int boardDetailId) throws Exception;
 }

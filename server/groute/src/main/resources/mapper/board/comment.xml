@@ -37,7 +37,7 @@
         where id = #{id}
     </update>
 
-    <delete id="deleteAllComment" parameterType="int">
+    <delete id="deleteAllCommentByBoardDetailId" parameterType="int">
         delete from comment
         where boardDetail_id = #{boardDetailId}
     </delete>
