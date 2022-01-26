@@ -4,9 +4,12 @@ package com.ssafy.groute.service.board;
 import com.ssafy.groute.dto.board.BoardDetail;
 
 import com.ssafy.groute.dto.board.BoardDetailLike;
+import com.ssafy.groute.mapper.board.BoardDetailLikeMapper;
 import com.ssafy.groute.mapper.board.BoardDetailMapper;
+import com.ssafy.groute.mapper.board.CommentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +17,10 @@ import java.util.List;
 public class BoardDetailServiceImpl implements BoardDetailService {
     @Autowired
     BoardDetailMapper boardDetailMapper;
+    @Autowired
+    BoardDetailLikeMapper boardDetailLikeMapper;
+    @Autowired
+    CommentMapper commentMapper;
 
     @Override
     public void insertBoardDetail(BoardDetail boardDetail) throws Exception {
@@ -34,8 +41,11 @@ public class BoardDetailServiceImpl implements BoardDetailService {
     }
 
     @Override
-    public void deleteBoardDetail(int id) throws Exception {
-        boardDetailMapper.deleteBoardDetail(id);
+    @Transactional
+    public void deleteBoardDetail(int boardDetailId) throws Exception {
+        boardDetailLikeMapper.deleteAllBoardDetailLikeByBoardDetailId(boardDetailId);
+        commentMapper.deleteAllCommentByBoardDetailId(boardDetailId);
+        boardDetailMapper.deleteBoardDetail(boardDetailId);
     }
 
     @Override

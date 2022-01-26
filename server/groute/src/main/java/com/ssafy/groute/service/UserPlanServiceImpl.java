@@ -82,5 +82,25 @@ public class UserPlanServiceImpl implements UserPlanService {
         return userPlans;
     }
 
+    @Override
+    public void likePlan(PlanLike planLike) throws Exception {
+        PlanLike p = userPlanMapper.isLike(planLike);
+        UserPlan plan = userPlanMapper.selectUserPlan(planLike.getUserPlanId());
+        if(p==null) {
+            userPlanMapper.likePlan(planLike);
+            plan.setHeartCnt(plan.getHeartCnt()+1);
+            userPlanMapper.updateUserPlan(plan);
+        }else{
+            userPlanMapper.unLikePlan(p.getId());
+            plan.setHeartCnt(plan.getHeartCnt()-1);
+            userPlanMapper.updateUserPlan(plan);
+        }
+    }
+
+    @Override
+    public PlanLike isLike(PlanLike planLike) throws Exception {
+        return userPlanMapper.isLike(planLike);
+    }
+
 
 }

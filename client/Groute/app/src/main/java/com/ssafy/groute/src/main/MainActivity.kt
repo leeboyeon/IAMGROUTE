@@ -12,6 +12,7 @@ import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ssafy.groute.R
@@ -49,8 +50,10 @@ class MainActivity : AppCompatActivity() {
     private val PERMISSIONS_CODE = 100
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
+
+//        binding = ActivityMainBinding.inflate(layoutInflater)
+//        setContentView(binding.root)
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.frame_main_layout, HomeFragment())
@@ -162,7 +165,7 @@ class MainActivity : AppCompatActivity() {
     // 프로필바 사용자 정보 갱신
     fun initProfileBar() {
         var user = ApplicationClass.sharedPreferencesUtil.getUser()
-        binding.mainTvUsername.text = "${user.id}님"
+//        binding.mainTvUsername.text = "${user.id}님"
         val userInfo = UserService().getUserInfo(user.id)
         userInfo.observe(
             this, {

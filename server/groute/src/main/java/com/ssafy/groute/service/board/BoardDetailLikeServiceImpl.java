@@ -6,6 +6,7 @@ import com.ssafy.groute.mapper.board.BoardDetailLikeMapper;
 import com.ssafy.groute.mapper.board.BoardDetailMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,10 +18,11 @@ public class BoardDetailLikeServiceImpl implements BoardDetailLikeService{
     BoardDetailMapper boardDetailMapper;
     @Override
     public BoardDetailLike findBoardLikeByUIdBDId(String userId, int boardDetailId) throws Exception {
-        return boardDetailLikeMapper.findBoardLikeByUIdBDId(userId, boardDetailId);
+        return boardDetailLikeMapper.findBoardLikeByUIdBoardDetailId(userId, boardDetailId);
     }
 
     @Override
+    @Transactional
     public void deleteBoardDetailLike(int id) throws Exception {
         int boardDetailId = boardDetailLikeMapper.findLikeById(id);
         boardDetailLikeMapper.deleteBoardDetailLike(id);
@@ -31,6 +33,7 @@ public class BoardDetailLikeServiceImpl implements BoardDetailLikeService{
     }
 
     @Override
+    @Transactional
     public void insertBoardDetailLike(String userId, int boardDetailId) throws Exception {
         boardDetailLikeMapper.insertBoardDetailLike(userId, boardDetailId);
         BoardDetail res = boardDetailMapper.selectBoardDetail(boardDetailId);
@@ -41,10 +44,5 @@ public class BoardDetailLikeServiceImpl implements BoardDetailLikeService{
     @Override
     public int findLikeByBDId(int boardDetailId) throws Exception {
         return boardDetailLikeMapper.findLikeByBDId(boardDetailId);
-    }
-
-    @Override
-    public void deleteAllBoardDetailLike(int boardDetailId) throws Exception{
-        boardDetailLikeMapper.deleteAllBoardDetailLike(boardDetailId);
     }
 }

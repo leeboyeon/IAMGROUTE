@@ -44,6 +44,9 @@ android {
     viewBinding{
         enabled = true
     }
+    dataBinding{
+        enabled= true
+    }
 }
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

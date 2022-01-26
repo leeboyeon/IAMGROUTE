@@ -1,8 +1,8 @@
 -- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: groute
+-- Host: i6d109.p.ssafy.io    Database: groute
 -- ------------------------------------------------------
--- Server version	8.0.26
+-- Server version	8.0.27-0ubuntu0.20.04.1
 
 drop schema if exists groute;
 CREATE SCHEMA IF NOT EXISTS `groute` DEFAULT CHARACTER SET utf8 ;
@@ -61,7 +61,7 @@ CREATE TABLE `area` (
   `lat` varchar(20) NOT NULL,
   `lng` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +70,7 @@ CREATE TABLE `area` (
 
 LOCK TABLES `area` WRITE;
 /*!40000 ALTER TABLE `area` DISABLE KEYS */;
-INSERT INTO `area` VALUES (1,'제주도','string','string','string');
+INSERT INTO `area` VALUES (1,'제주도','jeju.png','33.431441','126.874237'),(2,'부산','busan.png','1','1'),(3,'충북','chungbuk.png','1','1'),(4,'대구','daegu.png','1','1'),(5,'인천','incheon.png','1','1'),(6,'전주','jeonju.png','1','11'),(7,'강원','kangwondo.png','1','1'),(8,'경주','keungju.png','1','1'),(9,'여수','yeosu.png','1','1'),(10,'경기','keongkido.png','1','1');
 /*!40000 ALTER TABLE `area` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -85,7 +85,7 @@ CREATE TABLE `board` (
   `id` int NOT NULL AUTO_INCREMENT,
   `type` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,6 +94,7 @@ CREATE TABLE `board` (
 
 LOCK TABLES `board` WRITE;
 /*!40000 ALTER TABLE `board` DISABLE KEYS */;
+INSERT INTO `board` VALUES (1,'자유'),(2,'질문');
 /*!40000 ALTER TABLE `board` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -460,7 +461,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES ('admin','$2a$10$PQGQLsepgoNTifM2JAR3POx3vrOi4dfCPvoDjh6fFXg.9XZ5fiLny',NULL,NULL,NULL,NULL,NULL,'none',NULL,NULL,'2022-01-19 09:16:10','2022-01-19 09:16:10');
+INSERT INTO `user` VALUES ('admin','$2a$10$PQGQLsepgoNTifM2JAR3POx3vrOi4dfCPvoDjh6fFXg.9XZ5fiLny',NULL,NULL,NULL,NULL,NULL,'none',NULL,NULL,'2022-01-19 09:16:10','2022-01-19 09:16:10'),('test','$2a$10$mEOY/E4B6blmSWGAcCJe3OrTZjpR.jzloBLHjfFe5EGrRAqhlMAA2','testnn',NULL,NULL,NULL,NULL,'none',NULL,'test.png','2022-01-25 03:10:53','2022-01-25 03:10:53');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -504,4 +505,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-25 11:26:38
+-- Dump completed on 2022-01-25 15:50:36

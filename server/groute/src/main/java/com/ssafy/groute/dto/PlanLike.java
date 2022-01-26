@@ -12,5 +12,5 @@ import lombok.Setter;
 public class PlanLike {
     private int id;
     private String userId;
-    private String userPlanId;
+    private int userPlanId;
 }

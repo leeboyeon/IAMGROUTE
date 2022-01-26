@@ -8,5 +8,4 @@
         android:id="@+id/menu_delete"
         android:title="삭제"/>
 
-
 </menu>

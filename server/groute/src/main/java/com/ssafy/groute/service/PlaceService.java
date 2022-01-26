@@ -14,4 +14,5 @@ public interface PlaceService {
     void deletePlace(int id) throws Exception;
     void updatePlace(Place place) throws Exception;
     void likePlace(PlaceLike placeLike) throws Exception;
+    PlaceLike isLike(PlaceLike placeLike) throws Exception;
 }

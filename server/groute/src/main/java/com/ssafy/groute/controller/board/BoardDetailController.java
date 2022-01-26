@@ -89,20 +89,11 @@ public class BoardDetailController {
 
     @ApiOperation(value = "delete boardDetail",notes = "boardDetail 삭제")
     @DeleteMapping(value = "/del")
-    @Transactional
     public ResponseEntity<?> deleteBoardDetail(@RequestParam("id") int id) throws Exception{
-        BoardDetail boardDetail = boardDetailService.selectBoardDetail(id);
         try {
-            if(boardDetail.getHeartCnt() > 0) {
-                boardDetailLikeService.deleteAllBoardDetailLike(id);
-            }
-            if(commentService.selectAllByBoardDetailId(id) != null) {
-                commentService.deleteAllComment(id);
-            }
             boardDetailService.deleteBoardDetail(id);
         }catch (Exception e){
             e.printStackTrace();
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
