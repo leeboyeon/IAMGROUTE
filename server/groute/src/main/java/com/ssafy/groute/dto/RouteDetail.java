@@ -15,4 +15,5 @@ public class RouteDetail {
     private int placeId;
     private int priority;
     private String memo;
+    private Place place;
 }
