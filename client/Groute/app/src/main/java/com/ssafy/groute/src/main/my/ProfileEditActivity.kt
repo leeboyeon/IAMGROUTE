@@ -86,7 +86,6 @@ class ProfileEditActivity : AppCompatActivity() {
         binding.profileEditFinish.setOnClickListener {
             var user = isAvailable(userData)
             if(user != null) {
-                finish()
                 updateUser(user)
             } else {
                 Toast.makeText(this, "입력 값을 다시 확인해 주세요", Toast.LENGTH_LONG).show()
@@ -98,6 +97,11 @@ class ProfileEditActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.setType("image/*")
             filterActivityLauncher.launch(intent)
+        }
+
+        // 수정 취소 버튼
+        binding.profileEditCancel.setOnClickListener {
+            finish()
         }
 
     }
@@ -179,18 +183,10 @@ class ProfileEditActivity : AppCompatActivity() {
         var img = ""
         if(user.type.equals("sns")){
             if(user.img != null) {
-//                Glide.with(this)
-//                    .load(user.img)
-//                    .circleCrop()
-//                    .into(binding.profileEditImg)
                 img = user.img!!
             }
         } else{
             if(user.img != null) {
-//                Glide.with(this)
-//                    .load("${ApplicationClass.IMGS_URL_USER}${user.img}")
-//                    .circleCrop()
-//                    .into(binding.profileEditImg)
                 img = "${ApplicationClass.IMGS_URL_USER}${user.img}"
             }
         }
@@ -198,11 +194,6 @@ class ProfileEditActivity : AppCompatActivity() {
         var password = user.password
         var nickname = user.nickname
         var phone = user.phone
-
-//        binding.profileEditIdEt.setText(user.id)
-//        binding.profileEditPasswordEt.setText(user.password)
-//        binding.profileEditNicknameEt.setText(user.nickname)
-//        binding.profileEditPhoneEt.setText(user.phone)
         val u = User(id, password, nickname, phone, img)
         binding.user = u
 
@@ -292,6 +283,7 @@ class ProfileEditActivity : AppCompatActivity() {
         // 사진 선택 안하고 사용자 정보 수정 시 user 정보만 서버로 전송
         if(imgUri == Uri.EMPTY) {
             Log.d(TAG, "updateUser: ${user}")
+            Log.d(TAG, "updateUser: ${user.img}")
             val gson : Gson = Gson()
             var json = gson.toJson(user)
             var requestBody_user = RequestBody.create(MediaType.parse("text/plain"), json)
@@ -329,7 +321,8 @@ class ProfileEditActivity : AppCompatActivity() {
         override fun onSuccess(code: Int, responseData: Boolean) {
             if(responseData) {
                 Toast.makeText(this@ProfileEditActivity, "프로필 정보가 수정되었습니다.", Toast.LENGTH_SHORT).show()
-
+                Log.d(TAG, "onSuccess: 사용자 정보 수정 완료")
+                finish()
             } else {
                 Toast.makeText(this@ProfileEditActivity, "프로필 정보 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
@@ -355,11 +348,11 @@ class ProfileEditActivity : AppCompatActivity() {
         if(validatedNickname() && validatedPhone()) {
             val nickname = binding.profileEditNicknameEt.text.toString()
             val phone = binding.profileEditPhoneEt.text.toString()
-//            Log.d(TAG, "isAvailable 사용자 비밀번호: ${user.password}")
-//            Log.d(TAG, "isAvailable: ${phone}")
-//            Log.d(TAG, "isAvailable: ${userEmail}")
-//            Log.d(TAG, "isAvailable: ${userBirth}")
-//            Log.d(TAG, "isAvailable: ${userGender}")
+            Log.d(TAG, "isAvailable 사용자 비밀번호: ${user.password}")
+            Log.d(TAG, "isAvailable: ${phone}")
+            Log.d(TAG, "isAvailable: ${userEmail}")
+            Log.d(TAG, "isAvailable: ${userBirth}")
+            Log.d(TAG, "isAvailable: ${userGender}")
             if(userEmail == null)
                 userEmail = ""
             if(userBirth == null)
