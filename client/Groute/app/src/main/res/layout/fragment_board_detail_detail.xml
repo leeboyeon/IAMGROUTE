@@ -120,17 +120,67 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/boardDtail_tv_title" />
 
+            <LinearLayout
+                android:id="@+id/linearLayout7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center|left"
+                android:orientation="horizontal"
+                android:padding="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/view4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/boardDetail_tv_content">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/heartLottie"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="15dp"
+                    android:scaleType="centerInside"
+                    app:lottie_autoPlay="false"
+                    app:lottie_fileName="heart.json"
+                    app:lottie_loop="true" />
+
+                <TextView
+                    android:id="@+id/boardDdetail_tv_heartCnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:text="10" />
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="15dp"
+                    app:srcCompat="@drawable/chat" />
+
+                <TextView
+                    android:id="@+id/boardDdetail_tv_chatCnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10" />
+            </LinearLayout>
+
             <View
                 android:id="@+id/view4"
                 android:layout_width="0dp"
                 android:layout_height="2px"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="10dp"
                 android:background="#4E4E4E"
+                app:layout_constraintBottom_toTopOf="@+id/scrollview"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/boardDetail_tv_content" />
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout7" />
 
             <ScrollView
                 android:id="@+id/scrollview"
@@ -148,7 +198,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:orientation="vertical">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/boardDetail_rv_comment"
@@ -162,31 +212,30 @@
                 android:id="@+id/board_detail_detail_comment_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintStart_toStartOf="parent">
 
                 <View
                     android:id="@+id/view"
                     android:layout_width="match_parent"
                     android:layout_height="0.6dp"
                     android:background="#d1d1d1"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/comment_write_profile_iv"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/circle_back"
                     android:layout_marginStart="40dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/view"
+                    android:src="@drawable/circle_back"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view" />
 
                 <EditText
                     android:id="@+id/comment_write_et"
@@ -195,29 +244,28 @@
                     android:layout_marginHorizontal="3dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
+                    android:background="@android:color/transparent"
                     android:hint="댓글 달기..."
                     android:paddingStart="10dp"
                     android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/comment_write_tv"
                     app:layout_constraintStart_toEndOf="@id/comment_write_profile_iv"
-                    android:background="@android:color/transparent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/comment_write_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="게시"
-                    android:textSize="14sp"
-                    android:textColor="@color/blue_500"
-                    android:layout_marginEnd="40dp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginEnd="40dp"
                     android:layout_marginBottom="10dp"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="게시"
+                    android:textColor="@color/blue_500"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

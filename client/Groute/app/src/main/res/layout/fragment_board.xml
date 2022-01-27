@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="boardViewModel"
-            type="com.ssafy.groute.src.main.board.BoardViewModel" />
+            name="boardViewModels"
+            type="com.ssafy.groute.util.BoardViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -102,7 +102,7 @@
                             android:layout_marginTop="7dp"
                             android:layout_marginEnd="15dp"
                             tools:itemCount="5"
-                            app:listData="@{boardViewModel.boardFreeList}"/>
+                            app:listData="@{boardViewModels.boardFreeList}"/>
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
@@ -160,7 +160,7 @@
                             android:layout_marginTop="7dp"
                             android:layout_marginEnd="15dp"
                             tools:itemCount="5"
-                            listData="@{boardViewModel.boardQuestionList}"/>
+                            listData="@{boardViewModels.boardQuestionList}"/>
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>

@@ -8,25 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
-import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.FragmentBoardWriteBinding
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.BoardService
-import com.ssafy.groute.util.BoardViewModel
 import com.ssafy.groute.util.RetrofitCallback
-import com.ssafy.groute.util.RetrofitUtil
 import org.json.JSONObject
-import org.json.JSONStringer
-import java.text.SimpleDateFormat
-import java.util.*
-import javax.security.auth.callback.Callback
-import kotlin.collections.HashMap
+
 
 private const val TAG = "BoardWriteFragment"
 class BoardWriteFragment : Fragment() {
@@ -122,8 +111,6 @@ class BoardWriteFragment : Fragment() {
 
             override fun onSuccess(code: Int, responseData: Boolean) {
                 mainActivity.moveFragment(5,"boardId",boardId)
-                val boardViewModel = ViewModelProvider(this@BoardWriteFragment).get(BoardViewModel::class.java)
-                boardViewModel.loadData()
                 Toast.makeText(requireContext(),"글쓰기 성공",Toast.LENGTH_SHORT).show()
             }
 
@@ -163,7 +150,7 @@ class BoardWriteFragment : Fragment() {
                 val boardDetail = JSONObject(responseData).getJSONObject("boardDetail")
                 val title = boardDetail.get("title")
                 val content = boardDetail.get("content")
-                boardId = boardDetail.get("boardId").toString().toInt()
+                boardId = boardDetail.get("boardId").toString().substring(0,1).toInt()
                 Log.d(TAG, "onSuccess: ${title}")
 
                 binding.boardWriteEtTitle.setText(title.toString())
