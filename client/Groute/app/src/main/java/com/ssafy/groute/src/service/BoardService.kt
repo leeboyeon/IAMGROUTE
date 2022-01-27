@@ -215,7 +215,7 @@ class BoardService {
                 val res = response.body()
                 if(response.code() == 200){
                     if (res != null) {
-                        responseLiveData.value = res
+                        responseLiveData.postValue(res)
                         Log.d(TAG, "onResponse: $res")
                     }
                 } else {

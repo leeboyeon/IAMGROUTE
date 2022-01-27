@@ -7,6 +7,9 @@
         <variable
             name="boardDetail"
             type="com.ssafy.groute.src.dto.BoardDetail" />
+        <variable
+            name="boardViewModels"
+            type="com.ssafy.groute.util.BoardViewModel" />
     </data>
 
     <FrameLayout
@@ -204,7 +207,8 @@
                         android:id="@+id/boardDetail_rv_comment"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        tools:listitem="@layout/recyclerview_comment_list_item" />
+                        tools:listitem="@layout/recyclerview_comment_list_item"
+                        app:listCommentData="@{boardViewModels.commentList}"/>
                 </LinearLayout>
             </ScrollView>
 

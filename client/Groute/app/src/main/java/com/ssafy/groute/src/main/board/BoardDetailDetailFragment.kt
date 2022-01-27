@@ -10,6 +10,7 @@ import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -22,6 +23,7 @@ import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.CommentService
 import com.ssafy.groute.src.service.UserService
+import com.ssafy.groute.util.BoardViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import org.json.JSONObject
 
@@ -30,8 +32,8 @@ class BoardDetailDetailFragment : Fragment() {
     private lateinit var binding: FragmentBoardDetailDetailBinding
     private lateinit var mainActivity: MainActivity
     private lateinit var commentAdapter:CommentAdapter
-    private var commentCount = 0
     private var userId : Any= ""
+    var boardViewModel: BoardViewModel = BoardViewModel()
 
     private var boardDetailId = -1
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,8 +60,10 @@ class BoardDetailDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViewModels()
         initAdapter()
         initData()
+
 
         binding.boardDetailIbtnBack.setOnClickListener {
             Log.d(TAG, "onViewCreated: CLICK")
@@ -71,22 +75,22 @@ class BoardDetailDetailFragment : Fragment() {
         getListBoardDetail(boardDetailId)
         commentWrite(boardDetailId)
     }
+
+    fun initViewModels(){
+        boardViewModel = ViewModelProvider(this).get(BoardViewModel::class.java)
+        binding.lifecycleOwner = this
+        binding.boardViewModels = boardViewModel
+    }
     fun initAdapter(){
+        boardViewModel.getBoardDetailWithComment(this, boardDetailId)
         commentAdapter = CommentAdapter(viewLifecycleOwner)
-        val boardDetailWithComment = BoardService().getBoardDetailWithComment(boardDetailId)
-        boardDetailWithComment.observe(
-            viewLifecycleOwner, {
-                commentCount = it.commentList.size
-                commentAdapter.setCommentList(it.commentList)
-            }
-        )
         binding.boardDetailRvComment.apply{
             layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
             adapter = commentAdapter
             adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
-
     }
+
     fun getUserInfo(userId:String){
         val userInfo = UserService().getUserInfo(userId)
         userInfo.observe(
@@ -98,6 +102,7 @@ class BoardDetailDetailFragment : Fragment() {
             }
         )
     }
+
     fun getListBoardDetail(id:Int){
         BoardService().getListBoardDetail(id, object : RetrofitCallback<Map<String,Any>> {
             override fun onError(t: Throwable) {
@@ -141,16 +146,18 @@ class BoardDetailDetailFragment : Fragment() {
     }
 
     fun commentWrite(boardDetailId: Int) {
+        val uId = ApplicationClass.sharedPreferencesUtil.getUser().id
         binding.commentWriteTv.setOnClickListener {
             if(binding.commentWriteEt.text.toString() == "") {
                 Toast.makeText(mainActivity, "댓글을 입력해주세요.", Toast.LENGTH_SHORT).show()
             } else {
-                var comment = Comment(boardDetailId, binding.commentWriteEt.text.toString(), commentCount + 1, userId.toString())
+                var comment = Comment(boardDetailId, binding.commentWriteEt.text.toString(), boardViewModel.commentCount.value!! + 1, uId)
                 CommentService().insertBoardComment(comment, object : RetrofitCallback<Any> {
                     override fun onError(t: Throwable) {
                         Log.d(TAG, "onError: 댓글 쓰기 에러")
                     }
                     override fun onSuccess(code: Int, responseData: Any) {
+                        boardViewModel.getBoardDetailWithComment(viewLifecycleOwner, boardDetailId)
                         Toast.makeText(requireContext(),"댓글 쓰기 성공",Toast.LENGTH_SHORT).show()
                     }
 

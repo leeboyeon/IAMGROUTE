@@ -17,9 +17,13 @@ import com.ssafy.groute.src.service.UserService
 class CommentAdapter(val lifecycleOwner: LifecycleOwner) : RecyclerView.Adapter<CommentAdapter.CommentHolder>(){
     var list = mutableListOf<Comment>()
 
-    fun setCommentList(list: List<Comment>) {
-        this.list = list.toMutableList()
-        notifyDataSetChanged()
+    fun setCommentList(list: List<Comment>?) {
+        if(list == null) {
+            this.list = ArrayList()
+        } else {
+            this.list = list.toMutableList()!!
+            notifyDataSetChanged()
+        }
     }
 
     inner class CommentHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
