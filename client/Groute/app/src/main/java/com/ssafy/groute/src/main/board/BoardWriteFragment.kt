@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.FragmentBoardWriteBinding
@@ -24,6 +25,7 @@ class BoardWriteFragment : Fragment() {
 
     private var boardDetailId = -1
     private var boardId = -1
+    private var placeId = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -31,6 +33,7 @@ class BoardWriteFragment : Fragment() {
         arguments?.let{
             boardDetailId = it.getInt("boardDetailId", -1)
             boardId = it.getInt("boardId",-1)
+            placeId = it.getInt("placeId",-1)
             Log.d(TAG, "onCreate: ${boardDetailId}")
         }
 
@@ -76,11 +79,16 @@ class BoardWriteFragment : Fragment() {
                 boardModify(boardDetail)
             }
         }
+        if(placeId > 0){
+            binding.boardWriteTvPlaceName.text = placeId.toString()
+        }
+
     }
 
     fun initButton(){
-        binding.boardWriteIbtnCancle.setOnClickListener {
-            mainActivity.onBackPressed()
+        binding.boardSearchIbtnCancle.setOnClickListener {
+            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
+            mainActivity.supportFragmentManager.popBackStack()
         }
 
             binding.boardDetailBtnComplete.setOnClickListener {
@@ -100,7 +108,9 @@ class BoardWriteFragment : Fragment() {
                 )
                 boardWrite(boardDetail)
             }
-
+        binding.searchLayout.setOnClickListener {
+            mainActivity.moveFragment(9)
+        }
 
     }
     fun boardWrite(boardDetail:BoardDetail){
