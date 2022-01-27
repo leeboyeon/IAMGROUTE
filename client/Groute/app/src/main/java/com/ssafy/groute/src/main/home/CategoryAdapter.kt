@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
-import com.ssafy.groute.src.dto.Category
+import com.ssafy.groute.src.dto.Area
 
 class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryHolder>(){
-    var list = listOf<Category>()
+    var list = listOf<Area>()
     inner class CategoryHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun bindInfo(data : Category){
+        fun bindInfo(data : Area){
             Glide.with(itemView)
                 .load("${ApplicationClass.IMGS_URL_AREA}${data.img}")
                 .into(itemView.findViewById(R.id.main_iv_category))

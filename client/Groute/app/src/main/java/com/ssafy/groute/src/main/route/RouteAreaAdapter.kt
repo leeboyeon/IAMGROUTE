@@ -7,12 +7,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
-import com.ssafy.groute.src.dto.Category
+import com.ssafy.groute.src.dto.Area
 
 class RouteAreaAdapter : RecyclerView.Adapter<RouteAreaAdapter.RouteAreaHolder>(){
-    var list = mutableListOf<Category>()
+    var list = mutableListOf<Area>()
     inner class RouteAreaHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun bindInfo(data : Category){
+        fun bindInfo(data : Area){
             Glide.with(itemView)
                 .load(data.img)
                 .into(itemView.findViewById(R.id.main_iv_category))

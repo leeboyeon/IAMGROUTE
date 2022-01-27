@@ -1,4 +1,4 @@
-package com.ssafy.smartstore.src.main.intercepter
+package com.ssafy.groute.config.intercepter
 
 import android.util.Log
 import com.ssafy.groute.config.ApplicationClass
@@ -6,7 +6,7 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
 
-private const val TAG = "ReceivedCooki_Groute"
+private const val TAG = "ReceivedCookie_Groute"
 
 class ReceivedCookiesInterceptor : Interceptor {
 

@@ -7,13 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentRouteCreateBinding
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.dto.Category
+import com.ssafy.groute.src.dto.Area
 import com.ssafy.groute.src.main.home.CategoryAdapter
 import com.ssafy.groute.src.service.AreaService
 import com.ssafy.groute.util.RetrofitCallback
@@ -27,7 +26,7 @@ class RouteCreateFragment : Fragment() {
     private var categoryAdapter:CategoryAdapter = CategoryAdapter()
     private var memberAdapter:MemberAdapter = MemberAdapter()
 
-    val area = mutableListOf<Category>()
+    val area = mutableListOf<Area>()
     val member = mutableListOf<Member>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,15 +75,15 @@ class RouteCreateFragment : Fragment() {
 
     }
     fun getData(){
-        AreaService().getAreas(AreaCallback())
+//        AreaService().getAreas(AreaCallback())
     }
-    inner class AreaCallback: RetrofitCallback<List<Category>> {
+    inner class AreaCallback: RetrofitCallback<List<Area>> {
 
         override fun onError(t: Throwable) {
             Log.d(TAG, "onError: $t")
         }
 
-        override fun onSuccess(code: Int, responseData: List<Category>) {
+        override fun onSuccess(code: Int, responseData: List<Area>) {
             Log.d(TAG, "onSuccess: ${responseData}")
             responseData.let{
                 categoryAdapter = CategoryAdapter()

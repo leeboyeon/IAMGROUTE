@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentSignBinding
-import com.ssafy.groute.src.dto.Category
 import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback

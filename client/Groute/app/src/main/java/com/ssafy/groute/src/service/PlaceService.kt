@@ -2,7 +2,7 @@ package com.ssafy.groute.src.service
 
 import android.util.Log
 import com.ssafy.groute.src.dto.Places
-import com.ssafy.groute.src.main.home.Place
+//import com.ssafy.groute.src.main.home.Place
 import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil
 import retrofit2.Call
