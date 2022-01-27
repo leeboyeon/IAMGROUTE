@@ -53,6 +53,7 @@
                 end update_date
         from boarddetail
         where board_id = #{boardId}
+        order by id desc
     </select>
 
     <delete id="deleteBoardDetail" parameterType="int">

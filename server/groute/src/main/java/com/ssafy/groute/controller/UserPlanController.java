@@ -22,12 +22,12 @@ public class UserPlanController {
     @Autowired
     RouteDetailService routeDetailService;
 
-    @ApiOperation(value = "userPlan 추가",notes = "userPlan 추가")
+    @ApiOperation(value = "userPlan 추가",notes = "planId가 0이면 빈 일정 생성 0이 아니면 추천 일정 복사해서 생성")
     @PostMapping(value = "/insert")
-    public ResponseEntity<?> insertUserPlan(@RequestBody UserPlan req,@RequestParam("userIds") List<String> userIds){
+    public ResponseEntity<?> insertUserPlan(@RequestBody UserPlan req,@RequestParam("userIds") List<String> userIds,@RequestParam("planId") int planId){
 
         try {
-            userPlanService.insertUserPlan(req, userIds);
+            userPlanService.insertUserPlan(req, userIds, planId);
         }catch (Exception e){
 //            e.printStackTrace();
             return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);

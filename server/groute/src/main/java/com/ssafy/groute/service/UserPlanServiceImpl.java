@@ -30,7 +30,7 @@ public class UserPlanServiceImpl implements UserPlanService {
 
     @Override
     @Transactional
-    public void insertUserPlan(UserPlan userPlan, List<String> userIds) throws Exception {
+    public void insertUserPlan(UserPlan userPlan, List<String> userIds, int planId) throws Exception {
         userPlanMapper.insertUserPlan(userPlan);
         for(String userId: userIds){
             planShareUserMapper.insertPlanShareUser(new PlanShareUser(userId, userPlan.getId()));
@@ -39,6 +39,26 @@ public class UserPlanServiceImpl implements UserPlanService {
             Route route = new Route("Day" + i, i, "", "Y");
             routeMapper.insertRoute(route);
             routesMapper.insertRoutes(new Routes(route.getId(),userPlan.getId()));
+        }
+        if(planId!=0){
+            copyPlan(userPlan, userPlanMapper.selectUserPlan(planId));
+        }
+    }
+
+    @Override
+    public void copyPlan(UserPlan userPlan, UserPlan orginPlan ) throws Exception{
+        List<Routes> userRoutesList = routesMapper.selectByPlanId(userPlan.getId());
+        List<Routes> originRoutesList = routesMapper.selectByPlanId(orginPlan.getId());
+
+        int i=0;
+        for(Routes routes: originRoutesList){
+            List<RouteDetail> routeDetailList = routeDetailMapper.selectByRouteId(routes.getRouteId());
+            int routeId = userRoutesList.get(i++).getRouteId();
+            for(RouteDetail routeDetail:routeDetailList){
+                RouteDetail newRouteDetail = routeDetail;
+                newRouteDetail.setRouteId(routeId);
+                routeDetailMapper.insertRouteDetail(newRouteDetail);
+            }
         }
     }
 
@@ -81,8 +101,8 @@ public class UserPlanServiceImpl implements UserPlanService {
             for(RouteDetail rd: routeDetails){
                 routeDetailMapper.deleteRouteDetail(rd.getId());
             }
-            routeMapper.deleteRoute(r.getRouteId());
             routesMapper.deleteRoutes(r.getId());
+            routeMapper.deleteRoute(r.getRouteId());
         }
         userPlanMapper.deleteUserPlan(id);
     }
@@ -121,6 +141,5 @@ public class UserPlanServiceImpl implements UserPlanService {
     public PlanLike isLike(PlanLike planLike) throws Exception {
         return userPlanMapper.isLike(planLike);
     }
-
 
 }
