@@ -9,6 +9,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.R
 
@@ -35,8 +36,6 @@ class PlaceDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
-
-
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -50,6 +49,7 @@ class PlaceDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+//        binding = DataBindingUtil.setContentView(requireActivity(), R.layout.fragment_place_detail)
         binding = FragmentPlaceDetailBinding.inflate(layoutInflater,container,false)
         return binding.root
     }
@@ -96,7 +96,10 @@ class PlaceDetailFragment : Fragment() {
 //            updatePlace(place)
 
         }
-
+        binding.placeDatilIbtnBack.setOnClickListener {
+            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
+            mainActivity.supportFragmentManager.popBackStack()
+        }
     }
     fun updatePlace(place : Places){
         PlaceService().updatePlace(place, placeUpdateCallback())
@@ -104,23 +107,8 @@ class PlaceDetailFragment : Fragment() {
     fun initData(){
         Log.d(TAG, "initData: $placeId")
         val placesDetail = PlaceService().getPlace(placeId, placesCallback())
-
-
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        super.onOptionsItemSelected(item)
-        when(item.itemId){
-            android.R.id.home -> {
-//                finish()
-//                (requireActivity()).onBackPressed()
-                requireActivity().finish()
-//                (activity as AppCompatActivity?)!!.onBackPressed()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
     companion object {
         @JvmStatic
         fun newInstance(key:String, value:Int) =
@@ -155,9 +143,27 @@ class PlaceDetailFragment : Fragment() {
         }
 
         override fun onSuccess(code: Int, responseData: Places) {
-            binding.placeDetailTvName.text = responseData.name
-            binding.placeDetailTvStar.text = responseData.rate.toFloat().toString()
-            places = responseData
+//                binding.placeDetailTvPlaceName.text = responseData.name
+//            binding.placeDetailTvReview.text = responseData.rate.toFloat().toString()
+            var place = Places(
+                responseData.address,
+                responseData.areaId,
+                responseData.contact,
+                responseData.description,
+                responseData.heartCnt,
+                responseData.id,
+                responseData.img,
+                responseData.lat,
+                responseData.lng,
+                responseData.name,
+                responseData.rate,
+                responseData.themeId,
+                responseData.type,
+                responseData.userId,
+                responseData.zipCode
+            )
+            binding.placeDetail = place
+//            places = responseData
         }
 
         override fun onFailure(code: Int) {
