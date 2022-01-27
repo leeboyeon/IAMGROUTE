@@ -65,6 +65,12 @@ class BoardDetailFragment : Fragment() {
             mainActivity.moveFragment(8,"boardId",boardId)
         }
 
+        binding.backBtn.setOnClickListener {
+            Log.d(TAG, "onViewCreated: CLICK")
+            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
+            mainActivity.supportFragmentManager.popBackStack()
+        }
+
     }
     fun initViewModel(id : Int){
         val boardViewModel = ViewModelProvider(this).get(BoardViewModel::class.java)
@@ -137,4 +143,15 @@ class BoardDetailFragment : Fragment() {
         refreshFragment()
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+    }
 }
