@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Service
 public interface UserPlanService {
-    void insertUserPlan(UserPlan userPlan, List<String> userIds) throws Exception;
+    void insertUserPlan(UserPlan userPlan, List<String> userIds, int planId) throws Exception;
     Map<String,Object> selectUserPlan(int id) throws Exception;
     List<UserPlan> selectAllUserPlan() throws Exception;
     void deleteUserPlan(int id) throws Exception;
@@ -18,4 +18,5 @@ public interface UserPlanService {
     List<UserPlan> selectAllUserPlanById(String id) throws Exception;
     void likePlan(PlanLike planLike) throws Exception;
     PlanLike isLike(PlanLike planLike) throws Exception;
+    void copyPlan(UserPlan userPlan, UserPlan orginPlan ) throws Exception;
 }
