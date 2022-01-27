@@ -10,5 +10,6 @@ class RetrofitUtil {
         val placeService = ApplicationClass.retrofit.create(PlaceApi::class.java)
         val boardService = ApplicationClass.retrofit.create(BoardApi::class.java)
         val commentService = ApplicationClass.retrofit.create(CommentApi::class.java)
+        val routeService = ApplicationClass.retrofit.create(RouteApi::class.java)
     }
 }
