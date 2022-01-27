@@ -12,8 +12,10 @@ import android.widget.Toast
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.FragmentBoardWriteBinding
 import com.ssafy.groute.src.dto.BoardDetail
+import com.ssafy.groute.src.dto.Places
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.BoardService
+import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.util.RetrofitCallback
 import org.json.JSONObject
 
@@ -54,7 +56,13 @@ class BoardWriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initButton()
-
+        if(boardId == 1){
+            binding.searchLayout.visibility = View.GONE
+        }else{
+            if(placeId > 0){
+                PlaceService().getPlace(placeId, PlacesCallback())
+            }
+        }
         if(boardDetailId > 0){
             Log.d(TAG, "onViewCreated: ${boardDetailId}")
             binding.boardDetailBtnComplete.setText("수정")
@@ -79,9 +87,7 @@ class BoardWriteFragment : Fragment() {
                 boardModify(boardDetail)
             }
         }
-        if(placeId > 0){
-            binding.boardWriteTvPlaceName.text = placeId.toString()
-        }
+
 
     }
 
@@ -172,6 +178,20 @@ class BoardWriteFragment : Fragment() {
             }
 
         })
+    }
+    inner class PlacesCallback : RetrofitCallback<Places>{
+        override fun onError(t: Throwable) {
+            Log.d(TAG, "onError: ")
+        }
+
+        override fun onSuccess(code: Int, responseData: Places) {
+            binding.boardWriteTvPlaceName.text = responseData.name
+        }
+
+        override fun onFailure(code: Int) {
+            Log.d(TAG, "onFailure: ")
+        }
+
     }
     companion object {
         @JvmStatic

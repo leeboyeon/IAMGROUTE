@@ -50,18 +50,10 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initButton()
         initAdapter()
-        initSearchView()
     }
     fun initAdapter(){
         PlaceService().getPlaces(PlaceCallback())
-    }
-    fun initButton(){
-        binding.boardSearchIbtnCancle.setOnClickListener {
-            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
-            mainActivity.supportFragmentManager.popBackStack()
-        }
-    }
-    fun initSearchView(){
+
         binding.boardSearchSv.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
@@ -75,11 +67,18 @@ class SearchFragment : Fragment() {
                     searchAdapter.notifyDataSetChanged()
                 }
 
-                return true
+                return false
             }
 
         })
     }
+    fun initButton(){
+        binding.boardSearchIbtnCancle.setOnClickListener {
+            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
+            mainActivity.supportFragmentManager.popBackStack()
+        }
+    }
+
     inner class PlaceCallback: RetrofitCallback<List<Places>> {
         override fun onError(t: Throwable) {
             Log.d(TAG, "onError: ")
