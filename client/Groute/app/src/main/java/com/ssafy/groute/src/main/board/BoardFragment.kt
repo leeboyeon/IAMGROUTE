@@ -98,7 +98,7 @@ class BoardFragment : Fragment() {
 
         }
     }
-
+    //
     fun initFreeRecyclerview(){
         boardViewModel.getBoardFreeList(this)
         binding.boardRvFree.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
