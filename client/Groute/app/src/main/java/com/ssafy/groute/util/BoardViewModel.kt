@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 private const val TAG = "BoardViewModel_groute"
 class BoardViewModel : ViewModel(){
     val _boardFreeList = BoardService().getBoardDetailList(1)
-//    val _boardFreeList =  MutableLiveData<List<BoardDetail>>()
+
     val boardFreeList: MutableLiveData<MutableList<BoardDetail>>
         get() = _boardFreeList
 
@@ -30,13 +30,6 @@ class BoardViewModel : ViewModel(){
         _boardQuestionList.postValue(questionList)
     }
 
-    fun getBoardFreeList() : LiveData<MutableList<BoardDetail>>{
-        return boardFreeList
-    }
-
-    fun getBoardQuestionList() : LiveData<MutableList<BoardDetail>>{
-        return boardQuestionList
-    }
     fun getBoardFreeListFive(owner:LifecycleOwner) {
         BoardService().getBoardDetailList(BOARD_FREE_TYPE).observe(owner, Observer {
             Log.d(TAG, "getBoardFreeList: $it")

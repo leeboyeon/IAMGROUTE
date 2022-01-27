@@ -7,16 +7,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.FragmentBoardBinding
-import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.util.BoardViewModel
@@ -154,8 +151,8 @@ class BoardFragment : Fragment() {
             }
 
             override fun onSuccess(code: Int, responseData: Any) {
-                boardViewModel.getBoardFreeList()
-                boardViewModel.getBoardQuestionList()
+                boardViewModel.boardFreeList
+                boardViewModel.boardQuestionList
             }
 
             override fun onFailure(code: Int) {

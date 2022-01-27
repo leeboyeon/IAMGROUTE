@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -70,7 +69,7 @@ class BoardDetailFragment : Fragment() {
         val boardViewModel = ViewModelProvider(this).get(BoardViewModel::class.java)
 
         if(id == 1){
-            boardViewModel.getBoardFreeList().observe(viewLifecycleOwner, Observer {
+            boardViewModel.boardFreeList.observe(viewLifecycleOwner, Observer {
                 if(it != null){
                     boardRecyclerAdapter.setBoardList(it)
                     boardRecyclerAdapter.notifyDataSetChanged()
@@ -89,7 +88,7 @@ class BoardDetailFragment : Fragment() {
             })
 
         }else if(id == 2){
-            boardViewModel.getBoardQuestionList().observe(viewLifecycleOwner, Observer {
+            boardViewModel.boardQuestionList.observe(viewLifecycleOwner, Observer {
                 if(it != null){
                     boardRecyclerAdapter.setBoardList(it)
                     boardRecyclerAdapter.notifyDataSetChanged()
