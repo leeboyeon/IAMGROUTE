@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
+import com.ssafy.groute.src.dto.Review
 
 class ReviewAdapter : RecyclerView.Adapter<ReviewAdapter.ReviewHolder>(){
     var list = mutableListOf<Review>()
