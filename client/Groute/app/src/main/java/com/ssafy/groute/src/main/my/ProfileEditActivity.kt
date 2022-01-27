@@ -175,26 +175,36 @@ class ProfileEditActivity : AppCompatActivity() {
 
     // 사용자 정보 화면에 초기화
     fun initData(user: UserInfoResponse) {
+
+        var img = ""
         if(user.type.equals("sns")){
             if(user.img != null) {
-                Glide.with(this)
-                    .load(user.img)
-                    .circleCrop()
-                    .into(binding.profileEditImg)
+//                Glide.with(this)
+//                    .load(user.img)
+//                    .circleCrop()
+//                    .into(binding.profileEditImg)
+                img = user.img!!
             }
         } else{
             if(user.img != null) {
-                Glide.with(this)
-                    .load("${ApplicationClass.IMGS_URL_USER}${user.img}")
-                    .circleCrop()
-                    .into(binding.profileEditImg)
+//                Glide.with(this)
+//                    .load("${ApplicationClass.IMGS_URL_USER}${user.img}")
+//                    .circleCrop()
+//                    .into(binding.profileEditImg)
+                img = "${ApplicationClass.IMGS_URL_USER}${user.img}"
             }
         }
+        var id = user.id
+        var password = user.password
+        var nickname = user.nickname
+        var phone = user.phone
 
-        binding.profileEditIdEt.setText(user.id)
-        binding.profileEditPasswordEt.setText(user.password)
-        binding.profileEditNicknameEt.setText(user.nickname)
-        binding.profileEditPhoneEt.setText(user.phone)
+//        binding.profileEditIdEt.setText(user.id)
+//        binding.profileEditPasswordEt.setText(user.password)
+//        binding.profileEditNicknameEt.setText(user.nickname)
+//        binding.profileEditPhoneEt.setText(user.phone)
+        val u = User(id, password, nickname, phone, img)
+        binding.user = u
 
         if(user.email != null) {
             if (user.email == "") {

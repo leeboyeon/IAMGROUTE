@@ -20,4 +20,5 @@ data class User(
     constructor(id: String, password: String, nickname: String, phone:String, email: String, birth: String, gender: String?, type: String) : this(id, password, nickname, phone, email, birth, gender, type, "", "")
     constructor(id: String, password: String, nickname: String, phone:String, email: String, birth: String, gender: String, type: String, img: String) : this(id, password, nickname, phone, email, birth, gender, type, "", img)
     constructor(id: String) : this(id, "", "", "", "", "", "", "", "", "")
+    constructor(id: String, password: String, nickname: String, phone: String, img: String): this(id, password, nickname,phone, "", "", "", "", "", img)
 }
