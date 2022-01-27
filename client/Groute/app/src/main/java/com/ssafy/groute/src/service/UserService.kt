@@ -149,14 +149,14 @@ class UserService {
         RetrofitUtil.userService.updateUser(user).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 val res = response.body()
-                if (response.code() == 200) {
-                    Log.d(TAG, "${res}")
+                if(res!!) {
+                    callback.onSuccess(response.code(), true)
                 } else {
-                    Log.d(TAG, "사용자 정보 수정 onResponse: Error Code : ${response.code()}")
+                    callback.onFailure(response.code())
                 }
             }
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                Log.d(TAG, "사용자 정보 수정 onFailure: $t")
+                callback.onError(t)
             }
         })
     }
