@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentReviewFragmentBinding
+import com.ssafy.groute.src.dto.Review
 import com.ssafy.groute.src.main.MainActivity
 
 class ReviewFragment : Fragment() {
@@ -43,25 +44,29 @@ class ReviewFragment : Fragment() {
     fun initAdapter(){
         reviewAdapter = ReviewAdapter()
         lists.apply {
-            add(Review(userimg = R.drawable.user,
+            add(
+                Review(userimg = R.drawable.user,
             username = "김싸피",
             rating = 3.0,
             reviewimg = R.drawable.defaultimg,
             reviewcontent = "가기전부터 너무 가고싶었던 곳인데 별로였어요...왜 이렇게 다들 불친절하고 나는 너무 하기싫은지....진짜 진짜 정말 하기")
             )
-            add(Review(userimg = R.drawable.user,
+            add(
+                Review(userimg = R.drawable.user,
                 username = "김싸피",
                 rating = 3.0,
                 reviewimg = R.drawable.defaultimg,
                 reviewcontent = "가기전부터 너무 가고싶었던 곳인데 별로였어요...왜 이렇게 다들 불친절하고 나는 너무 하기싫은지....진짜 진짜 정말 하기")
             )
-            add(Review(userimg = R.drawable.user,
+            add(
+                Review(userimg = R.drawable.user,
                 username = "김싸피",
                 rating = 3.0,
                 reviewimg = R.drawable.defaultimg,
                 reviewcontent = "가기전부터 너무 가고싶었던 곳인데 별로였어요...왜 이렇게 다들 불친절하고 나는 너무 하기싫은지....진짜 진짜 정말 하기")
             )
-            add(Review(userimg = R.drawable.user,
+            add(
+                Review(userimg = R.drawable.user,
                 username = "김싸피",
                 rating = 3.0,
                 reviewimg = R.drawable.defaultimg,

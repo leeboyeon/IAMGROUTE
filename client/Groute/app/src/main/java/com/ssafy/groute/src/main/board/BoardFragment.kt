@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.FragmentBoardBinding
+import com.ssafy.groute.src.dto.Magazine
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.util.BoardViewModel
