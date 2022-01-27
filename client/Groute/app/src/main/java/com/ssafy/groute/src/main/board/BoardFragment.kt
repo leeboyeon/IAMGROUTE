@@ -151,8 +151,8 @@ class BoardFragment : Fragment() {
             }
 
             override fun onSuccess(code: Int, responseData: Any) {
-                boardViewModel.boardFreeList
-                boardViewModel.boardQuestionList
+                boardViewModel.getBoardFreeListFive(viewLifecycleOwner)
+                boardViewModel.getBoardQuestionListFive(viewLifecycleOwner)
             }
 
             override fun onFailure(code: Int) {
