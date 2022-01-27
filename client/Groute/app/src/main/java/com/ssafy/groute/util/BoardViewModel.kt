@@ -7,37 +7,58 @@ import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_FREE_TYPE
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_QUESTION_TYPE
 import com.ssafy.groute.src.service.BoardService
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
 
 private const val TAG = "BoardViewModel_groute"
 class BoardViewModel : ViewModel(){
-    var boardFreeList =  MutableLiveData<LiveData<MutableList<BoardDetail>>>()
-    val boardQuestionList =  MutableLiveData<List<BoardDetail>>()
-    val errorMessage = MutableLiveData<String>()
-    var freeList =  BoardService().getBoardDetailList(1)
-    var questionList = BoardService().getBoardDetailList(2)
+    val _boardFreeList = BoardService().getBoardDetailList(1)
+//    val _boardFreeList =  MutableLiveData<List<BoardDetail>>()
+    val boardFreeList: MutableLiveData<MutableList<BoardDetail>>
+        get() = _boardFreeList
 
+    val _boardQuestionList =  BoardService().getBoardDetailList(2)
+    val boardQuestionList : MutableLiveData<MutableList<BoardDetail>>
+        get() = _boardQuestionList
 
-    private var questionBoards = MutableLiveData<LiveData<MutableList<BoardDetail>>>().apply {
-        value = questionList
-    }
-    var freeBoards = MutableLiveData<LiveData<MutableList<BoardDetail>>>().apply {
-        value = freeList
-    }
-    fun getFreelist() : LiveData<MutableList<BoardDetail>>{
-        return freeList
-    }
-    fun getQuestionlist() : LiveData<MutableList<BoardDetail>>{
-        return questionList
+    fun setFreeList(freeList: MutableList<BoardDetail>) = viewModelScope.launch{
+        _boardFreeList.value = freeList
+        _boardFreeList.postValue(freeList)
     }
 
-    val freeLiveData : LiveData<MutableList<BoardDetail>> get() = freeList
-    fun loadData() = viewModelScope.launch {
-        freeBoards.value = BoardService().getBoardDetailList(1)
-        freeBoards.postValue(BoardService().getBoardDetailList(1))
+    fun setQuestionList(questionList: MutableList<BoardDetail>) = viewModelScope.launch {
+        _boardQuestionList.value = questionList
+        _boardQuestionList.postValue(questionList)
     }
 
+    fun getBoardFreeList() : LiveData<MutableList<BoardDetail>>{
+        return boardFreeList
+    }
+
+    fun getBoardQuestionList() : LiveData<MutableList<BoardDetail>>{
+        return boardQuestionList
+    }
+    fun getBoardFreeListFive(owner:LifecycleOwner) {
+        BoardService().getBoardDetailList(BOARD_FREE_TYPE).observe(owner, Observer {
+            Log.d(TAG, "getBoardFreeList: $it")
+            val tmpList: ArrayList<BoardDetail> = arrayListOf()
+            if(it != null) {
+                for (i in 0..4) {
+                    tmpList.add(it.get(i))
+                }
+            }
+            setFreeList(tmpList)
+        })
+    }
+    fun getBoardQuestionListFive(owner: LifecycleOwner){
+        BoardService().getBoardDetailList(BOARD_QUESTION_TYPE).observe(owner, Observer {
+            Log.d(TAG, "getBoardQuestionList: $it")
+            val tmpList: ArrayList<BoardDetail> = arrayListOf()
+            if(it != null) {
+                for (i in 0..4) {
+                    tmpList.add(it.get(i))
+                }
+            }
+            setQuestionList(tmpList)
+        })
+    }
 }

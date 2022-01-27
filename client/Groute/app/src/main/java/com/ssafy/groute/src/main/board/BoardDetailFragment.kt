@@ -70,39 +70,52 @@ class BoardDetailFragment : Fragment() {
         val boardViewModel = ViewModelProvider(this).get(BoardViewModel::class.java)
 
         if(id == 1){
-            boardViewModel.getFreelist().observe(viewLifecycleOwner, Observer {
+            boardViewModel.getBoardFreeList().observe(viewLifecycleOwner, Observer {
                 if(it != null){
                     boardRecyclerAdapter.setBoardList(it)
                     boardRecyclerAdapter.notifyDataSetChanged()
                 }
-
-                boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
-                    override fun onClick(view: View, position: Int, name: String) {
-                        mainActivity.moveFragment(6,"boardDetailId", boardViewModel.freeList.value!!.get(position).id)
-                    }
-                })
             })
+            boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
+                override fun onClick(view: View, position: Int, name: String) {
+                    mainActivity.moveFragment(6,"boardDetailId", boardViewModel.boardFreeList.value!!.get(position).id)
+                }
+            })
+            boardRecyclerAdapter.setModifyClickListener(object : BoardRecyclerviewAdapter.ItemModifyListener{
+                override fun onClick(position: Int) {
+                    mainActivity.moveFragment(8,"boardDetailId",boardViewModel.boardFreeList.value!!.get(position).id)
+                }
+
+            })
+
         }else if(id == 2){
-            boardViewModel.getQuestionlist().observe(viewLifecycleOwner, Observer {
+            boardViewModel.getBoardQuestionList().observe(viewLifecycleOwner, Observer {
                 if(it != null){
                     boardRecyclerAdapter.setBoardList(it)
                     boardRecyclerAdapter.notifyDataSetChanged()
                 }
+            })
+            boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
+                override fun onClick(view: View, position: Int, name: String) {
+                    mainActivity.moveFragment(6,"boardDetailId", boardViewModel.boardQuestionList.value!!.get(position).id)
+                }
+            })
+            boardRecyclerAdapter.setModifyClickListener(object : BoardRecyclerviewAdapter.ItemModifyListener{
+                override fun onClick(position: Int) {
+                    mainActivity.moveFragment(8,"boardDetailId",boardViewModel.boardQuestionList.value!!.get(position).id)
+                }
 
-                boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
-                    override fun onClick(view: View, position: Int, name: String) {
-                        mainActivity.moveFragment(6,"boardDetailId", boardViewModel.questionList.value!!.get(position).id)
-                    }
-                })
             })
         }
 
     }
     fun initAdapter(){
-        initViewModel(boardId)
+
         binding.boardDetailRvListitem.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, boardDetailList, boardId, requireContext())
         binding.boardDetailRvListitem.adapter = boardRecyclerAdapter
+
+        initViewModel(boardId)
 
     }
     fun refreshFragment(){

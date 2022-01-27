@@ -19,6 +19,7 @@ import com.ssafy.groute.databinding.FragmentBoardBinding
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.BoardService
+import com.ssafy.groute.util.BoardViewModel
 import com.ssafy.groute.util.RetrofitCallback
 
 private const val TAG = "BoardFragment"
@@ -30,7 +31,7 @@ class BoardFragment : Fragment() {
     lateinit var boardQuestionAdapter : BoardAdapter
     val magazines = arrayListOf<Magazine>()
     lateinit var userId: String
-    private lateinit var boardViewModel: BoardViewModel
+    var boardViewModel: BoardViewModel = BoardViewModel()
 
     companion object{
         const val BOARD_FREE_TYPE = 1 // 자유게시판 타입
@@ -58,9 +59,7 @@ class BoardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_board, container, false)
-        boardViewModel = ViewModelProvider(this).get(BoardViewModel::class.java)
-        binding.lifecycleOwner = this
-        binding.boardViewModel = boardViewModel
+
         return binding.root
     }
 
@@ -80,7 +79,11 @@ class BoardFragment : Fragment() {
             mainActivity.moveFragment(5, "boardId", BOARD_QUESTION_TYPE)
         }
     }
-
+    fun initViewModels(){
+        boardViewModel = ViewModelProvider(this).get(BoardViewModel::class.java)
+        binding.lifecycleOwner = this
+        binding.boardViewModels = boardViewModel
+    }
     fun initMagazineRecyclerview(){
         magazineAdapter = MagazineAdapter()
 
@@ -100,7 +103,7 @@ class BoardFragment : Fragment() {
     }
     //
     fun initFreeRecyclerview(){
-        boardViewModel.getBoardFreeList(this)
+        boardViewModel.getBoardFreeListFive(this)
         binding.boardRvFree.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         boardFreeAdapter = BoardAdapter(requireContext(),viewLifecycleOwner)
         boardFreeAdapter.setHasStableIds(true)
@@ -119,7 +122,7 @@ class BoardFragment : Fragment() {
         })
     }
     fun initQuestionRecyclerView(){
-        boardViewModel.getBoardQuestionList(this)
+        boardViewModel.getBoardQuestionListFive(this)
         binding.boardRvQuestion.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         boardQuestionAdapter = BoardAdapter(requireContext(),viewLifecycleOwner)
         boardQuestionAdapter.setHasStableIds(true)
@@ -138,6 +141,7 @@ class BoardFragment : Fragment() {
         })
     }
     fun initAdapter(){
+        initViewModels()
         initMagazineRecyclerview()
         initFreeRecyclerview()
         initQuestionRecyclerView()
@@ -150,8 +154,8 @@ class BoardFragment : Fragment() {
             }
 
             override fun onSuccess(code: Int, responseData: Any) {
-                boardViewModel.getBoardFreeList(viewLifecycleOwner)
-                boardViewModel.getBoardQuestionList(viewLifecycleOwner)
+                boardViewModel.getBoardFreeList()
+                boardViewModel.getBoardQuestionList()
             }
 
             override fun onFailure(code: Int) {
