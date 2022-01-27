@@ -91,15 +91,33 @@ class InfoFragment : Fragment() {
 
         override fun onSuccess(code: Int, responseData: Places) {
             Log.d(TAG, "onSuccess: ${responseData}")
-            binding.placeDetailTvDescript.text = responseData.description
-            binding.infoTvAddr.text = responseData.address
-            if(responseData.contact == "" || responseData.contact ==null){
-                binding.infoTvPhone.text = "없음"
-            }else{
-                binding.infoTvPhone.text = responseData.contact
-            }
-
-            binding.placeDetailTvBigContent.text = responseData.name+"은"
+            val places = Places(
+                responseData.address,
+                responseData.areaId,
+                responseData.contact,
+                responseData.description,
+                responseData.heartCnt,
+                responseData.id,
+                responseData.img,
+                responseData.lat,
+                responseData.lng,
+                responseData.name,
+                responseData.rate,
+                responseData.themeId,
+                responseData.type,
+                responseData.userId,
+                responseData.zipCode
+            )
+            binding.placeDetail = places
+//            binding.placeDetailTvDescript.text = responseData.description
+//            binding.infoTvAddr.text = responseData.address
+//            if(responseData.contact == "" || responseData.contact ==null){
+//                binding.infoTvPhone.text = "없음"
+//            }else{
+//                binding.infoTvPhone.text = responseData.contact
+//            }
+//
+//            binding.placeDetailTvBigContent.text = responseData.name+"은"
             Glide.with(this@InfoFragment)
                 .load("${ApplicationClass.IMGS_URL_PLACE}${responseData.img}")
                 .into(binding.placeDetailIvSomenail)

@@ -60,6 +60,12 @@ class BoardDetailDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
         initData()
+
+        binding.boardDetailIbtnBack.setOnClickListener {
+            Log.d(TAG, "onViewCreated: CLICK")
+            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
+            mainActivity.supportFragmentManager.popBackStack()
+        }
     }
     fun initData(){
         getListBoardDetail(boardDetailId)
