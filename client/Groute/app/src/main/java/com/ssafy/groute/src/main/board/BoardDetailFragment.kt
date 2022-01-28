@@ -44,13 +44,6 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        binding= FragmentBoardDetailBinding.inflate(layoutInflater,container,false)
-//        return binding.root
-//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,6 +56,7 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
         initAdapter()
         //그냥 글쓰기
         binding.boardDetailBtnWrite.setOnClickListener {
+            Log.d(TAG, "onViewCreated: ${boardId}")
             mainActivity.moveFragment(8,"boardId",boardId)
         }
 

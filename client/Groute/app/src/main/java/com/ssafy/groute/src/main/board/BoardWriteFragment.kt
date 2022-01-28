@@ -107,19 +107,22 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
                 var boardId = boardId
                 var img = ""
                 var userId = ApplicationClass.sharedPreferencesUtil.getUser().id
-
-                val boardDetail = if(boardId == 1){
+                //Free Board
+                if(boardId == 1){
                     Log.d(TAG, "initButton: ${boardId}")
-                    BoardDetail(
+                    val boardDetail = BoardDetail(
                         title = title,
                         content = content,
                         img = img,
                         boardId=boardId,
                         userId = userId
                     )
+                    boardWrite(boardDetail, 1)
                 }else{
+                    //Question Board
                     Log.d(TAG, "initButton: ${boardId}")
-                    BoardDetail(
+                    boardId = 2
+                    val boardDetail = BoardDetail(
                         title = title,
                         content = content,
                         img = img,
@@ -127,6 +130,7 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
                         userId = userId,
                         placeId
                     )
+                    boardWrite(boardDetail,2)
                 }
 //                val boardDetail = BoardDetail(
 //                    title = title,
@@ -135,14 +139,14 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
 //                    boardId=boardId,
 //                    userId = userId
 //                )
-                boardWrite(boardDetail)
+
             }
         binding.searchLayout.setOnClickListener {
             mainActivity.moveFragment(9)
         }
 
     }
-    fun boardWrite(boardDetail:BoardDetail){
+    fun boardWrite(boardDetail:BoardDetail, boardId:Int){
         BoardService().insertBoardDetail(boardDetail, object : RetrofitCallback<Boolean> {
             override fun onError(t: Throwable) {
                 Log.d(TAG, "onError: 글쓰기 에러")

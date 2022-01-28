@@ -16,4 +16,11 @@ class PlaceViewModel :ViewModel() {
         _placeList.value = placeList
         _placeList.postValue(placeList)
     }
+
+    fun getPlace(id:Int){
+        PlaceService().getPlace(id, PlaceCallback())
+    }
+    inner class PlaceCallback(){
+        
+    }
 }

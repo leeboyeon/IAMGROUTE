@@ -51,11 +51,12 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
                     .load(data.img)
                     .into(thumbnailIv)
             }
-//            if(boardType == BOARD_FREE_TYPE) {
-//
-//            } else if(boardType == BOARD_QUESTION_TYPE) {
-//                thumbnailIv.visibility = View.GONE
-//            }
+            if(boardType == 1) {
+                //freeBoard
+                itemView.findViewById<LinearLayout>(R.id.locationLayout).visibility = View.GONE
+            } else if(boardType == 2) {
+                itemView.findViewById<TextView>(R.id.item_board_tv_location).text = data.placeId.toString()
+            }
             Log.d(TAG, "bindInfo: ${data.userId}")
             val userInfo = UserService().getUserInfo(data.userId)
             userInfo.observe(
