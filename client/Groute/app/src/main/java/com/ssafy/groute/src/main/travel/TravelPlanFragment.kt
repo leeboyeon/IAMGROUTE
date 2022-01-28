@@ -12,15 +12,17 @@ import android.widget.TextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.R
+import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentBoardBinding
+import com.ssafy.groute.databinding.FragmentRouteListBinding
 import com.ssafy.groute.databinding.FragmentTravelPlanBinding
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.main.route.RouteListFragment
 import com.ssafy.groute.src.main.route.RouteTabPageAdapter
 
 
-class TravelPlanFragment : Fragment() {
-    lateinit var binding: FragmentTravelPlanBinding
+class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTravelPlanBinding::bind, R.layout.fragment_travel_plan) {
+//    lateinit var binding: FragmentTravelPlanBinding
     private lateinit var mainActivity: MainActivity
     lateinit var con : ViewGroup
     lateinit var addButton: FloatingActionButton
@@ -28,10 +30,10 @@ class TravelPlanFragment : Fragment() {
     lateinit var routeRecomButton: FloatingActionButton
     lateinit var placeAddButton: FloatingActionButton
     var isFabOpen: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideBottomNav(true)
-
     }
 
     override fun onAttach(context: Context) {
@@ -43,8 +45,9 @@ class TravelPlanFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+//        binding = FragmentTravelPlanBinding.inflate(inflater, container, false)
         con = container!!
-        binding = FragmentTravelPlanBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -52,7 +55,6 @@ class TravelPlanFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
         floatingButtonEvent()
-
     }
 
     // 플로팅 버튼 이벤트 처리

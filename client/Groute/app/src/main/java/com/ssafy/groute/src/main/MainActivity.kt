@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.config.BaseActivity
 import com.ssafy.groute.databinding.ActivityMainBinding
 import com.ssafy.groute.src.main.board.*
 import com.ssafy.groute.src.main.home.AreaFragment
@@ -36,10 +37,9 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
 
-private const val TAG = "MainActivity_groute"
-class MainActivity : AppCompatActivity() {
-    private val viewModel : MainViewModel by viewModels()
-    private lateinit var binding: ActivityMainBinding
+private const val TAG = "MainActivity_Groute"
+class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
+    //    private lateinit var binding: ActivityMainBinding
     private lateinit var bottomNavigation: BottomNavigationView
     // 모든 퍼미션 관련 배열
     private val requiredPermissions = arrayOf(
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
     private val PERMISSIONS_CODE = 100
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
+//        binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
 
 //        binding = ActivityMainBinding.inflate(layoutInflater)
 //        setContentView(binding.root)
@@ -103,7 +103,9 @@ class MainActivity : AppCompatActivity() {
 
         initProfileBar()
 
-        getHashKey()
+        // kakao map api key hash
+//        getHashKey()
+
         // Location
         locationPermissionManager = LocationPermissionManager(this)
         locationServiceManager = LocationServiceManager(this)
@@ -212,7 +214,7 @@ class MainActivity : AppCompatActivity() {
         }catch(e:PackageManager.NameNotFoundException){
             e.printStackTrace()
         }
-        
+
         for(signature:Signature in packageInfo.signatures){
             try{
                 var md: MessageDigest = MessageDigest.getInstance("SHA")

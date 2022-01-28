@@ -7,21 +7,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.R
+import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentRouteBinding
+import com.ssafy.groute.databinding.FragmentRouteCreateBinding
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.dto.Category
+import com.ssafy.groute.src.dto.Area
 import com.ssafy.groute.src.main.home.CategoryAdapter
 import com.ssafy.groute.src.service.AreaService
 import com.ssafy.groute.util.RetrofitCallback
 
-private const val TAG = "RouteFragment"
-class RouteFragment : Fragment() {
-    lateinit var binding: FragmentRouteBinding
+private const val TAG = "RouteFragment_Groute"
+class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::bind, R.layout.fragment_route) {
+//    lateinit var binding: FragmentRouteBinding
     private lateinit var mainActivity: MainActivity
     lateinit var pagerAdapter: RouteTabPageAdapter
     lateinit var routeAreaAdapter: RouteAreaAdapter
@@ -37,14 +37,14 @@ class RouteFragment : Fragment() {
         mainActivity = context as MainActivity
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        binding = FragmentRouteBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        // Inflate the layout for this fragment
+//        binding = FragmentRouteBinding.inflate(inflater, container, false)
+//        return binding.root
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -78,15 +78,15 @@ class RouteFragment : Fragment() {
 
     }
     fun getData(){
-        AreaService().getAreas(AreaCallback())
+//        AreaService().getAreas(AreaCallback())
     }
 
-    inner class AreaCallback: RetrofitCallback<List<Category>> {
+    inner class AreaCallback: RetrofitCallback<List<Area>> {
         override fun onError(t: Throwable) {
             Log.d(TAG, "onError: $t")
         }
 
-        override fun onSuccess(code: Int, responseData: List<Category>) {
+        override fun onSuccess(code: Int, responseData: List<Area>) {
             Log.d(TAG, "onSuccess: ${responseData}")
             responseData.let {
                 categoryAdapter = CategoryAdapter()

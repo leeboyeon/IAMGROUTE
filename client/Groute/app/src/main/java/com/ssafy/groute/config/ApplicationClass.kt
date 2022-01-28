@@ -5,9 +5,10 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kakao.sdk.common.KakaoSdk
 import com.ssafy.groute.R
+import com.ssafy.groute.config.intercepter.AddCookiesInterceptor
+import com.ssafy.groute.config.intercepter.ReceivedCookiesInterceptor
+import com.ssafy.groute.config.intercepter.XAccessTokenInterceptor
 import com.ssafy.groute.util.SharedPreferencesUtil
-import com.ssafy.smartstore.src.main.intercepter.AddCookiesInterceptor
-import com.ssafy.smartstore.src.main.intercepter.ReceivedCookiesInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -27,6 +28,9 @@ class ApplicationClass : Application() {
         lateinit var sharedPreferencesUtil: SharedPreferencesUtil
         lateinit var retrofit: Retrofit
 
+        // JWT Token Header 키 값
+        const val X_ACCESS_TOKEN = "X-ACCESS-TOKEN"
+
     }
 
     override fun onCreate() {
@@ -35,6 +39,7 @@ class ApplicationClass : Application() {
         sharedPreferencesUtil = SharedPreferencesUtil(applicationContext)
 
         val okHttpClient = OkHttpClient.Builder()
+            .addNetworkInterceptor(XAccessTokenInterceptor()) // JWT 자동 헤더 전송
             .addInterceptor(AddCookiesInterceptor())
             .addInterceptor(ReceivedCookiesInterceptor())
             .connectTimeout(30, TimeUnit.SECONDS).build()

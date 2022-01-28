@@ -9,12 +9,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
+import com.ssafy.groute.config.BaseFragment
+import com.ssafy.groute.databinding.FragmentSaveTravelBinding
 import com.ssafy.groute.databinding.FragmentSharedTravelBinding
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.main.home.BestRoute
 
-class SharedTravelFragment : Fragment() {
-    private lateinit var binding: FragmentSharedTravelBinding
+class SharedTravelFragment : BaseFragment<FragmentSharedTravelBinding>(FragmentSharedTravelBinding::bind, R.layout.fragment_shared_travel) {
+//    private lateinit var binding: FragmentSharedTravelBinding
     private lateinit var mainActivity: MainActivity
     private var sharedAdapter:SharedTravelAdapter = SharedTravelAdapter()
 
@@ -27,13 +29,13 @@ class SharedTravelFragment : Fragment() {
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentSharedTravelBinding.inflate(layoutInflater,container,false)
-        return binding.root
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        binding = FragmentSharedTravelBinding.inflate(layoutInflater,container,false)
+//        return binding.root
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
