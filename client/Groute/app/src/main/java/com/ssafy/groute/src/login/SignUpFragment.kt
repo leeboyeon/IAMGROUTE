@@ -12,6 +12,8 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.ssafy.groute.R
+import com.ssafy.groute.config.BaseFragment
+import com.ssafy.groute.databinding.FragmentLoginBinding
 import com.ssafy.groute.databinding.FragmentSignBinding
 import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.service.UserService
@@ -19,8 +21,8 @@ import com.ssafy.groute.util.RetrofitCallback
 import java.util.regex.Pattern
 
 private const val TAG = "SignFragment_싸피"
-class SignFragment : Fragment() {
-    private lateinit var binding: FragmentSignBinding
+class SignFragment : BaseFragment<FragmentSignBinding>(FragmentSignBinding::bind, R.layout.fragment_sign) {
+//    private lateinit var binding: FragmentSignBinding
     private var isAvailableId = false
     private var userEmail : String = ""
     private var userBirth : String = ""
@@ -30,13 +32,13 @@ class SignFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentSignBinding.inflate(layoutInflater)
-        return binding.root
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        binding = FragmentSignBinding.inflate(layoutInflater)
+//        return binding.root
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

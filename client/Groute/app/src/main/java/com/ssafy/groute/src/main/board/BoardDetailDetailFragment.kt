@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentBoardDetailDetailBinding
+import com.ssafy.groute.databinding.FragmentReviewBinding
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.dto.Comment
 import com.ssafy.groute.src.main.MainActivity
@@ -25,9 +27,9 @@ import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
 import org.json.JSONObject
 
-private const val TAG = "BoardDetailDetailFragme"
-class BoardDetailDetailFragment : Fragment() {
-    private lateinit var binding: FragmentBoardDetailDetailBinding
+private const val TAG = "BoardDetailDF_Groute"
+class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>(FragmentBoardDetailDetailBinding::bind, R.layout.fragment_board_detail_detail) {
+//    private lateinit var binding: FragmentBoardDetailDetailBinding
     private lateinit var mainActivity: MainActivity
     private lateinit var commentAdapter:CommentAdapter
     private var commentCount = 0
@@ -47,14 +49,14 @@ class BoardDetailDetailFragment : Fragment() {
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-        binding = FragmentBoardDetailDetailBinding.inflate(layoutInflater,container,false)
-        return binding.root
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//
+//        binding = FragmentBoardDetailDetailBinding.inflate(layoutInflater,container,false)
+//        return binding.root
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

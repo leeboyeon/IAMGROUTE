@@ -51,9 +51,6 @@ class HomeViewModel: ViewModel() {
         }
     }
 
-
-
-
     private val _selectedProperty = MutableLiveData<Int>()
 
     val selectedProperty: LiveData<Int>

@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ssafy.groute.R
+import com.ssafy.groute.config.BaseFragment
+import com.ssafy.groute.databinding.FragmentRouteBinding
 import com.ssafy.groute.databinding.FragmentRouteListBinding
 
 
-class RouteListFragment : Fragment() {
-    lateinit var binding: FragmentRouteListBinding
+class RouteListFragment : BaseFragment<FragmentRouteListBinding>(FragmentRouteListBinding::bind, R.layout.fragment_route_list) {
+//    lateinit var binding: FragmentRouteListBinding
     lateinit var ThemeAdapter: RouteThemeRecyclerviewAdapter
     lateinit var RouteListAdapter: RouteListRecyclerviewAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,14 +21,14 @@ class RouteListFragment : Fragment() {
 
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        binding = FragmentRouteListBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        // Inflate the layout for this fragment
+//        binding = FragmentRouteListBinding.inflate(inflater, container, false)
+//        return binding.root
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

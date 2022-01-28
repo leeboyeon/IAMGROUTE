@@ -9,16 +9,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
+import com.ssafy.groute.R
+import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentRouteBinding
+import com.ssafy.groute.databinding.FragmentRouteCreateBinding
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.dto.Area
 import com.ssafy.groute.src.main.home.CategoryAdapter
 import com.ssafy.groute.src.service.AreaService
 import com.ssafy.groute.util.RetrofitCallback
 
-private const val TAG = "RouteFragment"
-class RouteFragment : Fragment() {
-    lateinit var binding: FragmentRouteBinding
+private const val TAG = "RouteFragment_Groute"
+class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::bind, R.layout.fragment_route) {
+//    lateinit var binding: FragmentRouteBinding
     private lateinit var mainActivity: MainActivity
     lateinit var pagerAdapter: RouteTabPageAdapter
     lateinit var routeAreaAdapter: RouteAreaAdapter
@@ -34,14 +37,14 @@ class RouteFragment : Fragment() {
         mainActivity = context as MainActivity
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        binding = FragmentRouteBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        // Inflate the layout for this fragment
+//        binding = FragmentRouteBinding.inflate(inflater, container, false)
+//        return binding.root
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

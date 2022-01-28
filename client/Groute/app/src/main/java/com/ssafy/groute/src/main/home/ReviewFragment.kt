@@ -9,12 +9,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
-import com.ssafy.groute.databinding.FragmentReviewFragmentBinding
+import com.ssafy.groute.config.BaseFragment
+import com.ssafy.groute.databinding.FragmentInfoBinding
+import com.ssafy.groute.databinding.FragmentReviewBinding
 import com.ssafy.groute.src.dto.Review
 import com.ssafy.groute.src.main.MainActivity
 
-class ReviewFragment : Fragment() {
-    private lateinit var binding: FragmentReviewFragmentBinding
+class ReviewFragment : BaseFragment<FragmentReviewBinding>(FragmentReviewBinding::bind, R.layout.fragment_review) {
+//    private lateinit var binding: FragmentReviewFragmentBinding
     private lateinit var mainActivity: MainActivity
     private lateinit var reviewAdapter:ReviewAdapter
 
@@ -27,14 +29,14 @@ class ReviewFragment : Fragment() {
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        binding = FragmentReviewFragmentBinding.inflate(layoutInflater,container,false)
-        return binding.root
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        // Inflate the layout for this fragment
+//        binding = FragmentReviewBinding.inflate(layoutInflater,container,false)
+//        return binding.root
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

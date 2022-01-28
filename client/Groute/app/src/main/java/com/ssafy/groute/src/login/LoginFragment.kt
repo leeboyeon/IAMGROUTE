@@ -31,7 +31,9 @@ import com.nhn.android.naverlogin.OAuthLogin
 import com.nhn.android.naverlogin.OAuthLoginHandler
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentLoginBinding
+import com.ssafy.groute.databinding.FragmentTravelPlanBinding
 import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
@@ -43,10 +45,10 @@ import io.reactivex.schedulers.Schedulers
 import org.json.JSONException
 import org.json.JSONObject
 
-private const val TAG = "LoginFragment_groute"
-class LoginFragment : Fragment() {
+private const val TAG = "LoginFragment_Groute"
+class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::bind, R.layout.fragment_login) {
     private lateinit var loginActivity: LoginActivity
-    private lateinit var binding: FragmentLoginBinding
+//    private lateinit var binding: FragmentLoginBinding
 
     // google 로그인
     private lateinit var mAuth: FirebaseAuth
@@ -68,13 +70,13 @@ class LoginFragment : Fragment() {
         loginActivity = context as LoginActivity
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentLoginBinding.inflate(layoutInflater)
-        return binding.root
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        binding = FragmentLoginBinding.inflate(layoutInflater)
+//        return binding.root
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

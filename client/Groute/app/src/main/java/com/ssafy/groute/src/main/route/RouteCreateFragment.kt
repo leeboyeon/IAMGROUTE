@@ -10,7 +10,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
+import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentRouteCreateBinding
+import com.ssafy.groute.databinding.FragmentSharedTravelBinding
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.dto.Area
 import com.ssafy.groute.src.main.home.CategoryAdapter
@@ -18,9 +20,9 @@ import com.ssafy.groute.src.service.AreaService
 import com.ssafy.groute.util.RetrofitCallback
 
 
-private const val TAG = "RouteCreateFragment"
-class RouteCreateFragment : Fragment() {
-    private lateinit var binding: FragmentRouteCreateBinding
+private const val TAG = "RouteCreateF_Groute"
+class RouteCreateFragment : BaseFragment<FragmentRouteCreateBinding>(FragmentRouteCreateBinding::bind, R.layout.fragment_route_create) {
+//    private lateinit var binding: FragmentRouteCreateBinding
     private lateinit var mainActivity:MainActivity
 
     private var categoryAdapter:CategoryAdapter = CategoryAdapter()
@@ -38,13 +40,13 @@ class RouteCreateFragment : Fragment() {
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentRouteCreateBinding.inflate(layoutInflater,container,false)
-        return binding.root
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        binding = FragmentRouteCreateBinding.inflate(layoutInflater,container,false)
+//        return binding.root
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

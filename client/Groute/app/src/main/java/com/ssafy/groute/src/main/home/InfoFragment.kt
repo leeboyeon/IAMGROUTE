@@ -8,7 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.config.BaseFragment
+import com.ssafy.groute.databinding.FragmentAreaBinding
 import com.ssafy.groute.databinding.FragmentInfoBinding
 import com.ssafy.groute.src.dto.Places
 import com.ssafy.groute.src.main.MainActivity
@@ -21,10 +24,10 @@ import net.daum.mf.map.api.MapView
 
 
 private const val TAG = "InfoFragment"
-class InfoFragment : Fragment() {
+class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind, R.layout.fragment_info) {
     private var placeId = -1
     private lateinit var mainActivity : MainActivity
-    private lateinit var binding: FragmentInfoBinding
+//    private lateinit var binding: FragmentInfoBinding
 
     var lat:Double = 0.0
     var lng:Double = 0.0
@@ -41,13 +44,13 @@ class InfoFragment : Fragment() {
             Log.d(TAG, "onAttach: $placeId")
         }
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentInfoBinding.inflate(layoutInflater,container,false)
-        return binding.root
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        binding = FragmentInfoBinding.inflate(layoutInflater,container,false)
+//        return binding.root
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
