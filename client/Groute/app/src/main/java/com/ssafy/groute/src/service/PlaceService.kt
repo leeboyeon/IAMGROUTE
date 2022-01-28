@@ -1,8 +1,8 @@
 package com.ssafy.groute.src.service
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.ssafy.groute.src.dto.Places
-import com.ssafy.groute.src.main.home.Place
 import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil
 import retrofit2.Call
@@ -11,6 +11,27 @@ import retrofit2.Response
 
 private const val TAG = "PlaceService"
 class PlaceService {
+    fun getAllPlaces() : MutableLiveData<List<Places>> {
+        var responseLiveData : MutableLiveData<List<Places>> = MutableLiveData()
+        val placesListRequest: Call<List<Places>> = RetrofitUtil.placeService.listPlace()
+        placesListRequest.enqueue(object : Callback<List<Places>> {
+            override fun onResponse(call: Call<List<Places>>, response: Response<List<Places>>) {
+                var res = response.body()
+                if(response.code() == 200){
+                    if( res!=null){
+                        responseLiveData.postValue(res)
+                    }
+                }else{
+                    Log.d(TAG, "onResponse: ")
+                }
+            }
+
+            override fun onFailure(call: Call<List<Places>>, t: Throwable) {
+                responseLiveData.postValue(null)
+            }
+        })
+        return responseLiveData
+    }
     fun getPlaces(callback: RetrofitCallback<List<Places>>){
         val placeRequest : Call<List<Places>> = RetrofitUtil.placeService.listPlace()
         placeRequest.enqueue(object : Callback<List<Places>> {
