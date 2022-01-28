@@ -16,10 +16,8 @@ private const val TAG = "SearchAdapter"
 class SearchAdapter(var places:List<Places>, var context:Context) : RecyclerView.Adapter <SearchAdapter.SearchHolder>(),
     Filterable {
 
-    var placeFilterList:List<Places> = arrayListOf()
-    init{
-        placeFilterList = places
-    }
+    private var placeFilterList = places
+
     inner class SearchHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindInfo(data: Places){
             itemView.findViewById<TextView>(R.id.search_tv_type).text = data.type
@@ -58,14 +56,17 @@ class SearchAdapter(var places:List<Places>, var context:Context) : RecyclerView
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 //event
                 val charString = constraint.toString()
-                Log.d(TAG, "performFiltering: ${charString}")
-                if(charString.isEmpty()){
-                    placeFilterList = places
+
+                placeFilterList = if(charString.isEmpty()){
+                    places
                 }else{
                     val resultList = ArrayList<Places>()
                     for(item in places){
-                        Log.d(TAG, "performFiltering: ${item}")
-                        if(item!!.name.contains(charString)) resultList.add(item)
+
+                        if(item!!.name.contains(charString)){
+                            Log.d(TAG, "performFiltering: ${item.name}")
+                            resultList.add(item)
+                        }
                     }
                     resultList
                 }

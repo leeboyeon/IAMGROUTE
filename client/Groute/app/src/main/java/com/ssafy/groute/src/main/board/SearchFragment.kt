@@ -60,6 +60,7 @@ class SearchFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                Log.d(TAG, "onQueryTextChange: $newText")
                 if(TextUtils.isEmpty(newText)){
                     searchAdapter.filter.filter("")
                 }else{
@@ -88,7 +89,6 @@ class SearchFragment : Fragment() {
 //            Log.d(TAG, "onSuccess: ${responseData}")
             responseData.let{
                 searchAdapter = SearchAdapter(responseData,requireContext())
-                searchAdapter.placeFilterList = it
                 searchAdapter.setItemClickListener(object : SearchAdapter.ItemClickListener{
                     override fun onClick(view: View, position: Int, placeId: Int) {
                         mainActivity.moveFragment(8,"placeId", placeId)

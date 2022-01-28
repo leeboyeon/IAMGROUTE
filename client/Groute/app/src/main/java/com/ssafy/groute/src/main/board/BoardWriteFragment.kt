@@ -37,6 +37,7 @@ class BoardWriteFragment : Fragment() {
             boardId = it.getInt("boardId",-1)
             placeId = it.getInt("placeId",-1)
             Log.d(TAG, "onCreate: ${boardDetailId}")
+            Log.d(TAG, "onCreate: ${boardId}")
         }
 
     }
@@ -77,12 +78,12 @@ class BoardWriteFragment : Fragment() {
                 var userId = ApplicationClass.sharedPreferencesUtil.getUser().id
 
                 val boardDetail = BoardDetail(
+                    id = boardDetailId,
                     title = title,
                     content = content,
                     img = img,
                     boardId=boardId,
-                    userId = userId,
-                    id = boardDetailId
+                    userId = userId
                 )
                 boardModify(boardDetail)
             }
@@ -104,14 +105,33 @@ class BoardWriteFragment : Fragment() {
                 var img = ""
                 var userId = ApplicationClass.sharedPreferencesUtil.getUser().id
 
-                val boardDetail = BoardDetail(
-
-                    title = title,
-                    content = content,
-                    img = img,
-                    boardId=boardId,
-                    userId = userId
-                )
+                val boardDetail = if(boardId == 1){
+                    Log.d(TAG, "initButton: ${boardId}")
+                    BoardDetail(
+                        title = title,
+                        content = content,
+                        img = img,
+                        boardId=boardId,
+                        userId = userId
+                    )
+                }else{
+                    Log.d(TAG, "initButton: ${boardId}")
+                    BoardDetail(
+                        title = title,
+                        content = content,
+                        img = img,
+                        boardId=boardId,
+                        userId = userId,
+                        placeId
+                    )
+                }
+//                val boardDetail = BoardDetail(
+//                    title = title,
+//                    content = content,
+//                    img = img,
+//                    boardId=boardId,
+//                    userId = userId
+//                )
                 boardWrite(boardDetail)
             }
         binding.searchLayout.setOnClickListener {
