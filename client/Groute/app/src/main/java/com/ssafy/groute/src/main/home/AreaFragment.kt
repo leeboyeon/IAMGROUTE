@@ -7,10 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.ssafy.groute.R
+import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentAreaBinding
 import com.ssafy.groute.src.dto.Places
 import com.ssafy.groute.src.main.MainActivity
@@ -18,8 +20,11 @@ import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.util.RetrofitCallback
 
 private const val TAG = "AreaFragment"
-class AreaFragment : Fragment() {
-    private lateinit var binding: FragmentAreaBinding
+//class AreaFragment : Fragment() {
+class AreaFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bind, R.layout.fragment_area) {
+//    private lateinit var binding: FragmentAreaBinding
+    private val homeViewModel: HomeViewModel by activityViewModels()
+
     private lateinit var mainActivity:MainActivity
     private lateinit var areaFilterAdapter:AreaFilterAdapter
 
@@ -33,17 +38,20 @@ class AreaFragment : Fragment() {
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        binding= FragmentAreaBinding.inflate(layoutInflater,container,false)
-        return binding.root
-    }
+
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        // Inflate the layout for this fragment
+//        binding= FragmentAreaBinding.inflate(layoutInflater,container,false)
+//        return binding.root
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.viewModel = homeViewModel
 
         initTab()
 

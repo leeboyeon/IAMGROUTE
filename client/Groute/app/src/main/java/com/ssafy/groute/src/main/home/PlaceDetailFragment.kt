@@ -14,6 +14,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.R
 
 import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.config.BaseFragment
+import com.ssafy.groute.databinding.FragmentInfoBinding
 import com.ssafy.groute.databinding.FragmentPlaceDetailBinding
 import com.ssafy.groute.src.dto.Places
 import com.ssafy.groute.src.dto.User
@@ -26,9 +28,9 @@ import com.ssafy.groute.util.RetrofitCallback
 
 
 
-private const val TAG = "PlaceDetailFragment"
-class PlaceDetailFragment : Fragment() {
-    private lateinit var binding: FragmentPlaceDetailBinding
+private const val TAG = "PlaceDetailFragment_Groute"
+class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPlaceDetailBinding::bind, R.layout.fragment_place_detail) {
+//    private lateinit var binding: FragmentPlaceDetailBinding
     private lateinit var mainActivity : MainActivity
     
     private var placeId = -1
@@ -45,14 +47,14 @@ class PlaceDetailFragment : Fragment() {
             Log.d(TAG, "onAttach: $placeId")
         }
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-//        binding = DataBindingUtil.setContentView(requireActivity(), R.layout.fragment_place_detail)
-        binding = FragmentPlaceDetailBinding.inflate(layoutInflater,container,false)
-        return binding.root
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+////        binding = DataBindingUtil.setContentView(requireActivity(), R.layout.fragment_place_detail)
+//        binding = FragmentPlaceDetailBinding.inflate(layoutInflater,container,false)
+//        return binding.root
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

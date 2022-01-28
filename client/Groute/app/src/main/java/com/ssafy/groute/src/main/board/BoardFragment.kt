@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentBoardBinding
+import com.ssafy.groute.databinding.FragmentBoardDetailBinding
 import com.ssafy.groute.src.dto.Magazine
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.BoardService
@@ -21,8 +23,8 @@ import com.ssafy.groute.util.BoardViewModel
 import com.ssafy.groute.util.RetrofitCallback
 
 private const val TAG = "BoardFragment"
-class BoardFragment : Fragment() {
-    lateinit var binding: FragmentBoardBinding
+class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::bind, R.layout.fragment_board) {
+//    lateinit var binding: FragmentBoardBinding
     private lateinit var mainActivity: MainActivity
     private var magazineAdapter: MagazineAdapter = MagazineAdapter()
     lateinit var boardFreeAdapter : BoardAdapter
@@ -52,14 +54,14 @@ class BoardFragment : Fragment() {
         mainActivity = context as MainActivity
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_board, container, false)
-
-        return binding.root
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_board, container, false)
+//
+//        return binding.root
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

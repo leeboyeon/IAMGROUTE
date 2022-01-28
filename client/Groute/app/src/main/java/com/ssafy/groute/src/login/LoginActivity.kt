@@ -6,16 +6,18 @@ import android.os.Bundle
 import android.util.Log
 import com.kakao.sdk.common.util.Utility
 import com.ssafy.groute.R
+import com.ssafy.groute.config.BaseActivity
 import com.ssafy.groute.databinding.ActivityLoginBinding
+import com.ssafy.groute.databinding.ActivityMainBinding
 import com.ssafy.groute.src.main.MainActivity
 
 
-class LoginActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityLoginBinding
+class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate) {
+//    private lateinit var binding: ActivityLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+//        binding = ActivityLoginBinding.inflate(layoutInflater)
+//        setContentView(binding.root)
 
         // kakao 플랫폼 키 해시 등록
 //        var keyHash = Utility.getKeyHash(this)

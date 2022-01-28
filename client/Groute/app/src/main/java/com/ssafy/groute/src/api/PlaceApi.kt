@@ -5,11 +5,14 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface PlaceApi {
+    // 제주도 지역 장소
     @GET("/place/list")
     fun listPlace() : Call<List<Places>>
 
+    // 제주도 지역 장소 중 1개
     @GET("/place/detail")
     fun getPlace(@Query("id") id:Int) : Call<Places>
+
 
     @PUT("/place/update")
     fun updatePlace(@Body place:Places) : Call<Boolean>

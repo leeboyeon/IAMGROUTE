@@ -8,25 +8,26 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.groute.R
+import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentTravelPlanBinding
 import com.ssafy.groute.databinding.FragmentTravelPlanListBinding
 import com.ssafy.groute.src.main.my.MyTravel
 
-class TravelPlanListFragment : Fragment() {
-    lateinit var binding: FragmentTravelPlanListBinding
+class TravelPlanListFragment : BaseFragment<FragmentTravelPlanListBinding>(FragmentTravelPlanListBinding::bind, R.layout.fragment_travel_plan_list) {
+//    lateinit var binding: FragmentTravelPlanListBinding
     lateinit var travelPlanListRecyclerviewAdapter: TravelPlanListRecyclerviewAdapter
     val list = arrayListOf<TravelPlan>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentTravelPlanListBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        binding = FragmentTravelPlanListBinding.inflate(inflater, container, false)
+//        return binding.root
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

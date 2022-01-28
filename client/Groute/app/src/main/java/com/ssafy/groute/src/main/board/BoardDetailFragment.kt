@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ssafy.groute.R
+import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentBoardDetailBinding
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.main.MainActivity
@@ -18,9 +20,9 @@ import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_FREE_TYPE
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_QUESTION_TYPE
 import com.ssafy.groute.util.BoardViewModel
 
-private const val TAG = "BoardDetailFragment"
-class BoardDetailFragment : Fragment() {
-    private lateinit var binding: FragmentBoardDetailBinding
+private const val TAG = "BoardDetailF_Groute"
+class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoardDetailBinding::bind, R.layout.fragment_board_detail) {
+//    private lateinit var binding: FragmentBoardDetailBinding
     private lateinit var mainActivity: MainActivity
     private lateinit var boardRecyclerAdapter:BoardRecyclerviewAdapter
     private var boardDetailList = mutableListOf<BoardDetail>()
@@ -42,13 +44,13 @@ class BoardDetailFragment : Fragment() {
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding= FragmentBoardDetailBinding.inflate(layoutInflater,container,false)
-        return binding.root
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        binding= FragmentBoardDetailBinding.inflate(layoutInflater,container,false)
+//        return binding.root
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

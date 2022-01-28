@@ -9,11 +9,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
+import com.ssafy.groute.config.BaseFragment
+import com.ssafy.groute.databinding.FragmentBoardWriteBinding
 import com.ssafy.groute.databinding.FragmentMyTravelBinding
 import com.ssafy.groute.src.main.MainActivity
 
-class MyTravelFragment : Fragment() {
-    private lateinit var binding: FragmentMyTravelBinding
+class MyTravelFragment : BaseFragment<FragmentMyTravelBinding>(FragmentMyTravelBinding::bind, R.layout.fragment_my_travel) {
+//    private lateinit var binding: FragmentMyTravelBinding
     private var mytravelAdapter:MyTravelAdapter = MyTravelAdapter()
     private lateinit var mainActivity:MainActivity
 
@@ -26,13 +28,14 @@ class MyTravelFragment : Fragment() {
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentMyTravelBinding.inflate(inflater,container,false)
-        return binding.root
-    }
+
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        binding = FragmentMyTravelBinding.inflate(inflater,container,false)
+//        return binding.root
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

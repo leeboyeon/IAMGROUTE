@@ -9,7 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
+import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.config.BaseFragment
+import com.ssafy.groute.databinding.FragmentBoardDetailBinding
 import com.ssafy.groute.databinding.FragmentBoardWriteBinding
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.dto.Places
@@ -20,9 +23,9 @@ import com.ssafy.groute.util.RetrofitCallback
 import org.json.JSONObject
 
 
-private const val TAG = "BoardWriteFragment"
-class BoardWriteFragment : Fragment() {
-    private lateinit var binding: FragmentBoardWriteBinding
+private const val TAG = "BoardWriteF_Grooute"
+class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoardWriteBinding::bind, R.layout.fragment_board_write) {
+//    private lateinit var binding: FragmentBoardWriteBinding
     private lateinit var mainActivity:MainActivity
 
     private var boardDetailId = -1
@@ -45,13 +48,13 @@ class BoardWriteFragment : Fragment() {
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentBoardWriteBinding.inflate(layoutInflater,container,false)
-        return binding.root
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        binding = FragmentBoardWriteBinding.inflate(layoutInflater,container,false)
+//        return binding.root
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

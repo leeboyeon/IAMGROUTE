@@ -1,4 +1,4 @@
-package com.ssafy.smartstore.src.main.intercepter
+package com.ssafy.groute.config.intercepter
 
 import android.util.Log
 import com.ssafy.groute.config.ApplicationClass
