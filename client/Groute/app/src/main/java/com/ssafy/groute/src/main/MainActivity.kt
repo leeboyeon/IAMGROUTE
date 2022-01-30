@@ -22,9 +22,9 @@ import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseActivity
 import com.ssafy.groute.databinding.ActivityMainBinding
 import com.ssafy.groute.src.main.board.*
-import com.ssafy.groute.src.main.home.AreaFragment
 import com.ssafy.groute.src.main.home.HomeFragment
 import com.ssafy.groute.src.main.home.PlaceDetailFragment
+import com.ssafy.groute.src.main.home.PlaceFragment
 import com.ssafy.groute.src.main.my.MyFragment
 import com.ssafy.groute.src.main.route.RouteCreateFragment
 import com.ssafy.groute.src.main.route.RouteFragment
@@ -135,7 +135,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .addToBackStack(null)
             }
             3->{    // 지역별 장소 리스트 화면
-                transaction.replace(R.id.frame_main_layout, AreaFragment.newInstance(key,value))
+                transaction.replace(R.id.frame_main_layout, PlaceFragment.newInstance(key,value))
                     .addToBackStack(null)
             }
             4 -> {  // 하나의 장소에 대한 상세 정보 출력 화면
