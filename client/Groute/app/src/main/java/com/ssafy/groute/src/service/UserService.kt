@@ -12,8 +12,6 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.http.HTTP
-import java.util.function.BiPredicate
 
 private const val TAG = "UserService_groute"
 class UserService {
@@ -121,19 +119,23 @@ class UserService {
      * @param userId
      * @param user
      */
-    fun updateUserInfo(user: RequestBody, img: MultipartBody.Part, callback: RetrofitCallback<Boolean>) {
-        Log.d(TAG, "사용자 정보 수정: $user 이미지: ${user}  ${img.body()}")
+    fun updateUserInfo(user: RequestBody, img: MultipartBody.Part?, callback: RetrofitCallback<Boolean>) {
+//        Log.d(TAG, "사용자 정보 수정: $user 이미지: ${user}  ${img.body()}")
         RetrofitUtil.userService.updateUser(user, img).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 val res = response.body()
                 if (response.code() == 200) {
-                    Log.d(TAG, "${res}")
+                    if (res != null) {
+                        callback.onSuccess(response.code(), res)
+                    }
                 } else {
+                    callback.onFailure(response.code())
                     Log.d(TAG, "사용자 정보 수정 onResponse: Error Code : ${response.code()}")
                 }
             }
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
                 Log.d(TAG, "사용자 정보 수정 onFailure: $t")
+                callback.onError(t)
             }
         })
     }
@@ -144,20 +146,20 @@ class UserService {
      * @param userId
      * @param user
      */
-    fun updateUserInfo(user: RequestBody, callback: RetrofitCallback<Boolean>) {
-        Log.d(TAG, "사용자 정보 수정: $user 이미지: ${user}")
-        RetrofitUtil.userService.updateUser(user).enqueue(object : Callback<Boolean> {
-            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                val res = response.body()
-                if(res!!) {
-                    callback.onSuccess(response.code(), true)
-                } else {
-                    callback.onFailure(response.code())
-                }
-            }
-            override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                callback.onError(t)
-            }
-        })
-    }
+//    fun updateUserInfo(user: RequestBody, callback: RetrofitCallback<Boolean>) {
+//        Log.d(TAG, "사용자 정보 수정: $user 이미지: ${user}")
+//        RetrofitUtil.userService.updateUser(user).enqueue(object : Callback<Boolean> {
+//            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+//                val res = response.body()
+//                if(res!!) {
+//                    callback.onSuccess(response.code(), true)
+//                } else {
+//                    callback.onFailure(response.code())
+//                }
+//            }
+//            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+//                callback.onError(t)
+//            }
+//        })
+//    }
 }

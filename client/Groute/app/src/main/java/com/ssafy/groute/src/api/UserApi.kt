@@ -29,13 +29,13 @@ interface UserApi {
     fun signUp(@Body user:User) : Call<Boolean>
 
     // 사용자 정보 수정 - 이미지 X
-    @Multipart
-    @PUT("/user/update")
-    fun updateUser(@Part("user") user : RequestBody): Call<Boolean>
+//    @Multipart
+//    @PUT("/user/update")
+//    fun updateUser(@Part("user") user : RequestBody): Call<Boolean>
     
     // 사용자 정보 수정 - 사용자 정보 + 이미지
     @Multipart
     @PUT("/user/update")
-    fun updateUser(@Part("user") user : RequestBody, @Part img: MultipartBody.Part): Call<Boolean>
+    fun updateUser(@Part("user") user : RequestBody, @Part img: MultipartBody.Part?): Call<Boolean>
 
 }

@@ -11,7 +11,6 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.FileUtils
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
@@ -25,13 +24,11 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toUri
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.ActivityProfileEditBinding
 import com.ssafy.groute.src.dto.User
-import com.ssafy.groute.src.login.SignFragment
 import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
@@ -287,8 +284,8 @@ class ProfileEditActivity : AppCompatActivity() {
             val gson : Gson = Gson()
             var json = gson.toJson(user)
             var requestBody_user = RequestBody.create(MediaType.parse("text/plain"), json)
-            Log.d(TAG, "updateUser_requestBodyuser: ${requestBody_user.contentType()}")
-            UserService().updateUserInfo(requestBody_user, userUpdateCallback())
+            Log.d(TAG, "updateUser_requestBodyUser: ${requestBody_user.contentType()}")
+            UserService().updateUserInfo(requestBody_user, null, userUpdateCallback())
         }
         // 사진 선택 + 사용자 정보 수정 시 사용자 정보와 파일 같이 서버로 전송
         else {

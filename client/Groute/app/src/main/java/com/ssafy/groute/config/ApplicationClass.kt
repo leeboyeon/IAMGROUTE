@@ -20,6 +20,7 @@ class ApplicationClass : Application() {
     companion object{
 //        const val SERVER_URL = "http://172.30.1.19:8888/"   // Kyunghee
 //        const val SERVER_URL = "http://61.85.38.39:8888/"   // Jiwoo
+//        const val SERVER_URL = "http://172.30.1.42:8888/"   // Jiwoo
         //AWS servoer
         const val SERVER_URL = "http://i6d109.p.ssafy.io:8888/"
         const val IMGS_URL_USER = "${SERVER_URL}imgs/user/"

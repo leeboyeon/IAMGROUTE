@@ -126,6 +126,7 @@ public class UserController {
     @PutMapping(value = "/update")
     public Boolean updateUser(@RequestPart(value = "user") String user, @RequestPart(value = "img", required = false) MultipartFile img) throws Exception{
         User inputUser = mapper.readValue(user, User.class);
+        String beforeUserImg = inputUser.getImg();
 
         if (userService.findById(inputUser.getId()) == null) {
             return false;
@@ -135,7 +136,11 @@ public class UserController {
             String fileName = storageService.store(img, uploadPath + "/user");
             inputUser.setImg(fileName);
         } else {
-            inputUser.setImg(null);
+            if(beforeUserImg.equals("")){
+                inputUser.setImg(null);
+            } else {
+                inputUser.setImg(beforeUserImg);
+            }
         }
 
         if(inputUser.getPhone() != null && inputUser.getPhone().equals("")) {
