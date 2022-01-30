@@ -21,7 +21,7 @@ object CommonUtils {
 //        }
         return a[0]
     }
-    fun getFormattedDesript(descript : String): String {
+    fun getFormattedDescription(descript : String): String {
         var tmp = ""
         if(descript.length > 38){
             tmp = descript.substring(0,33)

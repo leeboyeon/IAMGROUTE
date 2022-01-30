@@ -3,19 +3,14 @@ package com.ssafy.groute.src.main.board
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.SearchView
 import android.widget.Toast
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
-import com.ssafy.groute.databinding.FragmentBoardDetailBinding
 import com.ssafy.groute.databinding.FragmentBoardWriteBinding
 import com.ssafy.groute.src.dto.BoardDetail
-import com.ssafy.groute.src.dto.Places
+import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.PlaceService
@@ -182,12 +177,12 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
 
         })
     }
-    inner class PlacesCallback : RetrofitCallback<Places>{
+    inner class PlacesCallback : RetrofitCallback<Place>{
         override fun onError(t: Throwable) {
             Log.d(TAG, "onError: ")
         }
 
-        override fun onSuccess(code: Int, responseData: Places) {
+        override fun onSuccess(code: Int, responseData: Place) {
             binding.boardWriteTvPlaceName.text = responseData.name
         }
 

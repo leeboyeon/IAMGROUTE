@@ -10,18 +10,18 @@ import android.widget.Filterable
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
-import com.ssafy.groute.src.dto.Places
+import com.ssafy.groute.src.dto.Place
 
 private const val TAG = "SearchAdapter"
-class SearchAdapter(var places:List<Places>, var context:Context) : RecyclerView.Adapter <SearchAdapter.SearchHolder>(),
+class SearchAdapter(var places:List<Place>, var context:Context) : RecyclerView.Adapter <SearchAdapter.SearchHolder>(),
     Filterable {
 
-    var placeFilterList:List<Places> = arrayListOf()
+    var placeFilterList:List<Place> = arrayListOf()
     init{
         placeFilterList = places
     }
     inner class SearchHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindInfo(data: Places){
+        fun bindInfo(data: Place){
             itemView.findViewById<TextView>(R.id.search_tv_type).text = data.type
             itemView.findViewById<TextView>(R.id.search_tv_Name).text = data.name
         }
@@ -62,7 +62,7 @@ class SearchAdapter(var places:List<Places>, var context:Context) : RecyclerView
                 if(charString.isEmpty()){
                     placeFilterList = places
                 }else{
-                    val resultList = ArrayList<Places>()
+                    val resultList = ArrayList<Place>()
                     for(item in places){
                         Log.d(TAG, "performFiltering: ${item}")
                         if(item!!.name.contains(charString)) resultList.add(item)
@@ -76,7 +76,7 @@ class SearchAdapter(var places:List<Places>, var context:Context) : RecyclerView
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                placeFilterList = results?.values as ArrayList<Places>
+                placeFilterList = results?.values as ArrayList<Place>
                 notifyDataSetChanged()
             }
 

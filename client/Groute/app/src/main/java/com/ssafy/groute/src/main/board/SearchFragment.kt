@@ -11,11 +11,9 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentSearchBinding
-import com.ssafy.groute.src.dto.Places
+import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.main.home.AreaFilterAdapter
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.util.RetrofitCallback
 
@@ -24,7 +22,7 @@ class SearchFragment : Fragment() {
     private lateinit var mainActivity: MainActivity
     private lateinit var binding: FragmentSearchBinding
     private lateinit var searchAdapter:SearchAdapter
-    private var searchList:List<Places> = arrayListOf()
+    private var searchList:List<Place> = arrayListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -79,12 +77,12 @@ class SearchFragment : Fragment() {
         }
     }
 
-    inner class PlaceCallback: RetrofitCallback<List<Places>> {
+    inner class PlaceCallback: RetrofitCallback<List<Place>> {
         override fun onError(t: Throwable) {
             Log.d(TAG, "onError: ")
         }
 
-        override fun onSuccess(code: Int, responseData: List<Places>) {
+        override fun onSuccess(code: Int, responseData: List<Place>) {
 //            Log.d(TAG, "onSuccess: ${responseData}")
             responseData.let{
                 searchAdapter = SearchAdapter(responseData,requireContext())

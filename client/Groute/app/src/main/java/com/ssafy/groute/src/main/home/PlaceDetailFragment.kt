@@ -2,39 +2,30 @@ package com.ssafy.groute.src.main.home
 
 import android.animation.ValueAnimator
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
-import android.widget.Toolbar
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.R
 
-import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
-import com.ssafy.groute.databinding.FragmentInfoBinding
 import com.ssafy.groute.databinding.FragmentPlaceDetailBinding
-import com.ssafy.groute.src.dto.Places
-import com.ssafy.groute.src.dto.User
+import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.PlaceService
-import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
 
 
 
 
-
-private const val TAG = "PlaceDetailFragment_Groute"
+// place 하나 선택 했을 때 장소에 대한 정보를 보여주는 화면
+private const val TAG = "PlaceDetailF_Groute"
 class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPlaceDetailBinding::bind, R.layout.fragment_place_detail) {
 //    private lateinit var binding: FragmentPlaceDetailBinding
     private lateinit var mainActivity : MainActivity
     
     private var placeId = -1
-    private lateinit var places:Places
+    private lateinit var place:Place
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -103,7 +94,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
             mainActivity.supportFragmentManager.popBackStack()
         }
     }
-    fun updatePlace(place : Places){
+    fun updatePlace(place : Place){
         PlaceService().updatePlace(place, placeUpdateCallback())
     }
     fun initData(){
@@ -139,15 +130,15 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
         }
 
     }
-    inner class placesCallback : RetrofitCallback<Places>{
+    inner class placesCallback : RetrofitCallback<Place>{
         override fun onError(t: Throwable) {
             Log.d(TAG, "onError: ")
         }
 
-        override fun onSuccess(code: Int, responseData: Places) {
+        override fun onSuccess(code: Int, responseData: Place) {
 //                binding.placeDetailTvPlaceName.text = responseData.name
 //            binding.placeDetailTvReview.text = responseData.rate.toFloat().toString()
-            var place = Places(
+            var place = Place(
                 responseData.address,
                 responseData.areaId,
                 responseData.contact,

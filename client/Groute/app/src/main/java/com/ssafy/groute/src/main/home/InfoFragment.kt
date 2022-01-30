@@ -3,17 +3,13 @@ package com.ssafy.groute.src.main.home
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
-import com.ssafy.groute.databinding.FragmentAreaBinding
 import com.ssafy.groute.databinding.FragmentInfoBinding
-import com.ssafy.groute.src.dto.Places
+import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.util.RetrofitCallback
@@ -87,14 +83,14 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
                 }
             }
     }
-    inner class placesCallback : RetrofitCallback<Places> {
+    inner class placesCallback : RetrofitCallback<Place> {
         override fun onError(t: Throwable) {
             Log.d(TAG, "onError: ")
         }
 
-        override fun onSuccess(code: Int, responseData: Places) {
+        override fun onSuccess(code: Int, responseData: Place) {
             Log.d(TAG, "onSuccess: ${responseData}")
-            val places = Places(
+            val places = Place(
                 responseData.address,
                 responseData.areaId,
                 responseData.contact,

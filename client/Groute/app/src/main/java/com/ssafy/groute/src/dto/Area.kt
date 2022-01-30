@@ -5,5 +5,5 @@ data class Area (
     val name:String,
     val img:String,
     val lat:String,
-    val lng:String
+    val lng:String,
 )
