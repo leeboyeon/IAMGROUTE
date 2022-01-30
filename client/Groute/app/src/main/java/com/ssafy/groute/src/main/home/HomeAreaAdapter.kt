@@ -2,6 +2,7 @@ package com.ssafy.groute.src.main.home
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
@@ -15,8 +16,8 @@ import com.ssafy.groute.src.dto.Area
 import retrofit2.Call
 
 //class HomeAreaAdapter(private val onClickListener: OnClickListener) : RecyclerView.Adapter<HomeAreaAdapter.HomeAreaViewHolder>(HomeAreaAdapter){
-class HomeAreaAdapter(private val onClickListener: OnClickListener, private val areaList: MutableList<Area>) : RecyclerView.Adapter<HomeAreaAdapter.HomeAreaViewHolder>(){
-//class HomeAreaAdapter(private val areaList: MutableList<Area>) : RecyclerView.Adapter<HomeAreaAdapter.HomeAreaViewHolder>(){
+//class HomeAreaAdapter(private val onClickListener: OnClickListener, private val areaList: MutableList<Area>) : RecyclerView.Adapter<HomeAreaAdapter.HomeAreaViewHolder>(){
+class HomeAreaAdapter(private val areaList: MutableList<Area>) : RecyclerView.Adapter<HomeAreaAdapter.HomeAreaViewHolder>(){
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeAreaViewHolder {
@@ -25,19 +26,19 @@ class HomeAreaAdapter(private val onClickListener: OnClickListener, private val 
 
     override fun onBindViewHolder(holder: HomeAreaViewHolder, position: Int) {
         val dto = areaList[position]
-//        Log.d("HomeAreaAdapter", "onBindViewHolder: $dto")
-        holder.itemView.setOnClickListener {
-            onClickListener.onClick(dto)
+        holder.apply {
+            itemView.setOnClickListener {
+                itemClickListener.onClick(it, position, dto.name)
+            }
+            bind(dto)
         }
-        holder.bind(dto)
     }
 
     override fun getItemCount(): Int {
         return areaList.size
     }
 
-
-    class HomeAreaViewHolder(private var binding:RecyclerviewCategoryItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class HomeAreaViewHolder(private var binding:RecyclerviewCategoryItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(area: Area) {
             binding.area = area
             binding.executePendingBindings()
@@ -45,9 +46,18 @@ class HomeAreaAdapter(private val onClickListener: OnClickListener, private val 
 
     }
 
-    class OnClickListener(val clickListener: (area: Area) -> Unit) {
-        fun onClick(area: Area) = clickListener(area)
+//    class OnClickListener(val clickListener: (area: Area) -> Unit) {
+//        fun onClick(area: Area) = clickListener(area)
+//    }
+
+    interface ItemClickListener{
+        fun onClick(view: View, position: Int, name: String)
     }
 
+    private lateinit var itemClickListener : ItemClickListener
+
+    fun setItemClickListener(itemClickListener: ItemClickListener){
+        this.itemClickListener = itemClickListener
+    }
 
 }

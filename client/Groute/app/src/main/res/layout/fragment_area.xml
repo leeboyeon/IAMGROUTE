@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.ssafy.groute.src.main.home.HomeViewModel" />
+            type="com.ssafy.groute.src.main.home.PlaceViewModel" />
     </data>
     <FrameLayout
         android:layout_width="match_parent"
@@ -70,6 +70,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/searchView"
+                app:placeListData="@{viewModel.placeList}"
                 tools:listitem="@layout/recyclerview_area_place_item" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

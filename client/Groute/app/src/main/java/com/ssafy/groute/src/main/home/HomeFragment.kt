@@ -1,6 +1,7 @@
 package com.ssafy.groute.src.main.home
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -64,6 +65,11 @@ class HomeFragment : Fragment() {
         mainActivity = context as MainActivity
     }
 
+    override fun onResume() {
+        super.onResume()
+        mainActivity.hideMainProfileBar(false)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -81,17 +87,19 @@ class HomeFragment : Fragment() {
         }
 
         homeViewModel.areaList.observe(viewLifecycleOwner, Observer {
-//            homeAreaAdapter = HomeAreaAdapter(it)
 
-            homeAreaAdapter = HomeAreaAdapter(HomeAreaAdapter.OnClickListener {
-                homeViewModel.displayAreaDetails(it.id)
-            }, it)
+//            homeAreaAdapter = HomeAreaAdapter(HomeAreaAdapter.OnClickListener {
+//                homeViewModel.displayAreaDetails(it.id)
+//            }, it)
+
+            homeAreaAdapter = HomeAreaAdapter(it)
+            homeAreaAdapter.setItemClickListener(object : HomeAreaAdapter.ItemClickListener {
+                override fun onClick(view: View, position: Int, name: String) {
+                    mainActivity.moveFragment(3)
+                }
+            })
             homeAreaAdapter.notifyDataSetChanged()
-//        homeAreaAdapter.setItemClickListener(object : CategoryAdapter.ItemClickListener{
-//            override fun onClick(view: View, position: Int, name: String) {
-//                mainActivity.moveFragment(3)
-//            }
-//        })
+
 
             binding.homeRvCategory.apply{
                 layoutManager = GridLayoutManager(context, 5)
@@ -204,9 +212,11 @@ class HomeFragment : Fragment() {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             HomeFragment().apply {
-
             }
     }
+
+
+
 
 //    inner class AreaCallback: RetrofitCallback<List<Area>> {
 //        override fun onError(t: Throwable) {

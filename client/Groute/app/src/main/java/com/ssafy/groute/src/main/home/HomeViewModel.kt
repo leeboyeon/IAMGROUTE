@@ -7,6 +7,7 @@ import androidx.lifecycle.*
 import com.nhn.android.idp.common.connection.CommonConnection.cancel
 import com.ssafy.groute.src.dto.Area
 import com.ssafy.groute.src.dto.BoardDetail
+import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.AreaService
 import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil
@@ -32,7 +33,6 @@ class HomeViewModel: ViewModel() {
         _areaResponse.postValue(area)   // 백그라운드 갱신
     }
 
-
     suspend fun getAreaLists() {
         val response = AreaService().getAreaList()
         viewModelScope.launch {
@@ -41,7 +41,7 @@ class HomeViewModel: ViewModel() {
                 if (response.code() == 200) {
                     if (res != null) {
                         setAreaList(res)
-                        Log.d(TAG, "onResponse: $res")
+//                        Log.d(TAG, "onResponse: $res")
                     }
 
                 } else {

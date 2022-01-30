@@ -134,31 +134,31 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 transaction.replace(R.id.frame_main_layout, TravelPlanFragment())
                     .addToBackStack(null)
             }
-            3->{
+            3->{    // 지역별 장소 리스트 화면
                 transaction.replace(R.id.frame_main_layout, AreaFragment.newInstance(key,value))
                     .addToBackStack(null)
             }
-            4 -> {
+            4 -> {  // 하나의 장소에 대한 상세 정보 출력 화면
                 transaction.replace(R.id.frame_main_layout, PlaceDetailFragment.newInstance(key, value))
                     .addToBackStack(null)
             }
-            5->{
+            5->{    // 자유 or 질문 게시판 화면
                 transaction.replace(R.id.frame_main_layout, BoardDetailFragment.newInstance(key, value))
                     .addToBackStack(null)
             }
-            6->{
+            6->{    // 게시글 1개에 대한 화면
                 transaction.replace(R.id.frame_main_layout,BoardDetailDetailFragment.newInstance(key, value))
                     .addToBackStack(null)
             }
-            7->{
+            7->{    // 사용자 여행 일정 계획 화면
                 transaction.replace(R.id.frame_main_layout,TravelPlanFragment())
                     .addToBackStack(null)
             }
-            8->{
+            8->{    // 게시판 글쓰기 화면
                 transaction.replace(R.id.frame_main_layout,BoardWriteFragment.newInstance(key, value))
                     .addToBackStack(null)
             }
-            9->{
+            9->{    // 장소 검색 화면
                 transaction.replace(R.id.frame_main_layout, SearchFragment.newInstance(key, value))
                     .addToBackStack(null)
             }
