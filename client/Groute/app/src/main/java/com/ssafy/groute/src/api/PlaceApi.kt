@@ -29,4 +29,7 @@ interface PlaceApi {
     @GET("/place/list")
     suspend fun getPlaceList() : Response<MutableList<Place>>
 
+    @GET("/place/detail")
+    suspend fun getPlacebyId(@Query("id") id:Int) : Response<Place>
+
 }

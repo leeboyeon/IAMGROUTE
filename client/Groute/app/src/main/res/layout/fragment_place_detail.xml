@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="placeDetail"
-            type="com.ssafy.groute.src.dto.Place" />
+            name="placeViewModel"
+            type="com.ssafy.groute.src.main.home.PlaceViewModel" />
     </data>
     <FrameLayout
         android:layout_width="match_parent"
@@ -47,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="@{placeDetail.name}"
+                    android:text="@{placeViewModel.place.name}"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -63,7 +63,7 @@
                     android:id="@+id/placeDetail_tv_review"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(placeDetail.rate)}" />
+                    android:text="@{String.valueOf(placeViewModel.place.rate)}" />
 
             </LinearLayout>
 
