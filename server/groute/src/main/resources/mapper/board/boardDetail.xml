@@ -13,6 +13,7 @@
         <result column="user_id" property="userId"></result>
         <result column="create_date" property="createDate"></result>
         <result column="update_date" property="updateDate"></result>
+        <result column="place_id" property="placeId"></result>
     </resultMap>
     <select id="selectBoardDetail" parameterType="int" resultMap="BoardDetailDTO">
         select id, title, content, img, heartCnt, hitCnt, board_id, user_id, place_id,
