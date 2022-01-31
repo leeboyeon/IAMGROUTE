@@ -4,8 +4,8 @@
 
 <mapper namespace="com.ssafy.groute.mapper.board.BoardDetailMapper">
     <insert id="insertBoardDetail" parameterType="BoardDetail">
-        insert into boarddetail(title, content, img, board_id, user_id)
-        values(#{title}, #{content}, #{img}, #{boardId}, #{userId})
+        insert into boarddetail(title, content, img, board_id, user_id, place_id)
+        values(#{title}, #{content}, #{img}, #{boardId}, #{userId}, #{placeId})
     </insert>
 
     <resultMap id="BoardDetailDTO" type="BoardDetail">

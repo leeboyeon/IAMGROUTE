@@ -20,4 +20,5 @@ public class BoardDetail {
     private int hitCnt;
     private int boardId;
     private String userId;
+    private int placeId;
 }
