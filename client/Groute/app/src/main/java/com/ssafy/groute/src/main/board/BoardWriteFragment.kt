@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
@@ -12,9 +13,11 @@ import com.ssafy.groute.databinding.FragmentBoardWriteBinding
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.main.MainActivity
+import com.ssafy.groute.src.main.home.PlaceViewModel
 import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.util.RetrofitCallback
+import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 
 
@@ -22,7 +25,7 @@ private const val TAG = "BoardWriteF_Grooute"
 class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoardWriteBinding::bind, R.layout.fragment_board_write) {
 //    private lateinit var binding: FragmentBoardWriteBinding
     private lateinit var mainActivity:MainActivity
-
+    private val placeViewModel: PlaceViewModel by activityViewModels()
     private var boardDetailId = -1
     private var boardId = -1
     private var placeId = -1
@@ -43,13 +46,6 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        binding = FragmentBoardWriteBinding.inflate(layoutInflater,container,false)
-//        return binding.root
-//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,7 +55,10 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
             binding.searchLayout.visibility = View.GONE
         }else{
             if(placeId > 0){
-                PlaceService().getPlace(placeId, PlacesCallback())
+                runBlocking {
+                    placeViewModel.getPlace(placeId)
+                    binding.boardWriteTvPlaceName.text = placeViewModel.place.value?.name
+                }
             }
         }
         if(boardDetailId > 0){
@@ -116,6 +115,7 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
                 }else{
                     //Question Board
                     Log.d(TAG, "initButton: ${boardId}")
+                    Log.d(TAG, "initButton_Place: ${placeId}")
                     boardId = 2
                     val boardDetail = BoardDetail(
                         title = title,
@@ -123,18 +123,11 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
                         img = img,
                         boardId=boardId,
                         userId = userId,
-                        placeId
+                        placeId = placeId
                     )
+                    Log.d(TAG, "initButton: ${boardDetail}")
                     boardWrite(boardDetail,2)
                 }
-//                val boardDetail = BoardDetail(
-//                    title = title,
-//                    content = content,
-//                    img = img,
-//                    boardId=boardId,
-//                    userId = userId
-//                )
-
             }
         binding.searchLayout.setOnClickListener {
             mainActivity.moveFragment(9)
@@ -142,6 +135,7 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
 
     }
     fun boardWrite(boardDetail:BoardDetail, boardId:Int){
+        Log.d(TAG, "boardWrite: ${boardDetail}")
         BoardService().insertBoardDetail(boardDetail, object : RetrofitCallback<Boolean> {
             override fun onError(t: Throwable) {
                 Log.d(TAG, "onError: 글쓰기 에러")
@@ -200,20 +194,6 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
             }
 
         })
-    }
-    inner class PlacesCallback : RetrofitCallback<Place>{
-        override fun onError(t: Throwable) {
-            Log.d(TAG, "onError: ")
-        }
-
-        override fun onSuccess(code: Int, responseData: Place) {
-            binding.boardWriteTvPlaceName.text = responseData.name
-        }
-
-        override fun onFailure(code: Int) {
-            Log.d(TAG, "onFailure: ")
-        }
-
     }
     companion object {
         @JvmStatic

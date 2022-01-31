@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
@@ -13,6 +14,7 @@ import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.util.RetrofitCallback
+import kotlinx.coroutines.runBlocking
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -23,6 +25,7 @@ private const val TAG = "InfoFragment"
 class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind, R.layout.fragment_info) {
     private var placeId = -1
     private lateinit var mainActivity : MainActivity
+    private val placeViewModel: PlaceViewModel by activityViewModels()
 //    private lateinit var binding: FragmentInfoBinding
 
     var lat:Double = 0.0
@@ -40,17 +43,14 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
             Log.d(TAG, "onAttach: $placeId")
         }
     }
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        binding = FragmentInfoBinding.inflate(layoutInflater,container,false)
-//        return binding.root
-//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initData()
+        binding.viewModels = placeViewModel
+        runBlocking {
+            placeViewModel.getPlace(placeId)
+        }
+//        initData()
     }
     fun createMap(){
         val mapView = MapView(requireContext())
@@ -68,11 +68,11 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
 
         mapView.addPOIItem(marker)
     }
-    fun initData(){
-        Log.d(TAG, "initData: $placeId")
-        val placesDetail = PlaceService().getPlace(placeId, placesCallback())
-
-    }
+//    fun initData(){
+//        Log.d(TAG, "initData: $placeId")
+//        val placesDetail = PlaceService().getPlace(placeId)
+//
+//    }
     companion object {
 
         @JvmStatic
@@ -107,16 +107,7 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
                 responseData.userId,
                 responseData.zipCode
             )
-            binding.placeDetail = places
-//            binding.placeDetailTvDescript.text = responseData.description
-//            binding.infoTvAddr.text = responseData.address
-//            if(responseData.contact == "" || responseData.contact ==null){
-//                binding.infoTvPhone.text = "없음"
-//            }else{
-//                binding.infoTvPhone.text = responseData.contact
-//            }
-//
-//            binding.placeDetailTvBigContent.text = responseData.name+"은"
+
             Glide.with(this@InfoFragment)
                 .load("${ApplicationClass.IMGS_URL_PLACE}${responseData.img}")
                 .into(binding.placeDetailIvSomenail)
