@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.R
 
@@ -14,8 +15,7 @@ import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.util.RetrofitCallback
-
-
+import kotlinx.coroutines.runBlocking
 
 
 // place 하나 선택 했을 때 장소에 대한 정보를 보여주는 화면
@@ -23,7 +23,8 @@ private const val TAG = "PlaceDetailF_Groute"
 class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPlaceDetailBinding::bind, R.layout.fragment_place_detail) {
 //    private lateinit var binding: FragmentPlaceDetailBinding
     private lateinit var mainActivity : MainActivity
-    
+    private val placeViewModel: PlaceViewModel by activityViewModels()
+
     private var placeId = -1
     private lateinit var place:Place
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,17 +39,15 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
             Log.d(TAG, "onAttach: $placeId")
         }
     }
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-////        binding = DataBindingUtil.setContentView(requireActivity(), R.layout.fragment_place_detail)
-//        binding = FragmentPlaceDetailBinding.inflate(layoutInflater,container,false)
-//        return binding.root
-//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.placeViewModel = placeViewModel
+
+        runBlocking {
+            placeViewModel.getPlace(placeId)
+        }
         val areaTabPagerAdapter = AreaTabPagerAdapter(this)
         val tabList = arrayListOf("Info","Review")
 
@@ -60,7 +59,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
             tab.text = tabList.get(position)
         }.attach()
 
-        initData()
+//        initData()
 
         binding.placeDetailAbtnHeart.setOnClickListener {
             val animator = ValueAnimator.ofFloat(0f,0.5f).setDuration(500)
@@ -68,26 +67,6 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
                 binding.placeDetailAbtnHeart.progress = animation.animatedValue as Float
             }
             animator.start()
-//            val place:Places = Places(
-//                places.address,
-//                places.areaId,
-//                places.contact,
-//                places.description,
-//                places.heartCnt+1,
-//                placeId,
-//                places.img,
-//                places.lat,
-//                places.lng,
-//                places.name,
-//                places.rate,
-//                places.themeId,
-//                places.type,
-//                ApplicationClass.sharedPreferencesUtil.getUser().id,
-//                places.zipCode
-//            )
-//
-//            updatePlace(place)
-
         }
         binding.placeDatilIbtnBack.setOnClickListener {
             mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
@@ -97,10 +76,10 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
     fun updatePlace(place : Place){
         PlaceService().updatePlace(place, placeUpdateCallback())
     }
-    fun initData(){
-        Log.d(TAG, "initData: $placeId")
-        val placesDetail = PlaceService().getPlace(placeId, placesCallback())
-    }
+//    suspend fun initData(){
+//        Log.d(TAG, "initData: $placeId")
+//        placeViewModel.getPlace(placeId)
+//    }
 
     companion object {
         @JvmStatic
@@ -130,39 +109,39 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
         }
 
     }
-    inner class placesCallback : RetrofitCallback<Place>{
-        override fun onError(t: Throwable) {
-            Log.d(TAG, "onError: ")
-        }
-
-        override fun onSuccess(code: Int, responseData: Place) {
-//                binding.placeDetailTvPlaceName.text = responseData.name
-//            binding.placeDetailTvReview.text = responseData.rate.toFloat().toString()
-            var place = Place(
-                responseData.address,
-                responseData.areaId,
-                responseData.contact,
-                responseData.description,
-                responseData.heartCnt,
-                responseData.id,
-                responseData.img,
-                responseData.lat,
-                responseData.lng,
-                responseData.name,
-                responseData.rate,
-                responseData.themeId,
-                responseData.type,
-                responseData.userId,
-                responseData.zipCode
-            )
-            binding.placeDetail = place
-//            places = responseData
-        }
-
-        override fun onFailure(code: Int) {
-            Log.d(TAG, "onFailure: $code")
-            
-        }
-
-    }
+////    inner class placesCallback : RetrofitCallback<Place>{
+////        override fun onError(t: Throwable) {
+////            Log.d(TAG, "onError: ")
+////        }
+////
+////        override fun onSuccess(code: Int, responseData: Place) {
+//////                binding.placeDetailTvPlaceName.text = responseData.name
+//////            binding.placeDetailTvReview.text = responseData.rate.toFloat().toString()
+////            var place = Place(
+////                responseData.address,
+////                responseData.areaId,
+////                responseData.contact,
+////                responseData.description,
+////                responseData.heartCnt,
+////                responseData.id,
+////                responseData.img,
+////                responseData.lat,
+////                responseData.lng,
+////                responseData.name,
+////                responseData.rate,
+////                responseData.themeId,
+////                responseData.type,
+////                responseData.userId,
+////                responseData.zipCode
+////            )
+////            binding.placeDetail = place
+//////            places = responseData
+////        }
+//
+//        override fun onFailure(code: Int) {
+//            Log.d(TAG, "onFailure: $code")
+//
+//        }
+//
+//    }
 }

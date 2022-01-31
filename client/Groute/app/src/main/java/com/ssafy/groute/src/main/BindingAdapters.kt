@@ -10,6 +10,7 @@ import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.src.dto.Area
 import com.ssafy.groute.src.dto.Place
+import com.ssafy.groute.src.main.board.SearchAdapter
 import com.ssafy.groute.src.main.home.PlaceFilterAdapter
 
 @BindingAdapter("imageUrlArea")
@@ -44,6 +45,21 @@ fun bindImagePlace(imgView: ImageView, imgUrl: String?) {
 fun bindRecyclerView(recyclerView: RecyclerView, data: List<Place>?) {
     val adapter = recyclerView.adapter as PlaceFilterAdapter
     adapter.submitList(data)
+}
+
+
+@BindingAdapter("searchListData")
+fun bindSearchRecyclerView(recyclerView: RecyclerView, data: List<Place>?) {
+    var adapter = recyclerView.adapter as SearchAdapter
+
+    if (recyclerView.adapter == null) {
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    } else {
+        adapter = recyclerView.adapter as SearchAdapter
+    }
+    adapter.places = data as List<Place>
+    adapter.notifyDataSetChanged()
 }
 
 

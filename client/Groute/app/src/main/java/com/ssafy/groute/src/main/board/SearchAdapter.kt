@@ -8,12 +8,15 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
+import androidx.databinding.BindingAdapter
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.src.dto.Place
 
 private const val TAG = "SearchAdapter"
-class SearchAdapter(var places:List<Place>, var context:Context) : RecyclerView.Adapter <SearchAdapter.SearchHolder>(),
+class SearchAdapter(var places: List<Place>, var context:Context) : RecyclerView.Adapter <SearchAdapter.SearchHolder>(),
     Filterable {
 
     private var placeFilterList = places
@@ -32,7 +35,9 @@ class SearchAdapter(var places:List<Place>, var context:Context) : RecyclerView.
 
     override fun onBindViewHolder(holder: SearchHolder, position: Int) {
         holder.apply {
+//            bindInfo(placeFilterList.value!!.get(position))
             bindInfo(placeFilterList[position])
+
             itemView.setOnClickListener {
                 itemClickListener.onClick(it,position,placeFilterList[position].id)
             }
@@ -41,6 +46,11 @@ class SearchAdapter(var places:List<Place>, var context:Context) : RecyclerView.
 
     override fun getItemCount(): Int {
         return placeFilterList.size
+    }
+
+    override fun getItemId(position: Int): Long {
+        return placeFilterList.get(position).id.toLong()
+        //        return position.toLong()
     }
 
     interface ItemClickListener{
@@ -61,12 +71,14 @@ class SearchAdapter(var places:List<Place>, var context:Context) : RecyclerView.
                     places
                 }else{
                     val resultList = ArrayList<Place>()
+
                     for(item in places){
 
-                        if(item!!.name.contains(charString)){
+                        if(item.name.contains(charString)){
                             Log.d(TAG, "performFiltering: ${item.name}")
                             resultList.add(item)
                         }
+
                     }
                     resultList
                 }
@@ -77,7 +89,7 @@ class SearchAdapter(var places:List<Place>, var context:Context) : RecyclerView.
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                placeFilterList = results?.values as ArrayList<Place>
+                placeFilterList = results?.values as List<Place>
                 notifyDataSetChanged()
             }
 

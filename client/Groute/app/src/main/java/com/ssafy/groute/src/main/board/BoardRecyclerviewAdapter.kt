@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
@@ -11,14 +12,19 @@ import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.src.dto.BoardDetail
+import com.ssafy.groute.src.dto.Place
+import com.ssafy.groute.src.main.home.PlaceViewModel
 import com.ssafy.groute.src.main.route.RouteThemeRecyclerviewAdapter
 import com.ssafy.groute.src.service.BoardService
+import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
+import retrofit2.Retrofit
 
 private const val TAG = "BoardRecyclerviewAdapte"
 class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: MutableList<BoardDetail>, var boardType: Int, var context:Context) : RecyclerView.Adapter<BoardRecyclerviewAdapter.BoardHolder>(){
     lateinit var ThemeAdapter: RouteThemeRecyclerviewAdapter
+
     var isEdit = false
 
     @JvmName("setBoardList1")
@@ -51,11 +57,19 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
                     .load(data.img)
                     .into(thumbnailIv)
             }
+            Log.d(TAG, "bindInfo_DATA: ${data}")
             if(boardType == 1) {
                 //freeBoard
                 itemView.findViewById<LinearLayout>(R.id.locationLayout).visibility = View.GONE
             } else if(boardType == 2) {
-                itemView.findViewById<TextView>(R.id.item_board_tv_location).text = data.placeId.toString()
+
+                Log.d(TAG, "bindInfo_Place: ${data.placeId}")
+                val placeInfo = PlaceService().getPlace(data.placeId)
+                placeInfo.observe(lifecycleOwner, {
+
+                    itemView.findViewById<TextView>(R.id.item_board_tv_location).text = it.name
+                })
+
             }
             Log.d(TAG, "bindInfo: ${data.userId}")
             val userInfo = UserService().getUserInfo(data.userId)
@@ -132,6 +146,7 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
     fun setItemClickListener(itemClickListener: ItemClickListener){
         this.itemClickListener = itemClickListener
     }
+
     inner class DeleteCallback(var position:Int):RetrofitCallback<Boolean> {
         override fun onError(t: Throwable) {
             Log.d(TAG, "onError: ")

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="placeDetail"
-            type="com.ssafy.groute.src.dto.Place" />
+            name="viewModels"
+            type="com.ssafy.groute.src.main.home.PlaceViewModel" />
     </data>
     <FrameLayout
         android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginEnd="15dp"
-                        android:text="@{@string/convert_info_title(placeDetail.name)}"
+                        android:text="@{@string/convert_info_title(viewModels.place.name)}"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -62,7 +62,7 @@
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="15dp"
                         android:layout_marginEnd="15dp"
-                        android:text="@{placeDetail.description}"
+                        android:text="@{viewModels.place.description}"
                         android:textColor="#303030" />
 
 
@@ -107,7 +107,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="8dp"
                                     android:layout_weight="1"
-                                    android:text="@{placeDetail.address}"
+                                    android:text="@{viewModels.place.address}"
                                     android:textSize="11sp" />
                             </LinearLayout>
 
@@ -130,7 +130,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="8dp"
                                     android:layout_weight="1"
-                                    android:text="@{placeDetail.contact}"
+                                    android:text="@{viewModels.place.contact}"
                                     android:textSize="11sp" />
                             </LinearLayout>
 

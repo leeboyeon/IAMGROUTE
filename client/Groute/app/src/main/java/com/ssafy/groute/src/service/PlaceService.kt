@@ -1,6 +1,7 @@
 package com.ssafy.groute.src.service
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.groute.src.dto.Place
 //import com.ssafy.groute.src.main.home.Place
@@ -9,6 +10,8 @@ import com.ssafy.groute.util.RetrofitUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.http.Query
 
 private const val TAG = "PlaceService"
 class PlaceService {
@@ -56,7 +59,8 @@ class PlaceService {
         })
     }
 
-    fun getPlace(placeId: Int, callback: RetrofitCallback<Place>){
+    fun getPlace(placeId: Int) : LiveData<Place> {
+        val responseLiveData : MutableLiveData<Place> = MutableLiveData()
         val placeRequest : Call<Place> = RetrofitUtil.placeService.getPlace(placeId)
         placeRequest.enqueue(object : Callback<Place>{
             override fun onResponse(call: Call<Place>, response: Response<Place>) {
@@ -64,18 +68,19 @@ class PlaceService {
                 if(response.code() == 200){
                     if(res != null){
                         Log.d(TAG, "onResponse: ")
-                        callback.onSuccess(response.code(), res)
+                        responseLiveData.value = res
                     }
                 }else{
-                    callback.onFailure(response.code())
+                    Log.d(TAG, "onResponse: ")
                 }
             }
 
             override fun onFailure(call: Call<Place>, t: Throwable) {
-                callback.onError(t)
+                Log.d(TAG, "onFailure: ")
             }
 
         })
+        return responseLiveData
     }
     
     fun updatePlace(place: Place, callback:RetrofitCallback<Boolean>){
@@ -100,4 +105,9 @@ class PlaceService {
 
     // place Coroutine Call
     suspend fun getPlaceList() = RetrofitUtil.placeService.getPlaceList()
+
+    //place Coroutine Call
+    suspend fun getPlaces(id:Int): Response<Place> {
+        return RetrofitUtil.placeService.getPlacebyId(id)
+    }
 }

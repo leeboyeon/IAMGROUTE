@@ -25,5 +25,7 @@ class BoardBindingAdatper {
             adapter.setCommentList(data)
             adapter.notifyDataSetChanged()
         }
+
+
     }
 }
