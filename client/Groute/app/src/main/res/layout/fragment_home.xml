@@ -82,6 +82,7 @@
                         android:paddingRight="15dp"
                         android:text="인기 관광지 추천"
                         android:textColor="@color/black"
+                        android:textStyle="bold"
                         android:textSize="16sp" />
 
                     <com.airbnb.lottie.LottieAnimationView

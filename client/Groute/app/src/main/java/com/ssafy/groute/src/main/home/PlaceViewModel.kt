@@ -14,11 +14,16 @@ class PlaceViewModel : ViewModel() {
 
     private val _placeListResponse = MutableLiveData<MutableList<Place>>()
     private val _placeResponse = MutableLiveData<Place>()
+    private val _placeBestResponse =MutableLiveData<MutableList<Place>>()
+    
     val placeList : LiveData<MutableList<Place>>
         get() = _placeListResponse
 
     val place : LiveData<Place>
         get() = _placeResponse
+    
+    val placeBestList : LiveData<MutableList<Place>>
+        get() = _placeBestResponse
     
     fun setPlaceList(place: MutableList<Place>) = viewModelScope.launch {
         _placeListResponse.value = place  // main thread 에서 갱신
@@ -26,6 +31,9 @@ class PlaceViewModel : ViewModel() {
     }
     fun setPlace(place: Place) = viewModelScope.launch { 
         _placeResponse.value = place
+    }
+    fun setPlaceBestList(place: MutableList<Place>) = viewModelScope.launch { 
+        _placeBestResponse.value = place
     }
     
     suspend fun getPlaceList() {
@@ -57,6 +65,21 @@ class PlaceViewModel : ViewModel() {
                 }
             }else{
                 Log.d(TAG, "getPlace: ${response.message()}")
+            }
+        }
+    }
+    
+    suspend fun getPlaceBestList(){
+        val response = PlaceService().getPlaceBestList()
+        viewModelScope.launch { 
+            var res = response.body()
+            if(response.code() == 200){
+                if(res!= null){
+                    setPlaceBestList(res)
+                    Log.d(TAG, "getPlaceBestList: $res")
+                }
+            }else{
+                Log.d(TAG, "getPlaceBestList: ")
             }
         }
     }

@@ -41,8 +41,10 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
 
     private val homeViewModel: HomeViewModel by activityViewModels()
-    private lateinit var homeAreaAdapter:HomeAreaAdapter
+    private val placeViewModel : PlaceViewModel by activityViewModels()
 
+    private lateinit var homeAreaAdapter:HomeAreaAdapter
+    private lateinit var bestPlaceAdapter:BestPlaceAdapter
     private var categoryAdapter:CategoryAdapter = CategoryAdapter()
     private var bestrouteAdatper:BestRouteAdapter = BestRouteAdapter()
 
@@ -85,7 +87,9 @@ class HomeFragment : Fragment() {
         runBlocking {
             homeViewModel.getAreaLists()
         }
-
+        runBlocking {
+            placeViewModel.getPlaceBestList()
+        }
         homeViewModel.areaList.observe(viewLifecycleOwner, Observer {
 
 //            homeAreaAdapter = HomeAreaAdapter(HomeAreaAdapter.OnClickListener {
@@ -107,7 +111,7 @@ class HomeFragment : Fragment() {
                 adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
         })
-
+        initBestPlaceAdapter()
 
         initAdapter()
 
@@ -141,7 +145,26 @@ class HomeFragment : Fragment() {
 //            adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 //        }
 //    }
+    fun initBestPlaceAdapter(){
+        placeViewModel.placeBestList.observe(viewLifecycleOwner, Observer {
+            bestPlaceAdapter = BestPlaceAdapter(it)
+            bestPlaceAdapter.setItemClickListener(object : BestPlaceAdapter.ItemClickListener{
+                override fun onClick(view: View, position: Int, id: Int) {
+                    mainActivity.moveFragment(4, "placeId", it.get(position).id)
+                }
 
+
+            })
+            bestPlaceAdapter.notifyDataSetChanged()
+
+            binding.homeRvBestPlace.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
+                adapter = bestPlaceAdapter
+                adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+            }
+        })
+
+    }
     /**
      * home 화면에 3번째 배너
      */

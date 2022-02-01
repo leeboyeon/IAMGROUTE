@@ -110,4 +110,7 @@ class PlaceService {
     suspend fun getPlaces(id:Int): Response<Place> {
         return RetrofitUtil.placeService.getPlacebyId(id)
     }
+
+    //place bestList Corouting Call
+    suspend fun getPlaceBestList() = RetrofitUtil.placeService.getPlaceBestList()
 }

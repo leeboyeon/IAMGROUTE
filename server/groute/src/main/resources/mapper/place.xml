@@ -65,5 +65,6 @@
         select *
         from place
         order by heartcnt desc
+        limit 5
     </select>
 </mapper>
