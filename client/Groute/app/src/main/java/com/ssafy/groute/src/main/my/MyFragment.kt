@@ -13,6 +13,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -26,6 +27,7 @@ import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.main.home.PlaceViewModel
 import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
+import com.ssafy.groute.util.RetrofitCallback
 
 private const val TAG = "MyFragment_groute"
 class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.layout.fragment_my) {
@@ -117,11 +119,29 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
             .setMessage("정말로 탈퇴하시겠습니까?")
             .setPositiveButton("YES",DialogInterface.OnClickListener{dialogInterface, id ->
             // 탈퇴기능구현
+                UserService().deleteUser(ApplicationClass.sharedPreferencesUtil.getUser().id, DeleteCallback())
             })
             .setNeutralButton("NO", null)
             .create()
 
         builder.show()
     }
+    inner class DeleteCallback() : RetrofitCallback<Boolean>{
+        override fun onError(t: Throwable) {
+            Log.d(TAG, "onError: ")
+        }
 
+        override fun onSuccess(code: Int, responseData: Boolean) {
+            if(responseData){
+                Toast.makeText(requireContext(),"탈퇴되었습니다.",Toast.LENGTH_SHORT).show()
+                mainActivity.moveFragment(10)
+            }
+        }
+
+        override fun onFailure(code: Int) {
+            Log.d(TAG, "onFailure: ")
+        }
+
+
+    }
 }

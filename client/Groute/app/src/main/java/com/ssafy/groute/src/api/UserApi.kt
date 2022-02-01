@@ -38,4 +38,6 @@ interface UserApi {
     @PUT("/user/update")
     fun updateUser(@Part("user") user : RequestBody, @Part img: MultipartBody.Part?): Call<Boolean>
 
+    @DELETE("/user/{userId}")
+    fun deleteUser(@Path("userId") userId:String) : Call<Boolean>
 }
