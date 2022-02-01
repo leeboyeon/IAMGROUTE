@@ -40,13 +40,6 @@ class RouteCreateFragment : BaseFragment<FragmentRouteCreateBinding>(FragmentRou
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        binding = FragmentRouteCreateBinding.inflate(layoutInflater,container,false)
-//        return binding.root
-//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
