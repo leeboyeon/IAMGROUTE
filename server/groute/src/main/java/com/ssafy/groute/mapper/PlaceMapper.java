@@ -18,4 +18,5 @@ public interface PlaceMapper {
     List<Integer> findAllPlaceByUId(String userId) throws Exception;
     void unLikePlace(int id) throws Exception;
     PlaceLike isLike(PlaceLike placeLike) throws Exception;
+    List<Place> bestPlace() throws Exception;
 }

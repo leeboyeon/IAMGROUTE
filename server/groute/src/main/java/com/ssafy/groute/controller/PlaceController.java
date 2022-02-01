@@ -126,4 +126,15 @@ public class PlaceController {
         return new ResponseEntity<Boolean>(true, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "placeBest",notes = "인기 관광지 다섯개")
+    @GetMapping(value = "/best")
+    public ResponseEntity<?> bestPlaceFive() throws Exception{
+        List<Place> res = placeService.bestPlace();
+        if(res==null){
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<List<Place>>(res,HttpStatus.OK);
+    }
+
 }

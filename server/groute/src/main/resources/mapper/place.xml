@@ -60,4 +60,10 @@
         select * from placelike
         where user_id = #{userId} and place_id = #{placeId}
     </select>
+
+    <select id="bestPlace" resultMap="PlaceDTO">
+        select *
+        from place
+        order by heartcnt desc
+    </select>
 </mapper>

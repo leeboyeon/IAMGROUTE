@@ -58,4 +58,9 @@ public class PlaceServiceImpl implements PlaceService {
     public PlaceLike isLike(PlaceLike placeLike) throws Exception {
         return placeMapper.isLike(placeLike);
     }
+
+    @Override
+    public List<Place> bestPlace() throws Exception {
+        return placeMapper.bestPlace();
+    }
 }

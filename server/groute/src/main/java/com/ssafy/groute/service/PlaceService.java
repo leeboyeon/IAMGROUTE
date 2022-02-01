@@ -15,4 +15,5 @@ public interface PlaceService {
     void updatePlace(Place place) throws Exception;
     void likePlace(PlaceLike placeLike) throws Exception;
     PlaceLike isLike(PlaceLike placeLike) throws Exception;
+    List<Place> bestPlace() throws Exception;
 }
