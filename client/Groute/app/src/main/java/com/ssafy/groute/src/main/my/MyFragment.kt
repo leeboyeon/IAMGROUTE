@@ -1,6 +1,9 @@
 package com.ssafy.groute.src.main.my
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -94,6 +97,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
                         return@setOnMenuItemClickListener true
                     }
                     R.id.menu_userDelete ->{
+                        showDeleteuserDialog()
                         return@setOnMenuItemClickListener true
                     }
                     else ->{
@@ -107,6 +111,17 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
     fun initUserInfo() {
         viewModel.initData(this)
     }
+    fun showDeleteuserDialog(){
+        var builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("회원 탈퇴")
+            .setMessage("정말로 탈퇴하시겠습니까?")
+            .setPositiveButton("YES",DialogInterface.OnClickListener{dialogInterface, id ->
+            // 탈퇴기능구현
+            })
+            .setNeutralButton("NO", null)
+            .create()
 
+        builder.show()
+    }
 
 }
