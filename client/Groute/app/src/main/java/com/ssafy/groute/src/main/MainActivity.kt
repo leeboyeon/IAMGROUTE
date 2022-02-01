@@ -1,6 +1,7 @@
 package com.ssafy.groute.src.main
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
@@ -17,10 +18,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.kakao.sdk.user.UserApiClient
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseActivity
 import com.ssafy.groute.databinding.ActivityMainBinding
+import com.ssafy.groute.src.login.LoginActivity
 import com.ssafy.groute.src.main.board.*
 import com.ssafy.groute.src.main.home.HomeFragment
 import com.ssafy.groute.src.main.home.PlaceDetailFragment
@@ -162,6 +166,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 transaction.replace(R.id.frame_main_layout, SearchFragment.newInstance(key, value))
                     .addToBackStack(null)
             }
+            10 ->{
+                logout()
+            }
         }
         transaction.commit()
     }
@@ -226,6 +233,29 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 Log.e(TAG, "getHashKey: ${signature},  ${e}")
             }
         }
+    }
+    fun logout(){
+        ApplicationClass.sharedPreferencesUtil.deleteUser()
+
+        //google Logout
+        FirebaseAuth.getInstance().signOut()
+        //kakao Logout
+        UserApiClient.instance.logout{
+            error->
+            if(error != null){
+                Log.e(TAG, "logout: Fail",error )
+            }else{
+                Log.i(TAG, "logout: Success!")
+            }
+        }
+
+        //naver Logout
+
+        //화면이동
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>, grantResults: IntArray) {

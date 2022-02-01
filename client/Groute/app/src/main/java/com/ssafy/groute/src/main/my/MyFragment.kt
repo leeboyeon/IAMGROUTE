@@ -6,33 +6,35 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentMyBinding
 import com.ssafy.groute.src.main.MainActivity
+import com.ssafy.groute.src.main.home.PlaceViewModel
 import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
 
 private const val TAG = "MyFragment_groute"
-class MyFragment : Fragment() {
-    private lateinit var binding: FragmentMyBinding
+class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.layout.fragment_my) {
+
     private lateinit var mainActivity:MainActivity
     private lateinit var userInfoResponse: UserInfoResponse
     private lateinit var intent: Intent
-    private lateinit var viewModel: MyViewModel
-
+    private val viewModel: MyViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
-
-
     }
 
     override fun onAttach(context: Context) {
@@ -54,22 +56,12 @@ class MyFragment : Fragment() {
 
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        //binding = FragmentMyBinding.inflate(inflater,container,false)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_my, container, false)
-        viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
-        binding.vm = viewModel
-        binding.lifecycleOwner = this
-        return binding.root
-    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val pagerAdapter = MyTravelTabPageAdapter(this)
         val tabList = arrayListOf("My Travel", "Shared Travel", "Save Travel")
-
+        binding.vm = viewModel
+        binding.lifecycleOwner = this
         pagerAdapter.addFragment(MyTravelFragment())
         pagerAdapter.addFragment(SharedTravelFragment())
         pagerAdapter.addFragment(SaveTravelFragment())
@@ -82,13 +74,35 @@ class MyFragment : Fragment() {
         }.attach()
 
         initUserInfo()
+        initPopup()
 
         binding.myEditProfileTv.setOnClickListener {
             intent.putExtra("userData", userInfoResponse)
             startActivity(intent)
         }
-    }
 
+    }
+    fun initPopup(){
+        binding.myIbtnMore.setOnClickListener {
+            val popup = PopupMenu(context, binding.myIbtnMore)
+            MenuInflater(context).inflate(R.menu.my_menu_user_item, popup.menu)
+            popup.show()
+            popup.setOnMenuItemClickListener {
+                when(it.itemId){
+                    R.id.menu_logout -> {
+                        mainActivity.moveFragment(10)
+                        return@setOnMenuItemClickListener true
+                    }
+                    R.id.menu_userDelete ->{
+                        return@setOnMenuItemClickListener true
+                    }
+                    else ->{
+                        return@setOnMenuItemClickListener false
+                    }
+                }
+            }
+        }
+    }
     // 마이페이지 사용자 정보 갱신
     fun initUserInfo() {
         viewModel.initData(this)

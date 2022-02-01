@@ -49,12 +49,14 @@
         <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/fragment_board_write.xml" value="0.1" />
         <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/fragment_home.xml" value="0.2254563394178589" />
         <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/fragment_info.xml" value="0.1296875" />
-        <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/fragment_my.xml" value="0.171875" />
+        <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/fragment_my.xml" value="0.264" />
         <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/fragment_place_detail.xml" value="0.264" />
         <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/fragment_search.xml" value="0.1" />
         <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/list_item_board.xml" value="0.264" />
         <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/recyclerview_board_list_item.xml" value="0.264" />
         <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/recyclerview_place_search.xml" value="0.2" />
+        <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/menu/board_menu_item.xml" value="0.25364583333333335" />
+        <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/menu/my_menu_user_item.xml" value="0.25364583333333335" />
       </map>
     </option>
   </component>
