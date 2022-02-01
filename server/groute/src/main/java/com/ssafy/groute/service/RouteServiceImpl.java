@@ -37,4 +37,9 @@ public class RouteServiceImpl implements RouteService {
     public void updateRoute(Route route) throws Exception {
         routeMapper.updateRoute(route);
     }
+
+    @Override
+    public List<Route> selectBestRoute() throws Exception {
+        return routeMapper.selectBestRoute();
+    }
 }

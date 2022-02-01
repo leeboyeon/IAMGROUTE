@@ -30,4 +30,5 @@
         set name = #{name}, day = #{day}, memo = #{memo}, isCustom = #{isCustom}
         where id = #{id}
     </update>
+
 </mapper>

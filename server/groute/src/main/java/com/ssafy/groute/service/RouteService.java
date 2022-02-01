@@ -12,4 +12,5 @@ public interface RouteService {
     List<Route> selectAllRoute() throws Exception;
     void deleteRoute(int id) throws Exception;
     void updateRoute(Route route) throws Exception;
+    List<Route> selectBestRoute() throws Exception;
 }

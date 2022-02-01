@@ -84,4 +84,16 @@ public class RouteController {
 
         return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
+
+//    @ApiOperation(value = "bestRoute",notes = "인기경로 베스트5")
+//    @GetMapping(value = "/best")
+//    public ResponseEntity<?> listBestRoute() throws Exception{
+//
+//        List<Route> res = routeService.selectBestRoute();
+//        if(res==null){
+//            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+//        }
+//
+//        return new ResponseEntity<List<Route>>(res,HttpStatus.OK);
+//    }
 }
