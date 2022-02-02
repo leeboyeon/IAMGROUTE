@@ -1,6 +1,7 @@
 package com.ssafy.groute.src.api
 
 import com.ssafy.groute.src.dto.Place
+import com.ssafy.groute.src.response.PlaceLikeResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -29,10 +30,20 @@ interface PlaceApi {
     @GET("/place/list")
     suspend fun getPlaceList() : Response<MutableList<Place>>
 
+    //id로  place객체 찾기(코루틴버전)
     @GET("/place/detail")
     suspend fun getPlacebyId(@Query("id") id:Int) : Response<Place>
 
+    //좋아요 순 많은순으로 정렬하여 top 5 찾기
     @GET("/place/best")
     suspend fun getPlaceBestList() : Response<MutableList<Place>>
+
+    //place 좋아요 혹은 취소
+    @POST("/place/like")
+    fun placeLike(@Body placelike:PlaceLikeResponse) : Call<Boolean>
+
+    //place 좋아요 했는지
+    @POST("/place/isLike")
+    fun placeIsLike(@Body placelike: PlaceLikeResponse) : Call<Boolean>
 
 }

@@ -19,6 +19,8 @@ import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.RecyclerviewAreaPlaceItemBinding
 import com.ssafy.groute.src.dto.Place
+import com.ssafy.groute.src.response.PlaceLikeResponse
+import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.util.CommonUtils
 
 private const val TAG = "AreaFilterAdapter"
@@ -75,7 +77,22 @@ class PlaceFilterAdapter(var placeList : MutableList<Place>) : ListAdapter<Place
             itemView.setOnClickListener {
                 itemClickListener.onClick(it,position, filteredList[position].id)
             }
-//            bindInfo(getItem(position))
+            val heart = itemView.findViewById<LottieAnimationView>(R.id.area_abtn_heart)
+            heart.setOnClickListener {
+                heartClickListener.onClick(it,position,filteredList[position].id)
+                if(heart.progress > 0F){
+                    Log.d(TAG, "onBindViewHolder: 이미 클릭됨")
+                    heart.pauseAnimation()
+                    heart.progress = 0F
+                }else{
+                    Log.d(TAG, "onBindViewHolder: 클릭할거얌")
+                    val animator = ValueAnimator.ofFloat(0f,0.5f).setDuration(500)
+                    animator.addUpdateListener { animation ->
+                        heart.progress = animation.animatedValue as Float
+                    }
+                    animator.start()
+                }
+            }
         }
     }
 
@@ -119,8 +136,6 @@ class PlaceFilterAdapter(var placeList : MutableList<Place>) : ListAdapter<Place
         }
     }
 
-
-
     interface ItemClickListener{
         fun onClick(view:View, position: Int, placeId: Int)
     }
@@ -130,8 +145,13 @@ class PlaceFilterAdapter(var placeList : MutableList<Place>) : ListAdapter<Place
     fun setItemClickListener(itemClickListener: ItemClickListener){
         this.itemClickListener = itemClickListener
     }
-
-
+    interface HeartClickListener{
+        fun onClick(view:View, position: Int, placeId: Int)
+    }
+    private lateinit var heartClickListener : HeartClickListener
+    fun setHeartClickListener(heartClickListener: HeartClickListener){
+        this.heartClickListener = heartClickListener
+    }
     object DiffCallback : DiffUtil.ItemCallback<Place>() {
         override fun areItemsTheSame(oldItem: Place, newItem: Place): Boolean {
             return oldItem === newItem

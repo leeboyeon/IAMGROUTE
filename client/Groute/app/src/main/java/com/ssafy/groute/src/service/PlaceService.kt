@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.groute.src.dto.Place
+import com.ssafy.groute.src.response.PlaceLikeResponse
 //import com.ssafy.groute.src.main.home.Place
 import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil
@@ -113,4 +114,42 @@ class PlaceService {
 
     //place bestList Corouting Call
     suspend fun getPlaceBestList() = RetrofitUtil.placeService.getPlaceBestList()
+
+    //placeLike  Coroutine Call
+    fun placeLike(placelike:PlaceLikeResponse, callback: RetrofitCallback<Boolean>){
+        RetrofitUtil.placeService.placeLike(placelike).enqueue(object :Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if(response.code() == 200){
+                    Log.d(TAG, "onResponse: UpdateSuccess22!!")
+                }else{
+                    Log.d(TAG, "onResponse: FAIL")
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                Log.d(TAG, "onFailure: $t")
+            }
+
+        })
+    }
+
+    //place like check
+    fun placeIsLike(placelike: PlaceLikeResponse ,callback: RetrofitCallback<Boolean>){
+        RetrofitUtil.placeService.placeIsLike(placelike).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if(response.code() == 200){
+                    Log.d(TAG, "onResponse: UpdateSuccess!!")
+                }else{
+                    Log.d(TAG, "onResponse: FAIL")
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                Log.d(TAG, "onFailure: $t")
+            }
+
+        })
+    }
 }
