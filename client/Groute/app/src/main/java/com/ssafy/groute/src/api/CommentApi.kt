@@ -15,7 +15,7 @@ interface CommentApi {
     @PUT("/boardDetail/comment/update")
     fun updateBoardComment(@Body comment: Comment): Call<Any>
 
-
-
-
+    // 게시판 댓글 삭제
+    @DELETE("/boardDetail/comment/del")
+    fun deleteBoardComment(@Query("id") id: Int) : Call<Any>
 }

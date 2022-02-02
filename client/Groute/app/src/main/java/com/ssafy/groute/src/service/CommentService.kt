@@ -29,4 +29,43 @@ class CommentService {
         })
     }
 
+    fun updateBoardComment(comment: Comment, callback: RetrofitCallback<Any>){
+        RetrofitUtil.commentService.updateBoardComment(comment).enqueue(object : Callback<Any> {
+            override fun onResponse(call: Call<Any>, response: Response<Any>) {
+                val res = response.body()
+                if(response.code() == 200){
+                    if(res != null){
+                        callback.onSuccess(response.code(),res)
+                    }
+                }else{
+                    callback.onFailure(response.code())
+                }
+            }
+
+            override fun onFailure(call: Call<Any>, t: Throwable) {
+                callback.onError(t)
+            }
+
+        })
+    }
+
+    fun deleteBoardComment(id: Int, callback: RetrofitCallback<Any>) {
+        RetrofitUtil.commentService.deleteBoardComment(id).enqueue(object : Callback<Any>{
+            override fun onResponse(call: Call<Any>, response: Response<Any>) {
+                val res = response.body()
+                if(response.code() == 200) {
+                    if(res != null) {
+                        callback.onSuccess(response.code(), res)
+                    }
+                } else {
+                    callback.onFailure(response.code())
+                }
+            }
+
+            override fun onFailure(call: Call<Any>, t: Throwable) {
+                callback.onError(t)
+            }
+        })
+    }
+
 }

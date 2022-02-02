@@ -3,7 +3,7 @@ package com.ssafy.groute.src.dto
 data class Comment(
     val id: Int,
     val boardDetailId: Int,
-    val content: String,
+    var content: String,
     val groupNum: Int,
     val level: Int,
     val order: Int,

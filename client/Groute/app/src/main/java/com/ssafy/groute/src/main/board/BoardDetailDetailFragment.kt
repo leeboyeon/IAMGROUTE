@@ -1,6 +1,8 @@
 package com.ssafy.groute.src.main.board
 
+import android.app.AlertDialog
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,8 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +30,7 @@ import com.ssafy.groute.databinding.FragmentReviewBinding
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.dto.Comment
 import com.ssafy.groute.src.main.MainActivity
+import com.ssafy.groute.src.main.MainViewModel
 import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.CommentService
 import com.ssafy.groute.src.service.UserService
@@ -31,11 +40,11 @@ import org.json.JSONObject
 
 private const val TAG = "BoardDetailDF_Groute"
 class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>(FragmentBoardDetailDetailBinding::bind, R.layout.fragment_board_detail_detail) {
-//    private lateinit var binding: FragmentBoardDetailDetailBinding
     private lateinit var mainActivity: MainActivity
     private lateinit var commentAdapter:CommentAdapter
     private var userId : Any= ""
     var boardViewModel: BoardViewModel = BoardViewModel()
+    val viewModel: MainViewModel by activityViewModels()
 
     private var boardDetailId = -1
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,20 +60,14 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//
-//        binding = FragmentBoardDetailDetailBinding.inflate(layoutInflater,container,false)
-//        return binding.root
-//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModels()
         initAdapter()
         initData()
+
+        mainActivity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
 
         binding.boardDetailIbtnBack.setOnClickListener {
@@ -85,12 +88,60 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>
     }
     fun initAdapter(){
         boardViewModel.getBoardDetailWithComment(this, boardDetailId)
-        commentAdapter = CommentAdapter(viewLifecycleOwner)
+        commentAdapter = CommentAdapter(requireContext(), viewLifecycleOwner)
         binding.boardDetailRvComment.apply{
             layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
             adapter = commentAdapter
             adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
+
+        commentAdapter.setItemClickListener(object: CommentAdapter.ItemClickListener{
+            override fun onEditClick(position: Int, comment: Comment) {
+                showEditDialog(comment)
+            }
+
+        })
+    }
+
+    fun showEditDialog(comment: Comment) {
+        val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflater.inflate(R.layout.dialog_comment_edit, null)
+        var uComment = comment
+        view.findViewById<EditText>(R.id.dialog_comment_edit_et).setText(comment.content)
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle("")
+            .setPositiveButton("수정") {dialogInterface, i ->
+                val editText: EditText = view.findViewById(R.id.dialog_comment_edit_et)
+                val content = editText.text.toString()
+                uComment.content = content
+                updateComment(uComment)
+            }
+            .setNegativeButton("취소", null)
+            .create()
+
+        alertDialog.setCancelable(false)
+        alertDialog.setView(view)
+        alertDialog.show()
+
+
+    }
+
+    fun updateComment(comment: Comment) {
+        CommentService().updateBoardComment(comment, object : RetrofitCallback<Any> {
+            override fun onError(t: Throwable) {
+                Log.d(TAG, "onError: 댓글 수정 에러")
+            }
+
+            override fun onSuccess(code: Int, responseData: Any) {
+                showCustomToast("수정되었습니다.")
+                boardViewModel.getBoardDetailWithComment(viewLifecycleOwner, boardDetailId)
+            }
+
+            override fun onFailure(code: Int) {
+                Log.d(TAG, "onFailure: 댓글 수정 실패")
+            }
+
+        })
     }
 
     fun getUserInfo(userId:String){
@@ -106,7 +157,6 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>
     }
 
     fun getListBoardDetail(id:Int){
-        //binding.boardDdetailTvChatCnt.text = boardViewModel.commentCount.toString()
         BoardService().getListBoardDetail(id, object : RetrofitCallback<Map<String,Any>> {
             override fun onError(t: Throwable) {
                 Log.d(TAG, "onError: ")
@@ -152,6 +202,20 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>
 
     fun commentWrite(boardDetailId: Int) {
         val uId = ApplicationClass.sharedPreferencesUtil.getUser().id
+        viewModel.getUser().observe(viewLifecycleOwner, Observer {
+            if(it.type.equals("sns")){
+                Glide.with(this)
+                    .load(it.img)
+                    .circleCrop()
+                    .into(binding.commentWriteProfileIv)
+            } else{
+                Glide.with(this)
+                    .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
+                    .circleCrop()
+                    .into(binding.commentWriteProfileIv)
+            }
+        })
+
         binding.commentWriteTv.setOnClickListener {
             if(binding.commentWriteEt.text.toString() == "") {
                 Toast.makeText(mainActivity, "댓글을 입력해주세요.", Toast.LENGTH_SHORT).show()
@@ -163,7 +227,8 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>
                     }
                     override fun onSuccess(code: Int, responseData: Any) {
                         boardViewModel.getBoardDetailWithComment(viewLifecycleOwner, boardDetailId)
-                        Toast.makeText(requireContext(),"댓글 쓰기 성공",Toast.LENGTH_SHORT).show()
+                        binding.commentWriteEt.setText("")
+                        //Toast.makeText(requireContext(),"댓글 쓰기 성공",Toast.LENGTH_SHORT).show()
                     }
 
                     override fun onFailure(code: Int) {
