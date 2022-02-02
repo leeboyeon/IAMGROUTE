@@ -1,5 +1,6 @@
 package com.ssafy.groute.src.main.home
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -10,10 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.ssafy.groute.R
+import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentAreaBinding
 import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.main.MainActivity
+import com.ssafy.groute.src.response.PlaceLikeResponse
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
@@ -39,15 +42,6 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
         mainActivity = context as MainActivity
     }
 
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        // Inflate the layout for this fragment
-//        binding= FragmentAreaBinding.inflate(layoutInflater,container,false)
-//        return binding.root
-//    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = placeViewModel
@@ -57,7 +51,6 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
         }
 
         initTab()
-
         initAdapter()
     }
 
@@ -71,9 +64,19 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
                 override fun onClick(view: View, position: Int, placeId: Int) {
                     mainActivity.moveFragment(4,"placeId", placeId)
                 }
+            })
+            areaFilterAdapter.setHeartClickListener(object :PlaceFilterAdapter.HeartClickListener{
+                override fun onClick(view: View, position: Int, placeId: Int) {
+                    Log.d(TAG, "onClick: CLICKED")
+                    var placeLike = PlaceLikeResponse(
+                        0,
+                        ApplicationClass.sharedPreferencesUtil.getUser().id,
+                        placeId
+                    )
+                    placeGoLike(placeLike)
+                }
 
             })
-
             binding.areaRvPlaceitem.apply{
                 layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
                 adapter = areaFilterAdapter
@@ -82,10 +85,6 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
         })
 
     }
-
-//    fun initAdapter(){
-//        PlaceService().getPlaces(PlaceCallback())
-//    }
 
     /**
      * Place TabLayout initialize & filtering
@@ -128,6 +127,48 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
         })
     }
 
+    fun placeIsLike(placeLike:PlaceLikeResponse){
+        PlaceService().placeIsLike(placeLike, object :RetrofitCallback<Boolean> {
+            override fun onError(t: Throwable) {
+                Log.d(TAG, "onError: ")
+            }
+            //좋아요 했으면 트루
+            override fun onSuccess(code: Int, responseData: Boolean) {
+                if(responseData) {
+                    Log.d(TAG, "onSuccess: ")
+
+                }else{
+                    placeGoLike(placeLike)
+                }
+            }
+
+            override fun onFailure(code: Int) {
+                Log.d(TAG, "onFailure: ")
+            }
+
+        })
+    }
+    fun placeGoLike(placeLike: PlaceLikeResponse){
+        Log.d(TAG, "placeGoLike: $placeLike")
+        PlaceService().placeLike(placeLike, object :RetrofitCallback<Boolean> {
+            override fun onError(t: Throwable) {
+                Log.d(TAG, "onError: ")
+            }
+
+            override fun onSuccess(code: Int, responseData: Boolean) {
+                if(responseData){
+                    Log.d(TAG, "onSuccessLIKE: ")
+                }
+            }
+
+            override fun onFailure(code: Int) {
+                Log.d(TAG, "onFailure: ")
+            }
+
+        })
+
+    }
+
 
     companion object {
         @JvmStatic
@@ -138,36 +179,4 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
                 }
             }
     }
-
-
-//    inner class PlaceCallback:RetrofitCallback<List<Place>>{
-//        override fun onError(t: Throwable) {
-//            Log.d(TAG, "onError: ")
-//        }
-//
-//        override fun onSuccess(code: Int, responseData: List<Place>) {
-////            Log.d(TAG, "onSuccess: ${responseData}")
-//            responseData.let{
-//                areaFilterAdapter = AreaFilterAdapter(responseData)
-//                areaFilterAdapter.list = responseData
-//                areaFilterAdapter.setItemClickListener(object : AreaFilterAdapter.ItemClickListener{
-//                    override fun onClick(view: View, position: Int, placeId: Int) {
-//                        mainActivity.moveFragment(4,"placeId", placeId)
-//                    }
-//
-//                })
-//            }
-//            binding.areaRvPlaceitem.apply{
-//                layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
-//                adapter = areaFilterAdapter
-//                adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-//            }
-//
-//        }
-//
-//        override fun onFailure(code: Int) {
-//            Log.d(TAG, "onFailure: ")
-//        }
-//
-//    }
 }
