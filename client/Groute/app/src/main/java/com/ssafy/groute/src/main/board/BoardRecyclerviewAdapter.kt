@@ -27,8 +27,11 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
 
     var isEdit = false
 
+    // 현재 로그인한 유저의 아이디
+    val userId = ApplicationClass.sharedPreferencesUtil.getUser().id
+
     @JvmName("setBoardList1")
-    fun setBoardList(list: List<BoardDetail>){
+    fun setBoardList(list: List<BoardDetail>?){
         if (list == null) {
             this.boardList = ArrayList()
         } else {
@@ -47,8 +50,10 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
         //val themeRv = itemView.findViewById<RecyclerView>(R.id.item_board_theme_rv)
         //val themeList = arrayListOf("#힐링", "#로맨틱")
         val more = itemView.findViewById<ImageButton>(R.id.boardDetail_ibtn_more)
+        val likeBtn = itemView.findViewById<ImageView>(R.id.item_board_like_iv)
 
         fun bindInfo(data: BoardDetail) {
+
             if(data.img == null || data.img == ""){
                 thumbnailIv.visibility = View.GONE
             }else{
@@ -93,9 +98,26 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
 //                adapter = ThemeAdapter
 //            }
 
+            BoardService().isBoardLike(data.id, userId, object : RetrofitCallback<Boolean> {
+                override fun onError(t: Throwable) {
+                    Log.d(TAG, "onError: 찜하기 여부 에러")
+                }
 
+                override fun onSuccess(code: Int, responseData: Boolean) {
+                    if(responseData) {
+                        likeBtn.setColorFilter(context.resources.getColor(R.color.red))
+                    } else {
+                        likeBtn.setColorFilter(context.resources.getColor(R.color.grey))
+                    }
+                }
+                override fun onFailure(code: Int) {
+                    Log.d(TAG, "onFailure: ")
+                }
+            })
 
-
+            likeBtn.setOnClickListener{
+                itemClickListener.isLIke(it, layoutPosition, data.id)
+            }
         }
     }
 
@@ -133,7 +155,13 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
                     }
                 }
             }
+
+
+
         }
+    }
+    override fun getItemId(position: Int): Long {
+        return boardList.get(position).id.toLong()
     }
 
     override fun getItemCount(): Int {
@@ -141,8 +169,10 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
     }
     interface ItemClickListener{
         fun onClick(view:View, position: Int, name: String)
+        fun isLIke(view: View, position: Int, id:Int)
     }
     private lateinit var itemClickListener : ItemClickListener
+
     fun setItemClickListener(itemClickListener: ItemClickListener){
         this.itemClickListener = itemClickListener
     }

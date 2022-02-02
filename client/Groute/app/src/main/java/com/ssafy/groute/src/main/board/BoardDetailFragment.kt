@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.groute.R
+import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentBoardDetailBinding
 import com.ssafy.groute.src.dto.BoardDetail
@@ -18,7 +19,9 @@ import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.main.MainViewModel
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_FREE_TYPE
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_QUESTION_TYPE
+import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.util.BoardViewModel
+import com.ssafy.groute.util.RetrofitCallback
 
 private const val TAG = "BoardDetailF_Groute"
 class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoardDetailBinding::bind, R.layout.fragment_board_detail) {
@@ -26,7 +29,8 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
     private lateinit var mainActivity: MainActivity
     private lateinit var boardRecyclerAdapter:BoardRecyclerviewAdapter
     private var boardDetailList = mutableListOf<BoardDetail>()
-
+    var boardViewModel: BoardViewModel = BoardViewModel()
+    lateinit var userId: String
     private var boardId = -1
     private var boardDetailId = -1
     private var viewModel: MainViewModel = MainViewModel()
@@ -48,6 +52,7 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: ")
+        userId = ApplicationClass.sharedPreferencesUtil.getUser().id
         if(boardId == BOARD_FREE_TYPE) {
             binding.boardDetailBoardNameTv.text = "자유게시판"
         } else if(boardId == BOARD_QUESTION_TYPE) {
@@ -68,7 +73,7 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
 
     }
     fun initViewModel(id : Int){
-        val boardViewModel = ViewModelProvider(this).get(BoardViewModel::class.java)
+        boardViewModel = ViewModelProvider(this).get(BoardViewModel::class.java)
 
         if(id == 1){
             boardViewModel.boardFreeList.observe(viewLifecycleOwner, Observer {
@@ -80,6 +85,10 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
             boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
                 override fun onClick(view: View, position: Int, name: String) {
                     mainActivity.moveFragment(6,"boardDetailId", boardViewModel.boardFreeList.value!!.get(position).id)
+                }
+
+                override fun isLIke(view: View, position: Int, id: Int) {
+                    boardLike(id, userId)
                 }
             })
             boardRecyclerAdapter.setModifyClickListener(object : BoardRecyclerviewAdapter.ItemModifyListener{
@@ -100,6 +109,10 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
                 override fun onClick(view: View, position: Int, name: String) {
                     mainActivity.moveFragment(6,"boardDetailId", boardViewModel.boardQuestionList.value!!.get(position).id)
                 }
+
+                override fun isLIke(view: View, position: Int, id: Int) {
+                    boardLike(id, userId)
+                }
             })
             boardRecyclerAdapter.setModifyClickListener(object : BoardRecyclerviewAdapter.ItemModifyListener{
                 override fun onClick(position: Int) {
@@ -114,7 +127,9 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
 
         binding.boardDetailRvListitem.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, boardDetailList, boardId, requireContext())
+        boardRecyclerAdapter.setHasStableIds(true)
         binding.boardDetailRvListitem.adapter = boardRecyclerAdapter
+
 
         initViewModel(boardId)
 
@@ -122,6 +137,35 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
     fun refreshFragment(){
         val ft:FragmentTransaction = requireFragmentManager().beginTransaction()
         ft.detach(this).attach(this).commit()
+    }
+
+    fun boardLike(boardDetailId: Int, userId: String) {
+        BoardService().boardLike(boardDetailId, userId, object : RetrofitCallback<Any> {
+            override fun onError(t: Throwable) {
+                Log.d(TAG, "onError: 게시판 찜하기 에러")
+            }
+
+            override fun onSuccess(code: Int, responseData: Any) {
+                Log.d(TAG, "onSuccess: BoardDetail 찜하기 성공")
+
+                if(boardId == BOARD_FREE_TYPE) {
+                    boardViewModel.getBoardFreeList(viewLifecycleOwner)
+                    boardRecyclerAdapter.setBoardList(boardViewModel.boardFreeList.value)
+                    boardRecyclerAdapter.notifyDataSetChanged()
+                            //Log.d(TAG, "onSuccess: ${it}")
+
+                } else if(boardId == BOARD_QUESTION_TYPE) {
+                    boardViewModel.getBoardQuestionList(viewLifecycleOwner)
+                    boardRecyclerAdapter.setBoardList(boardViewModel.boardQuestionList.value)
+                    boardRecyclerAdapter.notifyDataSetChanged()
+                }
+            }
+
+            override fun onFailure(code: Int) {
+                Log.d(TAG, "onFailure: ")
+            }
+
+        })
     }
     companion object {
         @JvmStatic

@@ -26,6 +26,5 @@ class BoardBindingAdatper {
             adapter.notifyDataSetChanged()
         }
 
-
     }
 }

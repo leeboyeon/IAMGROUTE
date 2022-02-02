@@ -72,7 +72,8 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/boardDetail_appbar"
                 tools:layout_editor_absoluteX="37dp"
-                tools:listitem="@layout/list_item_board" />
+                tools:listitem="@layout/list_item_board"
+                />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/boardDetail_btn_write"

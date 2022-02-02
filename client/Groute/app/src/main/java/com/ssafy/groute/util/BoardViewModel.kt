@@ -13,11 +13,11 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "BoardViewModel_groute"
 class BoardViewModel : ViewModel(){
-    val _boardFreeList = BoardService().getBoardDetailList(1)
+    var _boardFreeList = BoardService().getBoardDetailList(1)
     val boardFreeList: MutableLiveData<MutableList<BoardDetail>>
         get() = _boardFreeList
 
-    val _boardQuestionList =  BoardService().getBoardDetailList(2)
+    var _boardQuestionList =  BoardService().getBoardDetailList(2)
     val boardQuestionList : MutableLiveData<MutableList<BoardDetail>>
         get() = _boardQuestionList
 
@@ -28,6 +28,7 @@ class BoardViewModel : ViewModel(){
         get() = _commentCount
     val commentList: LiveData<List<Comment>>
         get() = _commentList
+
 
     fun setFreeList(freeList: MutableList<BoardDetail>) = viewModelScope.launch{
         _boardFreeList.value = freeList
@@ -73,6 +74,19 @@ class BoardViewModel : ViewModel(){
         BoardService().getBoardDetailWithComment(boardDetailId).observe(owner, Observer {
             Log.d(TAG, "getBoardDetailWithComment observe: $it")
             setBoardDetailWithComment(it)
+        })
+    }
+
+    fun getBoardFreeList(owner:LifecycleOwner) {
+        BoardService().getBoardDetailList(BOARD_FREE_TYPE).observe(owner, Observer {
+            Log.d(TAG, "getBoardFreeList: $it")
+            setFreeList(it)
+        })
+    }
+    fun getBoardQuestionList(owner: LifecycleOwner){
+        BoardService().getBoardDetailList(BOARD_QUESTION_TYPE).observe(owner, Observer {
+            Log.d(TAG, "getBoardQuestionList: $it")
+            setQuestionList(it)
         })
     }
 }
