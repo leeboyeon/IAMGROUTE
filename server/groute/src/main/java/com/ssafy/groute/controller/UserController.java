@@ -158,7 +158,7 @@ public class UserController {
 
     @ApiOperation(value = "유저정보", notes = "유저정보")
     @GetMapping(value = "{userId}")
-    public ResponseEntity<?> detailUser(@PathVariable String userId, HttpServletRequest request) throws Exception{
+    public ResponseEntity<?> detailUser(@PathVariable String userId) throws Exception{
         User user = userService.findById(userId);
         if (user == null) {
             return ResponseEntity.badRequest().body("존재하지 않는 아이디입니다.");
