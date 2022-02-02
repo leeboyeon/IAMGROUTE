@@ -154,7 +154,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
-                    android:text="10" />
+                    android:text="@{Integer.toString(boardDetail.heartCnt)}" />
 
                 <ImageView
                     android:id="@+id/imageView3"
@@ -167,7 +167,7 @@
                     android:id="@+id/boardDdetail_tv_chatCnt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10" />
+                    android:text="@{Integer.toString(boardViewModels.commentCount)}" />
             </LinearLayout>
 
             <View

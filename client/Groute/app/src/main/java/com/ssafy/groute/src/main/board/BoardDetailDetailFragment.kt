@@ -106,6 +106,7 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>
     }
 
     fun getListBoardDetail(id:Int){
+        //binding.boardDdetailTvChatCnt.text = boardViewModel.commentCount.toString()
         BoardService().getListBoardDetail(id, object : RetrofitCallback<Map<String,Any>> {
             override fun onError(t: Throwable) {
                 Log.d(TAG, "onError: ")
@@ -119,12 +120,14 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>
                 userId = boardDetail.get("userId")
                 val img = boardDetail.get("img")
                 val boardId = boardDetail.get("boardId").toString().substring(0,1)
+                val heartCnt = boardDetail.get("heartCnt").toString().substring(0,1)
 
                 var bd = BoardDetail(
                     title.toString(),
                     content.toString(),
                     img.toString(),
                     boardId.toInt(),
+                    heartCnt.toInt(),
                     userId.toString()
                 )
 
