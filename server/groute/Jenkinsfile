@@ -1,38 +1,67 @@
 pipeline {
-    agent none
-    //기본적으로 체크아웃을 하지 않는 옵션
-    options { skipDefaultCheckout(true) }
+    agent any
+
     stages {
-        stage('Checkout repository') {
+        stage('Prepare') {
             agent any
+
             steps {
                 checkout scm
             }
-        }
-        stage('Build and test') {
-            agent {
-                docker {
-                    image 'gradle:6.6.1-alpine'
-                    args '-v /root/.m2:/root/.m2'
+
+            post {
+
+                success {
+                    echo 'prepare success'
+                }
+
+                always {
+                    echo 'done prepare'
+                }
+
+                cleanup {
+                    echo 'after all other post conditions'
                 }
             }
+        }
+
+        stage('build gradle') {
             steps {
-                sh 'gradle clean build -x test'
+                sh  './gradlew build'
+
+
+                sh 'ls -al ./build'
+            }
+            post {
+                success {
+                    echo 'gradle build success'
+                }
+
+                failure {
+                    echo 'gradle build failed'
+                }
             }
         }
-        stage('Docker build') {
-            agent any
-            steps {
-                sh 'docker build -t {container_name}:latest .'
+
+        stage('dockerizing'){
+            steps{
+                sh 'docker build . -t ci/test'
             }
         }
-        stage('Docker run') {
-            agent any
+
+        stage('Deploy') {
             steps {
-                sh 'docker ps -f name={container_name} -q | xargs --no-run-if-empty docker container stop'
-                sh 'docker container ls -a -fname=sbor_dev -q | xargs -r docker container rm'
-                sh 'docker images --no-trunc --all --quiet --filter="dangling=true" | xargs --no-run-if-empty docker rmi'
-                sh 'docker run -d --name {container_name} -p 8080:8080 {container_name}:latest'
+                sh 'docker run -d -p 47788:47788 --name ci_test ci/test'
+            }
+
+            post {
+                success {
+                    echo 'success'
+                }
+
+                failure {
+                    echo 'failed'
+                }
             }
         }
     }
