@@ -24,7 +24,9 @@ import com.ssafy.groute.databinding.FragmentHomeBinding
 import com.ssafy.groute.src.api.AreaApi
 import com.ssafy.groute.src.dto.Area
 import com.ssafy.groute.src.main.MainActivity
+import com.ssafy.groute.src.main.route.PlanViewModel
 import com.ssafy.groute.src.service.AreaService
+import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.util.BoardViewModel
 import com.ssafy.groute.util.MainViewModel
 import com.ssafy.groute.util.RetrofitCallback
@@ -42,6 +44,7 @@ class HomeFragment : Fragment() {
 
     private val homeViewModel: HomeViewModel by activityViewModels()
     private val placeViewModel : PlaceViewModel by activityViewModels()
+    private val planViewModel : PlanViewModel by activityViewModels()
 
     private lateinit var homeAreaAdapter:HomeAreaAdapter
     private lateinit var bestPlaceAdapter:BestPlaceAdapter
@@ -50,7 +53,6 @@ class HomeFragment : Fragment() {
 
 
     private lateinit var mainActivity : MainActivity
-    val catelists = mutableListOf<Area>()
     val bests = mutableListOf<BestRoute>()
 
     // 롤링 배너
@@ -90,12 +92,8 @@ class HomeFragment : Fragment() {
         runBlocking {
             placeViewModel.getPlaceBestList()
         }
+
         homeViewModel.areaList.observe(viewLifecycleOwner, Observer {
-
-//            homeAreaAdapter = HomeAreaAdapter(HomeAreaAdapter.OnClickListener {
-//                homeViewModel.displayAreaDetails(it.id)
-//            }, it)
-
             homeAreaAdapter = HomeAreaAdapter(it)
             homeAreaAdapter.setItemClickListener(object : HomeAreaAdapter.ItemClickListener {
                 override fun onClick(view: View, position: Int, name: String) {
@@ -112,8 +110,7 @@ class HomeFragment : Fragment() {
             }
         })
         initBestPlaceAdapter()
-
-        initAdapter()
+        initBestPlanAdapter()
 
         // home 화면에 2번째 배너 - 롤링 배너
         mainViewModel = ViewModelProvider(mainActivity).get(MainViewModel::class.java)
@@ -123,28 +120,9 @@ class HomeFragment : Fragment() {
         subscribeObservers()
         autoScrollViewPage()
     }
-
     /**
-     * Area List
-     * home 화면 첫번째 배너에 있는 지역 리스트
-     */
-//    private fun areaListInit(responseData: MutableList<Area>) {
-//        homeAreaAdapter = HomeAreaAdapter(responseData)
-////        Log.d(TAG, "areaListInit: ${homeViewModel.areaList}")
-//        Log.d(TAG, "areaListInit: ${responseData}")
-//
-////        homeAreaAdapter.setItemClickListener(object : CategoryAdapter.ItemClickListener{
-////            override fun onClick(view: View, position: Int, name: String) {
-////                mainActivity.moveFragment(3)
-////            }
-////        })
-//
-//        binding.homeRvCategory.apply{
-//            layoutManager = GridLayoutManager(context, 5)
-//            adapter = homeAreaAdapter
-//            adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-//        }
-//    }
+     * BEST Place 5개 출력하기
+     * */
     fun initBestPlaceAdapter(){
         placeViewModel.placeBestList.observe(viewLifecycleOwner, Observer {
             bestPlaceAdapter = BestPlaceAdapter(it)
@@ -152,8 +130,6 @@ class HomeFragment : Fragment() {
                 override fun onClick(view: View, position: Int, id: Int) {
                     mainActivity.moveFragment(4, "placeId", it.get(position).id)
                 }
-
-
             })
             bestPlaceAdapter.notifyDataSetChanged()
 
@@ -165,32 +141,56 @@ class HomeFragment : Fragment() {
         })
 
     }
+
     /**
-     * home 화면에 3번째 배너
-     */
-    fun initAdapter(){
-        bestrouteAdatper = BestRouteAdapter()
-        bests.apply {
-            add(BestRoute(img=R.drawable.normalimg, title="[대구] 3박 4일 뭐하고 놀지?!"))
-            add(BestRoute(img=R.drawable.normalimg, title="[대구] 3박 4일 뭐하고 놀지?!"))
-            add(BestRoute(img=R.drawable.normalimg, title="[대구] 3박 4일 뭐하고 놀지?!"))
-
-            bestrouteAdatper.list = bests
+     * BEST Plan 5개 출력하기
+     * */
+    fun initBestPlanAdapter(){
+        planViewModel.planBestList.observe(viewLifecycleOwner, Observer {
+            bestrouteAdatper = BestRouteAdapter()
+            //        bestrouteAdatper.setItemClickListener(object : BestRouteAdapter.ItemClickListener{
+//            override fun onClick(view: View, position: Int, name: String) {
+////
+//            }
+//
+//          })
             bestrouteAdatper.notifyDataSetChanged()
-        }
-
-        bestrouteAdatper.setItemClickListener(object : BestRouteAdapter.ItemClickListener{
-            override fun onClick(view: View, position: Int, name: String) {
-                //event
+            binding.homeRvBestRoute.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
+                adapter = bestrouteAdatper
+                adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
         })
 
-        binding.homeRvBestRoute.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
-            adapter = bestrouteAdatper
-            adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        }
+
+
+
     }
+
+    /**
+     * home 화면에 3번째 배너
+     */
+//    fun initAdapter(){
+//        bestrouteAdatper = BestRouteAdapter()
+//        bests.apply {
+//            add(BestRoute(img=R.drawable.normalimg, title="[대구] 3박 4일 뭐하고 놀지?!"))
+//            add(BestRoute(img=R.drawable.normalimg, title="[대구] 3박 4일 뭐하고 놀지?!"))
+//            add(BestRoute(img=R.drawable.normalimg, title="[대구] 3박 4일 뭐하고 놀지?!"))
+//
+//            bestrouteAdatper.list = bests
+//            bestrouteAdatper.notifyDataSetChanged()
+//        }
+//
+//        bestrouteAdatper.setItemClickListener(object : BestRouteAdapter.ItemClickListener{
+//            override fun onClick(view: View, position: Int, name: String) {
+//                //event
+//            }
+//        })
+//
+//        binding.homeRvBestRoute.apply {
+//
+//        }
+//    }
 
     /**
      * home 화면 2번째 롤링 배너 Recycler View Adapter

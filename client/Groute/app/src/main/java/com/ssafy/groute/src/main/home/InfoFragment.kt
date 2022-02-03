@@ -26,8 +26,6 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
     private var placeId = -1
     private lateinit var mainActivity : MainActivity
     private val placeViewModel: PlaceViewModel by activityViewModels()
-//    private lateinit var binding: FragmentInfoBinding
-
     var lat:Double = 0.0
     var lng:Double = 0.0
 
@@ -50,6 +48,7 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
         runBlocking {
             placeViewModel.getPlace(placeId)
         }
+        createMap()
 //        initData()
     }
     fun createMap(){
@@ -68,11 +67,7 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
 
         mapView.addPOIItem(marker)
     }
-//    fun initData(){
-//        Log.d(TAG, "initData: $placeId")
-//        val placesDetail = PlaceService().getPlace(placeId)
-//
-//    }
+
     companion object {
 
         @JvmStatic
@@ -83,47 +78,5 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
                 }
             }
     }
-    inner class placesCallback : RetrofitCallback<Place> {
-        override fun onError(t: Throwable) {
-            Log.d(TAG, "onError: ")
-        }
 
-        override fun onSuccess(code: Int, responseData: Place) {
-            Log.d(TAG, "onSuccess: ${responseData}")
-            val places = Place(
-                responseData.address,
-                responseData.areaId,
-                responseData.contact,
-                responseData.description,
-                responseData.heartCnt,
-                responseData.id,
-                responseData.img,
-                responseData.lat,
-                responseData.lng,
-                responseData.name,
-                responseData.rate,
-                responseData.themeId,
-                responseData.type,
-                responseData.userId,
-                responseData.zipCode
-            )
-
-            Glide.with(this@InfoFragment)
-                .load("${ApplicationClass.IMGS_URL_PLACE}${responseData.img}")
-                .into(binding.placeDetailIvSomenail)
-
-            lat = responseData.lat.toDouble()
-            lng = responseData.lng.toDouble()
-
-            createMap()
-
-
-        }
-
-        override fun onFailure(code: Int) {
-            Log.d(TAG, "onFailure: $code")
-
-        }
-
-    }
 }
