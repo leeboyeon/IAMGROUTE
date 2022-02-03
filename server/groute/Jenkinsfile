@@ -14,7 +14,6 @@ pipeline {
                 docker {
                     image 'gradle:7.3.2-alpine'
                     args '-v /root/.m2:/root/.m2'
-                    label 'docker'
                 }
             }
             steps {
