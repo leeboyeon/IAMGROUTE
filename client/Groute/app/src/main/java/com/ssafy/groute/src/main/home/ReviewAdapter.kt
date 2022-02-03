@@ -1,29 +1,60 @@
 package com.ssafy.groute.src.main.home
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
+import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.src.dto.PlaceReview
 import com.ssafy.groute.src.dto.Review
+import com.ssafy.groute.src.service.UserService
 
-class ReviewAdapter : RecyclerView.Adapter<ReviewAdapter.ReviewHolder>(){
-    var list = mutableListOf<Review>()
+private const val TAG = "ReviewAdapter"
+class ReviewAdapter(var owner: LifecycleOwner) : RecyclerView.Adapter<ReviewAdapter.ReviewHolder>(){
+    var list = mutableListOf<PlaceReview>()
     inner class ReviewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun bindInfo(data : Review){
-            Glide.with(itemView)
-                .load(data.userimg)
-                .into(itemView.findViewById(R.id.review_iv_userimg))
-            itemView.findViewById<TextView>(R.id.review_tv_username).text = data.username
-            itemView.findViewById<RatingBar>(R.id.review_rb_rating).rating = data.rating.toFloat()
+        fun bindInfo(data : PlaceReview){
+            val userInfo = UserService().getUserInfo(data.userId)
+            userInfo.observe(
+                owner, {
+                    Glide.with(itemView)
+                        .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
+                        .circleCrop()
+                        .into(itemView.findViewById(R.id.review_iv_userimg))
+                    itemView.findViewById<TextView>(R.id.review_tv_username).text = it.nickname
+                    Log.d(TAG, "bindInfo: ${it.nickname}")
+                }
+            )
+            itemView.findViewById<RatingBar>(R.id.review_rb_rating).rating = data.rate.toFloat()
+            if(data.img != null){
+                itemView.findViewById<ImageView>(R.id.review_iv_reviewimg).visibility = View.VISIBLE
+                Glide.with(itemView)
+                    .load("${ApplicationClass.IMGS_URL_PLACEREVIEW}${data.img}")
+                    .into(itemView.findViewById(R.id.review_iv_reviewimg))
+            }else if(data.img == null || data.img == ""){
+                itemView.findViewById<ImageView>(R.id.review_iv_reviewimg).visibility = View.GONE
+            }
+            itemView.findViewById<TextView>(R.id.review_tv_content).text = data.content
 
-            Glide.with(itemView)
-                .load(data.reviewimg)
-                .into(itemView.findViewById(R.id.review_iv_reviewimg))
-            itemView.findViewById<TextView>(R.id.review_tv_content)
+
+            if(itemView.findViewById<TextView>(R.id.review_tv_more).text == "더보기"){
+                itemView.findViewById<TextView>(R.id.review_tv_more).setOnClickListener {
+                    itemView.findViewById<TextView>(R.id.review_tv_content).isSingleLine = false
+                    itemView.findViewById<TextView>(R.id.review_tv_more).text = "줄이기"
+                }
+            }else if(itemView.findViewById<TextView>(R.id.review_tv_more).text == "줄이기"){
+                itemView.findViewById<TextView>(R.id.review_tv_more).setOnClickListener {
+                    itemView.findViewById<TextView>(R.id.review_tv_content).isSingleLine = true
+                    itemView.findViewById<TextView>(R.id.review_tv_more).text = "더보기"
+                }
+            }
 
         }
 
@@ -37,9 +68,10 @@ class ReviewAdapter : RecyclerView.Adapter<ReviewAdapter.ReviewHolder>(){
     override fun onBindViewHolder(holder: ReviewHolder, position: Int) {
         holder.apply {
             bindInfo(list[position])
-            itemView.setOnClickListener {
-                itemClickListener.onClick(it, position, list[position].username)
-            }
+//            itemView.setOnClickListener {
+//                itemClickListener.onClick(it, position, list[position].id)
+//            }
+
         }
     }
 
@@ -48,10 +80,12 @@ class ReviewAdapter : RecyclerView.Adapter<ReviewAdapter.ReviewHolder>(){
     }
 
     interface ItemClickListener{
-        fun onClick(view: View, position: Int, name: String)
+        fun onClick(view: View, position: Int, id:Int)
     }
     private lateinit var itemClickListener : ItemClickListener
     fun setItemClickListener(itemClickListener: ItemClickListener){
         this.itemClickListener = itemClickListener
     }
+
+
 }

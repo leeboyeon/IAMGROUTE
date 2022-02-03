@@ -6,21 +6,27 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentInfoBinding
 import com.ssafy.groute.databinding.FragmentReviewBinding
+import com.ssafy.groute.src.dto.PlaceReview
 import com.ssafy.groute.src.dto.Review
 import com.ssafy.groute.src.main.MainActivity
+import com.ssafy.groute.src.viewmodel.PlaceViewModel
+import kotlinx.coroutines.runBlocking
 
 class ReviewFragment : BaseFragment<FragmentReviewBinding>(FragmentReviewBinding::bind, R.layout.fragment_review) {
 //    private lateinit var binding: FragmentReviewFragmentBinding
     private lateinit var mainActivity: MainActivity
     private lateinit var reviewAdapter:ReviewAdapter
+    private val placeViewModel: PlaceViewModel by activityViewModels()
+    private var placeId = -1
 
-    val lists = arrayListOf<Review>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -28,70 +34,43 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(FragmentReviewBinding
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
+        arguments?.let {
+            placeId = it.getInt("placeId",-1)
+        }
     }
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        // Inflate the layout for this fragment
-//        binding = FragmentReviewBinding.inflate(layoutInflater,container,false)
-//        return binding.root
-//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding.viewModel = placeViewModel
+        runBlocking {
+            placeViewModel.getPlaceReviewListbyId(placeId)
+        }
         initAdapter()
     }
     fun initAdapter(){
-        reviewAdapter = ReviewAdapter()
-        lists.apply {
-            add(
-                Review(userimg = R.drawable.user,
-            username = "김싸피",
-            rating = 3.0,
-            reviewimg = R.drawable.defaultimg,
-            reviewcontent = "가기전부터 너무 가고싶었던 곳인데 별로였어요...왜 이렇게 다들 불친절하고 나는 너무 하기싫은지....진짜 진짜 정말 하기")
-            )
-            add(
-                Review(userimg = R.drawable.user,
-                username = "김싸피",
-                rating = 3.0,
-                reviewimg = R.drawable.defaultimg,
-                reviewcontent = "가기전부터 너무 가고싶었던 곳인데 별로였어요...왜 이렇게 다들 불친절하고 나는 너무 하기싫은지....진짜 진짜 정말 하기")
-            )
-            add(
-                Review(userimg = R.drawable.user,
-                username = "김싸피",
-                rating = 3.0,
-                reviewimg = R.drawable.defaultimg,
-                reviewcontent = "가기전부터 너무 가고싶었던 곳인데 별로였어요...왜 이렇게 다들 불친절하고 나는 너무 하기싫은지....진짜 진짜 정말 하기")
-            )
-            add(
-                Review(userimg = R.drawable.user,
-                username = "김싸피",
-                rating = 3.0,
-                reviewimg = R.drawable.defaultimg,
-                reviewcontent = "가기전부터 너무 가고싶었던 곳인데 별로였어요...왜 이렇게 다들 불친절하고 나는 너무 하기싫은지....진짜 진짜 정말 하기")
-            )
-
-            reviewAdapter.list = lists
-            reviewAdapter.notifyDataSetChanged()
-        }
-
-        binding.reviewRvList.apply{
-            layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
-            adapter = reviewAdapter
-            adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        }
-
+        placeViewModel.placeReviewList.observe(viewLifecycleOwner, Observer {
+            reviewAdapter = ReviewAdapter(viewLifecycleOwner)
+            reviewAdapter.list = it
+//            reviewAdapter.setItemClickListener(object : ReviewAdapter.ItemClickListener {
+//                override fun onClick(view: View, position: Int, name: String) {
+//                    //리뷰 상세페이지제작
+//                }
+//            })
+            binding.reviewRvList.apply{
+                layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
+                adapter = reviewAdapter
+                adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+            }
+        })
     }
     companion object {
 
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(key:String, value:Int) =
             ReviewFragment().apply {
-
+                arguments = Bundle().apply {
+                    putInt(key, value)
+                }
             }
     }
 }

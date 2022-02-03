@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.groute.src.dto.Place
+import com.ssafy.groute.src.dto.PlaceReview
 import com.ssafy.groute.src.service.PlaceService
 import kotlinx.coroutines.launch
 
@@ -16,6 +17,7 @@ class PlaceViewModel : ViewModel() {
     private val _placeResponse = MutableLiveData<Place>()
     private val _placeBestResponse =MutableLiveData<MutableList<Place>>()
     private val _placeLikeListResponse = MutableLiveData<MutableList<Place>>()
+    private val _placeReviewListResponse = MutableLiveData<MutableList<PlaceReview>>()
 
     val placeList : LiveData<MutableList<Place>>
         get() = _placeListResponse
@@ -28,6 +30,9 @@ class PlaceViewModel : ViewModel() {
 
     val placeLikeList : LiveData<MutableList<Place>>
         get() = _placeLikeListResponse
+
+    val placeReviewList :LiveData<MutableList<PlaceReview>>
+        get() = _placeReviewListResponse
 
     fun setPlaceList(place: MutableList<Place>) = viewModelScope.launch {
         _placeListResponse.value = place  // main thread 에서 갱신
@@ -42,7 +47,9 @@ class PlaceViewModel : ViewModel() {
     fun setPlaceLikeList(place:MutableList<Place>) = viewModelScope.launch {
         _placeLikeListResponse.value = place
     }
-
+    fun setPlaceReviewList(place:MutableList<PlaceReview>) = viewModelScope.launch {
+        _placeReviewListResponse.value = place
+    }
 
     suspend fun getPlaceList() {
         val response = PlaceService().getPlaceList()
@@ -105,6 +112,22 @@ class PlaceViewModel : ViewModel() {
                 }
             }else{
                 Log.d(TAG, "getPlaceLikeList: FAIL")
+            }
+        }
+    }
+    
+    suspend fun getPlaceReviewListbyId(placeId:Int){
+        val response = PlaceService().getPlaceReviewbyId(placeId)
+        viewModelScope.launch { 
+            var res = response.body()
+            if(response.code()==200){
+                if(res!=null){
+                    setPlaceReviewList(res)
+                    Log.d(TAG, "getPlaceReviewListbyId: ")
+                }
+
+            }else{
+                Log.d(TAG, "getPlaceReviewListbyId: ")
             }
         }
     }

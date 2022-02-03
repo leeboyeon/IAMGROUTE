@@ -26,6 +26,7 @@ class ApplicationClass : Application() {
         const val IMGS_URL_USER = "${SERVER_URL}imgs/user/"
         const val IMGS_URL_AREA = "${SERVER_URL}imgs/area/"
         const val IMGS_URL_PLACE = "${SERVER_URL}imgs/place"
+        const val IMGS_URL_PLACEREVIEW = "${SERVER_URL}imgs/placereview"
         lateinit var sharedPreferencesUtil: SharedPreferencesUtil
         lateinit var retrofit: Retrofit
 

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.groute.src.dto.Place
+import com.ssafy.groute.src.dto.PlaceReview
 import com.ssafy.groute.src.response.PlaceLikeResponse
 //import com.ssafy.groute.src.main.home.Place
 import com.ssafy.groute.util.RetrofitCallback
@@ -155,5 +156,9 @@ class PlaceService {
 
     suspend fun getPlaceLikeList(userId: String) : Response<MutableList<Place>>{
         return RetrofitUtil.placeService.getPlaceLikeListbyUserId(userId)
+    }
+
+    suspend fun getPlaceReviewbyId(placeId:Int) : Response<MutableList<PlaceReview>>{
+        return RetrofitUtil.placeService.getPlaceReviewListbyId(placeId)
     }
 }
