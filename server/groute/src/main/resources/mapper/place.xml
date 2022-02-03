@@ -14,12 +14,14 @@
         <result column="user_id" property="userId"></result>
     </resultMap>
     <select id="selectPlace" parameterType="int" resultMap="PlaceDTO">
-        select * from place
+        select id, name, type, lat, lng, zipCode, contact, address, description, theme_id, area_id, img, user_id, round(rate,2) rate, heartCnt
+        from place
         where id = #{id}
     </select>
 
     <select id="selectAllPlace"  resultMap="PlaceDTO">
-        select * from place
+        select id, name, type, lat, lng, zipCode, contact, address, description, theme_id, area_id, img, user_id, round(rate,2) rate, heartCnt
+        from place
     </select>
 
     <delete id="deletePlace" parameterType="int">
@@ -29,7 +31,9 @@
 
     <update id="updatePlace" parameterType="Place">
         update place
-        set name = #{name}, type = #{type}, lat = #{lat}, lng = #{lng}, zipCode = #{zipCode}, contact = #{contact}, address = #{address}, description = #{description}, theme_id = #{themeId}, area_id = #{areaId}, img = #{img}, user_id = #{userId}, heartCnt = #{heartCnt}
+        set name = #{name}, type = #{type}, lat = #{lat}, lng = #{lng}, zipCode = #{zipCode},contact = #{contact},
+            address = #{address}, description = #{description}, theme_id = #{themeId},area_id = #{areaId}, img = #{img},
+            user_id = #{userId}, heartCnt = #{heartCnt}, rate = #{rate}
         where id = #{id}
     </update>
 
@@ -72,4 +76,5 @@
         select p.* from placelike l, place p
         where l.user_id = #{userId} and p.id = l.place_id
     </select>
+
 </mapper>

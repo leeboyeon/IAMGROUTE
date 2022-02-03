@@ -2,6 +2,8 @@ package com.ssafy.groute.controller;
 
 import com.ssafy.groute.dto.Place;
 import com.ssafy.groute.dto.PlaceLike;
+import com.ssafy.groute.dto.PlaceReview;
+import com.ssafy.groute.service.PlaceReviewService;
 import com.ssafy.groute.service.PlaceService;
 import com.ssafy.groute.service.StorageService;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +26,9 @@ public class PlaceController {
     @Autowired
     PlaceService placeService;
     private final StorageService storageService;
+    
+    @Autowired
+    PlaceReviewService placeReviewService;
 
     @Value("${spring.servlet.multipart.location}")
     private String uploadPath;
@@ -148,4 +153,81 @@ public class PlaceController {
         return new ResponseEntity<List<Place>>(res,HttpStatus.OK);
     }
 
+    @ApiOperation(value = "placeReview 추가",notes = "placeReview 추가")
+    @PostMapping(value = "/review")
+    public ResponseEntity<?> insertPlaceReview(@RequestBody PlaceReview req){
+
+        try {
+            placeReviewService.insertPlaceReview(req);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "placeReview 검색",notes = "이름으로 placeReview 하나 검색")
+    @GetMapping(value = "/review/detail")
+    public ResponseEntity<?> detailPlaceReview(@RequestParam("id") int id) throws Exception{
+
+        PlaceReview res = placeReviewService.selectPlaceReview(id);
+        if(res==null){
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<PlaceReview>(res,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "list placeReview",notes = "모든 placeReview 반환")
+    @GetMapping(value = "/review/list")
+    public ResponseEntity<?> listPlaceReview() throws Exception{
+
+        List<PlaceReview> res = placeReviewService.selectAllPlaceReview();
+        if(res==null){
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<List<PlaceReview>>(res,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "delete placeReview",notes = "placeReview 삭제")
+    @DeleteMapping(value = "/review/del")
+    public ResponseEntity<?> deletePlaceReview(@RequestParam("id") int id) throws Exception{
+
+        try {
+            placeReviewService.deletePlaceReview(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "updatePlaceReview",notes = "placeReview 수정")
+    @PutMapping(value = "/review/update")
+    public ResponseEntity<?> updatePlaceReview(@RequestBody PlaceReview placeReview) throws Exception{
+
+        try {
+            placeReviewService.updatePlaceReview(placeReview);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "placeReview by placeId",notes = "해당 place의 리뷰 반환")
+    @GetMapping(value = "/review/list/{placeId}")
+    public ResponseEntity<?> listPlaceReviewByPlaceId(@PathVariable("placeId") int placeId) throws Exception{
+
+        List<PlaceReview> res = placeReviewService.selectByPlaceId(placeId);
+        if(res==null){
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<List<PlaceReview>>(res,HttpStatus.OK);
+    }
 }
