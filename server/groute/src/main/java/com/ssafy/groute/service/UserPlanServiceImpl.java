@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class UserPlanServiceImpl implements UserPlanService {
@@ -41,25 +38,58 @@ public class UserPlanServiceImpl implements UserPlanService {
             routesMapper.insertRoutes(new Routes(route.getId(),userPlan.getId()));
         }
         if(planId!=0){
-            copyPlan(userPlan, userPlanMapper.selectUserPlan(planId));
+            copyPlan(userPlan, planId, 0);
         }
     }
 
     @Override
-    public void copyPlan(UserPlan userPlan, UserPlan orginPlan ) throws Exception{
+    public void copyPlan(UserPlan userPlan, int planId, int day) throws Exception{
+        UserPlan originPlan = userPlanMapper.selectUserPlan(planId);
         List<Routes> userRoutesList = routesMapper.selectByPlanId(userPlan.getId());
-        List<Routes> originRoutesList = routesMapper.selectByPlanId(orginPlan.getId());
+        List<Routes> originRoutesList = routesMapper.selectByPlanId(originPlan.getId());
+
+
+        List<Routes> routesList = routesMapper.selectByPlanId(userPlan.getId());
+        for(Routes routes:routesList){
+            int routeId = routes.getRouteId();
+            if(day == 0 || routeMapper.selectRoute(routeId).getDay()==day){
+                routeDetailMapper.deleteAllRouteDetailByRouteId(routeId);
+            }
+        }
+
 
         int i=0;
         for(Routes routes: originRoutesList){
             List<RouteDetail> routeDetailList = routeDetailMapper.selectByRouteId(routes.getRouteId());
-            int routeId = userRoutesList.get(i++).getRouteId();
+            int routeId = 0;
+            if(day==0) {
+                routeId = userRoutesList.get(i++).getRouteId();
+            }else{
+                for(Routes userRoutes:userRoutesList){
+                    if(routeMapper.selectRoute(userRoutes.getRouteId()).getDay()==day){
+                        routeId = userRoutes.getRouteId();
+                    }
+                }
+            }
             for(RouteDetail routeDetail:routeDetailList){
                 RouteDetail newRouteDetail = routeDetail;
                 newRouteDetail.setRouteId(routeId);
                 routeDetailMapper.insertRouteDetail(newRouteDetail);
             }
         }
+    }
+
+    @Override
+    public List<UserPlan> selectAllByPlaceId(List<Integer> placeIds, int day) throws Exception {
+        List<Integer> planIdList = userPlanMapper.selectAllUserPlanByTotalDate(day);
+        List<UserPlan> userPlans = new ArrayList<>();
+        for(int planId: planIdList){
+            List<Integer> placeList = userPlanMapper.selectPlaceListByPlanId(planId);
+            if(placeList.containsAll(placeIds)){
+                userPlans.add(userPlanMapper.selectUserPlan(planId));
+            }
+        }
+        return userPlans;
     }
 
     @Override
