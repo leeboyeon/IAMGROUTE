@@ -97,7 +97,6 @@ class CommentNestedAdapter(val context: Context, val lifecycleOwner: LifecycleOw
 
     interface ItemClickListener{
         fun onEditClick(position: Int, comment: Comment)
-        fun onCommentNestedClick(position: Int, id: Int)
     }
     private lateinit var itemClickListener : ItemClickListener
     fun setItemClickListener(itemClickListener: ItemClickListener){

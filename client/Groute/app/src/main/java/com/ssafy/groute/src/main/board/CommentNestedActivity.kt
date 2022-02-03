@@ -2,9 +2,13 @@ package com.ssafy.groute.src.main.board
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.fragment.app.activityViewModels
@@ -61,15 +65,53 @@ class CommentNestedActivity : BaseActivity<ActivityCommentNestedBinding>(Activit
 
         commentNestedAdapter.setItemClickListener(object: CommentNestedAdapter.ItemClickListener{
             override fun onEditClick(position: Int, comment: Comment) {
-                //showEditDialog(comment)
-            }
-
-            override fun onCommentNestedClick(position: Int, commentId: Int) {
-                //mainActivity.moveFragment(11, "commentId", commentId)
+                showEditDialog(comment)
             }
 
         })
 
+    }
+
+    fun showEditDialog(comment: Comment) {
+        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflater.inflate(R.layout.dialog_comment_edit, null)
+        var uComment = comment
+        view.findViewById<EditText>(R.id.dialog_comment_edit_et).setText(comment.content)
+        val alertDialog = AlertDialog.Builder(this)
+            .setTitle("")
+            .setPositiveButton("수정") {dialogInterface, i ->
+                val editText: EditText = view.findViewById(R.id.dialog_comment_edit_et)
+                val content = editText.text.toString()
+                uComment.content = content
+                updateComment(uComment)
+            }
+            .setNegativeButton("취소", null)
+            .create()
+
+        alertDialog.setCancelable(false)
+        alertDialog.setView(view)
+        alertDialog.show()
+
+
+    }
+
+    @SuppressLint("LongLogTag")
+    fun updateComment(comment: Comment) {
+        CommentService().updateBoardComment(comment, object : RetrofitCallback<Any> {
+            override fun onError(t: Throwable) {
+                Log.d(TAG, "onError: 댓글 수정 에러")
+            }
+
+            override fun onSuccess(code: Int, responseData: Any) {
+                showCustomToast("수정되었습니다.")
+                boardViewModel.getBoardDetailWithComment(this@CommentNestedActivity, comment.boardDetailId)
+            }
+
+            override fun onFailure(code: Int) {
+                Log.d(TAG, "onFailure: 댓글 수정 실패")
+            }
+
+        })
     }
 
     @SuppressLint("LongLogTag")
