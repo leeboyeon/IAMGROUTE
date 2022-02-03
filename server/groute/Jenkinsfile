@@ -26,29 +26,31 @@ pipeline {
         }
 
         stage('build gradle') {
-            dir('server/groute/') {
-                steps {
+            
+            steps {
+                dir('server/groute/') {
                     sh  'cd server/groute/; chmod +x gradlew; ./gradlew build'
 
 
                     sh 'cd server/groute/; ls -al ./build'
                 }
-                post {
-                    success {
-                        echo 'gradle build success'
-                    }
+            }
+            post {
+                success {
+                    echo 'gradle build success'
+                }
 
-                    failure {
-                        echo 'gradle build failed'
-                    }
+                failure {
+                    echo 'gradle build failed'
                 }
             }
         }
 
         stage('Docker build') {
-            dir('server/groute/') {
-                agent any
-                steps {
+            
+            agent any
+            steps {
+                dir('server/groute/') {
                     sh 'docker build -t springboot-gorute-image:latest .'
                 }
             }
