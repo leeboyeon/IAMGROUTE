@@ -1,12 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.27, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
 --
--- Host: localhost    Database: groute
+-- Host: 127.0.0.1    Database: groute
 -- ------------------------------------------------------
--- Server version	8.0.27
-
-drop schema if exists groute;
-CREATE SCHEMA IF NOT EXISTS `groute` DEFAULT CHARACTER SET utf8 ;
-USE `groute` ;
+-- Server version	8.0.26
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -118,6 +114,7 @@ CREATE TABLE `boarddetail` (
   `board_id` int NOT NULL,
   `user_id` varchar(100) NOT NULL,
   `place_id` int DEFAULT NULL,
+  `commentCnt` int DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `fk_boardDetail_board1_idx` (`board_id`),
   KEY `fk_boardDetail_user1_idx` (`user_id`),
@@ -218,7 +215,7 @@ CREATE TABLE `place` (
   `area_id` int NOT NULL,
   `img` varchar(255) DEFAULT NULL,
   `user_id` varchar(100) NOT NULL COMMENT 'user_id에는 admin 또는 place를 등록한 user의 아이디\\n동진님 - plan이 public이 될 때, 검토 후에  userplace가 place로 등록이 될 수 있도록(user_id -> admin)\\n',
-  `rate` double DEFAULT NULL,
+  `rate` double DEFAULT '0',
   `heartCnt` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_theme_place_idx` (`theme_id`),
@@ -269,6 +266,39 @@ LOCK TABLES `placelike` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `placereview`
+--
+
+DROP TABLE IF EXISTS `placereview`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `placereview` (
+  `user_id` varchar(100) NOT NULL,
+  `place_id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(45) NOT NULL,
+  `content` varchar(100) NOT NULL,
+  `rate` double NOT NULL,
+  `img` varchar(255) DEFAULT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_user_has_place_place2_idx` (`place_id`),
+  KEY `fk_user_has_place_user2_idx` (`user_id`),
+  CONSTRAINT `fk_user_has_place_place2` FOREIGN KEY (`place_id`) REFERENCES `place` (`id`),
+  CONSTRAINT `fk_user_has_place_user2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `placereview`
+--
+
+LOCK TABLES `placereview` WRITE;
+/*!40000 ALTER TABLE `placereview` DISABLE KEYS */;
+/*!40000 ALTER TABLE `placereview` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `planlike`
 --
 
@@ -294,6 +324,39 @@ CREATE TABLE `planlike` (
 LOCK TABLES `planlike` WRITE;
 /*!40000 ALTER TABLE `planlike` DISABLE KEYS */;
 /*!40000 ALTER TABLE `planlike` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `planreview`
+--
+
+DROP TABLE IF EXISTS `planreview`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `planreview` (
+  `user_id` varchar(100) NOT NULL,
+  `userplan_id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(45) NOT NULL,
+  `content` varchar(255) NOT NULL,
+  `rate` double NOT NULL,
+  `img` varchar(255) DEFAULT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_user_has_userplan_userplan2_idx` (`userplan_id`),
+  KEY `fk_user_has_userplan_user2_idx` (`user_id`),
+  CONSTRAINT `fk_user_has_userplan_user2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `fk_user_has_userplan_userplan2` FOREIGN KEY (`userplan_id`) REFERENCES `userplan` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `planreview`
+--
+
+LOCK TABLES `planreview` WRITE;
+/*!40000 ALTER TABLE `planreview` DISABLE KEYS */;
+/*!40000 ALTER TABLE `planreview` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -485,8 +548,13 @@ CREATE TABLE `userplan` (
   `endDate` date NOT NULL,
   `totalDate` varchar(20) NOT NULL,
   `isPublic` varchar(1) NOT NULL,
+  `rate` double DEFAULT '0',
+  `heartCnt` int DEFAULT NULL,
+  `theme_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_user_userPlan_idx` (`user_id`),
+  KEY `fk_theme_userPlan_idx` (`theme_id`),
+  CONSTRAINT `fk_theme_userPlan` FOREIGN KEY (`theme_id`) REFERENCES `theme` (`id`),
   CONSTRAINT `fk_user_userPlan` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -497,7 +565,7 @@ CREATE TABLE `userplan` (
 
 LOCK TABLES `userplan` WRITE;
 /*!40000 ALTER TABLE `userplan` DISABLE KEYS */;
-INSERT INTO `userplan` VALUES (1,'admin','제주도 양구경하기',NULL,'2022-02-02','2022-02-02','1','T'),(2,'admin','청수마을 탐방기',NULL,'2022-02-02','2022-02-02','1','T'),(3,'admin','농촌마을에서 체험한마당',NULL,'2022-02-02','2022-02-02','1','T'),(4,'admin','숲길따라 걸어보기',NULL,'2022-02-02','2022-02-02','1','T'),(5,'admin','말 한번 타보시겠습니까?',NULL,'2022-02-02','2022-02-02','1','T'),(6,'admin','우도 한번 갔다와 보세요',NULL,'2022-02-02','2022-02-02','1','T'),(7,'admin','수목원에서 함께 광합성',NULL,'2022-02-02','2022-02-02','1','T'),(8,'admin','비자림에서 함께 힐링',NULL,'2022-02-02','2022-02-02','1','T'),(9,'admin','해변따라 모래따라',NULL,'2022-02-02','2022-02-02','1','T'),(10,'admin','커피한잔의 여유',NULL,'2022-02-02','2022-02-02','1','T'),(11,'admin','제주도 돌하르방 문화 탐방기',NULL,'2022-02-02','2022-02-02','1','T'),(12,'admin','세계 자동차&피아노 ',NULL,'2022-02-02','2022-02-02','1','T'),(13,'admin','제주도에서 공룡을 구경하실 수 있습니다.',NULL,'2022-02-02','2022-02-02','1','T'),(14,'admin','환상의 테마파크로 오세요',NULL,'2022-02-02','2022-02-02','1','T'),(15,'admin','향기로운 동백나무 수목원',NULL,'2022-02-02','2022-02-02','1','T'),(16,'admin','산지천 당일치기 따라잡기',NULL,'2022-02-02','2022-02-02','1','T'),(17,'admin','제주도 등대 탐방',NULL,'2022-02-02','2022-02-02','1','T'),(18,'admin','제주도 차 생산지대 방문기',NULL,'2022-02-02','2022-02-02','1','T'),(19,'admin','양과 함께하는 1박2일 제주',NULL,'2022-02-02','2022-02-02','2','T'),(20,'admin','이중섭 문화거리 따라',NULL,'2022-02-02','2022-02-02','2','T'),(21,'admin','1박2일 말체험 한마당',NULL,'2022-02-02','2022-02-02','2','T'),(22,'admin','승마와 카약을 한번에 즐기는 여행',NULL,'2022-02-02','2022-02-02','2','T'),(23,'admin','제주도 1박2일 힐링모험',NULL,'2022-02-02','2022-02-02','2','T'),(24,'admin','제주 생태여행기',NULL,'2022-02-02','2022-02-02','2','T'),(25,'admin','제주 해녀문화는 어떠세요?',NULL,'2022-02-02','2022-02-02','2','T'),(26,'admin','문화탐방 1박2일 여행',NULL,'2022-02-02','2022-02-02','2','T'),(27,'admin','sns에서 핫한 수목원 방문하기',NULL,'2022-02-02','2022-02-02','2','T'),(28,'admin','귤로 유명한 인디고트리는 어떠세요?',NULL,'2022-02-02','2022-02-02','2','T'),(29,'admin','제주도 정복 1박2일 여행기',NULL,'2022-02-02','2022-02-02','2','T'),(30,'admin','생태 관광 1박 2일',NULL,'2022-02-02','2022-02-02','2','T'),(31,'admin','유명여행지를 모두 가고싶다면?',NULL,'2022-02-02','2022-02-02','3','T'),(32,'admin','우도와 승마 두마리 토끼를 한번에',NULL,'2022-02-02','2022-02-02','3','T'),(33,'admin','2박3일 제주힐링 여행기',NULL,'2022-02-02','2022-02-02','3','T'),(34,'admin','제주의 모든 문화를 경험해보실 수 있습니다.',NULL,'2022-02-02','2022-02-02','3','T'),(35,'admin','제주도 눈 여행기는 어때?',NULL,'2022-02-02','2022-02-02','3','T'),(36,'admin','제주 여행하면 어긴 빠질 수 없지',NULL,'2022-02-02','2022-02-02','3','T');
+INSERT INTO `userplan` VALUES (1,'admin','제주도 양구경하기',NULL,'2022-02-02','2022-02-02','1','T',0,0,7),(2,'admin','청수마을 탐방기',NULL,'2022-02-02','2022-02-02','1','T',0,0,7),(3,'admin','농촌마을에서 체험한마당',NULL,'2022-02-02','2022-02-02','1','T',0,0,7),(4,'admin','숲길따라 걸어보기',NULL,'2022-02-02','2022-02-02','1','T',0,0,3),(5,'admin','말 한번 타보시겠습니까?',NULL,'2022-02-02','2022-02-02','1','T',0,0,3),(6,'admin','우도 한번 갔다와 보세요',NULL,'2022-02-02','2022-02-02','1','T',0,0,3),(7,'admin','수목원에서 함께 광합성',NULL,'2022-02-02','2022-02-02','1','T',0,0,1),(8,'admin','비자림에서 함께 힐링',NULL,'2022-02-02','2022-02-02','1','T',0,0,1),(9,'admin','해변따라 모래따라',NULL,'2022-02-02','2022-02-02','1','T',0,0,1),(10,'admin','커피한잔의 여유',NULL,'2022-02-02','2022-02-02','1','T',0,0,6),(11,'admin','제주도 돌하르방 문화 탐방기',NULL,'2022-02-02','2022-02-02','1','T',0,0,6),(12,'admin','세계 자동차&피아노 ',NULL,'2022-02-02','2022-02-02','1','T',0,0,6),(13,'admin','제주도에서 공룡을 구경하실 수 있습니다.',NULL,'2022-02-02','2022-02-02','1','T',0,0,5),(14,'admin','환상의 테마파크로 오세요',NULL,'2022-02-02','2022-02-02','1','T',0,0,5),(15,'admin','향기로운 동백나무 수목원',NULL,'2022-02-02','2022-02-02','1','T',0,0,5),(16,'admin','산지천 당일치기 따라잡기',NULL,'2022-02-02','2022-02-02','1','T',0,0,4),(17,'admin','제주도 등대 탐방',NULL,'2022-02-02','2022-02-02','1','T',0,0,4),(18,'admin','제주도 차 생산지대 방문기',NULL,'2022-02-02','2022-02-02','1','T',0,0,4),(19,'admin','양과 함께하는 1박2일 제주',NULL,'2022-02-02','2022-02-02','2','T',0,0,7),(20,'admin','이중섭 문화거리 따라',NULL,'2022-02-02','2022-02-02','2','T',0,0,7),(21,'admin','1박2일 말체험 한마당',NULL,'2022-02-02','2022-02-02','2','T',0,0,3),(22,'admin','승마와 카약을 한번에 즐기는 여행',NULL,'2022-02-02','2022-02-02','2','T',0,0,3),(23,'admin','제주도 1박2일 힐링모험',NULL,'2022-02-02','2022-02-02','2','T',0,0,1),(24,'admin','제주 생태여행기',NULL,'2022-02-02','2022-02-02','2','T',0,0,1),(25,'admin','제주 해녀문화는 어떠세요?',NULL,'2022-02-02','2022-02-02','2','T',0,0,6),(26,'admin','문화탐방 1박2일 여행',NULL,'2022-02-02','2022-02-02','2','T',0,0,6),(27,'admin','sns에서 핫한 수목원 방문하기',NULL,'2022-02-02','2022-02-02','2','T',0,0,5),(28,'admin','귤로 유명한 인디고트리는 어떠세요?',NULL,'2022-02-02','2022-02-02','2','T',0,0,5),(29,'admin','제주도 정복 1박2일 여행기',NULL,'2022-02-02','2022-02-02','2','T',0,0,4),(30,'admin','생태 관광 1박 2일',NULL,'2022-02-02','2022-02-02','2','T',0,0,4),(31,'admin','유명여행지를 모두 가고싶다면?',NULL,'2022-02-02','2022-02-02','3','T',0,0,7),(32,'admin','우도와 승마 두마리 토끼를 한번에',NULL,'2022-02-02','2022-02-02','3','T',0,0,3),(33,'admin','2박3일 제주힐링 여행기',NULL,'2022-02-02','2022-02-02','3','T',0,0,1),(34,'admin','제주의 모든 문화를 경험해보실 수 있습니다.',NULL,'2022-02-02','2022-02-02','3','T',0,0,6),(35,'admin','제주도 눈 여행기는 어때?',NULL,'2022-02-02','2022-02-02','3','T',0,0,5),(36,'admin','제주 여행하면 어긴 빠질 수 없지',NULL,'2022-02-02','2022-02-02','3','T',0,0,4);
 /*!40000 ALTER TABLE `userplan` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -510,4 +578,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-02-02 22:06:17
+-- Dump completed on 2022-02-03 15:20:20

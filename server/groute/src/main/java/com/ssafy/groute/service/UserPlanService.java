@@ -20,4 +20,5 @@ public interface UserPlanService {
     PlanLike isLike(PlanLike planLike) throws Exception;
     void copyPlan(UserPlan userPlan, int planId, int day) throws Exception;
     List<UserPlan> selectAllByPlaceId(List<Integer> placeIds, int day) throws Exception;
+    List<UserPlan> bestPlanList() throws Exception;
 }

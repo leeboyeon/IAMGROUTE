@@ -93,6 +93,12 @@ public class UserPlanServiceImpl implements UserPlanService {
     }
 
     @Override
+    public List<UserPlan> bestPlanList() throws Exception {
+
+        return userPlanMapper.bestPlanList();
+    }
+
+    @Override
     public Map<String,Object> selectUserPlan(int id) throws Exception {
         Map<String,Object> res = new HashMap<>();
         UserPlan userPlan = userPlanMapper.selectUserPlan(id);
