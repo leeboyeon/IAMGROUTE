@@ -15,7 +15,8 @@ class PlaceViewModel : ViewModel() {
     private val _placeListResponse = MutableLiveData<MutableList<Place>>()
     private val _placeResponse = MutableLiveData<Place>()
     private val _placeBestResponse =MutableLiveData<MutableList<Place>>()
-    
+    private val _placeLikeListResponse = MutableLiveData<MutableList<Place>>()
+
     val placeList : LiveData<MutableList<Place>>
         get() = _placeListResponse
 
@@ -24,7 +25,10 @@ class PlaceViewModel : ViewModel() {
     
     val placeBestList : LiveData<MutableList<Place>>
         get() = _placeBestResponse
-    
+
+    val placeLikeList : LiveData<MutableList<Place>>
+        get() = _placeLikeListResponse
+
     fun setPlaceList(place: MutableList<Place>) = viewModelScope.launch {
         _placeListResponse.value = place  // main thread 에서 갱신
 //        _placeListResponse.postValue(place)   // 백그라운드 갱신
@@ -35,7 +39,11 @@ class PlaceViewModel : ViewModel() {
     fun setPlaceBestList(place: MutableList<Place>) = viewModelScope.launch { 
         _placeBestResponse.value = place
     }
-    
+    fun setPlaceLikeList(place:MutableList<Place>) = viewModelScope.launch {
+        _placeLikeListResponse.value = place
+    }
+
+
     suspend fun getPlaceList() {
         val response = PlaceService().getPlaceList()
         viewModelScope.launch {
@@ -71,7 +79,7 @@ class PlaceViewModel : ViewModel() {
     
     suspend fun getPlaceBestList(){
         val response = PlaceService().getPlaceBestList()
-        viewModelScope.launch { 
+        viewModelScope.launch {
             var res = response.body()
             if(response.code() == 200){
                 if(res!= null){
@@ -80,6 +88,21 @@ class PlaceViewModel : ViewModel() {
                 }
             }else{
                 Log.d(TAG, "getPlaceBestList: ")
+            }
+        }
+    }
+
+    suspend fun getPlaceLikeList(userId:String){
+        val response = PlaceService().getPlaceLikeList(userId)
+        viewModelScope.launch {
+            var res = response.body()
+            if(response.code() == 200){
+                if(res!=null){
+                    setPlaceLikeList(res)
+                    Log.d(TAG, "getPlaceLikeList: ")
+                }
+            }else{
+                Log.d(TAG, "getPlaceLikeList: ")
             }
         }
     }
