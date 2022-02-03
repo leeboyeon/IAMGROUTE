@@ -29,10 +29,10 @@ pipeline {
             
             steps {
                 dir('server/groute/') {
-                    sh  'cd server/groute/; chmod +x gradlew; ./gradlew build'
+                    sh  'chmod +x gradlew; ./gradlew build'
 
 
-                    sh 'cd server/groute/; ls -al ./build'
+                    sh 'ls -al ./build'
                 }
             }
             post {
