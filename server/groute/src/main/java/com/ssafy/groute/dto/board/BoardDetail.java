@@ -21,4 +21,5 @@ public class BoardDetail {
     private int boardId;
     private String userId;
     private int placeId;
+    private int commentCnt;
 }

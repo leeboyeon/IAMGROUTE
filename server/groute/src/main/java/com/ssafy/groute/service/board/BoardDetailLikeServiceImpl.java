@@ -28,7 +28,7 @@ public class BoardDetailLikeServiceImpl implements BoardDetailLikeService{
         boardDetailLikeMapper.deleteBoardDetailLike(id);
         BoardDetail res = boardDetailMapper.selectBoardDetail(boardDetailId);
         res.setHeartCnt(res.getHeartCnt()-1);
-        boardDetailMapper.updateBoardDetailHitCntOrLike(res);
+        boardDetailMapper.updateBoardDetailHitCntOrLikeOrCommentCnt(res);
 
     }
 
@@ -38,7 +38,7 @@ public class BoardDetailLikeServiceImpl implements BoardDetailLikeService{
         boardDetailLikeMapper.insertBoardDetailLike(userId, boardDetailId);
         BoardDetail res = boardDetailMapper.selectBoardDetail(boardDetailId);
         res.setHeartCnt(res.getHeartCnt()+1);
-        boardDetailMapper.updateBoardDetailHitCntOrLike(res);
+        boardDetailMapper.updateBoardDetailHitCntOrLikeOrCommentCnt(res);
     }
 
     @Override
