@@ -124,23 +124,19 @@ class PlaceFilterAdapter(var placeList : MutableList<Place>, var likeList: LiveD
 //            itemView.findViewById<TextView>(R.id.areaPlace_tv_info).text = data.type
 
             val itemAtPosition1 = filteredList[position]
-            val itemAtPosition2 = unFilteredList[position]
             val actualPosition1 = placeList.indexOf(itemAtPosition1)
-            val actualPosition2 = placeList.indexOf(itemAtPosition2)
 
             likeList.observe(owner, Observer {
                 for(i in 0 until placeList.size-1){
                     for(j in 0 until it.size){
                         if(placeList[i].id == likeList.value!![j].id){
-                            if(actualPosition1 == i || actualPosition2 == i){
+                            if(actualPosition1 == i ){
                                 itemView.findViewById<LottieAnimationView>(R.id.area_abtn_heart).progress = 0.5F
                             }
                         }
                     }
                 }
             })
-
-
 
         }
     }
