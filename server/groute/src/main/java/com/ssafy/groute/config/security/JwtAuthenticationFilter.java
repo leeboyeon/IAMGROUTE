@@ -31,16 +31,13 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
-            System.out.println("filter3");
             try {
-                Authentication auth = jwtTokenProvider.getAuthentication(token);
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                // Authentication auth = jwtTokenProvider.getAuthentication(token);
+                // SecurityContextHolder.getContext().setAuthentication(auth);
             } catch (Exception e) {
                 e.printStackTrace();
-                return;
             }
         }
-        System.out.println("filter2");
-        filterChain.doFilter(req, res);
+        filterChain.doFilter(request, response);
     }
 }

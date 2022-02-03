@@ -45,17 +45,14 @@ public class User implements UserDetails {
 
     private String updateDate;
 
-    private String roles;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<String> listRoles = Arrays.asList(roles.split(","));
-        return listRoles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        return null;
     }
 
     @Override
     public String getUsername() {
-        return this.id;
+        return null;
     }
 
     @Override

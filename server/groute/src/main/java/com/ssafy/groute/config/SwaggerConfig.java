@@ -33,12 +33,8 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage("com.ssafy.groute.controller"))
                 .paths(PathSelectors.ant("/**"))
                 .build()
-                .apiInfo(apiInfo(title, version))
-                .securitySchemes(Arrays.asList(apiKey()));
+                .apiInfo(apiInfo(title, version));
 
-    }
-    private ApiKey apiKey() {
-        return new ApiKey("Bearer +accessToken", "X-AUTH-TOKEN", "header");
     }
 
     private ApiInfo apiInfo(String title, String version) {

@@ -51,14 +51,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
                 // permitAll() 처리한 경로의 API는 JWT 값이 없어도 실행 가능
-                .antMatchers("/user/signup", "/user/login", "/user/isUsedId").permitAll()
+                .antMatchers("/**").permitAll();
 //                .antMatchers("/docs/**").permitAll()
-                .anyRequest().hasRole("USER")
-                .and()
+                // .anyRequest().hasRole("USER")
+                // .and()
                 // 403 예외처리 핸들링
 //                .exceptionHandling().accessDeniedPage("/user/denied")
 //                .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+//                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
     }
 
 

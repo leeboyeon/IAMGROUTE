@@ -29,7 +29,7 @@ public class JwtTokenProvider { // JWT 토큰을 생성 및 검증 모듈
 
     private long tokenValidMilisecond = 1000L * 60 * 60 * 24 * 30; // 30일만 토큰 유효
 
-    private final UserDetailsService userDetailsService;
+    // private final UserDetailsService userDetailsService;
 
     @PostConstruct
     protected void init() {
@@ -51,10 +51,10 @@ public class JwtTokenProvider { // JWT 토큰을 생성 및 검증 모듈
     }
 
     // Jwt 토큰으로 인증 정보를 조회
-    public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-    }
+    // public Authentication getAuthentication(String token) {
+    //     UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
+    //     return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    // }
 
     // Jwt 토큰에서 회원 구별 정보 추출
     public String getUserPk(String token) {
