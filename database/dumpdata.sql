@@ -118,6 +118,7 @@ CREATE TABLE `boarddetail` (
   `board_id` int NOT NULL,
   `user_id` varchar(100) NOT NULL,
   `place_id` int DEFAULT NULL,
+  `commentCnt` int DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `fk_boardDetail_board1_idx` (`board_id`),
   KEY `fk_boardDetail_user1_idx` (`user_id`),
