@@ -1,5 +1,6 @@
 package com.ssafy.groute.src.main.board
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,26 +12,23 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.src.dto.Comment
-import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.CommentService
 import com.ssafy.groute.src.service.UserService
-import com.ssafy.groute.util.BoardViewModel
 import com.ssafy.groute.util.RetrofitCallback
 
-private const val TAG = "CommentAdapter_groute"
-class CommentAdapter(val context: Context, val lifecycleOwner: LifecycleOwner, val boardViewModel: BoardViewModel) : RecyclerView.Adapter<CommentAdapter.CommentHolder>(){
+private const val TAG = "CommentNestedAdapter_groute"
+class CommentNestedAdapter(val context: Context, val lifecycleOwner: LifecycleOwner) : RecyclerView.Adapter<CommentNestedAdapter.CommentNestedHolder>(){
     var list = mutableListOf<Comment>()
 
     // 현재 로그인한 유저의 아이디
     val userId = ApplicationClass.sharedPreferencesUtil.getUser().id
 
-    fun setCommentList(list: List<Comment>?) {
+    fun setCommentNestedList(list: List<Comment>?) {
         if(list == null) {
             this.list = ArrayList()
         } else {
@@ -39,10 +37,8 @@ class CommentAdapter(val context: Context, val lifecycleOwner: LifecycleOwner, v
         }
     }
 
-    inner class CommentHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val more = itemView.findViewById<ImageView>(R.id.comment_more_iv)
-        val commentNestedTv = itemView.findViewById<TextView>(R.id.comment_nested_btn)
-        val commentNestedRv = itemView.findViewById<RecyclerView>(R.id.comment_nested_rv)
+    inner class CommentNestedHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        val more = itemView.findViewById<ImageView>(R.id.comment_nested_more_iv)
         fun bindInfo(data : Comment){
             val userInfo = UserService().getUserInfo(data.userId)
             userInfo.observe(
@@ -50,55 +46,27 @@ class CommentAdapter(val context: Context, val lifecycleOwner: LifecycleOwner, v
                     Glide.with(itemView)
                         .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
                         .circleCrop()
-                        .into(itemView.findViewById(R.id.comment_detail_iv_userImg))
-                    itemView.findViewById<TextView>(R.id.comment_detail_tv_userNick).text = it.nickname
+                        .into(itemView.findViewById(R.id.comment_nested_iv_userImg))
+                    itemView.findViewById<TextView>(R.id.comment_nested_tv_userNick).text = it.nickname
                 }
             )
-            itemView.findViewById<TextView>(R.id.comment_detail_tv_comment).text = data.content
+            itemView.findViewById<TextView>(R.id.comment_nested_tv_comment).text = data.content
 
             if(userId != data.userId) { // 로그인한 유저 댓글이 아닐 때
                 more.visibility = View.GONE
             }
 
-            // 답글 달기 버튼을 눌렀을 때
-            commentNestedTv.setOnClickListener {
-                itemClickListener.onCommentNestedClick(layoutPosition, data)
-            }
-
-            var commentNestedAdapter = CommentNestedAdapter(context, lifecycleOwner)
-            BoardService().getBoardDetailWithComment(data.boardDetailId).observe(
-                lifecycleOwner,
-                {
-                    var list = mutableListOf<Comment>()
-                    for(i in 0 until it.commentList.size) {
-                        if(it.commentList.get(i).groupNum == data.groupNum) {
-                            if(it.commentList.get(i).level == 1) {
-                                list.add(it.commentList.get(i))
-                            }
-                        }
-                    }
-                    Log.d(TAG, "bindInfo CommentAdapter: ${list}")
-                    commentNestedAdapter.setCommentNestedList(list)
-                    commentNestedRv.apply{
-                        layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-                        adapter = commentNestedAdapter
-                        adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-                    }
-                }
-            )
-
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentHolder{
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_comment_list_item,parent,false)
-        return CommentHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentNestedHolder{
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_nested_comment_list_item,parent,false)
+        return CommentNestedHolder(view)
     }
 
-    override fun onBindViewHolder(holder: CommentHolder, position: Int) {
+    override fun onBindViewHolder(holder: CommentNestedHolder, position: Int) {
         holder.apply {
             bindInfo(list[position])
-
 
             more.setOnClickListener {
                 val popup: PopupMenu = PopupMenu(context,more)
@@ -129,14 +97,16 @@ class CommentAdapter(val context: Context, val lifecycleOwner: LifecycleOwner, v
 
     interface ItemClickListener{
         fun onEditClick(position: Int, comment: Comment)
-        fun onCommentNestedClick(position: Int, comment: Comment)
+        fun onCommentNestedClick(position: Int, id: Int)
     }
     private lateinit var itemClickListener : ItemClickListener
     fun setItemClickListener(itemClickListener: ItemClickListener){
         this.itemClickListener = itemClickListener
     }
 
+    @SuppressLint("LongLogTag")
     inner class DeleteCallback(var position:Int): RetrofitCallback<Any> {
+
         override fun onError(t: Throwable) {
             Log.d(TAG, "onError: ")
         }

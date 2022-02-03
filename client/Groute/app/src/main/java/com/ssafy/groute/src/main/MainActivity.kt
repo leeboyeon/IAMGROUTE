@@ -169,9 +169,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             10 ->{
                 logout()
             }
+
         }
         transaction.commit()
     }
+
     fun moveFragment(index:Int, key:String, value:Int){
         openFragment(index, key, value)
     }
