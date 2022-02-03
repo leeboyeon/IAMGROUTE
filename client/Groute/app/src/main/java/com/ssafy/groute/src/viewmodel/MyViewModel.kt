@@ -1,4 +1,4 @@
-package com.ssafy.groute.src.main.my
+package com.ssafy.groute.src.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.*

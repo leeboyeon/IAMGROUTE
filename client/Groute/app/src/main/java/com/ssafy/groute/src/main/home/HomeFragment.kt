@@ -24,10 +24,9 @@ import com.ssafy.groute.databinding.FragmentHomeBinding
 import com.ssafy.groute.src.api.AreaApi
 import com.ssafy.groute.src.dto.Area
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.main.route.PlanViewModel
-import com.ssafy.groute.src.service.AreaService
-import com.ssafy.groute.src.service.UserPlanService
-import com.ssafy.groute.util.BoardViewModel
+import com.ssafy.groute.src.viewmodel.HomeViewModel
+import com.ssafy.groute.src.viewmodel.PlaceViewModel
+import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.MainViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil

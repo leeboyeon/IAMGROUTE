@@ -152,4 +152,8 @@ class PlaceService {
 
         })
     }
+
+    suspend fun getPlaceLikeList(userId: String) : Response<MutableList<Place>>{
+        return RetrofitUtil.placeService.getPlaceLikeListbyUserId(userId)
+    }
 }

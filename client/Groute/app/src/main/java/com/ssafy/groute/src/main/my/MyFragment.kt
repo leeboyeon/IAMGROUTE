@@ -24,9 +24,9 @@ import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentMyBinding
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.main.home.PlaceViewModel
 import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
+import com.ssafy.groute.src.viewmodel.MyViewModel
 import com.ssafy.groute.util.RetrofitCallback
 
 private const val TAG = "MyFragment_groute"

@@ -46,4 +46,6 @@ interface PlaceApi {
     @POST("/place/isLike")
     fun placeIsLike(@Body placelike: PlaceLikeResponse) : Call<Boolean>
 
+    @GET("/place/like/{userId}")
+    suspend fun getPlaceLikeListbyUserId(@Path("userId")userId:String) : Response<MutableList<Place>>
 }

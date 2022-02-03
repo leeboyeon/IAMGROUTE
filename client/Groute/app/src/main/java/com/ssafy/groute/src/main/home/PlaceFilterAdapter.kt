@@ -11,6 +11,11 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.ListAdapter
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
@@ -21,38 +26,33 @@ import com.ssafy.groute.databinding.RecyclerviewAreaPlaceItemBinding
 import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.response.PlaceLikeResponse
 import com.ssafy.groute.src.service.PlaceService
+import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.util.CommonUtils
+import kotlinx.coroutines.runBlocking
 
 private const val TAG = "AreaFilterAdapter"
-//class AreaFilterAdapter() : RecyclerView.Adapter<AreaFilterAdapter.AreaViewHolder>(),
-//class AreaFilterAdapter(var placeList:MutableList<Place>) : RecyclerView.Adapter<AreaFilterAdapter.AreaViewHolder>(),
-class PlaceFilterAdapter(var placeList : MutableList<Place>) : ListAdapter<Place, PlaceFilterAdapter.PlaceViewHolder>(DiffCallback),
+class PlaceFilterAdapter(var placeList : MutableList<Place>, var likeList: LiveData<MutableList<Place>>, var owner: LifecycleOwner) : ListAdapter<Place, PlaceFilterAdapter.PlaceViewHolder>(DiffCallback),
     Filterable {
     private var unFilteredList = placeList
     private var filteredList = placeList
-//    private var context:Context?=null
-//    var list = listOf<Place>()
-//    var isHeart = false
-
+    private lateinit var placeViewModel:PlaceViewModel
+    private var heartHashMap:HashMap<Int,Boolean> = HashMap()
     override fun getFilter(): Filter {
         return object  : Filter(){
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 //event
                 val charString = constraint.toString()
-//                Log.d(TAG, "performFiltering: ${charString}")
                 filteredList = if(charString.isEmpty()){
                     unFilteredList
                 }else{
                     val filteringList = ArrayList<Place>()
                     for(item in unFilteredList){
-//                        Log.d(TAG, "performFiltering: ${item}")
                         if(item.type.contains(charString)) filteringList.add(item)
                     }
                     filteringList
                 }
                 val filterResults = FilterResults()
                 filterResults.values = filteredList
-//                Log.d(TAG, "performFiltering: ${filterResults.values}")
                 return filterResults
             }
 
@@ -65,19 +65,18 @@ class PlaceFilterAdapter(var placeList : MutableList<Place>) : ListAdapter<Place
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceViewHolder {
-//        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_area_place_item,parent,false)
-//        return AreaViewHolder(view)
         return PlaceViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.recyclerview_area_place_item, parent, false))
     }
 
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
         holder.apply {
-//            bindInfo(filteredList[position])
-            bindInfo(filteredList[position])
+            bindInfo(filteredList[position], position)
             itemView.setOnClickListener {
                 itemClickListener.onClick(it,position, filteredList[position].id)
             }
+
             val heart = itemView.findViewById<LottieAnimationView>(R.id.area_abtn_heart)
+
             heart.setOnClickListener {
                 heartClickListener.onClick(it,position,filteredList[position].id)
                 if(heart.progress > 0F){
@@ -111,9 +110,7 @@ class PlaceFilterAdapter(var placeList : MutableList<Place>) : ListAdapter<Place
     }
 
     inner class PlaceViewHolder(private var binding:RecyclerviewAreaPlaceItemBinding) : RecyclerView.ViewHolder(binding.root){
-//        val heartLottie = itemView.findViewById<LottieAnimationView>(R.id.area_abtn_heart)
-
-        fun bindInfo(place : Place){
+        fun bindInfo(place : Place, position: Int){
             binding.place = place
             binding.executePendingBindings()
 //            Glide.with(itemView)
@@ -122,17 +119,29 @@ class PlaceFilterAdapter(var placeList : MutableList<Place>) : ListAdapter<Place
 //
             itemView.findViewById<TextView>(R.id.areaPlace_tv_name).text =CommonUtils.getFormattedTitle(place.name)
             itemView.findViewById<TextView>(R.id.areaPlace_tv_content).text = CommonUtils.getFormattedDescription(place.description)
+            itemView.findViewById<LottieAnimationView>(R.id.area_abtn_heart).progress = 0F
 ////            itemView.findViewById<TextView>(R.id.areaPlace_rb_rating) = data.review
 //            itemView.findViewById<TextView>(R.id.areaPlace_tv_info).text = data.type
 
-            // place 좋아요 버튼 클릭 이벤트(Lottie)
-            binding.areaAbtnHeart.setOnClickListener {
-                val animator = ValueAnimator.ofFloat(0f,0.5f).setDuration(500)
-                animator.addUpdateListener { animation ->
-                    binding.areaAbtnHeart.progress = animation.animatedValue as Float
+            val itemAtPosition1 = filteredList[position]
+            val itemAtPosition2 = unFilteredList[position]
+            val actualPosition1 = placeList.indexOf(itemAtPosition1)
+            val actualPosition2 = placeList.indexOf(itemAtPosition2)
+
+            likeList.observe(owner, Observer {
+                for(i in 0 until placeList.size-1){
+                    for(j in 0 until it.size){
+                        if(placeList[i].id == likeList.value!![j].id){
+                            if(actualPosition1 == i || actualPosition2 == i){
+                                itemView.findViewById<LottieAnimationView>(R.id.area_abtn_heart).progress = 0.5F
+                            }
+                        }
+                    }
                 }
-                animator.start()
-            }
+            })
+
+
+
         }
     }
 

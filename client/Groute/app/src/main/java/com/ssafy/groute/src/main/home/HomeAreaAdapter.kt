@@ -15,8 +15,6 @@ import com.ssafy.groute.databinding.RecyclerviewCategoryItemBinding
 import com.ssafy.groute.src.dto.Area
 import retrofit2.Call
 
-//class HomeAreaAdapter(private val onClickListener: OnClickListener) : RecyclerView.Adapter<HomeAreaAdapter.HomeAreaViewHolder>(HomeAreaAdapter){
-//class HomeAreaAdapter(private val onClickListener: OnClickListener, private val areaList: MutableList<Area>) : RecyclerView.Adapter<HomeAreaAdapter.HomeAreaViewHolder>(){
 class HomeAreaAdapter(private val areaList: MutableList<Area>) : RecyclerView.Adapter<HomeAreaAdapter.HomeAreaViewHolder>(){
 
 

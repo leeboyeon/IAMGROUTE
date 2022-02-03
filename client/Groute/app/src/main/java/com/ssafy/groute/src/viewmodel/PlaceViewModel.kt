@@ -1,4 +1,4 @@
-package com.ssafy.groute.src.main.home
+package com.ssafy.groute.src.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -99,10 +99,12 @@ class PlaceViewModel : ViewModel() {
             if(response.code() == 200){
                 if(res!=null){
                     setPlaceLikeList(res)
-                    Log.d(TAG, "getPlaceLikeList: ")
+                    Log.d(TAG, "getPlaceLikeList: ${res}")
+                }else{
+                    Log.d(TAG, "getPlaceLikeList: ISNULL")
                 }
             }else{
-                Log.d(TAG, "getPlaceLikeList: ")
+                Log.d(TAG, "getPlaceLikeList: FAIL")
             }
         }
     }
