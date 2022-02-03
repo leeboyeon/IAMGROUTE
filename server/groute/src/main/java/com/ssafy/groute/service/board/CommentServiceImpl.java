@@ -1,10 +1,12 @@
 package com.ssafy.groute.service.board;
 
+import com.ssafy.groute.dto.board.BoardDetail;
 import com.ssafy.groute.dto.board.Comment;
 import com.ssafy.groute.mapper.board.BoardDetailMapper;
 import com.ssafy.groute.mapper.board.CommentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,10 +14,16 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService{
     @Autowired
     CommentMapper commentMapper;
+    @Autowired
+    BoardDetailMapper boardDetailMapper;
 
+    @Transactional
     @Override
     public void insertComment(Comment comment) throws Exception {
+        BoardDetail boardDetail = boardDetailMapper.selectBoardDetail(comment.getBoardDetailId());
+        boardDetail.setCommentCnt(boardDetail.getCommentCnt()+1);
         commentMapper.insertComment(comment);
+        boardDetailMapper.updateBoardDetailHitCntOrLikeOrCommentCnt(boardDetail);
     }
 
     @Override
@@ -30,6 +38,10 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public void deleteComment(int id) throws Exception {
+        int boardDetailId = commentMapper.selectComment(id).getBoardDetailId();
+        BoardDetail boardDetail = boardDetailMapper.selectBoardDetail(boardDetailId);
+        boardDetail.setCommentCnt(boardDetail.getCommentCnt()-1);
+        boardDetailMapper.updateBoardDetailHitCntOrLikeOrCommentCnt(boardDetail);
         commentMapper.deleteComment(id);
     }
 

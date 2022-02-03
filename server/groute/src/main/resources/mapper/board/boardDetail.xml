@@ -16,7 +16,7 @@
         <result column="place_id" property="placeId"></result>
     </resultMap>
     <select id="selectBoardDetail" parameterType="int" resultMap="BoardDetailDTO">
-        select id, title, content, img, heartCnt, hitCnt, board_id, user_id, place_id,
+        select id, title, content, img, heartCnt, hitCnt, board_id, user_id, place_id, commentCnt,
                case when date_format(create_date, '%Y%m%d') = date_format(now(), '%Y%m%d')
                         then date_format(create_date, '%H:%i:%s')
                     else date_format(create_date, '%y.%m.%d')
@@ -30,7 +30,7 @@
     </select>
 
     <select id="selectAllBoardDetail"  resultMap="BoardDetailDTO">
-        select id, title, content, img, heartCnt, hitCnt, board_id, user_id, place_id,
+        select id, title, content, img, heartCnt, hitCnt, board_id, user_id, place_id,commentCnt,
                case when date_format(create_date, '%Y%m%d') = date_format(now(), '%Y%m%d')
                         then date_format(create_date, '%H:%i:%s')
                     else date_format(create_date, '%y.%m.%d')
@@ -43,7 +43,7 @@
     </select>
 
     <select id="selectBoardDetailSeparetedByTag"  resultMap="BoardDetailDTO">
-        select id, title, content, img, heartCnt, hitCnt, board_id, user_id, place_id,
+        select id, title, content, img, heartCnt, hitCnt, board_id, user_id, place_id,commentCnt,
             case when date_format(create_date, '%Y%m%d') = date_format(now(), '%Y%m%d')
                     then date_format(create_date, '%H:%i:%s')
                 else date_format(create_date, '%y.%m.%d')
@@ -68,9 +68,9 @@
         where id = #{id}
     </update>
 
-    <update id="updateBoardDetailHitCntOrLike" parameterType="BoardDetail">
+    <update id="updateBoardDetailHitCntOrLikeOrCommentCnt" parameterType="BoardDetail">
         update boarddetail
-        set hitCnt = #{hitCnt}, heartCnt = #{heartCnt}
+        set hitCnt = #{hitCnt}, heartCnt = #{heartCnt}, commentCnt = #{commentCnt}
         where id = #{id}
     </update>
 
