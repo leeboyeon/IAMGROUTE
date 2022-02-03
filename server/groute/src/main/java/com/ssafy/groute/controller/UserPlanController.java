@@ -175,7 +175,7 @@ public class UserPlanController {
 
     @ApiOperation(value = "planLike",notes = "해당 plan 좋아요 또는 좋아요취소")
     @PostMapping(value = "/like")
-    public ResponseEntity<?> placeLike(@RequestBody PlanLike planLike){
+    public ResponseEntity<?> planLike(@RequestBody PlanLike planLike){
         try {
             userPlanService.likePlan(planLike);
         }catch(Exception e){
@@ -184,5 +184,15 @@ public class UserPlanController {
         }
 
         return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "bestPlanList",notes = "좋아요가 많은 순 5개 plan리스트 출력")
+    @GetMapping(value="/best")
+    public ResponseEntity<?> bestPlanList() throws Exception{
+        List<UserPlan> res = userPlanService.bestPlanList();
+        if(res == null){
+            return new ResponseEntity<Boolean>(false,HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<List<UserPlan>>(res,HttpStatus.OK);
     }
 }
