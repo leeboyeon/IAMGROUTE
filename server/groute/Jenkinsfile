@@ -27,8 +27,7 @@ pipeline {
 
         stage('build gradle') {
             steps {
-                sh  'cd server/groute/'
-                sh  './gradlew build'
+                sh  'cd server/groute/; ./gradlew build'
 
 
                 sh 'ls -al ./build'
