@@ -102,6 +102,10 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>
                 showEditDialog(comment)
             }
 
+            override fun onCommentNestedClick(position: Int, comment: Comment) {
+                TODO("Not yet implemented")
+            }
+
         })
     }
 

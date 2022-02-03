@@ -15,9 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
-import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.dto.Comment
-import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.CommentService
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
@@ -40,6 +38,7 @@ class CommentAdapter(val context: Context, val lifecycleOwner: LifecycleOwner) :
 
     inner class CommentHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val more = itemView.findViewById<ImageView>(R.id.comment_more_iv)
+        val commentNestedTv = itemView.findViewById<TextView>(R.id.comment_nested_btn)
         fun bindInfo(data : Comment){
             val userInfo = UserService().getUserInfo(data.userId)
             userInfo.observe(
@@ -47,14 +46,19 @@ class CommentAdapter(val context: Context, val lifecycleOwner: LifecycleOwner) :
                     Glide.with(itemView)
                         .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
                         .circleCrop()
-                        .into(itemView.findViewById(R.id.comment_iv_userImg))
-                    itemView.findViewById<TextView>(R.id.comment_tv_userNick).text = it.nickname
+                        .into(itemView.findViewById(R.id.comment_nested_detail_iv_userImg))
+                    itemView.findViewById<TextView>(R.id.comment_nested_detail_tv_userNick).text = it.nickname
                 }
             )
-            itemView.findViewById<TextView>(R.id.comment_tv_comment).text = data.content
+            itemView.findViewById<TextView>(R.id.comment_nested_detail_tv_comment).text = data.content
 
             if(userId != data.userId) { // 로그인한 유저 댓글이 아닐 때
                 more.visibility = View.GONE
+            }
+
+            // 답글 달기 버튼을 눌렀을 때
+            commentNestedTv.setOnClickListener {
+                itemClickListener.onCommentNestedClick(layoutPosition, data)
             }
         }
     }
@@ -97,6 +101,7 @@ class CommentAdapter(val context: Context, val lifecycleOwner: LifecycleOwner) :
 
     interface ItemClickListener{
         fun onEditClick(position: Int, comment: Comment)
+        fun onCommentNestedClick(position: Int, comment: Comment)
     }
     private lateinit var itemClickListener : ItemClickListener
     fun setItemClickListener(itemClickListener: ItemClickListener){
