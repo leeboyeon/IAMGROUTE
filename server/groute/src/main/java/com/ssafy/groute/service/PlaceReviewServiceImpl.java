@@ -40,7 +40,10 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
         PlaceReview placeReview = selectPlaceReview(id);
         Place place = placeMapper.selectPlace(placeReview.getPlaceId());
         int cnt = placeReviewMapper.selectByPlaceId(place.getId()).size();
-        double rate = ((place.getRate()*cnt) - placeReview.getRate())/(cnt-1);
+        double rate = 0;
+        if(cnt>1) {
+            rate = ((place.getRate() * cnt) - placeReview.getRate()) / (cnt - 1);
+        }
         place.setRate(rate);
         placeMapper.updatePlace(place);
         placeReviewMapper.deletePlaceReview(id);

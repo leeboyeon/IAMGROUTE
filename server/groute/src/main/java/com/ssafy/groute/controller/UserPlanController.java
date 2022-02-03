@@ -1,6 +1,7 @@
 package com.ssafy.groute.controller;
 
 import com.ssafy.groute.dto.*;
+import com.ssafy.groute.service.PlanReviewService;
 import com.ssafy.groute.service.RouteDetailService;
 import com.ssafy.groute.service.UserPlanService;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +23,8 @@ public class UserPlanController {
     UserPlanService userPlanService;
     @Autowired
     RouteDetailService routeDetailService;
+    @Autowired
+    PlanReviewService planReviewService;
 
     @ApiOperation(value = "userPlan 추가",notes = "planId가 0이면 빈 일정 생성 0이 아니면 해당 일정 복사해서 생성")
     @PostMapping(value = "/insert")
@@ -194,5 +197,83 @@ public class UserPlanController {
             return new ResponseEntity<Boolean>(false,HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<List<UserPlan>>(res,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "planReview 추가",notes = "planReview 추가")
+    @PostMapping(value = "/review")
+    public ResponseEntity<?> insertPlanReview(@RequestBody PlanReview req){
+
+        try {
+            planReviewService.insertPlanReview(req);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "planReview 검색",notes = "이름으로 planReview 하나 검색")
+    @GetMapping(value = "/review/detail")
+    public ResponseEntity<?> detailPlanReview(@RequestParam("id") int id) throws Exception{
+
+        PlanReview res = planReviewService.selectPlanReview(id);
+        if(res==null){
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<PlanReview>(res,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "list planReview",notes = "모든 planReview 반환")
+    @GetMapping(value = "/review/list")
+    public ResponseEntity<?> listPlanReview() throws Exception{
+
+        List<PlanReview> res = planReviewService.selectAllPlanReview();
+        if(res==null){
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<List<PlanReview>>(res,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "delete planReview",notes = "planReview 삭제")
+    @DeleteMapping(value = "/review/del")
+    public ResponseEntity<?> deletePlanReview(@RequestParam("id") int id) throws Exception{
+
+        try {
+            planReviewService.deletePlanReview(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "updatePlanReview",notes = "planReview 수정")
+    @PutMapping(value = "/review/update")
+    public ResponseEntity<?> updatePlanReview(@RequestBody PlanReview planReview) throws Exception{
+
+        try {
+            planReviewService.updatePlanReview(planReview);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "planReview by planId",notes = "해당 plan의 리뷰 반환")
+    @GetMapping(value = "/review/list/{planId}")
+    public ResponseEntity<?> listPlanReviewByPlanId(@PathVariable("planId") int planId) throws Exception{
+
+        List<PlanReview> res = planReviewService.selectByPlanId(planId);
+        if(res==null){
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<List<PlanReview>>(res,HttpStatus.OK);
     }
 }
