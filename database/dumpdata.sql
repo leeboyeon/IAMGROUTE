@@ -1,12 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.27, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
 --
--- Host: localhost    Database: groute
+-- Host: 127.0.0.1    Database: groute
 -- ------------------------------------------------------
--- Server version	8.0.27
-
-drop schema if exists groute;
-CREATE SCHEMA IF NOT EXISTS `groute` DEFAULT CHARACTER SET utf8 ;
-USE `groute` ;
+-- Server version	8.0.26
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -219,7 +215,7 @@ CREATE TABLE `place` (
   `area_id` int NOT NULL,
   `img` varchar(255) DEFAULT NULL,
   `user_id` varchar(100) NOT NULL COMMENT 'user_id에는 admin 또는 place를 등록한 user의 아이디\\n동진님 - plan이 public이 될 때, 검토 후에  userplace가 place로 등록이 될 수 있도록(user_id -> admin)\\n',
-  `rate` double DEFAULT NULL,
+  `rate` double DEFAULT '0',
   `heartCnt` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_theme_place_idx` (`theme_id`),
@@ -270,6 +266,39 @@ LOCK TABLES `placelike` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `placereview`
+--
+
+DROP TABLE IF EXISTS `placereview`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `placereview` (
+  `user_id` varchar(100) NOT NULL,
+  `place_id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(45) NOT NULL,
+  `content` varchar(100) NOT NULL,
+  `rate` double NOT NULL,
+  `img` varchar(255) DEFAULT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_user_has_place_place2_idx` (`place_id`),
+  KEY `fk_user_has_place_user2_idx` (`user_id`),
+  CONSTRAINT `fk_user_has_place_place2` FOREIGN KEY (`place_id`) REFERENCES `place` (`id`),
+  CONSTRAINT `fk_user_has_place_user2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `placereview`
+--
+
+LOCK TABLES `placereview` WRITE;
+/*!40000 ALTER TABLE `placereview` DISABLE KEYS */;
+/*!40000 ALTER TABLE `placereview` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `planlike`
 --
 
@@ -295,6 +324,39 @@ CREATE TABLE `planlike` (
 LOCK TABLES `planlike` WRITE;
 /*!40000 ALTER TABLE `planlike` DISABLE KEYS */;
 /*!40000 ALTER TABLE `planlike` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `planreview`
+--
+
+DROP TABLE IF EXISTS `planreview`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `planreview` (
+  `user_id` varchar(100) NOT NULL,
+  `userplan_id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(45) NOT NULL,
+  `content` varchar(255) NOT NULL,
+  `rate` double NOT NULL,
+  `img` varchar(255) DEFAULT NULL,
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_user_has_userplan_userplan2_idx` (`userplan_id`),
+  KEY `fk_user_has_userplan_user2_idx` (`user_id`),
+  CONSTRAINT `fk_user_has_userplan_user2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `fk_user_has_userplan_userplan2` FOREIGN KEY (`userplan_id`) REFERENCES `userplan` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `planreview`
+--
+
+LOCK TABLES `planreview` WRITE;
+/*!40000 ALTER TABLE `planreview` DISABLE KEYS */;
+/*!40000 ALTER TABLE `planreview` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -486,7 +548,7 @@ CREATE TABLE `userplan` (
   `endDate` date NOT NULL,
   `totalDate` varchar(20) NOT NULL,
   `isPublic` varchar(1) NOT NULL,
-  `rate` double DEFAULT NULL,
+  `rate` double DEFAULT '0',
   `heartCnt` int DEFAULT NULL,
   `theme_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -516,6 +578,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-
--- Dump completed on 2022-02-03 11:46:26
-
+-- Dump completed on 2022-02-03 15:20:20
