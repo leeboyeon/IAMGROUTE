@@ -30,7 +30,7 @@ pipeline {
                 sh  'cd server/groute/; chmod +x gradlew; ./gradlew build'
 
 
-                sh 'ls -al ./build'
+                sh 'cd server/groute/; ls -al ./build'
             }
             post {
                 success {
