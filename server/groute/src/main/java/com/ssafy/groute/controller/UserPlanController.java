@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,19 +23,48 @@ public class UserPlanController {
     @Autowired
     RouteDetailService routeDetailService;
 
-    @ApiOperation(value = "userPlan 추가",notes = "planId가 0이면 빈 일정 생성 0이 아니면 추천 일정 복사해서 생성")
+    @ApiOperation(value = "userPlan 추가",notes = "planId가 0이면 빈 일정 생성 0이 아니면 해당 일정 복사해서 생성")
     @PostMapping(value = "/insert")
     public ResponseEntity<?> insertUserPlan(@RequestBody UserPlan req,@RequestParam("userIds") List<String> userIds,@RequestParam("planId") int planId){
 
         try {
             userPlanService.insertUserPlan(req, userIds, planId);
         }catch (Exception e){
-//            e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
+
+    @ApiOperation(value = "userPlan 반환",notes = "해당 place 포함한 경로 찾기")
+    @GetMapping(value = "/filter")
+    public ResponseEntity<?> filterUserPlan(@RequestParam("placeIds") List<Integer> placeIds,int day) throws Exception{
+        List<UserPlan> userPlans = new ArrayList<>();
+        try {
+            userPlans = userPlanService.selectAllByPlaceId(placeIds,day);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return new ResponseEntity<List<UserPlan>>(userPlans,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "userPlan 카피",notes = "이미 만들어진 일정에서 추천루트 선택했을때 전체 일정 변경이면 day 0, 특정 날짜 변경이면 day에 몇번째 날인지")
+    @PostMapping(value = "/copy")
+    public ResponseEntity<?> copyUserPlan(@RequestBody UserPlan req,@RequestParam("planId") int planId,@RequestParam("day")int day){
+
+        try {
+            userPlanService.copyPlan(req, planId, day);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+    }
+
 
     @ApiOperation(value = "userPlan 검색",notes = "id로 userPlan 상세 정보 반환")
     @GetMapping(value = "/{id}")
@@ -42,7 +72,7 @@ public class UserPlanController {
 
         Map<String,Object> res = userPlanService.selectUserPlan(id);
         if(res==null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
         return new ResponseEntity<Map<String,Object>>(res,HttpStatus.OK);
@@ -94,6 +124,20 @@ public class UserPlanController {
 
         try {
             routeDetailService.insertRouteDetail(routeDetail);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "place 삭제",notes = "해당 일정에 place 삭제")
+    @DeleteMapping(value = "/place/{id}")
+    public ResponseEntity<?> deletePlace(@PathVariable("id") int id){
+
+        try {
+            routeDetailService.deleteRouteDetail(id);
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);

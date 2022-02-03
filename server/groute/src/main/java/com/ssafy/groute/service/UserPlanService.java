@@ -18,5 +18,6 @@ public interface UserPlanService {
     List<UserPlan> selectAllUserPlanById(String id) throws Exception;
     void likePlan(PlanLike planLike) throws Exception;
     PlanLike isLike(PlanLike planLike) throws Exception;
-    void copyPlan(UserPlan userPlan, UserPlan orginPlan ) throws Exception;
+    void copyPlan(UserPlan userPlan, int planId, int day) throws Exception;
+    List<UserPlan> selectAllByPlaceId(List<Integer> placeIds, int day) throws Exception;
 }

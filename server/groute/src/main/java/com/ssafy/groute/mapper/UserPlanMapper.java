@@ -19,4 +19,6 @@ public interface UserPlanMapper {
     void likePlan(PlanLike planLike) throws Exception;
     void unLikePlan(int id) throws Exception;
     PlanLike isLike(PlanLike planLike) throws Exception;
+    List<Integer> selectAllUserPlanByTotalDate(int totalDate);
+    List<Integer> selectPlaceListByPlanId(int id);
 }

@@ -47,4 +47,9 @@
         delete from routedetail
         where place_id = #{placeId}
     </delete>
+
+    <delete id="deleteAllRouteDetailByRouteId" parameterType="int">
+        delete from routedetail
+        where route_id = #{routeId}
+    </delete>
 </mapper>

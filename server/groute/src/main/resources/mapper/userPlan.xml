@@ -62,4 +62,14 @@
         select * from planlike
         where user_id = #{userId} and userplan_id = #{userPlanId}
     </select>
+
+    <select id="selectAllUserPlanByTotalDate" parameterType="int" resultType="int">
+        select id from userplan
+        where totaldate = #{totalDate}
+    </select>
+
+    <select id="selectPlaceListByPlanId" parameterType="int" resultType="int">
+        select place_id from routeDetail
+        where route_id IN (select route_id from routes where plan_id = #{id})
+    </select>
 </mapper>
