@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="boardViewModel"
-            type="com.ssafy.groute.util.BoardViewModel" />
+            name="boardViewModels"
+            type="com.ssafy.groute.src.viewmodel.BoardViewModel" />
     </data>
     <FrameLayout
         android:layout_width="match_parent"

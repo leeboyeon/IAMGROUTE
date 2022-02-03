@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.ssafy.groute.src.main.home.PlaceViewModel" />
+            type="com.ssafy.groute.src.viewmodel.PlaceViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

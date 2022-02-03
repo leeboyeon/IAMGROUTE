@@ -3,10 +3,7 @@ package com.ssafy.groute.src.main.board
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,11 +13,11 @@ import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentBoardDetailBinding
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.main.MainViewModel
+import com.ssafy.groute.src.viewmodel.MainViewModel
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_FREE_TYPE
 import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_QUESTION_TYPE
 import com.ssafy.groute.src.service.BoardService
-import com.ssafy.groute.util.BoardViewModel
+import com.ssafy.groute.src.viewmodel.BoardViewModel
 import com.ssafy.groute.util.RetrofitCallback
 
 private const val TAG = "BoardDetailF_Groute"

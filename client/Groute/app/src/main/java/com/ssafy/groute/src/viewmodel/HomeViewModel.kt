@@ -1,4 +1,4 @@
-package com.ssafy.groute.src.main.home
+package com.ssafy.groute.src.viewmodel
 
 import android.net.Network
 import android.util.Log

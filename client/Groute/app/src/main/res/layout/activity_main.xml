@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModeluser"
-            type="com.ssafy.groute.src.main.MainViewModel" />
+            type="com.ssafy.groute.src.viewmodel.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

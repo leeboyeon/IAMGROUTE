@@ -13,6 +13,7 @@ import com.ssafy.groute.databinding.FragmentInfoBinding
 import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.PlaceService
+import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
 import net.daum.mf.map.api.MapPOIItem

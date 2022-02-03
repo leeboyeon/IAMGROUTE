@@ -12,8 +12,7 @@ import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.src.dto.BoardDetail
-import com.ssafy.groute.src.dto.Place
-import com.ssafy.groute.src.main.home.PlaceViewModel
+
 import com.ssafy.groute.src.main.route.RouteThemeRecyclerviewAdapter
 import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.PlaceService

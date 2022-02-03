@@ -8,9 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.viewbinding.ViewBinding
-import com.ssafy.groute.src.main.MainViewModel
 import com.ssafy.groute.util.LoadingDialog
 
 

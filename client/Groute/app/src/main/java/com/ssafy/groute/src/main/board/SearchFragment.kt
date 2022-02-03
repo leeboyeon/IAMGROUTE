@@ -18,8 +18,8 @@ import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentSearchBinding
 import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.main.home.PlaceViewModel
 import com.ssafy.groute.src.service.PlaceService
+import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
 
