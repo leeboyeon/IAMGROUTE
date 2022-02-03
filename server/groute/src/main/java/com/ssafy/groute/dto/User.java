@@ -5,9 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -39,14 +45,17 @@ public class User implements UserDetails {
 
     private String updateDate;
 
+    private String roles;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<String> listRoles = Arrays.asList(roles.split(","));
+        return listRoles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return this.id;
     }
 
     @Override
