@@ -43,25 +43,19 @@ pipeline {
             }
         }
 
-        stage('dockerizing'){
-            steps{
-                sh 'docker build . -t ci/test'
+        stage('Docker build') {
+            agent any
+            steps {
+                sh 'docker build -t {container_name}:latest .'
             }
         }
-
-        stage('Deploy') {
+        stage('Docker run') {
+            agent any
             steps {
-                sh 'docker run -d -p 47788:47788 --name ci_test ci/test'
-            }
-
-            post {
-                success {
-                    echo 'success'
-                }
-
-                failure {
-                    echo 'failed'
-                }
+                sh 'docker ps -f name={container_name} -q | xargs --no-run-if-empty docker container stop'
+                sh 'docker container ls -a -fname=sbor_dev -q | xargs -r docker container rm'
+                sh 'docker images --no-trunc --all --quiet --filter="dangling=true" | xargs --no-run-if-empty docker rmi'
+                sh 'docker run -d --name {container_name} -p 8080:8080 {container_name}:latest'
             }
         }
     }
