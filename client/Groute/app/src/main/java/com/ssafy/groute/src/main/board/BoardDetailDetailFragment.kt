@@ -45,6 +45,7 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>
     private var userId : Any= ""
     var boardViewModel: BoardViewModel = BoardViewModel()
     val viewModel: MainViewModel by activityViewModels()
+    lateinit var uId: String
 
     private var boardDetailId = -1
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,10 +64,11 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        uId = ApplicationClass.sharedPreferencesUtil.getUser().id
         initViewModels()
         initAdapter()
         initData()
-
+        initListener()
         mainActivity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
 
@@ -98,6 +100,31 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>
         commentAdapter.setItemClickListener(object: CommentAdapter.ItemClickListener{
             override fun onEditClick(position: Int, comment: Comment) {
                 showEditDialog(comment)
+            }
+
+        })
+    }
+
+    fun initListener() {
+        binding.boardDdetailLikeIv.setOnClickListener{
+            boardLike()
+        }
+    }
+
+    fun boardLike() {
+        BoardService().boardLike(boardDetailId, uId, object : RetrofitCallback<Any> {
+            override fun onError(t: Throwable) {
+                Log.d(TAG, "onError: 게시판 찜하기 에러")
+            }
+
+            override fun onSuccess(code: Int, responseData: Any) {
+                Log.d(TAG, "onSuccess: BoardDetail 찜하기 성공")
+                getListBoardDetail(boardDetailId)
+
+            }
+
+            override fun onFailure(code: Int) {
+                Log.d(TAG, "onFailure: ")
             }
 
         })
@@ -157,6 +184,23 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>
     }
 
     fun getListBoardDetail(id:Int){
+        BoardService().isBoardLike(id, uId, object : RetrofitCallback<Boolean> {
+            override fun onError(t: Throwable) {
+                Log.d(TAG, "onError: 찜하기 여부 에러")
+            }
+
+            override fun onSuccess(code: Int, responseData: Boolean) {
+                if(responseData) {
+                    binding.boardDdetailLikeIv.setColorFilter(requireContext().resources.getColor(R.color.red))
+                } else {
+                    binding.boardDdetailLikeIv.setColorFilter(requireContext().resources.getColor(R.color.grey))
+                }
+            }
+            override fun onFailure(code: Int) {
+                Log.d(TAG, "onFailure: ")
+            }
+        })
+
         BoardService().getListBoardDetail(id, object : RetrofitCallback<Map<String,Any>> {
             override fun onError(t: Throwable) {
                 Log.d(TAG, "onError: ")
