@@ -137,4 +137,15 @@ public class PlaceController {
         return new ResponseEntity<List<Place>>(res,HttpStatus.OK);
     }
 
+    @ApiOperation(value = "my place",notes = "내가 좋아요한 place 리스트 반환")
+    @GetMapping(value = "/like/{userId}")
+    public ResponseEntity<?> myPlace(@PathVariable("userId") String userId) throws Exception{
+        List<Place> res = placeService.selectAllPlaceIdByUserId(userId);
+        if(res==null){
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<List<Place>>(res,HttpStatus.OK);
+    }
+
 }

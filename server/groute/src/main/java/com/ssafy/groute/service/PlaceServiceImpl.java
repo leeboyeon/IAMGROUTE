@@ -63,4 +63,9 @@ public class PlaceServiceImpl implements PlaceService {
     public List<Place> bestPlace() throws Exception {
         return placeMapper.bestPlace();
     }
+
+    @Override
+    public List<Place> selectAllPlaceIdByUserId(String userId) throws Exception {
+        return placeMapper.selectAllPlaceIdByUserId(userId);
+    }
 }

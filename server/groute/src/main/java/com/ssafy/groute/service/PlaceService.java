@@ -16,4 +16,5 @@ public interface PlaceService {
     void likePlace(PlaceLike placeLike) throws Exception;
     PlaceLike isLike(PlaceLike placeLike) throws Exception;
     List<Place> bestPlace() throws Exception;
+    List<Place> selectAllPlaceIdByUserId(String userId)throws Exception;
 }

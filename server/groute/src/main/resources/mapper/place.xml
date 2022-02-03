@@ -67,4 +67,9 @@
         order by heartcnt desc
         limit 5
     </select>
+
+    <select id="selectAllPlaceIdByUserId" parameterType="String" resultMap="PlaceDTO">
+        select p.* from placelike l, place p
+        where l.user_id = #{userId} and p.id = l.place_id
+    </select>
 </mapper>
