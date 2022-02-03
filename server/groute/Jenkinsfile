@@ -26,27 +26,31 @@ pipeline {
         }
 
         stage('build gradle') {
-            steps {
-                sh  'cd server/groute/; chmod +x gradlew; ./gradlew build'
+            dir('server/groute/') {
+                steps {
+                    sh  'cd server/groute/; chmod +x gradlew; ./gradlew build'
 
 
-                sh 'cd server/groute/; ls -al ./build'
-            }
-            post {
-                success {
-                    echo 'gradle build success'
+                    sh 'cd server/groute/; ls -al ./build'
                 }
+                post {
+                    success {
+                        echo 'gradle build success'
+                    }
 
-                failure {
-                    echo 'gradle build failed'
+                    failure {
+                        echo 'gradle build failed'
+                    }
                 }
             }
         }
 
         stage('Docker build') {
-            agent any
-            steps {
-                sh 'docker build -t springboot-gorute-image:latest .'
+            dir('server/groute/') {
+                agent any
+                steps {
+                    sh 'docker build -t springboot-gorute-image:latest .'
+                }
             }
         }
         stage('Docker run') {
