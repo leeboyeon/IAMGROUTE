@@ -22,5 +22,6 @@ public class UserPlan {
     private String isPublic;
     private Double rate;
     private int heartCnt;
+    private int areaId;
     private List<Integer> themeIdList;
 }
