@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
-import com.ssafy.groute.src.main.MainViewModel
+import com.ssafy.groute.src.viewmodel.MainViewModel
 import com.ssafy.groute.util.LoadingDialog
 
 

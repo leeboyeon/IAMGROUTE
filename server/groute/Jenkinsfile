@@ -1,38 +1,67 @@
 pipeline {
-    agent none
-    //기본적으로 체크아웃을 하지 않는 옵션
-    options { skipDefaultCheckout(true) }
+    agent any
+
     stages {
-        stage('Checkout repository') {
+        stage('Prepare') {
             agent any
+
             steps {
                 checkout scm
             }
-        }
-        stage('Build and test') {
-            agent {
-                docker {
-                    image 'gradle:7.3.2-alpine'
-                    args '-v /root/.m2:/root/.m2'
+
+            post {
+
+                success {
+                    echo 'prepare success'
+                }
+
+                always {
+                    echo 'done prepare'
+                }
+
+                cleanup {
+                    echo 'after all other post conditions'
                 }
             }
+        }
+
+        stage('build gradle') {
+            
             steps {
-                sh 'gradle clean build -x test'
+                dir('server/groute/') {
+                    sh  'chmod +x gradlew; ./gradlew build'
+
+
+                    sh 'ls -al ./build'
+                }
+            }
+            post {
+                success {
+                    echo 'gradle build success'
+                }
+
+                failure {
+                    echo 'gradle build failed'
+                }
             }
         }
+
         stage('Docker build') {
+            
             agent any
             steps {
-                sh 'docker build -t {container_name}:latest .'
+                dir('server/groute/') {
+                    sh 'docker build -t springboot-gorute-image:latest .'
+                }
             }
         }
         stage('Docker run') {
             agent any
             steps {
-                sh 'docker ps -f name={container_name} -q | xargs --no-run-if-empty docker container stop'
+                sh 'docker ps -f name=springboot-gorute-image -q | xargs --no-run-if-empty docker container stop'
                 sh 'docker container ls -a -fname=sbor_dev -q | xargs -r docker container rm'
                 sh 'docker images --no-trunc --all --quiet --filter="dangling=true" | xargs --no-run-if-empty docker rmi'
-                sh 'docker run -d --name {container_name} -p 8080:8080 {container_name}:latest'
+                sh 'docker run -d --name springboot-gorute-image -p 8888:8888 springboot-gorute-image:latest'
             }
         }
     }

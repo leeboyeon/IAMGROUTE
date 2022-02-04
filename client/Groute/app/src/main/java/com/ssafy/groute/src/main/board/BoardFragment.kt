@@ -19,7 +19,7 @@ import com.ssafy.groute.databinding.FragmentBoardDetailBinding
 import com.ssafy.groute.src.dto.Magazine
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.BoardService
-import com.ssafy.groute.util.BoardViewModel
+import com.ssafy.groute.src.viewmodel.BoardViewModel
 import com.ssafy.groute.util.RetrofitCallback
 
 private const val TAG = "BoardFragment"
@@ -53,15 +53,6 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
-
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_board, container, false)
-//
-//        return binding.root
-//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

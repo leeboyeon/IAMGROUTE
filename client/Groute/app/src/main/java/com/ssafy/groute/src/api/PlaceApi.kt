@@ -1,6 +1,7 @@
 package com.ssafy.groute.src.api
 
 import com.ssafy.groute.src.dto.Place
+import com.ssafy.groute.src.dto.PlaceReview
 import com.ssafy.groute.src.response.PlaceLikeResponse
 import retrofit2.Call
 import retrofit2.Response
@@ -45,5 +46,11 @@ interface PlaceApi {
     //place 좋아요 했는지
     @POST("/place/isLike")
     fun placeIsLike(@Body placelike: PlaceLikeResponse) : Call<Boolean>
+
+    @GET("/place/like/{userId}")
+    suspend fun getPlaceLikeListbyUserId(@Path("userId")userId:String) : Response<MutableList<Place>>
+
+    @GET("/place/review/list/{placeId}")
+    suspend fun getPlaceReviewListbyId(@Path("placeId")placeId:Int) : Response<MutableList<PlaceReview>>
 
 }

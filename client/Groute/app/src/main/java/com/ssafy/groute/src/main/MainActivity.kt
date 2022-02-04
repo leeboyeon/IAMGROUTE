@@ -185,7 +185,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         var user = ApplicationClass.sharedPreferencesUtil.getUser()
 
         viewModel.getUser().observe(this, Observer {
-            binding.mainTvUsername.text = it.nickname.toString()
+            binding.mainTvUsername.text = it.nickname
             if(it.type.equals("sns")){
                 Log.d(TAG, "initProfileBar_SNS: ${it.img}")
                 Glide.with(this)

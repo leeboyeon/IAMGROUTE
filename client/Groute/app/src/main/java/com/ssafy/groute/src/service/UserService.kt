@@ -72,7 +72,6 @@ class UserService {
                 val res = response.body()
                 if(response.code() == 200){
                     if (res != null) {
-
                         responseLiveData.value = res
                     }
                 } else {

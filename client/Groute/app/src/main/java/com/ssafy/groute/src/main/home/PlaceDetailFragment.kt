@@ -16,6 +16,7 @@ import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.response.PlaceLikeResponse
 import com.ssafy.groute.src.service.PlaceService
+import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
 
@@ -54,7 +55,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
         val tabList = arrayListOf("Info","Review")
 
         areaTabPagerAdapter.addFragment(InfoFragment.newInstance("placeId",placeId))
-        areaTabPagerAdapter.addFragment(ReviewFragment())
+        areaTabPagerAdapter.addFragment(ReviewFragment.newInstance("placeId",placeId))
 
         binding.pdVpLayout.adapter = areaTabPagerAdapter
         TabLayoutMediator(binding.pdTablayout, binding.pdVpLayout){tab, position ->

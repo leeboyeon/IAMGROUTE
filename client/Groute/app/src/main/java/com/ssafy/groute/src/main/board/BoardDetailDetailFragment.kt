@@ -6,17 +6,12 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
-import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -27,16 +22,12 @@ import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentBoardDetailDetailBinding
-import com.ssafy.groute.databinding.FragmentReviewBinding
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.dto.Comment
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.main.MainViewModel
-import com.ssafy.groute.src.main.my.ProfileEditActivity
 import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.CommentService
 import com.ssafy.groute.src.service.UserService
-import com.ssafy.groute.util.BoardViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import org.json.JSONObject
 

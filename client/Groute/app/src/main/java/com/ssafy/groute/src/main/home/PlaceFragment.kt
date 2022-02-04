@@ -18,14 +18,13 @@ import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.response.PlaceLikeResponse
 import com.ssafy.groute.src.service.PlaceService
+import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
 
 // Place List 보여주는 화면
 private const val TAG = "AreaFragment_Groute"
-//class AreaFragment : Fragment() {
 class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bind, R.layout.fragment_area) {
-//    private lateinit var binding: FragmentAreaBinding
     private val placeViewModel: PlaceViewModel by activityViewModels()
 
     private lateinit var mainActivity : MainActivity
@@ -49,7 +48,11 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
         runBlocking {
             placeViewModel.getPlaceList()
         }
-
+        runBlocking {
+            placeViewModel.getPlaceLikeList(ApplicationClass.sharedPreferencesUtil.getUser().id)
+            Log.d(TAG, "onViewCreated_Id: ${ApplicationClass.sharedPreferencesUtil.getUser().id}")
+            Log.d(TAG, "onViewCreated: ${placeViewModel.placeLikeList.value}")
+        }
         initTab()
         initAdapter()
     }
@@ -59,7 +62,7 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
      */
     private fun initAdapter() {
         placeViewModel.placeList.observe(viewLifecycleOwner, Observer {
-            areaFilterAdapter = PlaceFilterAdapter(it)
+            areaFilterAdapter = PlaceFilterAdapter(it, placeViewModel.placeLikeList, viewLifecycleOwner)
             areaFilterAdapter.setItemClickListener(object : PlaceFilterAdapter.ItemClickListener{
                 override fun onClick(view: View, position: Int, placeId: Int) {
                     mainActivity.moveFragment(4,"placeId", placeId)
@@ -83,6 +86,7 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
                 adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
         })
+
 
     }
 
