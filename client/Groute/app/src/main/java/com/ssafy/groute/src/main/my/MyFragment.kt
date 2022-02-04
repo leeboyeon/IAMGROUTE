@@ -1,24 +1,19 @@
 package com.ssafy.groute.src.main.my
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
+import com.kakao.sdk.user.UserApiClient
+import com.kakao.sdk.user.rx
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
@@ -28,6 +23,10 @@ import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.src.viewmodel.MyViewModel
 import com.ssafy.groute.util.RetrofitCallback
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 
 private const val TAG = "MyFragment_groute"
 class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.layout.fragment_my) {
@@ -118,8 +117,20 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
         builder.setTitle("회원 탈퇴")
             .setMessage("정말로 탈퇴하시겠습니까?")
             .setPositiveButton("YES",DialogInterface.OnClickListener{dialogInterface, id ->
-            // 탈퇴기능구현
+                // 탈퇴기능구현
                 UserService().deleteUser(ApplicationClass.sharedPreferencesUtil.getUser().id, DeleteCallback())
+
+                val disposables = CompositeDisposable()
+
+                // 연결 끊기
+                UserApiClient.rx.unlink()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        Log.i(TAG, "연결 끊기 성공. SDK에서 토큰 삭제 됨")
+                    }, { error ->
+                        Log.e(TAG, "연결 끊기 실패", error)
+                    }).addTo(disposables)
             })
             .setNeutralButton("NO", null)
             .create()

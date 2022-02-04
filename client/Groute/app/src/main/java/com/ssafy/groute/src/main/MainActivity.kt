@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.kakao.sdk.user.UserApiClient
+import com.kakao.sdk.user.rx
 import com.nhn.android.naverlogin.OAuthLogin
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
@@ -40,6 +41,10 @@ import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.LocationPermissionManager
 import com.ssafy.groute.util.LocationServiceManager
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
@@ -259,14 +264,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         FirebaseAuth.getInstance().signOut()
 
         //kakao Logout
-        UserApiClient.instance.logout{
-            error->
-            if(error != null){
-                Log.e(TAG, "logout: Fail",error )
-            }else{
-                Log.i(TAG, "logout: Success!")
-            }
-        }
+        val disposables = CompositeDisposable()
+
+        UserApiClient.rx.logout()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제 됨")
+            }, { error ->
+                Log.e(TAG, "로그아웃 실패. SDK에서 토큰 삭제 됨", error)
+            }).addTo(disposables)
 
         //naver Logout
         if (mOAuthLoginInstance != null) {

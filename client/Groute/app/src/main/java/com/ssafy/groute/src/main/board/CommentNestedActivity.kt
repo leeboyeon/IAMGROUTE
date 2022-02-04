@@ -1,17 +1,13 @@
 package com.ssafy.groute.src.main.board
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,13 +17,11 @@ import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseActivity
 import com.ssafy.groute.databinding.ActivityCommentNestedBinding
 import com.ssafy.groute.src.dto.Comment
-import com.ssafy.groute.src.main.MainViewModel
-import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.CommentService
 import com.ssafy.groute.src.service.UserService
-import com.ssafy.groute.util.BoardViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import androidx.lifecycle.Observer
+import com.ssafy.groute.src.viewmodel.BoardViewModel
 
 private const val TAG = "CommentNestedActivity_groute"
 class CommentNestedActivity : BaseActivity<ActivityCommentNestedBinding>(ActivityCommentNestedBinding::inflate) {

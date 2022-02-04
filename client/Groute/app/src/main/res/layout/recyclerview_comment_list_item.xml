@@ -8,7 +8,7 @@
     <data>
         <variable
             name="boardViewModels"
-            type="com.ssafy.groute.util.BoardViewModel" />
+            type="com.ssafy.groute.src.viewmodel.BoardViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
