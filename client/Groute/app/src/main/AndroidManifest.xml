@@ -22,7 +22,8 @@
             android:exported="false" />
         <activity
             android:name=".src.main.MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".src.login.LoginActivity"
             android:exported="true">
