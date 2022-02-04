@@ -51,7 +51,7 @@ pipeline {
             agent any
             steps {
                 dir('server/groute/') {
-                    sh 'docker build -t springboot-gorute-image:latest .'
+                    sh 'docker build --build-arg JAR_FILE=build/libs/\*.jar -t springboot-gorute-image:latest .'
                 }
             }
         }
