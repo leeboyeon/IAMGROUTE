@@ -11,9 +11,12 @@ import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.src.dto.Area
 import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.dto.PlaceReview
+import com.ssafy.groute.src.dto.UserPlan
 import com.ssafy.groute.src.main.board.SearchAdapter
 import com.ssafy.groute.src.main.home.PlaceFilterAdapter
 import com.ssafy.groute.src.main.home.ReviewAdapter
+import com.ssafy.groute.src.main.my.MyTravel
+import com.ssafy.groute.src.main.my.MyTravelAdapter
 
 @BindingAdapter("imageUrlArea")
 fun bindImageArea(imgView: ImageView, imgUrl: String?) {
@@ -75,6 +78,19 @@ fun bindreviewRecyclerView(recyclerView: RecyclerView, data:List<PlaceReview>){
     }
 
     adapter.list = data as MutableList<PlaceReview>
+    adapter.notifyDataSetChanged()
+}
+
+@BindingAdapter("myPlanListData")
+fun bindMyPlanRecyclerView(recyclerView: RecyclerView,data:List<UserPlan>){
+    var adapter = recyclerView.adapter as MyTravelAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as MyTravelAdapter
+    }
+    adapter.list = data as MutableList<UserPlan>
     adapter.notifyDataSetChanged()
 }
 

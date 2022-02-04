@@ -2,6 +2,7 @@ package com.ssafy.groute.src.main.travel
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,12 +18,14 @@ import com.ssafy.groute.databinding.FragmentBoardBinding
 import com.ssafy.groute.databinding.FragmentRouteListBinding
 import com.ssafy.groute.databinding.FragmentTravelPlanBinding
 import com.ssafy.groute.src.main.MainActivity
+import com.ssafy.groute.src.main.my.MyTravelFragment
 import com.ssafy.groute.src.main.route.RouteListFragment
 import com.ssafy.groute.src.main.route.RouteTabPageAdapter
 
-
-class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTravelPlanBinding::bind, R.layout.fragment_travel_plan) {
-//    lateinit var binding: FragmentTravelPlanBinding
+private const val TAG = "TravelPlanFragment"
+//class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTravelPlanBinding::bind, R.layout.fragment_travel_plan) {
+ class TravelPlanFragment: Fragment(){
+    private lateinit var binding:FragmentTravelPlanBinding
     private lateinit var mainActivity: MainActivity
     lateinit var con : ViewGroup
     lateinit var addButton: FloatingActionButton
@@ -30,29 +33,35 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     lateinit var routeRecomButton: FloatingActionButton
     lateinit var placeAddButton: FloatingActionButton
     var isFabOpen: Boolean = false
-
+    private var planId = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideBottomNav(true)
+
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
+        arguments?.let {
+            planId = it.getInt("planId",-1)
+        }
+        Log.d(TAG, "onAttach: ${planId}")
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-//        binding = FragmentTravelPlanBinding.inflate(inflater, container, false)
+        binding = FragmentTravelPlanBinding.inflate(layoutInflater,container,false)
         con = container!!
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onViewCreated: ${con}")
+        
         initAdapter()
         floatingButtonEvent()
     }
@@ -130,5 +139,13 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             tab.setCustomView(customTabView)
         }.attach()
     }
-
+    companion object {
+        @JvmStatic
+        fun newInstance(key: String, value: Int) =
+            TravelPlanFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(key, value)
+                }
+            }
+    }
 }

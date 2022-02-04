@@ -2,17 +2,16 @@
     <string name="app_name">Groute</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="google_login_key">664097318377-l0dhckmh95ghghsphho582oro6bcd8fe.apps.googleusercontent.com</string>
+    <!-- <string name="google_login_key">664097318377-l0dhckmh95ghghsphho582oro6bcd8fe.apps.googleusercontent.com</string> -->
 
-    <string name="naver_client_id">VOpTU0bsRg5ofE5TMfYm</string>
+    <!-- <string name="naver_client_id">VOpTU0bsRg5ofE5TMfYm</string>
 
-    <string name="naver_client_secret">8biOx1VjkG</string>
+    <string name="naver_client_secret">8biOx1VjkG</string> -->
 
-    <string name="naver_client_name">groute</string>
+    <!-- <string name="naver_client_name">groute</string> -->
 
-    <string name="kakao_nativeapp_key">1cfb5d85fba73249197e415cfc745142</string>
-    <string name="convert_info_title">%s은..</string>
-    <string name="convert_review_count">총 %d건</string>
+    <!-- <string name="kakao_nativeapp_key">1cfb5d85fba73249197e415cfc745142</string> -->
+
     <string-array name="birth_year_spinner">
         <item>year</item>
         <item>2022</item>
@@ -106,4 +105,14 @@
         <item>nate.com</item>
         <item>직접 입력</item>
     </string-array>
+
+    <string name="google_login_key">664097318377-l0dhckmh95ghghsphho582oro6bcd8fe.apps.googleusercontent.com</string>
+    <string name="naver_client_id">VOpTU0bsRg5ofE5TMfYm</string>
+    <string name="naver_client_secret">8biOx1VjkG</string>
+    <string name="naver_client_name">groute</string>
+    <string name="kakao_nativeapp_key">1cfb5d85fba73249197e415cfc745142</string>
+    <string name="convert_info_title">%s은..</string>
+    <string name="convert_review_count">총 %d건</string>
+    <string name="mtrl_picker_title_str"> 여행 갈 날짜를 선택해주세요 </string>
+    <string name="convert_plan_date">%s ~ %s</string>
 </resources>

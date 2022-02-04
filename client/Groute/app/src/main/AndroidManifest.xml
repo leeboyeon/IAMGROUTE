@@ -23,7 +23,7 @@
         <activity
             android:name=".src.main.MainActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".src.login.LoginActivity"
             android:exported="true">

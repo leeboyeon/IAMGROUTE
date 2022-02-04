@@ -29,6 +29,9 @@ object CommonUtils {
         tmp += "..."
         return tmp
     }
-
+    fun getFormattedDueDate(startDate:String, endDate:String):String{
+        var result = "${startDate} ~ ${endDate}"
+        return result
+    }
 
 }

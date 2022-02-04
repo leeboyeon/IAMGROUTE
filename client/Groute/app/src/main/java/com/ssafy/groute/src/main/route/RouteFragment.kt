@@ -58,7 +58,7 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
     fun initAdapter(){
         getData()
         pagerAdapter = RouteTabPageAdapter(this)
-        routeAreaAdapter = RouteAreaAdapter()
+//        routeAreaAdapter = RouteAreaAdapter()
 
         val tabList = arrayListOf("당일치기", "1박 2일", "2박 3일", "3박 4일", "4박 5일")
 
