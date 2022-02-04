@@ -5,7 +5,12 @@
 <mapper namespace="com.ssafy.groute.mapper.board.BoardDetailMapper">
     <insert id="insertBoardDetail" parameterType="BoardDetail">
         insert into boarddetail(title, content, img, board_id, user_id, place_id)
-        values(#{title}, #{content}, #{img}, #{boardId}, #{userId}, #{placeId})
+        <if test="placeId == 0">
+            values(#{title}, #{content}, #{img}, #{boardId}, #{userId}, null)
+        </if>
+        <if test="placeId != 0">
+            values(#{title}, #{content}, #{img}, #{boardId}, #{userId}, #{placeId})
+        </if>
     </insert>
 
     <resultMap id="BoardDetailDTO" type="BoardDetail">
@@ -40,6 +45,7 @@
                     else date_format(update_date, '%y.%m.%d')
                    end update_date
         from boarddetail
+        order by id desc
     </select>
 
     <select id="selectBoardDetailSeparetedByTag"  resultMap="BoardDetailDTO">
