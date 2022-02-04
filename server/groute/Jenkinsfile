@@ -29,7 +29,8 @@ pipeline {
             
             steps {
                 dir('server/groute/') {
-                    sh  'chmod +x gradlew; ./gradlew build'
+//                     sh  'chmod +x gradlew; ./gradlew build'
+                    sh  './gradlew clean build'
 
 
                     sh 'ls -al ./build'
