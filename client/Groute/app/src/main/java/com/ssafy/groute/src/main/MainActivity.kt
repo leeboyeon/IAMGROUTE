@@ -190,6 +190,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
             12-> {
                 transaction.replace(R.id.frame_main_layout, RouteDetailFragment())
+            }
             13 ->{
                 transaction.replace(R.id.frame_main_layout, MyFragment())
                     .addToBackStack(null)

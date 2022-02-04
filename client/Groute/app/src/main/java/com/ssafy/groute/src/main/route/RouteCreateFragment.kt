@@ -171,7 +171,7 @@ class RouteCreateFragment : BaseFragment<FragmentRouteCreateBinding>(FragmentRou
             }
 
             override fun onSuccess(code: Int, responseData: Boolean) {
-                mainActivity.moveFragment(12)
+                mainActivity.moveFragment(13)
             }
 
             override fun onFailure(code: Int) {
