@@ -1,6 +1,7 @@
 package com.ssafy.groute.src.main.board
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuInflater
@@ -17,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.src.dto.Comment
+import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.CommentService
 import com.ssafy.groute.src.service.UserService
@@ -65,7 +67,7 @@ class CommentAdapter(val context: Context, val lifecycleOwner: LifecycleOwner, v
                 itemClickListener.onCommentNestedClick(layoutPosition, data)
             }
 
-            var commentNestedAdapter = CommentNestedAdapter(context, lifecycleOwner)
+            var commentNestedAdapter = CommentNestedAdapter(context, lifecycleOwner, true)
             BoardService().getBoardDetailWithComment(data.boardDetailId).observe(
                 lifecycleOwner,
                 {
@@ -84,6 +86,11 @@ class CommentAdapter(val context: Context, val lifecycleOwner: LifecycleOwner, v
                         adapter = commentNestedAdapter
                         adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
                     }
+                    commentNestedAdapter.setItemClickListener(object: CommentNestedAdapter.ItemClickListener {
+                        override fun onEditClick(position: Int, comment: Comment) {
+                        }
+
+                    })
                 }
             )
 

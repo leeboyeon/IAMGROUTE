@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -50,7 +51,7 @@ class CommentNestedActivity : BaseActivity<ActivityCommentNestedBinding>(Activit
 
     fun initAdapter(){
         boardViewModel.getBoardDetailWithNestedComment(this, comment.boardDetailId, comment.groupNum)
-        commentNestedAdapter = CommentNestedAdapter(this, this)
+        commentNestedAdapter = CommentNestedAdapter(this, this, false)
         binding.commentNestedDetailRv.apply{
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
             adapter = commentNestedAdapter
@@ -61,7 +62,6 @@ class CommentNestedActivity : BaseActivity<ActivityCommentNestedBinding>(Activit
             override fun onEditClick(position: Int, comment: Comment) {
                 showEditDialog(comment)
             }
-
         })
 
     }
@@ -98,7 +98,7 @@ class CommentNestedActivity : BaseActivity<ActivityCommentNestedBinding>(Activit
 
             override fun onSuccess(code: Int, responseData: Any) {
                 showCustomToast("수정되었습니다.")
-                boardViewModel.getBoardDetailWithComment(this@CommentNestedActivity, comment.boardDetailId)
+                boardViewModel.getBoardDetailWithNestedComment(this@CommentNestedActivity, comment.boardDetailId, comment.groupNum)
             }
 
             override fun onFailure(code: Int) {

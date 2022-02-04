@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.view.menu.MenuView
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -22,7 +23,7 @@ import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
 
 private const val TAG = "CommentNestedAdapter_groute"
-class CommentNestedAdapter(val context: Context, val lifecycleOwner: LifecycleOwner) : RecyclerView.Adapter<CommentNestedAdapter.CommentNestedHolder>(){
+class CommentNestedAdapter(val context: Context, val lifecycleOwner: LifecycleOwner, var flag: Boolean) : RecyclerView.Adapter<CommentNestedAdapter.CommentNestedHolder>(){
     var list = mutableListOf<Comment>()
 
     // 현재 로그인한 유저의 아이디
@@ -52,9 +53,15 @@ class CommentNestedAdapter(val context: Context, val lifecycleOwner: LifecycleOw
             )
             itemView.findViewById<TextView>(R.id.comment_nested_tv_comment).text = data.content
 
-            if(userId != data.userId) { // 로그인한 유저 댓글이 아닐 때
+            if(flag) { // BoardDetailDetailFragment에서 표시할때 대댓글은 수정, 삭제 못하게
                 more.visibility = View.GONE
+            } else {
+                if(userId != data.userId) { // 로그인한 유저 댓글이 아닐 때
+                    more.visibility = View.GONE
+                }
             }
+
+
 
         }
     }
