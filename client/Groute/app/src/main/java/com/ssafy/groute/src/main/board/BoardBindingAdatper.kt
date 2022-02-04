@@ -1,13 +1,17 @@
 package com.ssafy.groute.src.main.board
 
+import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestOptions
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.dto.Comment
 
+private const val TAG = "BindingAdapter_groute"
 class BoardBindingAdatper {
     companion object {
         @JvmStatic
@@ -26,5 +30,25 @@ class BoardBindingAdatper {
             adapter.notifyDataSetChanged()
         }
 
+        @JvmStatic
+        @BindingAdapter("listCommentNestedData")
+        fun bindCommentNestedRecyclerView(recyclerView: RecyclerView, data: List<Comment>?) {
+            val adapter = recyclerView.adapter as CommentNestedAdapter
+            Log.d(TAG, "bindCommentNestedRecyclerView: ${data}")
+            adapter.setCommentNestedList(data)
+            adapter.notifyDataSetChanged()
+        }
+
+        @JvmStatic
+        @BindingAdapter("listNestedData")
+        fun bindtNestedRecyclerView(recyclerView: RecyclerView, data: List<Comment>?) {
+            val adapter = recyclerView.adapter as CommentNestedAdapter
+            Log.d(TAG, "bindCommentNestedRecyclerView: ${data}")
+            adapter.setCommentNestedList(data)
+            adapter.notifyDataSetChanged()
+        }
+
+
     }
+
 }

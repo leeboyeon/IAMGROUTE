@@ -1,10 +1,12 @@
 package com.ssafy.groute.src.main
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
@@ -20,6 +22,8 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.kakao.sdk.user.UserApiClient
+import com.kakao.sdk.user.rx
+import com.nhn.android.naverlogin.OAuthLogin
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseActivity
@@ -38,6 +42,10 @@ import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.LocationPermissionManager
 import com.ssafy.groute.util.LocationServiceManager
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
@@ -53,12 +61,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     lateinit var locationServiceManager: LocationServiceManager
     lateinit var locationPermissionManager: LocationPermissionManager
     private val PERMISSIONS_CODE = 100
+
+    // Naver Logout 인증 변수
+    lateinit var mOAuthLoginInstance : OAuthLogin
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
 
 //        binding = ActivityMainBinding.inflate(layoutInflater)
 //        setContentView(binding.root)
+
+        // Naver Logout init
+        mOAuthLoginInstance = OAuthLogin.getInstance()
+        mOAuthLoginInstance.init(this, getString(R.string.naver_client_id), getString(R.string.naver_client_secret), getString(R.string.naver_client_name))
+
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.frame_main_layout, HomeFragment())
@@ -174,15 +191,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 transaction.replace(R.id.frame_main_layout, ReviewWriteFragment.newInstance(key, value))
                     .addToBackStack(null)
             }
+
         }
         transaction.commit()
     }
+
     fun moveFragment(index:Int, key:String, value:Int){
         openFragment(index, key, value)
     }
+
     fun moveFragment(index: Int){
         openFragment(index,"",0)
     }
+
     // 프로필바 사용자 정보 갱신
     fun initProfileBar() {
         var user = ApplicationClass.sharedPreferencesUtil.getUser()
@@ -219,6 +240,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         if(state) bottomNavigation.visibility =  View.GONE
         else bottomNavigation.visibility = View.VISIBLE
     }
+
     fun getHashKey(){
         var packageInfo :PackageInfo = PackageInfo()
         try{
@@ -239,22 +261,31 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             }
         }
     }
-    fun logout(){
+
+    private fun logout(){
         ApplicationClass.sharedPreferencesUtil.deleteUser()
 
         //google Logout
         FirebaseAuth.getInstance().signOut()
+
         //kakao Logout
-        UserApiClient.instance.logout{
-            error->
-            if(error != null){
-                Log.e(TAG, "logout: Fail",error )
-            }else{
-                Log.i(TAG, "logout: Success!")
-            }
-        }
+        val disposables = CompositeDisposable()
+
+        UserApiClient.rx.logout()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제 됨")
+            }, { error ->
+                Log.e(TAG, "로그아웃 실패. SDK에서 토큰 삭제 됨", error)
+            }).addTo(disposables)
 
         //naver Logout
+        if (mOAuthLoginInstance != null) {
+            mOAuthLoginInstance.logout(this)
+            showCustomToast("로그아웃 하셨습니다.")
+            DeleteTokenTask(this, mOAuthLoginInstance).execute()
+        }
 
         //화면이동
         val intent = Intent(this, LoginActivity::class.java)
@@ -262,6 +293,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
     }
+
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -277,6 +309,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * #S06P12D109-151
+     * SNS Naver Logout delete Token
+     */
+    inner class DeleteTokenTask(private val mContext: Context, private val mOAuthLoginModule: OAuthLogin) : AsyncTask<Void?, Void?, Boolean>() {
+        override fun onPostExecute(isSuccessDeleteToken: Boolean) {}
+        override fun doInBackground(vararg params: Void?): Boolean {
+            val isSuccessDeleteToken = mOAuthLoginModule.logoutAndDeleteToken(mContext)
+            if (!isSuccessDeleteToken) {
+                Log.d(TAG, "errorCode:" + mOAuthLoginModule.getLastErrorCode(mContext))
+                Log.d(TAG, "errorDesc:" + mOAuthLoginModule.getLastErrorDesc(mContext))
+            }
+            return isSuccessDeleteToken
         }
     }
 }

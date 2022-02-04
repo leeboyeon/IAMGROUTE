@@ -2,6 +2,8 @@ package com.ssafy.groute.src.main.board
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,11 +25,11 @@ import com.ssafy.groute.databinding.FragmentBoardDetailDetailBinding
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.dto.Comment
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.viewmodel.MainViewModel
 import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.CommentService
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.src.viewmodel.BoardViewModel
+import com.ssafy.groute.src.viewmodel.MainViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import org.json.JSONObject
 
@@ -39,6 +41,7 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>
     var boardViewModel: BoardViewModel = BoardViewModel()
     val viewModel: MainViewModel by activityViewModels()
     lateinit var uId: String
+    private lateinit var intent: Intent
 
     private var boardDetailId = -1
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,13 +66,19 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>
         initData()
         initListener()
         mainActivity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-
+        intent = Intent(mainActivity, CommentNestedActivity::class.java)
 
         binding.boardDetailIbtnBack.setOnClickListener {
             Log.d(TAG, "onViewCreated: CLICK")
             mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
             mainActivity.supportFragmentManager.popBackStack()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initAdapter()
+
     }
     fun initData(){
         getListBoardDetail(boardDetailId)
@@ -83,7 +92,7 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>
     }
     fun initAdapter(){
         boardViewModel.getBoardDetailWithComment(this, boardDetailId)
-        commentAdapter = CommentAdapter(requireContext(), viewLifecycleOwner)
+        commentAdapter = CommentAdapter(requireContext(), viewLifecycleOwner, boardViewModel)
         binding.boardDetailRvComment.apply{
             layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
             adapter = commentAdapter
@@ -93,6 +102,11 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>
         commentAdapter.setItemClickListener(object: CommentAdapter.ItemClickListener{
             override fun onEditClick(position: Int, comment: Comment) {
                 showEditDialog(comment)
+            }
+
+            override fun onCommentNestedClick(position: Int, comment: Comment) {
+                intent.putExtra("commentData", comment)
+                startActivity(intent)
             }
 
         })

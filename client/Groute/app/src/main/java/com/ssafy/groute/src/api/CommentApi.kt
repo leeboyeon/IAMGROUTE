@@ -18,4 +18,8 @@ interface CommentApi {
     // 게시판 댓글 삭제
     @DELETE("/boardDetail/comment/del")
     fun deleteBoardComment(@Query("id") id: Int) : Call<Any>
+
+    // 게시판 댓글 조회
+    @GET("/boardDetail/comment/detail")
+    fun selectBoardComment(@Query("id") id: Int) : Call<Comment>
 }

@@ -4,6 +4,10 @@
 -- ------------------------------------------------------
 -- Server version	8.0.26
 
+drop schema if exists groute;
+CREATE SCHEMA IF NOT EXISTS `groute` DEFAULT CHARACTER SET utf8 ;
+USE `groute` ;
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -276,7 +280,7 @@ CREATE TABLE `placereview` (
   `user_id` varchar(100) NOT NULL,
   `place_id` int NOT NULL,
   `id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(45) NOT NULL,
+  `title` varchar(45) DEFAULT NULL,
   `content` varchar(100) NOT NULL,
   `rate` double NOT NULL,
   `img` varchar(255) DEFAULT NULL,
@@ -337,7 +341,7 @@ CREATE TABLE `planreview` (
   `user_id` varchar(100) NOT NULL,
   `userplan_id` int NOT NULL,
   `id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(45) NOT NULL,
+  `title` varchar(45) DEFAULT NULL,
   `content` varchar(255) NOT NULL,
   `rate` double NOT NULL,
   `img` varchar(255) DEFAULT NULL,

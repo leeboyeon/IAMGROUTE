@@ -17,6 +17,7 @@ class ReceivedCookiesInterceptor : Interceptor {
         if (originalResponse.headers("Set-Cookie").isNotEmpty()) {
 
             val cookies = HashSet<String>()
+//            loginId=test; Max-Age=1000000; Expires=Tue, 15-Feb-2022 16:08:34 GMT
             for (header in originalResponse.headers("Set-Cookie")) {
                 cookies.add(header)
                 Log.d("_ssafy", "intercept: $header")

@@ -1,9 +1,7 @@
 package com.ssafy.groute.src.main.home
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,22 +15,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.nhn.android.idp.common.connection.CommonConnection.cancel
 import com.ssafy.groute.R
-import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentHomeBinding
-import com.ssafy.groute.src.api.AreaApi
-import com.ssafy.groute.src.dto.Area
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.viewmodel.HomeViewModel
+import com.ssafy.groute.src.viewmodel.MainViewModel
 import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.src.viewmodel.PlanViewModel
-import com.ssafy.groute.util.MainViewModel
-import com.ssafy.groute.util.RetrofitCallback
-import com.ssafy.groute.util.RetrofitUtil
 import kotlinx.coroutines.*
 import retrofit2.*
-import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import com.kakao.sdk.common.util.Utility
 import com.ssafy.groute.R
+import com.ssafy.groute.config.ApplicationClass.Companion.sharedPreferencesUtil
 import com.ssafy.groute.config.BaseActivity
 import com.ssafy.groute.databinding.ActivityLoginBinding
 import com.ssafy.groute.databinding.ActivityMainBinding
@@ -16,8 +17,24 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
 //    private lateinit var binding: ActivityLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        binding = ActivityLoginBinding.inflate(layoutInflater)
-//        setContentView(binding.root)
+
+        /**
+         * #S06P12D109-11
+         * Auto Login -> 로그인 했던 상태이면 login 화면 pass
+         */
+        //로그인 된 상태인지 확인
+        val user = sharedPreferencesUtil.getUser()
+
+        //로그인 상태 확인. id가 있다면 로그인 된 상태
+        if (user.id != ""){
+            openFragment(1)
+        } else {
+            // 가장 첫 화면은 홈 화면의 Fragment로 지정
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_login_layout, LoginFragment())
+                .commit()
+        }
+
 
         // kakao 플랫폼 키 해시 등록
 //        var keyHash = Utility.getKeyHash(this)
