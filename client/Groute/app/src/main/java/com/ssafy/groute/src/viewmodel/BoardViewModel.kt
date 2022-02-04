@@ -80,11 +80,16 @@ class BoardViewModel : ViewModel(){
             Log.d(TAG, "getBoardFreeList: $it")
             val tmpList: ArrayList<BoardDetail> = arrayListOf()
             if(!it.isEmpty()) {
-                for (i in 0..4) {
-                    tmpList.add(it.get(i))
+                if(it.size >= 5) {
+                    for (i in 0..4) {
+                        tmpList.add(it.get(i))
+                    }
+                    setFreeList(tmpList)
+                } else {
+                 setFreeList(it)
                 }
             }
-            setFreeList(tmpList)
+
         })
     }
     fun getBoardQuestionListFive(owner: LifecycleOwner){
@@ -92,11 +97,16 @@ class BoardViewModel : ViewModel(){
             Log.d(TAG, "getBoardQuestionList: $it")
             val tmpList: ArrayList<BoardDetail> = arrayListOf()
             if(!it.isEmpty()) {
-                for (i in 0..4) {
-                    tmpList.add(it.get(i))
+                if(it.size >= 5) {
+                    for (i in 0..4) {
+                        tmpList.add(it.get(i))
+                    }
+                    setQuestionList(tmpList)
+                } else {
+                    setQuestionList(it)
                 }
             }
-            setQuestionList(tmpList)
+
         })
     }
 
