@@ -99,6 +99,7 @@ class HomeFragment : Fragment() {
                 adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
         })
+
         initBestPlaceAdapter()
         initBestPlanAdapter()
 

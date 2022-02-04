@@ -41,9 +41,9 @@ class ApplicationClass : Application() {
         sharedPreferencesUtil = SharedPreferencesUtil(applicationContext)
 
         val okHttpClient = OkHttpClient.Builder()
-            .addNetworkInterceptor(XAccessTokenInterceptor()) // JWT 자동 헤더 전송
             .addInterceptor(AddCookiesInterceptor())
             .addInterceptor(ReceivedCookiesInterceptor())
+            .addNetworkInterceptor(XAccessTokenInterceptor()) // JWT 자동 헤더 전송
             .connectTimeout(30, TimeUnit.SECONDS).build()
 
         // Gson 객체 생성 - setLenient 속성 추가
