@@ -77,13 +77,14 @@
                 android:textSize="11sp"
                 app:autoSizeTextType="none" />
 
-            <TextView
-                android:id="@+id/review_tv_more"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:text="더보기" />
+            <ImageButton
+                android:id="@+id/reviewItem_ib_more"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="right"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/morecion" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

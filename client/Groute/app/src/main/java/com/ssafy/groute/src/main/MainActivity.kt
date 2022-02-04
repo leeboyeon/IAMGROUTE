@@ -67,11 +67,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
-
-//        binding = ActivityMainBinding.inflate(layoutInflater)
-//        setContentView(binding.root)
-
         // Naver Logout init
         mOAuthLoginInstance = OAuthLogin.getInstance()
         mOAuthLoginInstance.init(this, getString(R.string.naver_client_id), getString(R.string.naver_client_secret), getString(R.string.naver_client_name))
@@ -143,7 +138,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         binding.lifecycleOwner = this
         binding.viewModeluser = viewModel
     }
-    fun openFragment(index:Int, key:String, value:Int){
+    fun openFragment(index:Int, key1:String, value1:Int, key2:String, value2:Int){
         val transaction = supportFragmentManager.beginTransaction()
         when(index){
             1 -> {
@@ -157,19 +152,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .addToBackStack(null)
             }
             3->{    // 지역별 장소 리스트 화면
-                transaction.replace(R.id.frame_main_layout, PlaceFragment.newInstance(key,value))
+                transaction.replace(R.id.frame_main_layout, PlaceFragment.newInstance(key1,value1))
                     .addToBackStack(null)
             }
             4 -> {  // 하나의 장소에 대한 상세 정보 출력 화면
-                transaction.replace(R.id.frame_main_layout, PlaceDetailFragment.newInstance(key, value))
+                transaction.replace(R.id.frame_main_layout, PlaceDetailFragment.newInstance(key1, value1))
                     .addToBackStack(null)
             }
             5->{    // 자유 or 질문 게시판 화면
-                transaction.replace(R.id.frame_main_layout, BoardDetailFragment.newInstance(key, value))
+                transaction.replace(R.id.frame_main_layout, BoardDetailFragment.newInstance(key1, value1))
                     .addToBackStack(null)
             }
             6->{    // 게시글 1개에 대한 화면
-                transaction.replace(R.id.frame_main_layout,BoardDetailDetailFragment.newInstance(key, value))
+                transaction.replace(R.id.frame_main_layout,BoardDetailDetailFragment.newInstance(key1, value1))
                     .addToBackStack(null)
             }
             7->{    // 사용자 여행 일정 계획 화면
@@ -177,31 +172,32 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .addToBackStack(null)
             }
             8->{    // 게시판 글쓰기 화면
-                transaction.replace(R.id.frame_main_layout,BoardWriteFragment.newInstance(key, value))
+                transaction.replace(R.id.frame_main_layout,BoardWriteFragment.newInstance(key1, value1))
                     .addToBackStack(null)
             }
             9->{    // 장소 검색 화면
-                transaction.replace(R.id.frame_main_layout, SearchFragment.newInstance(key, value))
+                transaction.replace(R.id.frame_main_layout, SearchFragment.newInstance(key1, value1))
                     .addToBackStack(null)
             }
             10 ->{
                 logout()
             }
             11->{
-                transaction.replace(R.id.frame_main_layout, ReviewWriteFragment.newInstance(key, value))
+                transaction.replace(R.id.frame_main_layout, ReviewWriteFragment.newInstance(key1,value1,key2,value2))
                     .addToBackStack(null)
             }
-
         }
         transaction.commit()
     }
 
     fun moveFragment(index:Int, key:String, value:Int){
-        openFragment(index, key, value)
+        openFragment(index, key, value,"",0)
     }
-
+    fun moveFragment(index:Int, key1:String, value1:Int, key2:String, value2:Int){
+        openFragment(index, key1, value1, key2, value2)
+    }
     fun moveFragment(index: Int){
-        openFragment(index,"",0)
+        openFragment(index,"",0,"",0)
     }
 
     // 프로필바 사용자 정보 갱신

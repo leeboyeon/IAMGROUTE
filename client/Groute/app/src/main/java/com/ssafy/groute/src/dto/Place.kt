@@ -11,7 +11,7 @@ data class Place(
     val lat: String,
     val lng: String,
     val name: String,
-    val rate: Int,
+    val rate: Float,
     val themeId: Int,
     val type: String,
     val userId: String,

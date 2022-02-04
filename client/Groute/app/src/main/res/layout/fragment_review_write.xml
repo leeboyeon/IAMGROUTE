@@ -3,7 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
+    <data>
+        <variable
+            name="viewModel"
+            type="com.ssafy.groute.src.viewmodel.PlaceViewModel" />
+    </data>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -81,7 +85,7 @@
                         android:id="@+id/reviewWrite_tv_placeName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
+                        android:text="@{viewModel.place.name}"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
@@ -89,7 +93,7 @@
                         android:id="@+id/reviewWrite_tv_placeType"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="TextView" />
+                        android:text="@{viewModel.place.type}" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -125,6 +129,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
+                android:isIndicator="false"
                 android:max="5"
                 android:stepSize="0.5"
                 app:layout_constraintEnd_toEndOf="parent"

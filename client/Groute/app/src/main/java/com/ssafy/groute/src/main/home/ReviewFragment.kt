@@ -2,6 +2,7 @@ package com.ssafy.groute.src.main.home
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,7 @@ import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import kotlinx.coroutines.runBlocking
 
+private const val TAG = "ReviewFragment"
 class ReviewFragment : BaseFragment<FragmentReviewBinding>(FragmentReviewBinding::bind, R.layout.fragment_review) {
 //    private lateinit var binding: FragmentReviewFragmentBinding
     private lateinit var mainActivity: MainActivity
@@ -46,23 +48,22 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(FragmentReviewBinding
             placeViewModel.getPlaceReviewListbyId(placeId)
         }
         initAdapter()
-        initButton()
-    }
-    fun initButton(){
         binding.reviewIbtnWrite.setOnClickListener {
+            Log.d(TAG, "onViewCreated: ${placeId}")
             mainActivity.moveFragment(11,"placeId",placeId)
         }
     }
-
     fun initAdapter(){
         placeViewModel.placeReviewList.observe(viewLifecycleOwner, Observer {
-            reviewAdapter = ReviewAdapter(viewLifecycleOwner)
+            reviewAdapter = ReviewAdapter(viewLifecycleOwner,requireContext())
             reviewAdapter.list = it
-//            reviewAdapter.setItemClickListener(object : ReviewAdapter.ItemClickListener {
-//                override fun onClick(view: View, position: Int, name: String) {
-//                    //리뷰 상세페이지제작
-//                }
-//            })
+            reviewAdapter.setModifyClickListener(object: ReviewAdapter.ModifyClickListener{
+                override fun onClick(position: Int) {
+                    mainActivity.moveFragment(11,"placeId",placeId,"reviewId",it[position].id)
+
+                }
+
+            })
             binding.reviewRvList.apply{
                 layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
                 adapter = reviewAdapter
@@ -73,10 +74,10 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(FragmentReviewBinding
     companion object {
 
         @JvmStatic
-        fun newInstance(key:String, value:Int) =
+        fun newInstance(key1:String, value1:Int) =
             ReviewFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(key, value)
+                    putInt(key1, value1)
                 }
             }
     }

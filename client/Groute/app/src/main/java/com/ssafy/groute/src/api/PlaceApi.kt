@@ -53,12 +53,15 @@ interface PlaceApi {
     @GET("/place/review/list/{placeId}")
     suspend fun getPlaceReviewListbyId(@Path("placeId")placeId:Int) : Response<MutableList<PlaceReview>>
 
-    @GET("/place/review")
+    @POST("/place/review")
     fun insertPlaceReview(@Body placeReview: PlaceReview):Call<Boolean>
 
     @DELETE("/place/review/del")
-    suspend fun deletePlaceReview(@Path("id")id:Int):Response<Boolean>
+    fun deletePlaceReview(@Query("id")id:Int):Call<Boolean>
 
     @PUT("/place/review/update")
-    suspend fun updatePlaceReview(@Body placeReview: PlaceReview) : Response<Boolean>
+    fun updatePlaceReview(@Body placeReview: PlaceReview) : Call<Boolean>
+
+    @GET("/place/review/detail")
+    suspend fun getReviewbyId(@Query("id")id:Int): Response<PlaceReview>
 }

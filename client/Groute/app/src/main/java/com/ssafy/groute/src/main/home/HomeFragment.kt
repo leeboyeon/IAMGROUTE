@@ -78,11 +78,8 @@ class HomeFragment : Fragment() {
 
         runBlocking {
             homeViewModel.getAreaLists()
-        }
-        runBlocking {
             placeViewModel.getPlaceBestList()
         }
-
         homeViewModel.areaList.observe(viewLifecycleOwner, Observer {
             homeAreaAdapter = HomeAreaAdapter(it)
             homeAreaAdapter.setItemClickListener(object : HomeAreaAdapter.ItemClickListener {
@@ -151,36 +148,7 @@ class HomeFragment : Fragment() {
                 adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
         })
-
-
-
-
     }
-
-    /**
-     * home 화면에 3번째 배너
-     */
-//    fun initAdapter(){
-//        bestrouteAdatper = BestRouteAdapter()
-//        bests.apply {
-//            add(BestRoute(img=R.drawable.normalimg, title="[대구] 3박 4일 뭐하고 놀지?!"))
-//            add(BestRoute(img=R.drawable.normalimg, title="[대구] 3박 4일 뭐하고 놀지?!"))
-//            add(BestRoute(img=R.drawable.normalimg, title="[대구] 3박 4일 뭐하고 놀지?!"))
-//
-//            bestrouteAdatper.list = bests
-//            bestrouteAdatper.notifyDataSetChanged()
-//        }
-//
-//        bestrouteAdatper.setItemClickListener(object : BestRouteAdapter.ItemClickListener{
-//            override fun onClick(view: View, position: Int, name: String) {
-//                //event
-//            }
-//        })
-//
-//        binding.homeRvBestRoute.apply {
-//
-//        }
-//    }
 
     /**
      * home 화면 2번째 롤링 배너 Recycler View Adapter
@@ -228,31 +196,6 @@ class HomeFragment : Fragment() {
             }
     }
 
-
-
-
-//    inner class AreaCallback: RetrofitCallback<List<Area>> {
-//        override fun onError(t: Throwable) {
-//            Log.d(TAG, "onError: $t")
-//        }
-//
-//        override fun onSuccess(code: Int, responseData: List<Area>) {
-//            Log.d(TAG, "onSuccess: ${responseData}")
-//            areaListInit(responseData as MutableList<Area>)
-////            homeViewModel.setAreaList(responseData)
-////            Log.d(TAG, "onSuccess1222: ${homeViewModel.areaList}")
-//
-//        }
-//
-//        override fun onFailure(code: Int) {
-//            Log.d(TAG, "onFailure: ")
-//        }
-//    }
-
-
-
-
-
     suspend fun <T : Any> Call<T>.await(): T {
         return suspendCancellableCoroutine { continuation ->
             continuation.invokeOnCancellation {
@@ -285,39 +228,5 @@ class HomeFragment : Fragment() {
             })
         }
     }
-//    inner class Logic {
-//        suspend fun doWork(): Any {
-//
-//            return suspendCancellableCoroutine { cont ->
-//                cont.invokeOnCancellation {
-//                    cancel()
-//                }
-//                val areaRequest: Call<List<Area>> = RetrofitUtil.areaService.listArea()
-//                areaRequest.enqueue(object : Callback<List<Area>> {
-//                    override fun onResponse(
-//                        call: Call<List<Area>>,
-//                        response: Response<List<Area>>
-//                    ) {
-//                        val res = response.body()
-//                        if (response.code() == 200) {
-//                            if (res != null) {
-//                                cont.resume(res)
-////                                callback.onSuccess(response.code(), res)
-//                                Log.d("Home", "onResponse: $res")
-////                        responseData = res
-//                            }
-//                        } else {
-//                            cont.resumeWithException(HttpException(response))
-////                            callback.onFailure(response.code())
-//                        }
-//                    }
-//
-//                    override fun onFailure(call: Call<List<Area>>, t: Throwable) {
-//                        cont.resumeWithException(t)
-////                        callback.onError(t)
-//                    }
-//                })
-//            }
-//        }
-//    }
+
 }

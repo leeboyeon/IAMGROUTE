@@ -18,6 +18,7 @@ class PlaceViewModel : ViewModel() {
     private val _placeBestResponse =MutableLiveData<MutableList<Place>>()
     private val _placeLikeListResponse = MutableLiveData<MutableList<Place>>()
     private val _placeReviewListResponse = MutableLiveData<MutableList<PlaceReview>>()
+    private val _reviewResponse = MutableLiveData<PlaceReview>()
 
     val placeList : LiveData<MutableList<Place>>
         get() = _placeListResponse
@@ -34,6 +35,9 @@ class PlaceViewModel : ViewModel() {
     val placeReviewList :LiveData<MutableList<PlaceReview>>
         get() = _placeReviewListResponse
 
+    val review : LiveData<PlaceReview>
+        get() = _reviewResponse
+
     fun setPlaceList(place: MutableList<Place>) = viewModelScope.launch {
         _placeListResponse.value = place  // main thread 에서 갱신
 //        _placeListResponse.postValue(place)   // 백그라운드 갱신
@@ -49,6 +53,9 @@ class PlaceViewModel : ViewModel() {
     }
     fun setPlaceReviewList(place:MutableList<PlaceReview>) = viewModelScope.launch {
         _placeReviewListResponse.value = place
+    }
+    fun setReivew(review:PlaceReview) = viewModelScope.launch {
+        _reviewResponse.value = review
     }
 
     suspend fun getPlaceList() {
@@ -131,17 +138,18 @@ class PlaceViewModel : ViewModel() {
             }
         }
     }
-//    suspend fun insertPlaceReview(review:PlaceReview){
-//        val response = PlaceService().insertPlaceReview(review)
-//        viewModelScope.launch {
-//            var res = response.body()
-//            if(response.code() == 200){
-//                if(res == true){
-//                    Log.d(TAG, "insertPlaceReview: complete")
-//                }
-//            }else{
-//                Log.d(TAG, "insertPlaceReview: ")
-//            }
-//        }
-//    }
+    suspend fun getReviewById(id:Int){
+        val response = PlaceService().getReviewById(id)
+        viewModelScope.launch { 
+            var res = response.body()
+            if(response.code() == 200) {
+                if(res!=null){
+                    Log.d(TAG, "getReviewById: ")
+                    setReivew(res)
+                }
+            }else{
+                Log.d(TAG, "getReviewById: ")
+            }
+        }
+    }
 }
