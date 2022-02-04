@@ -82,4 +82,17 @@
         select place_id from routeDetail
         where route_id IN (select route_id from routes where plan_id = #{id})
     </select>
+
+    <select id="selectThemeListByPlanId" parameterType="int" resultType="int">
+        select distinct theme_id
+        from place
+        where id IN (
+                    select place_id
+                    from routeDetail
+                    where route_id IN (
+                            select route_id
+                            from routes
+                            where plan_id = #{id}))
+        order by theme_id asc
+    </select>
 </mapper>
