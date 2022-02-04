@@ -79,7 +79,7 @@
     </select>
 
     <select id="selectPlaceListByPlanId" parameterType="int" resultType="int">
-        select place_id from routeDetail
+        select place_id from routedetail
         where route_id IN (select route_id from routes where plan_id = #{id})
     </select>
 
@@ -88,7 +88,7 @@
         from place
         where id IN (
                     select place_id
-                    from routeDetail
+                    from routedetail
                     where route_id IN (
                             select route_id
                             from routes
