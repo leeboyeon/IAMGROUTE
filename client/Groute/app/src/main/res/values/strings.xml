@@ -106,4 +106,6 @@
     <string name="kakao_nativeapp_key">1cfb5d85fba73249197e415cfc745142</string>
     <string name="convert_info_title">%s은..</string>
     <string name="convert_review_count">총 %d건</string>
+    <string name="mtrl_picker_title_str"> 여행 갈 날짜를 선택해주세요 </string>
+    <string name="convert_plan_date">%s ~ %s</string>
 </resources>

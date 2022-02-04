@@ -7,16 +7,22 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
+import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.src.dto.UserPlan
+import com.ssafy.groute.util.CommonUtils
 
 class MyTravelAdapter : RecyclerView.Adapter<MyTravelAdapter.MyTravelHolder>(){
-    var list = mutableListOf<MyTravel>()
+    var list = mutableListOf<UserPlan>()
     inner class MyTravelHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun bindInfo(data:MyTravel){
+        fun bindInfo(data:UserPlan){
+
             Glide.with(itemView)
-                .load(data.img)
+                .load(R.drawable.jeju)
+                .circleCrop()
                 .into(itemView.findViewById(R.id.mytravel_iv_img))
             itemView.findViewById<TextView>(R.id.mytravel_tv_title).text = data.title
-            itemView.findViewById<TextView>(R.id.mytravel_tv_due).text = data.due
+            itemView.findViewById<TextView>(R.id.mytravel_tv_due).text = CommonUtils.getFormattedDueDate(data.startDate,data.endDate)
+
         }
     }
 
@@ -29,7 +35,7 @@ class MyTravelAdapter : RecyclerView.Adapter<MyTravelAdapter.MyTravelHolder>(){
         holder.apply {
             bindInfo(list[position])
             itemView.setOnClickListener {
-                itemClickListener.onClick(it, position, list[position].title)
+                itemClickListener.onClick(it, position, list[position].id)
             }
         }
     }
@@ -38,7 +44,7 @@ class MyTravelAdapter : RecyclerView.Adapter<MyTravelAdapter.MyTravelHolder>(){
         return list.size
     }
     interface ItemClickListener{
-        fun onClick(view: View, position: Int, name: String)
+        fun onClick(view: View, position: Int, id: Int)
     }
     private lateinit var itemClickListener : ItemClickListener
     fun setItemClickListener(itemClickListener: ItemClickListener){

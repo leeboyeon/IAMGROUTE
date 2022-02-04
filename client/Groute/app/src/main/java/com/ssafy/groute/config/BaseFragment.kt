@@ -2,6 +2,7 @@ package com.ssafy.groute.config
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +21,7 @@ abstract class BaseFragment<B : ViewBinding>(
     private var _binding: B? = null
     lateinit var mLoadingDialog: LoadingDialog
 //    val viewModel: MainViewModel by activityViewModels()
-
+//    lateinit var con:ViewGroup
     protected val binding get() = _binding!!
 
     override fun onCreateView(

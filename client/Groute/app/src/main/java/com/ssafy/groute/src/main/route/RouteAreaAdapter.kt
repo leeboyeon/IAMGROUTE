@@ -4,45 +4,43 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
+import com.ssafy.groute.databinding.ActivityCommentNestedBinding.bind
+import com.ssafy.groute.databinding.RecyclerviewRouteAreaitemBinding
 import com.ssafy.groute.src.dto.Area
 
-class RouteAreaAdapter : RecyclerView.Adapter<RouteAreaAdapter.RouteAreaHolder>(){
-    var list = mutableListOf<Area>()
-    inner class RouteAreaHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun bindInfo(data : Area){
-            Glide.with(itemView)
-                .load(data.img)
-                .into(itemView.findViewById(R.id.main_iv_category))
+class RouteAreaAdapter(private val areaList:MutableList<Area>) : RecyclerView.Adapter<RouteAreaAdapter.RouteAreaHolder>(){
 
-            itemView.findViewById<TextView>(R.id.main_tv_category).visibility = View.GONE
-
+    inner class RouteAreaHolder(private var binding:RecyclerviewRouteAreaitemBinding)  : RecyclerView.ViewHolder(binding.root){
+        fun bind(data : Area){
+            binding.area = data
+            binding.executePendingBindings()
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RouteAreaHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_category_item,parent,false)
-        return RouteAreaHolder(view)
+        return RouteAreaHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context),R.layout.recyclerview_route_areaitem, parent, false))
     }
 
     override fun onBindViewHolder(holder: RouteAreaHolder, position: Int) {
+        val dto = areaList[position]
         holder.apply {
-            bindInfo(list[position])
             itemView.setOnClickListener {
-                itemClickListener.onClick(it, position, list[position].name)
+                itemClickListener.onClick(it, position, dto.id)
             }
+            bind(dto)
         }
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return areaList.size
     }
 
     interface ItemClickListener{
-        fun onClick(view:View, position: Int, name: String)
+        fun onClick(view:View, position: Int, id:Int)
     }
     private lateinit var itemClickListener : ItemClickListener
     fun setItemClickListener(itemClickListener: ItemClickListener){

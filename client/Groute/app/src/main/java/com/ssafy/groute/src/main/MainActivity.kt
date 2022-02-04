@@ -168,7 +168,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .addToBackStack(null)
             }
             7->{    // 사용자 여행 일정 계획 화면
-                transaction.replace(R.id.frame_main_layout,TravelPlanFragment())
+                transaction.replace(R.id.frame_main_layout,TravelPlanFragment.newInstance(key1,value1))
                     .addToBackStack(null)
             }
             8->{    // 게시판 글쓰기 화면
@@ -186,6 +186,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 transaction.replace(R.id.frame_main_layout, ReviewWriteFragment.newInstance(key1,value1,key2,value2))
                     .addToBackStack(null)
             }
+            12 ->{
+                transaction.replace(R.id.frame_main_layout, MyFragment())
+                    .addToBackStack(null)
+            }
+
         }
         transaction.commit()
     }
