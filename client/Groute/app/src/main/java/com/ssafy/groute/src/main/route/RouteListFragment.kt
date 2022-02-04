@@ -1,5 +1,6 @@
 package com.ssafy.groute.src.main.route
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,16 +11,27 @@ import com.ssafy.groute.R
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentRouteBinding
 import com.ssafy.groute.databinding.FragmentRouteListBinding
+import com.ssafy.groute.src.main.MainActivity
 
 
 class RouteListFragment : BaseFragment<FragmentRouteListBinding>(FragmentRouteListBinding::bind, R.layout.fragment_route_list) {
 //    lateinit var binding: FragmentRouteListBinding
     lateinit var ThemeAdapter: RouteThemeRecyclerviewAdapter
     lateinit var RouteListAdapter: RouteListRecyclerviewAdapter
+
+    private lateinit var mainActivity: MainActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mainActivity.hideMainProfileBar(true)
+        mainActivity.hideBottomNav(true)
 
     }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as MainActivity
+    }
+
 
 //    override fun onCreateView(
 //        inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +56,13 @@ class RouteListFragment : BaseFragment<FragmentRouteListBinding>(FragmentRouteLi
             layoutManager = LinearLayoutManager(requireContext())
             adapter = RouteListAdapter
         }
+
+        RouteListAdapter.setItemClickListener(object : RouteListRecyclerviewAdapter.ItemClickListener {
+            override fun onClick(position: Int) {
+                mainActivity.moveFragment(12)
+            }
+
+        })
     }
 
 }

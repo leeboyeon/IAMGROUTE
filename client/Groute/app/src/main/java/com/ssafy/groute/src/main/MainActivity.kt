@@ -35,6 +35,7 @@ import com.ssafy.groute.src.main.home.PlaceDetailFragment
 import com.ssafy.groute.src.main.home.PlaceFragment
 import com.ssafy.groute.src.main.my.MyFragment
 import com.ssafy.groute.src.main.route.RouteCreateFragment
+import com.ssafy.groute.src.main.route.RouteDetailFragment
 import com.ssafy.groute.src.main.route.RouteFragment
 import com.ssafy.groute.src.main.travel.TravelPlanFragment
 import com.ssafy.groute.src.response.UserInfoResponse
@@ -185,6 +186,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             }
             10 ->{
                 logout()
+            }
+
+            12-> {
+                transaction.replace(R.id.frame_main_layout, RouteDetailFragment())
+                    .addToBackStack(null)
             }
 
         }

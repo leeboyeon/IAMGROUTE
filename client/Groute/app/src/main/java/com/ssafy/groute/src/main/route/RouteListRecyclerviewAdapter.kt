@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
+import com.ssafy.groute.src.dto.Comment
 
 class RouteListRecyclerviewAdapter() : RecyclerView.Adapter<RouteListRecyclerviewAdapter.RouteListHolder>(){
 
@@ -29,10 +30,22 @@ class RouteListRecyclerviewAdapter() : RecyclerView.Adapter<RouteListRecyclervie
     override fun onBindViewHolder(holder: RouteListHolder, position: Int) {
         holder.apply {
             bindInfo()
+
+            itemView.setOnClickListener{
+                itemClickListener.onClick(position)
+            }
         }
     }
 
     override fun getItemCount(): Int {
         return 4
+    }
+
+    interface ItemClickListener{
+        fun onClick(position: Int)
+    }
+    private lateinit var itemClickListener : ItemClickListener
+    fun setItemClickListener(itemClickListener: ItemClickListener){
+        this.itemClickListener = itemClickListener
     }
 }
