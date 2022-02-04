@@ -29,6 +29,7 @@ import com.ssafy.groute.src.main.board.*
 import com.ssafy.groute.src.main.home.HomeFragment
 import com.ssafy.groute.src.main.home.PlaceDetailFragment
 import com.ssafy.groute.src.main.home.PlaceFragment
+import com.ssafy.groute.src.main.home.ReviewWriteFragment
 import com.ssafy.groute.src.main.my.MyFragment
 import com.ssafy.groute.src.main.route.RouteCreateFragment
 import com.ssafy.groute.src.main.route.RouteFragment
@@ -168,6 +169,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             }
             10 ->{
                 logout()
+            }
+            11->{
+                transaction.replace(R.id.frame_main_layout, ReviewWriteFragment.newInstance(key, value))
+                    .addToBackStack(null)
             }
         }
         transaction.commit()

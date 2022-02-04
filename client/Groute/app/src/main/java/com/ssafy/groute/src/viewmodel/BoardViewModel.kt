@@ -49,7 +49,7 @@ class BoardViewModel : ViewModel(){
         BoardService().getBoardDetailList(BOARD_FREE_TYPE).observe(owner, Observer {
             Log.d(TAG, "getBoardFreeList: $it")
             val tmpList: ArrayList<BoardDetail> = arrayListOf()
-            if(it != null) {
+            if(!it.isEmpty()) {
                 for (i in 0..4) {
                     tmpList.add(it.get(i))
                 }
@@ -61,7 +61,7 @@ class BoardViewModel : ViewModel(){
         BoardService().getBoardDetailList(BOARD_QUESTION_TYPE).observe(owner, Observer {
             Log.d(TAG, "getBoardQuestionList: $it")
             val tmpList: ArrayList<BoardDetail> = arrayListOf()
-            if(it != null) {
+            if(!it.isEmpty()) {
                 for (i in 0..4) {
                     tmpList.add(it.get(i))
                 }

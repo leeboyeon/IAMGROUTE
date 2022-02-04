@@ -161,4 +161,32 @@ class PlaceService {
     suspend fun getPlaceReviewbyId(placeId:Int) : Response<MutableList<PlaceReview>>{
         return RetrofitUtil.placeService.getPlaceReviewListbyId(placeId)
     }
+
+    fun insertPlaceReview(review:PlaceReview, calback:RetrofitCallback<Boolean>){
+        RetrofitUtil.placeService.insertPlaceReview(review).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if(response.code()==200){
+                    if(res==true){
+                        Log.d(TAG, "onResponse: insert Success!")
+                    }else{
+                        Log.d(TAG, "onResponse: insert fail")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                Log.d(TAG, "onFailure: $t")
+            }
+
+        })
+    }
+
+    suspend fun updatePlaceReview(review:PlaceReview) : Response<Boolean> {
+        return RetrofitUtil.placeService.updatePlaceReview(review)
+    }
+
+    suspend fun deletePlaceReview(id:Int) : Response<Boolean> {
+        return RetrofitUtil.placeService.deletePlaceReview(id)
+    }
 }

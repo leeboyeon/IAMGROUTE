@@ -9,4 +9,6 @@ data class PlaceReview(
     val rate: Int,
     val title: String,
     val userId: String
-)
+){
+    constructor(placeId: Int,userId: String,content: String,rate: Int,img: String) : this(content,"",0,img,placeId, rate,"",userId)
+}

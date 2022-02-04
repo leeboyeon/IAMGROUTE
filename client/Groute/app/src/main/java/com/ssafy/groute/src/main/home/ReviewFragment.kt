@@ -46,7 +46,14 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(FragmentReviewBinding
             placeViewModel.getPlaceReviewListbyId(placeId)
         }
         initAdapter()
+        initButton()
     }
+    fun initButton(){
+        binding.reviewIbtnWrite.setOnClickListener {
+            mainActivity.moveFragment(11,"placeId",placeId)
+        }
+    }
+
     fun initAdapter(){
         placeViewModel.placeReviewList.observe(viewLifecycleOwner, Observer {
             reviewAdapter = ReviewAdapter(viewLifecycleOwner)

@@ -38,23 +38,12 @@ class ReviewAdapter(var owner: LifecycleOwner) : RecyclerView.Adapter<ReviewAdap
                 Glide.with(itemView)
                     .load("${ApplicationClass.IMGS_URL_PLACEREVIEW}${data.img}")
                     .into(itemView.findViewById(R.id.review_iv_reviewimg))
-            }else if(data.img == null || data.img == ""){
+            }
+            if(data.img == null || data.img == ""){
                 itemView.findViewById<ImageView>(R.id.review_iv_reviewimg).visibility = View.GONE
             }
             itemView.findViewById<TextView>(R.id.review_tv_content).text = data.content
 
-
-            if(itemView.findViewById<TextView>(R.id.review_tv_more).text == "더보기"){
-                itemView.findViewById<TextView>(R.id.review_tv_more).setOnClickListener {
-                    itemView.findViewById<TextView>(R.id.review_tv_content).isSingleLine = false
-                    itemView.findViewById<TextView>(R.id.review_tv_more).text = "줄이기"
-                }
-            }else if(itemView.findViewById<TextView>(R.id.review_tv_more).text == "줄이기"){
-                itemView.findViewById<TextView>(R.id.review_tv_more).setOnClickListener {
-                    itemView.findViewById<TextView>(R.id.review_tv_content).isSingleLine = true
-                    itemView.findViewById<TextView>(R.id.review_tv_more).text = "더보기"
-                }
-            }
 
         }
 

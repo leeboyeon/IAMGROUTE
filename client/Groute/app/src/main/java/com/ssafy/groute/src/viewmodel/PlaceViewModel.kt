@@ -131,4 +131,17 @@ class PlaceViewModel : ViewModel() {
             }
         }
     }
+//    suspend fun insertPlaceReview(review:PlaceReview){
+//        val response = PlaceService().insertPlaceReview(review)
+//        viewModelScope.launch {
+//            var res = response.body()
+//            if(response.code() == 200){
+//                if(res == true){
+//                    Log.d(TAG, "insertPlaceReview: complete")
+//                }
+//            }else{
+//                Log.d(TAG, "insertPlaceReview: ")
+//            }
+//        }
+//    }
 }
