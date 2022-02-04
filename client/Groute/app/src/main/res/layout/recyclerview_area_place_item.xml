@@ -70,7 +70,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:max="5"
-            android:rating="@{place.rate}"
+            android:rating="@{Float.valueOf(place.rate)}"
             app:layout_constraintStart_toEndOf="@+id/areaPlace_iv_img"
             app:layout_constraintTop_toBottomOf="@+id/areaPlace_tv_content" />
 

@@ -5,10 +5,10 @@
 <mapper namespace="com.ssafy.groute.mapper.board.BoardDetailMapper">
     <insert id="insertBoardDetail" parameterType="BoardDetail">
         insert into boarddetail(title, content, img, board_id, user_id, place_id)
-        <if test="placeId == 0">
+        <if test="placeId lte 0">
             values(#{title}, #{content}, #{img}, #{boardId}, #{userId}, null)
         </if>
-        <if test="placeId != 0">
+        <if test="placeId gt 0">
             values(#{title}, #{content}, #{img}, #{boardId}, #{userId}, #{placeId})
         </if>
     </insert>

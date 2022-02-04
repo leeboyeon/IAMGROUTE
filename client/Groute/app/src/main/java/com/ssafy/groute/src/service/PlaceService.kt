@@ -161,4 +161,71 @@ class PlaceService {
     suspend fun getPlaceReviewbyId(placeId:Int) : Response<MutableList<PlaceReview>>{
         return RetrofitUtil.placeService.getPlaceReviewListbyId(placeId)
     }
+
+    fun insertPlaceReview(review:PlaceReview, callback:RetrofitCallback<Boolean>){
+        RetrofitUtil.placeService.insertPlaceReview(review).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if(response.code()==200){
+                    if(res==true){
+                        callback.onSuccess(response.code(),res)
+                        Log.d(TAG, "onResponse: insert Success!")
+                    }else{
+                        Log.d(TAG, "onResponse: insert fail")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                Log.d(TAG, "onFailure: $t")
+            }
+
+        })
+    }
+
+    fun updatePlaceReview(review:PlaceReview, callback : RetrofitCallback<Boolean>) {
+        RetrofitUtil.placeService.updatePlaceReview(review).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if(response.code()==200){
+                    if(res==true){
+                        callback.onSuccess(response.code(),res)
+                        Log.d(TAG, "onResponse: update Success!")
+                    }else{
+                        Log.d(TAG, "onResponse: update fail")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                Log.d(TAG, "onFailure: $t")
+            }
+
+        })
+    }
+
+    fun deletePlaceReview(id:Int, callback: RetrofitCallback<Boolean>){
+        RetrofitUtil.placeService.deletePlaceReview(id).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if(response.code()==200){
+                    if(res==true){
+                        callback.onSuccess(response.code(),res)
+                        Log.d(TAG, "onResponse: delete Success!")
+                    }else{
+                        Log.d(TAG, "onResponse: delete fail")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                Log.d(TAG, "onFailure: $t")
+            }
+
+        })
+    }
+    
+    suspend fun getReviewById(id:Int) :Response<PlaceReview>{
+       return RetrofitUtil.placeService.getReviewbyId(id)
+    }
 }

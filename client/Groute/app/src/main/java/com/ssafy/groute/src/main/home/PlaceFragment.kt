@@ -131,27 +131,6 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
         })
     }
 
-    fun placeIsLike(placeLike:PlaceLikeResponse){
-        PlaceService().placeIsLike(placeLike, object :RetrofitCallback<Boolean> {
-            override fun onError(t: Throwable) {
-                Log.d(TAG, "onError: ")
-            }
-            //좋아요 했으면 트루
-            override fun onSuccess(code: Int, responseData: Boolean) {
-                if(responseData) {
-                    Log.d(TAG, "onSuccess: ")
-
-                }else{
-                    placeGoLike(placeLike)
-                }
-            }
-
-            override fun onFailure(code: Int) {
-                Log.d(TAG, "onFailure: ")
-            }
-
-        })
-    }
     fun placeGoLike(placeLike: PlaceLikeResponse){
         Log.d(TAG, "placeGoLike: $placeLike")
         PlaceService().placeLike(placeLike, object :RetrofitCallback<Boolean> {

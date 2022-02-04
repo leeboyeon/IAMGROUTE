@@ -4,8 +4,8 @@
 
 <mapper namespace="com.ssafy.groute.mapper.UserPlanMapper">
     <insert id="insertUserPlan" parameterType="UserPlan">
-        insert into userplan(user_id, title, description, startDate, endDate, totalDate, isPublic)
-        values(#{userId}, #{title}, #{description}, #{startDate}, #{endDate}, #{totalDate}, #{isPublic})
+        insert into userplan(user_id, title, description, startDate, endDate, totalDate, isPublic, area_id)
+        values(#{userId}, #{title}, #{description}, #{startDate}, #{endDate}, #{totalDate}, #{isPublic}, #{areaId})
         <selectKey resultType="int" keyProperty="id" order="AFTER">
             select last_insert_id()
         </selectKey>
@@ -13,21 +13,22 @@
 
     <resultMap id="UserPlanDTO" type="UserPlan">
         <result column="user_id" property="userId"></result>
+        <result column="area_id" property="areaId"></result>
     </resultMap>
 
     <select id="selectUserPlan" parameterType="int" resultMap="UserPlanDTO">
-        select id, user_id, title, description, startDate, endDate, totalDate, isPublic, round(rate,2) rate, heartCnt, theme_id
+        select id, user_id, title, description, startDate, endDate, totalDate, isPublic, round(rate,2) rate, heartCnt, area_id
         from userplan
         where id = #{id}
     </select>
 
     <select id="selectAllUserPlan"  resultMap="UserPlanDTO">
-        select id, user_id, title, description, startDate, endDate, totalDate, isPublic, round(rate,2) rate, heartCnt, theme_id
+        select id, user_id, title, description, startDate, endDate, totalDate, isPublic, round(rate,2) rate, heartCnt, area_id
         from userplan
     </select>
 
     <select id="bestPlanList" resultMap="UserPlanDTO">
-        select id, user_id, title, description, startDate, endDate, totalDate, isPublic, round(rate,2) rate, heartCnt, theme_id
+        select id, user_id, title, description, startDate, endDate, totalDate, isPublic, round(rate,2) rate, heartCnt, area_id
         from userplan
         order by heartcnt desc
         limit 5
@@ -79,7 +80,7 @@
     </select>
 
     <select id="selectPlaceListByPlanId" parameterType="int" resultType="int">
-        select place_id from routeDetail
+        select place_id from routedetail
         where route_id IN (select route_id from routes where plan_id = #{id})
     </select>
 
@@ -88,7 +89,7 @@
         from place
         where id IN (
                     select place_id
-                    from routeDetail
+                    from routedetail
                     where route_id IN (
                             select route_id
                             from routes
