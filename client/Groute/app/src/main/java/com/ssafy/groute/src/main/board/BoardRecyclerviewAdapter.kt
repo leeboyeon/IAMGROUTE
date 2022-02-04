@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -52,6 +53,7 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
         val likeBtn = itemView.findViewById<ImageView>(R.id.item_board_like_iv)
 
         fun bindInfo(data: BoardDetail) {
+            more.isVisible = data.userId == ApplicationClass.sharedPreferencesUtil.getUser().id
 
             if(data.img == null || data.img == ""){
                 thumbnailIv.visibility = View.GONE

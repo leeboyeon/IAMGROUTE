@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
@@ -50,21 +51,22 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
             placeViewModel.getPlace(placeId)
         }
         createMap()
-//        initData()
     }
     fun createMap(){
         val mapView = MapView(requireContext())
-        binding.kakaoMapView.addView(mapView)
-        val mapPoint = MapPoint.mapPointWithGeoCoord(lat,lng)
-        Log.d(TAG, "createMap: $lat  // $lng")
-        mapView.setMapCenterPoint(mapPoint, true)
-        mapView.setZoomLevel(3, true)
-
         val marker = MapPOIItem()
-        marker.itemName = binding.placeDetailTvBigContent.text.toString()
-        marker.mapPoint = mapPoint
-        marker.markerType = MapPOIItem.MarkerType.BluePin
-        marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
+        placeViewModel.place.observe(viewLifecycleOwner, Observer {
+
+            binding.kakaoMapView.addView(mapView)
+            val mapPoint = MapPoint.mapPointWithGeoCoord(it.lat.toDouble(),it.lng.toDouble())
+            Log.d(TAG, "createMap: $lat  // $lng")
+            mapView.setMapCenterPoint(mapPoint, true)
+            mapView.setZoomLevel(3, true)
+            marker.itemName = binding.placeDetailTvBigContent.text.toString()
+            marker.mapPoint = mapPoint
+            marker.markerType = MapPOIItem.MarkerType.BluePin
+            marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
+        })
 
         mapView.addPOIItem(marker)
     }

@@ -1,12 +1,13 @@
 package com.ssafy.groute.src.main.home
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.RatingBar
-import android.widget.TextView
+import android.widget.*
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -14,12 +15,16 @@ import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.src.dto.PlaceReview
 import com.ssafy.groute.src.dto.Review
+import com.ssafy.groute.src.main.board.BoardRecyclerviewAdapter
+import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.service.UserService
+import com.ssafy.groute.util.RetrofitCallback
 
 private const val TAG = "ReviewAdapter"
-class ReviewAdapter(var owner: LifecycleOwner) : RecyclerView.Adapter<ReviewAdapter.ReviewHolder>(){
+class ReviewAdapter(var owner: LifecycleOwner, var context:Context) : RecyclerView.Adapter<ReviewAdapter.ReviewHolder>(){
     var list = mutableListOf<PlaceReview>()
     inner class ReviewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        val more = itemView.findViewById<ImageButton>(R.id.reviewItem_ib_more)
         fun bindInfo(data : PlaceReview){
             val userInfo = UserService().getUserInfo(data.userId)
             userInfo.observe(
@@ -38,23 +43,12 @@ class ReviewAdapter(var owner: LifecycleOwner) : RecyclerView.Adapter<ReviewAdap
                 Glide.with(itemView)
                     .load("${ApplicationClass.IMGS_URL_PLACEREVIEW}${data.img}")
                     .into(itemView.findViewById(R.id.review_iv_reviewimg))
-            }else if(data.img == null || data.img == ""){
+            }
+            if(data.img == null || data.img == ""){
                 itemView.findViewById<ImageView>(R.id.review_iv_reviewimg).visibility = View.GONE
             }
             itemView.findViewById<TextView>(R.id.review_tv_content).text = data.content
-
-
-            if(itemView.findViewById<TextView>(R.id.review_tv_more).text == "더보기"){
-                itemView.findViewById<TextView>(R.id.review_tv_more).setOnClickListener {
-                    itemView.findViewById<TextView>(R.id.review_tv_content).isSingleLine = false
-                    itemView.findViewById<TextView>(R.id.review_tv_more).text = "줄이기"
-                }
-            }else if(itemView.findViewById<TextView>(R.id.review_tv_more).text == "줄이기"){
-                itemView.findViewById<TextView>(R.id.review_tv_more).setOnClickListener {
-                    itemView.findViewById<TextView>(R.id.review_tv_content).isSingleLine = true
-                    itemView.findViewById<TextView>(R.id.review_tv_more).text = "더보기"
-                }
-            }
+            more.isVisible = data.userId == ApplicationClass.sharedPreferencesUtil.getUser().id
 
         }
 
@@ -71,7 +65,26 @@ class ReviewAdapter(var owner: LifecycleOwner) : RecyclerView.Adapter<ReviewAdap
 //            itemView.setOnClickListener {
 //                itemClickListener.onClick(it, position, list[position].id)
 //            }
-
+            more.setOnClickListener{
+                val popup = PopupMenu(context,more)
+                MenuInflater(context).inflate(R.menu.board_menu_item,popup.menu)
+                popup.show()
+                popup.setOnMenuItemClickListener {
+                    when(it.itemId){
+                        R.id.menu_edit -> {
+                            modifyClickListener.onClick(bindingAdapterPosition)
+                            return@setOnMenuItemClickListener true
+                        }
+                        R.id.menu_delete -> {
+                            PlaceService().deletePlaceReview(list[position].id, DeleteCallback(position))
+                            return@setOnMenuItemClickListener true
+                        }
+                        else ->{
+                            return@setOnMenuItemClickListener false
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -87,5 +100,29 @@ class ReviewAdapter(var owner: LifecycleOwner) : RecyclerView.Adapter<ReviewAdap
         this.itemClickListener = itemClickListener
     }
 
+    interface ModifyClickListener{
+        fun onClick(position: Int)
+    }
+    private lateinit var modifyClickListener: ModifyClickListener
+    fun setModifyClickListener(modifyClickListener: ModifyClickListener){
+        this.modifyClickListener = modifyClickListener
+    }
 
+    inner class DeleteCallback(var position: Int):RetrofitCallback<Boolean> {
+        override fun onError(t: Throwable) {
+            Log.d(TAG, "onError: ")
+        }
+
+        override fun onSuccess(code: Int, responseData: Boolean) {
+            if(responseData){
+                Toast.makeText(context,"삭제되었습니다.",Toast.LENGTH_SHORT).show()
+                list.removeAt(position)
+            }
+        }
+
+        override fun onFailure(code: Int) {
+            Log.d(TAG, "onFailure: ${code}")
+        }
+
+    }
 }
