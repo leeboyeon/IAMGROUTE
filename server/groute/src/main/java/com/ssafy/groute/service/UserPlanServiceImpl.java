@@ -42,6 +42,7 @@ public class UserPlanServiceImpl implements UserPlanService {
         }
     }
 
+    @Transactional
     @Override
     public void copyPlan(UserPlan userPlan, int planId, int day) throws Exception{
         UserPlan originPlan = userPlanMapper.selectUserPlan(planId);
@@ -79,6 +80,7 @@ public class UserPlanServiceImpl implements UserPlanService {
         }
     }
 
+    @Transactional
     @Override
     public List<UserPlan> selectAllByPlaceId(List<Integer> placeIds, int day) throws Exception {
         List<Integer> planIdList = userPlanMapper.selectAllUserPlanByTotalDate(day);
@@ -98,6 +100,7 @@ public class UserPlanServiceImpl implements UserPlanService {
         return userPlanMapper.bestPlanList();
     }
 
+    @Transactional
     @Override
     public Map<String,Object> selectUserPlan(int id) throws Exception {
         Map<String,Object> res = new HashMap<>();
@@ -121,7 +124,7 @@ public class UserPlanServiceImpl implements UserPlanService {
 
     @Override
     public List<UserPlan> selectAllUserPlan() throws Exception {
-        return userPlanMapper.selectAllUserPlan();
+        return setThemeList(userPlanMapper.selectAllUserPlan());
     }
 
     @Transactional
@@ -148,6 +151,7 @@ public class UserPlanServiceImpl implements UserPlanService {
         userPlanMapper.updateUserPlan(userPlan);
     }
 
+    @Transactional
     @Override
     public List<UserPlan> selectAllUserPlanById(String id) throws Exception {
         List<PlanShareUser> planShareUsers = planShareUserMapper.selectByUserId(id);
@@ -158,6 +162,7 @@ public class UserPlanServiceImpl implements UserPlanService {
         return userPlans;
     }
 
+    @Transactional
     @Override
     public void likePlan(PlanLike planLike) throws Exception {
         PlanLike p = userPlanMapper.isLike(planLike);
@@ -178,4 +183,12 @@ public class UserPlanServiceImpl implements UserPlanService {
         return userPlanMapper.isLike(planLike);
     }
 
+    public List<UserPlan> setThemeList(List<UserPlan> userPlans) throws Exception{
+
+        for(UserPlan userPlan:userPlans){
+            userPlan.setThemeIdList(userPlanMapper.selectThemeListByPlanId(userPlan.getId()));
+        }
+
+        return userPlans;
+    }
 }

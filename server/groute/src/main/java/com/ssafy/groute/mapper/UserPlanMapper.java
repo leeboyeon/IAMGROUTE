@@ -22,4 +22,5 @@ public interface UserPlanMapper {
     List<Integer> selectAllUserPlanByTotalDate(int totalDate);
     List<Integer> selectPlaceListByPlanId(int id);
     List<UserPlan> bestPlanList() throws Exception;
+    List<Integer> selectThemeListByPlanId(int id) throws Exception;
 }
