@@ -28,6 +28,8 @@ import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.CommentService
 import com.ssafy.groute.src.service.UserService
+import com.ssafy.groute.src.viewmodel.BoardViewModel
+import com.ssafy.groute.src.viewmodel.MainViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import org.json.JSONObject
 
