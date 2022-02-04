@@ -52,9 +52,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
         mainActivity.hideBottomNav(false)
         var user = ApplicationClass.sharedPreferencesUtil.getUser()
         val userInfo = UserService().getUserInfo(user.id)
-        userInfo.observe(
-            viewLifecycleOwner,
-            {
+        userInfo.observe(viewLifecycleOwner, {
                 userInfoResponse = it
             }
         )
@@ -109,10 +107,12 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
             }
         }
     }
+
     // 마이페이지 사용자 정보 갱신
     fun initUserInfo() {
         viewModel.initData(this)
     }
+
     fun showDeleteuserDialog(){
         var builder = AlertDialog.Builder(requireContext())
         builder.setTitle("회원 탈퇴")
@@ -126,6 +126,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
 
         builder.show()
     }
+
     inner class DeleteCallback() : RetrofitCallback<Boolean>{
         override fun onError(t: Throwable) {
             Log.d(TAG, "onError: ")
@@ -141,7 +142,5 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
         override fun onFailure(code: Int) {
             Log.d(TAG, "onFailure: ")
         }
-
-
     }
 }
