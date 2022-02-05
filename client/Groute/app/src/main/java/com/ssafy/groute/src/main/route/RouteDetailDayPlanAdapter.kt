@@ -7,19 +7,20 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
+import com.ssafy.groute.src.dto.RouteDetail
 
 class RouteDetailDayPlanAdapter() : RecyclerView.Adapter<RouteDetailDayPlanAdapter.RouteDetailDayPlanThemeHolder>(){
-
+    var list = mutableListOf<RouteDetail>()
     inner class RouteDetailDayPlanThemeHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val placeName = itemView.findViewById<TextView>(R.id.routedetail_recycler_item_item_day_placeName_tv)
         val placeType = itemView.findViewById<TextView>(R.id.routedetail_recycler_item_item_day_placeType_tv)
         val placeImg = itemView.findViewById<ImageView>(R.id.routedetail_recycler_item_item_day_place_img)
         val placeBtn = itemView.findViewById<ImageView>(R.id.routedetail_recycler_item_item_day_place_iv)
 
-        fun bindInfo() {
+        fun bindInfo(data : RouteDetail) {
             placeImg.setImageResource(R.drawable.profile)
-            placeName.text = "섭지코지"
-            placeType.text = "관광지"
+            placeName.text = "${data.place.name}"
+            placeType.text = "${data.place.type}"
 
         }
     }
@@ -31,11 +32,11 @@ class RouteDetailDayPlanAdapter() : RecyclerView.Adapter<RouteDetailDayPlanAdapt
 
     override fun onBindViewHolder(holder: RouteDetailDayPlanThemeHolder, position: Int) {
         holder.apply {
-            bindInfo()
+            bindInfo(list[position])
         }
     }
 
     override fun getItemCount(): Int {
-        return 3
+        return list.size
     }
 }

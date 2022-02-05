@@ -2,7 +2,7 @@ package com.ssafy.groute.src.dto
 
 data class UserPlan(
     val areaId: Int,
-    val description: String,
+    val description: String?,
     val endDate: String,
     val heartCnt: Int,
     val id: Int,

@@ -4,25 +4,37 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
+import com.ssafy.groute.src.viewmodel.PlanViewModel
+import kotlinx.coroutines.runBlocking
 
-class RouteDetailDayPerAdapter(var list: List<String>) : RecyclerView.Adapter<RouteDetailDayPerAdapter.RouteDetailDayPerThemeHolder>(){
+class RouteDetailDayPerAdapter(val viewLifecycleOwner: LifecycleOwner, val totalDate: Int, val planViewModel: PlanViewModel) : RecyclerView.Adapter<RouteDetailDayPerAdapter.RouteDetailDayPerThemeHolder>(){
 
     inner class RouteDetailDayPerThemeHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val dayTv = itemView.findViewById<TextView>(R.id.routedetail_recycler_item_day_tv)
         val routeDetailDayPlanRv = itemView.findViewById<RecyclerView>(R.id.routedetail_recycler_item_day_rv)
 
-        fun bindInfo(theme : String) {
-            dayTv.text = theme
+        fun bindInfo(day : Int) {
+            dayTv.text = "$day DAY"
 
-            var routeDetailDayPlanAdapter = RouteDetailDayPlanAdapter()
-
-            routeDetailDayPlanRv.apply {
-                layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-                adapter = routeDetailDayPlanAdapter
+            runBlocking {
+                planViewModel.getRouteDetailbyDay(day)
             }
+
+            planViewModel.routeDetailList.observe(viewLifecycleOwner, Observer {
+                var routeDetailDayPlanAdapter = RouteDetailDayPlanAdapter()
+                routeDetailDayPlanAdapter.list = it
+
+                routeDetailDayPlanRv.apply {
+                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+                    adapter = routeDetailDayPlanAdapter
+                }
+
+            })
 
         }
     }
@@ -34,11 +46,11 @@ class RouteDetailDayPerAdapter(var list: List<String>) : RecyclerView.Adapter<Ro
 
     override fun onBindViewHolder(holder: RouteDetailDayPerThemeHolder, position: Int) {
         holder.apply {
-            bindInfo(list[position])
+            bindInfo(position + 1)
         }
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return totalDate
     }
 }

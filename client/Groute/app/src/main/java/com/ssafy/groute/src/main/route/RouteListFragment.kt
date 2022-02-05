@@ -59,7 +59,7 @@ class RouteListFragment : BaseFragment<FragmentRouteListBinding>(FragmentRouteLi
 
         RouteListAdapter.setItemClickListener(object : RouteListRecyclerviewAdapter.ItemClickListener {
             override fun onClick(position: Int) {
-                mainActivity.moveFragment(12)
+                mainActivity.moveFragment(12, "planId", 39)
             }
 
         })

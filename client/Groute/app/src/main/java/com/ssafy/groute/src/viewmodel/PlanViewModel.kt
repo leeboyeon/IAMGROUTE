@@ -54,6 +54,7 @@ class PlanViewModel : ViewModel(){
     }
     fun setRouteDetailList(routeDetail: MutableList<RouteDetail>) = viewModelScope.launch {
         _routeDetailResponse.value = routeDetail
+        Log.d(TAG, "setRouteDetailList: ${_routeDetailResponse.value}")
     }
     fun setPlanNotEndList(plan:MutableList<UserPlan>) = viewModelScope.launch {
         _planNotEndResponse.value = plan

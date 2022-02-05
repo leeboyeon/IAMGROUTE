@@ -4,6 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".src.main.route.RouteDetailInfoFragment">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.ssafy.groute.src.viewmodel.PlanViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -26,7 +32,7 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="14dp"
             android:includeFontPadding="false"
-            android:text="이중섭 문화거리를 따라 걸어보아요. 너무 좋습니당~~~"
+            android:text="@{viewModel.planList.description}"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -115,4 +115,6 @@
     <string name="convert_review_count">총 %d건</string>
     <string name="mtrl_picker_title_str"> 여행 갈 날짜를 선택해주세요 </string>
     <string name="convert_plan_date">%s ~ %s</string>
+    <string name="plan_totalDate_one_day">당일치기</string>
+    <string name="covert_plan_totalDate">%s박 %s일</string>
 </resources>

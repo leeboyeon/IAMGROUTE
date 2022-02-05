@@ -6,22 +6,28 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.groute.R
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentRouteDetailInfoBinding
 import com.ssafy.groute.src.main.MainActivity
+import com.ssafy.groute.src.viewmodel.PlanViewModel
+import kotlinx.coroutines.runBlocking
 
 
 class RouteDetailInfoFragment : BaseFragment<FragmentRouteDetailInfoBinding>(FragmentRouteDetailInfoBinding::bind, R.layout.fragment_route_detail_info) {
     private lateinit var routeDetailDayPerAdapter: RouteDetailDayPerAdapter
     private lateinit var mainActivity: MainActivity
+    private val planViewModel: PlanViewModel by activityViewModels()
+    private var planId = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
         mainActivity.hideBottomNav(true)
         arguments?.let {
+            planId = it.getInt("planId",-1)
         }
     }
 
@@ -34,8 +40,12 @@ class RouteDetailInfoFragment : BaseFragment<FragmentRouteDetailInfoBinding>(Fra
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val dayList = arrayListOf("1 DAY", "2 DAY")
-        routeDetailDayPerAdapter = RouteDetailDayPerAdapter(dayList)
+        binding.viewModel = planViewModel
+        runBlocking {
+            planViewModel.getPlanById(planId)
+        }
+
+        routeDetailDayPerAdapter = RouteDetailDayPerAdapter(viewLifecycleOwner, planViewModel.planList.value!!.totalDate, planViewModel)
         binding.RouteDetailDayPerRv.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = routeDetailDayPerAdapter
@@ -46,10 +56,10 @@ class RouteDetailInfoFragment : BaseFragment<FragmentRouteDetailInfoBinding>(Fra
     companion object {
 
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(key: String, value: Int) =
             RouteDetailInfoFragment().apply {
                 arguments = Bundle().apply {
-
+                    putInt(key, value)
                 }
             }
     }

@@ -4,6 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".src.main.route.RouteDetailFragment">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.ssafy.groute.src.viewmodel.PlanViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -58,7 +64,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:includeFontPadding="false"
-                    android:text="1박 2일"
+                    android:text="@{viewModel.planList.totalDate == 1 ? @string/plan_totalDate_one_day : @string/covert_plan_totalDate(viewModel.planList.totalDate - 1, viewModel.planList.totalDate)}"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="normal"
@@ -83,7 +89,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="50dp"
                     android:includeFontPadding="false"
-                    android:text="이중섭 문화거리 따라"
+                    android:text="@{viewModel.planList.title}"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold"
