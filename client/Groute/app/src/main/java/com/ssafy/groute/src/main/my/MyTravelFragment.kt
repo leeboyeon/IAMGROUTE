@@ -39,11 +39,14 @@ class MyTravelFragment : BaseFragment<FragmentMyTravelBinding>(FragmentMyTravelB
         binding.userplan = planViewModel
         runBlocking {
             planViewModel.getPlanMyList(ApplicationClass.sharedPreferencesUtil.getUser().id)
+            planViewModel.getMyNotendPlan(ApplicationClass.sharedPreferencesUtil.getUser().id)
+            planViewModel.getMyEndPlan(ApplicationClass.sharedPreferencesUtil.getUser().id)
         }
         planedAdapter()
+        endAdapter()
     }
     fun planedAdapter(){
-        planViewModel.planMyList.observe(viewLifecycleOwner, Observer {
+        planViewModel.planNotEndList.observe(viewLifecycleOwner, Observer {
             mytravelAdapter = MyTravelAdapter()
             mytravelAdapter.list = it
             mytravelAdapter.setItemClickListener(object: MyTravelAdapter.ItemClickListener{
@@ -53,6 +56,24 @@ class MyTravelFragment : BaseFragment<FragmentMyTravelBinding>(FragmentMyTravelB
 
             })
             binding.mytravelRvIng.apply{
+                layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
+                adapter = mytravelAdapter
+                adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+            }
+        })
+    }
+
+    fun endAdapter(){
+        planViewModel.planEndList.observe(viewLifecycleOwner, Observer {
+            mytravelAdapter = MyTravelAdapter()
+            mytravelAdapter.list = it
+            mytravelAdapter.setItemClickListener(object: MyTravelAdapter.ItemClickListener{
+                override fun onClick(view: View, position: Int, id:Int) {
+                    mainActivity.moveFragment(7,"planId", it[position].id)
+                }
+
+            })
+            binding.mytravelRvMylist.apply{
                 layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
                 adapter = mytravelAdapter
                 adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY

@@ -36,4 +36,12 @@ class UserPlanService {
     suspend fun getMyUserPlan(userId:String) : Response<MutableList<UserPlan>>{
         return RetrofitUtil.userPlanService.getMyUserPlan(userId)
     }
+
+    suspend fun getMyPlanNotEnd(userId:String) : Response<MutableList<UserPlan>>{
+        return RetrofitUtil.userPlanService.getMyPlanNotEnd(userId)
+    }
+
+    suspend fun getMyPlanEnd(userId:String) : Response<MutableList<UserPlan>>{
+        return RetrofitUtil.userPlanService.getMyPlanEnd(userId)
+    }
 }

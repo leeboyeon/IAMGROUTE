@@ -20,6 +20,8 @@ class PlanViewModel : ViewModel(){
     private val _planResponse = MutableLiveData<UserPlan>()
     private val _routeResponse = MutableLiveData<MutableList<Route>>()
     private val _routeDetailResponse = MutableLiveData<MutableList<RouteDetail>>()
+    private val _planNotEndResponse = MutableLiveData<MutableList<UserPlan>>()
+    private val _planEndResponse = MutableLiveData<MutableList<UserPlan>>()
 
 //    private val _routeResponse = MutableLiveData<MutableList<>>
 //    private val _routeDetailResponse = MutableLiveData<MutableList<>>
@@ -33,6 +35,10 @@ class PlanViewModel : ViewModel(){
         get() = _routeResponse
     val routeDetailList : LiveData<MutableList<RouteDetail>>
         get() = _routeDetailResponse
+    val planNotEndList : LiveData<MutableList<UserPlan>>
+        get() =_planNotEndResponse
+    val planEndList : LiveData<MutableList<UserPlan>>
+        get() =_planEndResponse
 
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planBestResponse.value = plan
@@ -49,6 +55,13 @@ class PlanViewModel : ViewModel(){
     fun setRouteDetailList(routeDetail: MutableList<RouteDetail>) = viewModelScope.launch {
         _routeDetailResponse.value = routeDetail
     }
+    fun setPlanNotEndList(plan:MutableList<UserPlan>) = viewModelScope.launch {
+        _planNotEndResponse.value = plan
+    }
+    fun setPlanEndList(plan:MutableList<UserPlan>) = viewModelScope.launch {
+        _planEndResponse.value = plan
+    }
+
     suspend fun getPlanBestList(){
         val response = UserPlanService().getBestUserPlan()
         viewModelScope.launch { 
@@ -196,6 +209,36 @@ class PlanViewModel : ViewModel(){
                 if(routeList.value!!.get(i).day == day){
                     setRouteDetailList(routeList.value!!.get(i).routeDetailList.toMutableList())
                 }
+            }
+        }
+    }
+    
+    suspend fun getMyNotendPlan(userId:String){
+        val response = UserPlanService().getMyPlanNotEnd(userId)
+        viewModelScope.launch {
+            var res = response.body()
+            if(response.code() == 200){
+                if(res!=null){
+                    setPlanNotEndList(res)
+                    Log.d(TAG, "getMyNotendPlan: ")
+                }
+            }else{
+                Log.d(TAG, "getMyNotendPlan: ")
+            }
+        }
+    }
+    
+    suspend fun getMyEndPlan(userId:String){
+        val response = UserPlanService().getMyPlanEnd(userId)
+        viewModelScope.launch { 
+            var res = response.body()
+            if(response.code() == 200){
+                if(res!=null){
+                    setPlanEndList(res)
+                    Log.d(TAG, "getMyEndPlan: ")
+                }
+            }else{
+                Log.d(TAG, "getMyEndPlan: ")
             }
         }
     }

@@ -17,4 +17,11 @@ interface UserPlanApi {
 
     @GET("/plan/list/{userId}")
     suspend fun getMyUserPlan(@Path("userId")userId:String):Response<MutableList<UserPlan>>
+
+    @GET("/plan/list/notend/{userId}")
+    suspend fun getMyPlanNotEnd(@Path("userId")userId:String) : Response<MutableList<UserPlan>>
+
+    @GET("/plan/list/end/{userId}")
+    suspend fun getMyPlanEnd(@Path("userId") userId:String) : Response<MutableList<UserPlan>>
+
 }
