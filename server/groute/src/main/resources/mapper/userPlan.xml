@@ -50,6 +50,18 @@
         where user_id = #{userId}
     </select>
 
+    <select id="findEndPlanById" parameterType="String" resultMap="UserPlanDTO">
+        select * from userplan
+        where id in (select plan_id from planshareuser where user_id = #{userId})
+                and datediff(curdate(),endDate) &gt; 0
+    </select>
+
+    <select id="findNotEndPlanById" parameterType="String" resultMap="UserPlanDTO">
+        select * from userplan
+        where id in (select plan_id from planshareuser where user_id = #{userId})
+          and datediff(curdate(),endDate) &lt;= 0
+    </select>
+
     <delete id="deleteAllUserPlanByUId" parameterType="String">
         delete from userplan
         where user_id = #{userId}
