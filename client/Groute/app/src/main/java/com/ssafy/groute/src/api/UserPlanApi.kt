@@ -7,7 +7,7 @@ import retrofit2.http.*
 
 interface UserPlanApi {
     @GET("/plan/{id}")
-    fun getUserPlanById(@Query("id") id: Int) : Call<MutableList<UserPlan>>
+    suspend fun getUserPlanById(@Path("id") id: Int) : Response<Map<String,Any>>
 
     @GET("/plan/best")
     suspend fun getBestUserPlan() : Response<MutableList<UserPlan>>

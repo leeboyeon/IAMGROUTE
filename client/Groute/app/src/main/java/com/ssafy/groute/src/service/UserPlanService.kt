@@ -8,7 +8,9 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class UserPlanService {
-
+    suspend fun getUserPlanById(id:Int) : Response<Map<String,Any>>{
+        return RetrofitUtil.userPlanService.getUserPlanById(id)
+    }
     suspend fun getBestUserPlan() = RetrofitUtil.userPlanService.getBestUserPlan()
 
     fun insertUserPlan(planId:Int, userPlan: UserPlan, userIds:ArrayList<String>, callback: RetrofitCallback<Boolean>){

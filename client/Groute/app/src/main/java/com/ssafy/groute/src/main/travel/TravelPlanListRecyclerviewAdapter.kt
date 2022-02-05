@@ -11,12 +11,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
+import com.ssafy.groute.src.dto.Route
+import com.ssafy.groute.src.dto.RouteDetail
 import java.util.*
 import kotlin.collections.ArrayList
 
 private const val TAG = "TravelPlanListRecyclerviewAdapter_groute"
-class TravelPlanListRecyclerviewAdapter(val context: Context, private val list: ArrayList<TravelPlan>) : RecyclerView.Adapter<TravelPlanListRecyclerviewAdapter.TravelPlanListHolder>(){
-
+class TravelPlanListRecyclerviewAdapter(val context: Context) : RecyclerView.Adapter<TravelPlanListRecyclerviewAdapter.TravelPlanListHolder>(){
+    var list = mutableListOf<RouteDetail>()
     inner class TravelPlanListHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val numTv = itemView.findViewById<TextView>(R.id.item_travelplan_num_tv)
         val placeTv = itemView.findViewById<TextView>(R.id.item_travelplan_day_list_place_tv)
@@ -26,10 +28,10 @@ class TravelPlanListRecyclerviewAdapter(val context: Context, private val list: 
         val removeTv = itemView.findViewById<TextView>(R.id.item_swipe_delete_tv)
 
         @SuppressLint("LongLogTag")
-        fun bindInfo(data: TravelPlan, position: Int, flag: Int) {
+        fun bindInfo(data: RouteDetail, position: Int, flag: Int) {
             numTv.text = "${this.layoutPosition+1}"
-            placeTv.text = "${data.title}"
-            locTv.text = "${data.location}"
+            placeTv.text = "${data.place.name}"
+            locTv.text = "${data.place.type}"
 
             // item의 위치에 따라 점선 보이거나 안보이거나 처리
             if(flag == 0) {
