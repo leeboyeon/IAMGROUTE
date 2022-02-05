@@ -1,6 +1,7 @@
 package com.ssafy.groute.src.main.travel
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,6 +11,9 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.R
@@ -21,6 +25,10 @@ import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.main.my.MyTravelFragment
 import com.ssafy.groute.src.main.route.RouteListFragment
 import com.ssafy.groute.src.main.route.RouteTabPageAdapter
+import com.ssafy.groute.src.viewmodel.PlanViewModel
+import kotlinx.coroutines.runBlocking
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 private const val TAG = "TravelPlanFragment"
 //class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTravelPlanBinding::bind, R.layout.fragment_travel_plan) {
@@ -32,6 +40,8 @@ private const val TAG = "TravelPlanFragment"
     lateinit var memoAddButton: FloatingActionButton
     lateinit var routeRecomButton: FloatingActionButton
     lateinit var placeAddButton: FloatingActionButton
+
+    private val planViewModel:PlanViewModel by activityViewModels()
     var isFabOpen: Boolean = false
     private var planId = -1
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,14 +68,18 @@ private const val TAG = "TravelPlanFragment"
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: ${con}")
-        
+        binding.viewModel = planViewModel
+        runBlocking {
+            planViewModel.getPlanById(planId)
+        }
+
         initAdapter()
         floatingButtonEvent()
     }
-
     // 플로팅 버튼 이벤트 처리
     fun floatingButtonEvent() {
         addButton = binding.travelplanAddFb
@@ -120,24 +134,45 @@ private const val TAG = "TravelPlanFragment"
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun initAdapter(){
-        val travelPlanAdapter = TravelPlanTabPageAdapter(this)
+        planViewModel.planList.observe(viewLifecycleOwner, Observer {
+            val travelPlanAdapter = TravelPlanTabPageAdapter(this)
+            var totalDays = it.totalDate
+            val tabDayList:ArrayList<String> = arrayListOf()
+            for(i in 1..totalDays){
+                tabDayList.apply {
+                    add("day${i}")
+                }
+            }
+            val tabDateList = arrayListOf<String>()
+            tabDateList.apply {
+                var sdate = it.startDate
+                var edate = it.endDate
+                var sdateTmp = LocalDate.parse(sdate,DateTimeFormatter.ISO_DATE)
+                var edateTmp = LocalDate.parse(edate,DateTimeFormatter.ISO_DATE)
+                for(i in 0..totalDays){
+                    add(sdateTmp.plusDays(i.toLong()).toString())
+                }
+            }
+            for(i in 1..totalDays){
+                travelPlanAdapter.addFragment(TravelPlanListFragment.newInstance("day",i,"planId",planId))
+            }
+//
+//            travelPlanAdapter.addFragment(TravelPlanListFragment())
+//            travelPlanAdapter.addFragment(TravelPlanListFragment())
+//            travelPlanAdapter.addFragment(TravelPlanListFragment())
 
-        val tabDayList = arrayListOf("day1", "day2", "day3", "day4")
-        val tabDateList = arrayListOf("01.24 월", "01.25 화", "01.26 수", "01.27 목")
-        travelPlanAdapter.addFragment(TravelPlanListFragment())
-        travelPlanAdapter.addFragment(TravelPlanListFragment())
-        travelPlanAdapter.addFragment(TravelPlanListFragment())
-        travelPlanAdapter.addFragment(TravelPlanListFragment())
+            binding.pager.adapter = travelPlanAdapter
 
-        binding.pager.adapter = travelPlanAdapter
+            TabLayoutMediator(binding.travelplanTabLayout, binding.pager) { tab, position ->
+                val customTabView = LayoutInflater.from(context).inflate(R.layout.item_travelplan_tab, con, false)
+                customTabView.findViewById<TextView>(R.id.item_travelplan_day_tv).text = tabDayList.get(position)
+                customTabView.findViewById<TextView>(R.id.item_travelplan_date_tv).text = tabDateList.get(position)
+                tab.setCustomView(customTabView)
+            }.attach()
+        })
 
-        TabLayoutMediator(binding.travelplanTabLayout, binding.pager) { tab, position ->
-            val customTabView = LayoutInflater.from(context).inflate(R.layout.item_travelplan_tab, con, false)
-            customTabView.findViewById<TextView>(R.id.item_travelplan_day_tv).text = tabDayList.get(position)
-            customTabView.findViewById<TextView>(R.id.item_travelplan_date_tv).text = tabDateList.get(position)
-            tab.setCustomView(customTabView)
-        }.attach()
     }
     companion object {
         @JvmStatic

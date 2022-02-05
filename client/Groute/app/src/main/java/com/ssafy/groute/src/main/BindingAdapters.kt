@@ -8,15 +8,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
-import com.ssafy.groute.src.dto.Area
-import com.ssafy.groute.src.dto.Place
-import com.ssafy.groute.src.dto.PlaceReview
-import com.ssafy.groute.src.dto.UserPlan
+import com.ssafy.groute.src.dto.*
 import com.ssafy.groute.src.main.board.SearchAdapter
 import com.ssafy.groute.src.main.home.PlaceFilterAdapter
 import com.ssafy.groute.src.main.home.ReviewAdapter
 import com.ssafy.groute.src.main.my.MyTravel
 import com.ssafy.groute.src.main.my.MyTravelAdapter
+import com.ssafy.groute.src.main.travel.TravelPlanListRecyclerviewAdapter
 
 @BindingAdapter("imageUrlArea")
 fun bindImageArea(imgView: ImageView, imgUrl: String?) {
@@ -94,4 +92,16 @@ fun bindMyPlanRecyclerView(recyclerView: RecyclerView,data:List<UserPlan>){
     adapter.notifyDataSetChanged()
 }
 
+@BindingAdapter("plandetailListData")
+fun bindPlanDetailRecyclerView(recyclerView:RecyclerView, data: List<RouteDetail>){
+    var adapter = recyclerView.adapter as TravelPlanListRecyclerviewAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as TravelPlanListRecyclerviewAdapter
+    }
+    adapter.list = data as MutableList<RouteDetail>
+    adapter.notifyDataSetChanged()
+}
 
