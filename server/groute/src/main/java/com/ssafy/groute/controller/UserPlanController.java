@@ -149,13 +149,36 @@ public class UserPlanController {
         return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
     }
 
-    @ApiOperation(value = "list my userPlan",notes = "userId로 내 여행일정 검색")
+    @ApiOperation(value = "list my userPlan",notes = "userId로 내 전체 여행일정 검색")
     @GetMapping(value = "/list/{userId}")
     public ResponseEntity<?> listMyUserPlan(@PathVariable String userId) throws Exception{
 
         List<UserPlan> res = userPlanService.selectAllUserPlanById(userId);
         if(res==null){
             return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<List<UserPlan>>(res,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "list my end userPlan",notes = "userId로 내 끝난 여행일정 검색")
+    @GetMapping(value = "/list/end/{userId}")
+    public ResponseEntity<?> listMyEndUserPlan(@PathVariable String userId) throws Exception{
+
+        List<UserPlan> res = userPlanService.findEndPlanById(userId);
+        if(res==null){
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<List<UserPlan>>(res,HttpStatus.OK);
+    }
+    @ApiOperation(value = "list my end userPlan",notes = "userId로 내 안끝난 여행일정 검색")
+    @GetMapping(value = "/list/notend/{userId}")
+    public ResponseEntity<?> listMyNotEndUserPlan(@PathVariable String userId) throws Exception{
+
+        List<UserPlan> res = userPlanService.findNotEndPlanById(userId);
+        if(res==null){
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<List<UserPlan>>(res,HttpStatus.OK);

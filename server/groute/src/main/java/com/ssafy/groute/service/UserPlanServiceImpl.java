@@ -100,6 +100,16 @@ public class UserPlanServiceImpl implements UserPlanService {
         return userPlanMapper.bestPlanList();
     }
 
+    @Override
+    public List<UserPlan> findEndPlanById(String userId) throws Exception {
+        return userPlanMapper.findEndPlanById(userId);
+    }
+
+    @Override
+    public List<UserPlan> findNotEndPlanById(String userId) throws Exception {
+        return userPlanMapper.findNotEndPlanById(userId);
+    }
+
     @Transactional
     @Override
     public Map<String,Object> selectUserPlan(int id) throws Exception {
