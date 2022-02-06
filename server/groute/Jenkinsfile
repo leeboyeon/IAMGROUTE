@@ -1,7 +1,11 @@
 pipeline {
     agent any
+    options { skipDefaultCheckout(true) }
+
     stages {
         stage('Checkout Repository') {
+            options { skipDefaultCheckout(true) }
+
             agent any
 
             steps {
@@ -58,6 +62,8 @@ pipeline {
         }
 
         stage('Docker run') {
+            options { skipDefaultCheckout(true) }
+
             agent any
             steps {
                 sh 'docker ps -f name=springboot-groute-container -q | xargs --no-run-if-empty docker container stop'
