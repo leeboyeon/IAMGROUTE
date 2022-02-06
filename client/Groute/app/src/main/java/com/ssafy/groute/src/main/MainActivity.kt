@@ -157,7 +157,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .addToBackStack(null)
             }
             4 -> {  // 하나의 장소에 대한 상세 정보 출력 화면
-                transaction.replace(R.id.frame_main_layout, PlaceDetailFragment.newInstance(key1, value1))
+                transaction.replace(R.id.frame_main_layout, PlaceDetailFragment.newInstance(key1, value1,key2,value2))
                     .addToBackStack(null)
             }
             5->{    // 자유 or 질문 게시판 화면
