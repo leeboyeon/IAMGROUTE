@@ -1,9 +1,6 @@
 pipeline {
-    options { disableConcurrentBuilds() }   // 파이프 라인 동시 실행 허용 X
     agent any
-    options { skipDefaultCheckout(true) }   // agent 지시문에서 기본적으로 소스 제어에서 코드 체크 아웃을 건너 뜁니다.
     stages {
-
         stage('Checkout Repository') {
             agent any
 
