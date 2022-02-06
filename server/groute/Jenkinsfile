@@ -31,7 +31,7 @@ pipeline {
 //             options { skipDefaultCheckout(true) }
 
             steps {
-                dir('Jenkins-SpringBoot-Groute/server/groute/') {
+                dir('${env.WORKSPACE}/Jenkins-SpringBoot-Groute/server/groute/') {
 //                     sh  'chmod +x gradlew; ./gradlew build'
                     sh  'chmod +x gradlew'
                     sh  './gradlew clean build'
@@ -55,7 +55,7 @@ pipeline {
 
             agent any
             steps {
-                dir('Jenkins-SpringBoot-Groute/server/groute/') {
+                dir('${env.WORKSPACE}/Jenkins-SpringBoot-Groute/server/groute/') {
                     sh 'docker build --build-arg JAR_FILE=build/libs/*.jar -t springboot-groute-image:latest .'
                 }
             }
