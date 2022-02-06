@@ -1,8 +1,11 @@
 pipeline {
-    agent any
+    agent none
+    options { skipDefaultCheckout(true) }
 
     stages {
-        stage('Prepare') {
+        stage('Checkout Repository') {
+//             options { skipDefaultCheckout(true) }
+
             agent any
 
             steps {
@@ -10,7 +13,6 @@ pipeline {
             }
 
             post {
-
                 success {
                     echo 'prepare success'
                 }
@@ -26,11 +28,13 @@ pipeline {
         }
 
         stage('build gradle') {
-            
+//             options { skipDefaultCheckout(true) }
+            agent any
             steps {
                 dir('server/groute/') {
-                    sh  'chmod +x gradlew; ./gradlew build'
-
+//                     sh  'chmod +x gradlew; ./gradlew build'
+                    sh  'chmod +x gradlew'
+                    sh  './gradlew clean build'
 
                     sh 'ls -al ./build'
                 }
@@ -47,7 +51,8 @@ pipeline {
         }
 
         stage('Docker build') {
-            
+//             options { skipDefaultCheckout(true) }
+
             agent any
             steps {
                 dir('server/groute/') {
@@ -55,7 +60,10 @@ pipeline {
                 }
             }
         }
+
         stage('Docker run') {
+//             options { skipDefaultCheckout(true) }
+
             agent any
             steps {
                 sh 'docker ps -f name=springboot-groute-container -q | xargs --no-run-if-empty docker container stop'
