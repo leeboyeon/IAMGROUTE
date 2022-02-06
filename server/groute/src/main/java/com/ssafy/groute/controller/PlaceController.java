@@ -1,13 +1,17 @@
 package com.ssafy.groute.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.groute.dto.Place;
 import com.ssafy.groute.dto.PlaceLike;
 import com.ssafy.groute.dto.PlaceReview;
+import com.ssafy.groute.dto.board.BoardDetail;
 import com.ssafy.groute.service.PlaceReviewService;
 import com.ssafy.groute.service.PlaceService;
 import com.ssafy.groute.service.StorageService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -23,12 +27,20 @@ import java.util.List;
 @CrossOrigin(origins = { "*" }, methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
         RequestMethod.DELETE }, maxAge = 6000)
 public class PlaceController {
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
     PlaceService placeService;
-    private final StorageService storageService;
+//    private final StorageService storageService;
     
     @Autowired
     PlaceReviewService placeReviewService;
+
+    @Autowired
+    StorageService storageService;
+
+    @Autowired
+    private ObjectMapper mapper;
 
     @Value("${spring.servlet.multipart.location}")
     private String uploadPath;
@@ -155,9 +167,21 @@ public class PlaceController {
 
     @ApiOperation(value = "placeReview 추가",notes = "placeReview 추가")
     @PostMapping(value = "/review")
-    public ResponseEntity<?> insertPlaceReview(@RequestBody PlaceReview req){
+//    public ResponseEntity<?> insertPlaceReview(@RequestBody PlaceReview req){
+    public ResponseEntity<?> insertPlaceReview(@RequestPart(value = "review") String review, @RequestPart(value = "img", required = false) MultipartFile img) throws Exception {
 
         try {
+            logger.debug("PlaceReview : {}", review);
+            PlaceReview req = mapper.readValue(review, PlaceReview.class);
+            logger.debug("boardDetail : {}", req.getContent());
+
+            if (img != null) {
+                String fileName = storageService.store(img, uploadPath + "/review");
+                req.setImg("/review/" + fileName);
+            } else {
+                req.setImg(null);
+            }
+
             placeReviewService.insertPlaceReview(req);
         }catch (Exception e){
             e.printStackTrace();
