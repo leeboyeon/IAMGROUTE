@@ -284,7 +284,7 @@ class ProfileEditActivity : AppCompatActivity() {
             val gson : Gson = Gson()
             var json = gson.toJson(user)
             var requestBody_user = RequestBody.create(MediaType.parse("text/plain"), json)
-            Log.d(TAG, "updateUser_requestBodyUser: ${requestBody_user.contentType()}")
+            Log.d(TAG, "updateUser_requestBodyUser: ${requestBody_user.contentType()}, ${json}")
             UserService().updateUserInfo(requestBody_user, null, userUpdateCallback())
         }
         // 사진 선택 + 사용자 정보 수정 시 사용자 정보와 파일 같이 서버로 전송
