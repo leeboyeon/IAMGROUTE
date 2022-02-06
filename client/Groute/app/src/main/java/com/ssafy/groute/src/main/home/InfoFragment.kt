@@ -50,7 +50,7 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
         runBlocking {
             placeViewModel.getPlace(placeId)
         }
-        createMap()
+//        createMap()
     }
     fun createMap(){
         val mapView = MapView(requireContext())

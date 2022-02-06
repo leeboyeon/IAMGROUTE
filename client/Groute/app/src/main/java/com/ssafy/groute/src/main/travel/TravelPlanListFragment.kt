@@ -30,7 +30,7 @@ class TravelPlanListFragment : BaseFragment<FragmentTravelPlanListBinding>(Fragm
     private var planId = -1
 
     lateinit var travelPlanListRecyclerviewAdapter: TravelPlanListRecyclerviewAdapter
-    val list = arrayListOf<TravelPlan>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
