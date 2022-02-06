@@ -1,7 +1,9 @@
 package com.ssafy.groute.src.main.route
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +17,7 @@ import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import kotlinx.coroutines.runBlocking
 
-
+private const val TAG = "RouteDetailInfoFragment_groute"
 class RouteDetailInfoFragment : BaseFragment<FragmentRouteDetailInfoBinding>(FragmentRouteDetailInfoBinding::bind, R.layout.fragment_route_detail_info) {
     private lateinit var routeDetailDayPerAdapter: RouteDetailDayPerAdapter
     private lateinit var mainActivity: MainActivity
@@ -38,14 +40,20 @@ class RouteDetailInfoFragment : BaseFragment<FragmentRouteDetailInfoBinding>(Fra
     }
 
 
+    @SuppressLint("LongLogTag")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = planViewModel
         runBlocking {
             planViewModel.getPlanById(planId)
         }
-
-        routeDetailDayPerAdapter = RouteDetailDayPerAdapter(viewLifecycleOwner, planViewModel.planList.value!!.totalDate, planViewModel)
+        var list = mutableListOf<Int>()
+        for(i in 1..planViewModel.planList.value!!.totalDate) {
+            Log.d(TAG, "onViewCreated: $i")
+            list.add(i)
+        }
+        routeDetailDayPerAdapter = RouteDetailDayPerAdapter(viewLifecycleOwner, list, planViewModel)
+        routeDetailDayPerAdapter.setHasStableIds(true)
         binding.RouteDetailDayPerRv.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = routeDetailDayPerAdapter

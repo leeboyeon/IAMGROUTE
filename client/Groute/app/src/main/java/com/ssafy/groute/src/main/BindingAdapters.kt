@@ -107,17 +107,5 @@ fun bindPlanDetailRecyclerView(recyclerView:RecyclerView, data: List<RouteDetail
     adapter.notifyDataSetChanged()
 }
 
-@BindingAdapter("routeDetailByDay")
-fun bindRouteDetailByDayRecyclerView(recyclerView:RecyclerView, data: List<RouteDetail>){
-    var adapter = recyclerView.adapter as RouteDetailDayPlanAdapter
-    if(recyclerView.adapter == null){
-        adapter.setHasStableIds(true)
-        recyclerView.adapter = adapter
-    }else{
-        adapter = recyclerView.adapter as RouteDetailDayPlanAdapter
-    }
-    Log.d("BindingAdapter", "bindRouteDetailByDayRecyclerView: ${data}")
-    adapter.list = data as MutableList<RouteDetail>
-    adapter.notifyDataSetChanged()
-}
+
 

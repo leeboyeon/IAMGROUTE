@@ -32,7 +32,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:layout_marginStart="14dp"
-        app:routeDetailByDay="@{viewModel.routeDetailList}"
         tools:listitem="@layout/recyclerview_route_detail_day_per_item_item"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/routedetail_recycler_item_day_tv"

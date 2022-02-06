@@ -1,5 +1,7 @@
 package com.ssafy.groute.src.main.route
 
+import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,45 +14,60 @@ import com.ssafy.groute.R
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import kotlinx.coroutines.runBlocking
 
-class RouteDetailDayPerAdapter(val viewLifecycleOwner: LifecycleOwner, val totalDate: Int, val planViewModel: PlanViewModel) : RecyclerView.Adapter<RouteDetailDayPerAdapter.RouteDetailDayPerThemeHolder>(){
+private const val TAG = "RouteDtailDayPerAdapter_groute"
+class RouteDetailDayPerAdapter(val viewLifecycleOwner: LifecycleOwner, var list: MutableList<Int>, val planViewModel: PlanViewModel) : RecyclerView.Adapter<RouteDetailDayPerAdapter.RouteDetailDayPerHolder>(){
 
-    inner class RouteDetailDayPerThemeHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class RouteDetailDayPerHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val dayTv = itemView.findViewById<TextView>(R.id.routedetail_recycler_item_day_tv)
         val routeDetailDayPlanRv = itemView.findViewById<RecyclerView>(R.id.routedetail_recycler_item_day_rv)
 
+        @SuppressLint("LongLogTag")
         fun bindInfo(day : Int) {
             dayTv.text = "$day DAY"
+
+            Log.d(TAG, "bindInfo: $day")
 
             runBlocking {
                 planViewModel.getRouteDetailbyDay(day)
             }
-
+            var routeDetailDayPlanAdapter = RouteDetailDayPlanAdapter()
             planViewModel.routeDetailList.observe(viewLifecycleOwner, Observer {
-                var routeDetailDayPlanAdapter = RouteDetailDayPlanAdapter()
                 routeDetailDayPlanAdapter.list = it
-
-                routeDetailDayPlanRv.apply {
-                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-                    adapter = routeDetailDayPlanAdapter
-                }
-
             })
 
+            routeDetailDayPlanRv.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+                adapter = routeDetailDayPlanAdapter
+                adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+            }
+
+
+
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RouteDetailDayPerThemeHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RouteDetailDayPerHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_route_detail_day_per_item, parent, false)
-        return RouteDetailDayPerThemeHolder(view)
+        return RouteDetailDayPerHolder(view)
     }
 
-    override fun onBindViewHolder(holder: RouteDetailDayPerThemeHolder, position: Int) {
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
+
+    @SuppressLint("LongLogTag")
+    override fun onBindViewHolder(holder: RouteDetailDayPerHolder, position: Int) {
         holder.apply {
-            bindInfo(position + 1)
+            Log.d(TAG, "onBindViewHolder: ${position}")
+            bindInfo(list[position])
         }
     }
 
+    @SuppressLint("LongLogTag")
     override fun getItemCount(): Int {
-        return totalDate
+        Log.d(TAG, "getItemCount: ${list.size}")
+        return list.size
     }
 }

@@ -54,7 +54,6 @@ class PlanViewModel : ViewModel(){
     }
     fun setRouteDetailList(routeDetail: MutableList<RouteDetail>) = viewModelScope.launch {
         _routeDetailResponse.value = routeDetail
-        Log.d(TAG, "setRouteDetailList: ${_routeDetailResponse.value}")
     }
     fun setPlanNotEndList(plan:MutableList<UserPlan>) = viewModelScope.launch {
         _planNotEndResponse.value = plan
@@ -117,9 +116,9 @@ class PlanViewModel : ViewModel(){
                     val routetmp = JSONObject(res).getJSONArray("routeList")
                     var i = 0
 
-                    var routeDetaillist = arrayListOf<RouteDetail>()
                     var routeList = mutableListOf<Route>()
                     while(i < routetmp.length()){
+                        var routeDetaillist = arrayListOf<RouteDetail>()
                         val jsonObject = routetmp.getJSONObject(i)
                         var rid = jsonObject.getInt("id")
                         var rname = jsonObject.getString("name")
