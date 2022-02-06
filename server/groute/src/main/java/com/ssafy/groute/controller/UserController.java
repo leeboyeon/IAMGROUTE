@@ -143,7 +143,7 @@ public class UserController {
             String fileName = storageService.store(img, uploadPath + "/user");
             inputUser.setImg(fileName);
         } else {
-            if(beforeUserImg.equals("")){
+            if(beforeUserImg.equals("") || beforeUserImg.equals("null")){
                 inputUser.setImg(null);
             } else {
                 inputUser.setImg(beforeUserImg);

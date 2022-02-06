@@ -231,9 +231,25 @@ public class PlaceController {
 
     @ApiOperation(value = "updatePlaceReview",notes = "placeReview 수정")
     @PutMapping(value = "/review/update")
-    public ResponseEntity<?> updatePlaceReview(@RequestBody PlaceReview placeReview) throws Exception{
+//    public ResponseEntity<?> updatePlaceReview(@RequestBody PlaceReview placeReview) throws Exception{
+    public ResponseEntity<?> updatePlaceReview(@RequestPart(value = "review") String review, @RequestPart(value = "img", required = false) MultipartFile img) throws Exception {
 
         try {
+            logger.debug("PlaceReview : {}", review);
+            PlaceReview placeReview = mapper.readValue(review, PlaceReview.class);
+            String beforeImg = placeReviewService.selectPlaceReview(placeReview.getId()).getImg();
+            logger.debug("boardDetail : {}", placeReview.getImg());
+
+            if (img != null) {
+                String fileName = storageService.store(img, uploadPath + "/review");
+                placeReview.setImg("/review/" + fileName);
+            } else {    // img == null
+                if(beforeImg.equals("") || beforeImg.equals("null")){
+                    placeReview.setImg(null);
+                } else {
+                    placeReview.setImg(beforeImg);
+                }
+            }
             placeReviewService.updatePlaceReview(placeReview);
         }catch (Exception e){
             e.printStackTrace();
