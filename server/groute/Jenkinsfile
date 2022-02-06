@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    options { skipDefaultCheckout(true) }
+//     options { skipDefaultCheckout(true) }
 
     stages {
         stage('Checkout Repository') {
