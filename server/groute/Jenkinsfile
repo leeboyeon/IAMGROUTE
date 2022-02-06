@@ -29,7 +29,7 @@ pipeline {
 
         stage('build gradle') {
 //             options { skipDefaultCheckout(true) }
-
+            agent any
             steps {
                 dir('server/groute/') {
 //                     sh  'chmod +x gradlew; ./gradlew build'
