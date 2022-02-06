@@ -7,22 +7,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
+import androidx.lifecycle.Observer
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentRouteDetailReviewBinding
 import com.ssafy.groute.src.main.MainActivity
+import com.ssafy.groute.src.main.home.ReviewAdapter
+import com.ssafy.groute.src.viewmodel.PlanViewModel
+import kotlinx.coroutines.runBlocking
 
 
 class RouteDetailReviewFragment : BaseFragment<FragmentRouteDetailReviewBinding>(FragmentRouteDetailReviewBinding::bind, R.layout.fragment_route_detail_review) {
     private lateinit var mainActivity: MainActivity
     private lateinit var routeDetailReviewAdapter: RouteDetailReviewAdapter
+    private val planViewModel: PlanViewModel by activityViewModels()
+    private var planId = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
         mainActivity.hideBottomNav(true)
         arguments?.let {
-
+            planId = it.getInt("planId",-1)
         }
     }
 
@@ -33,12 +41,24 @@ class RouteDetailReviewFragment : BaseFragment<FragmentRouteDetailReviewBinding>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        routeDetailReviewAdapter = RouteDetailReviewAdapter()
-        binding.routedetailReviewRvList.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = routeDetailReviewAdapter
+        binding.viewModel = planViewModel
+        runBlocking {
+            planViewModel.getPlanReviewListbyId(planId)
         }
+        initAdapter()
+    }
 
+    fun initAdapter(){
+        planViewModel.planReviewList.observe(viewLifecycleOwner, Observer {
+            routeDetailReviewAdapter = RouteDetailReviewAdapter(viewLifecycleOwner)
+            routeDetailReviewAdapter.list = it
+
+            binding.routedetailReviewRvList.apply{
+                layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
+                adapter = routeDetailReviewAdapter
+                adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+            }
+        })
     }
 
 
@@ -46,11 +66,11 @@ class RouteDetailReviewFragment : BaseFragment<FragmentRouteDetailReviewBinding>
     companion object {
 
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(key: String, value: Int) =
             RouteDetailReviewFragment().apply {
                 arguments = Bundle().apply {
-
-                }
+                putInt(key, value)
+            }
             }
     }
 }

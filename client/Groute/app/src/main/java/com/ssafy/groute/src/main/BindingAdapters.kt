@@ -16,6 +16,7 @@ import com.ssafy.groute.src.main.home.ReviewAdapter
 import com.ssafy.groute.src.main.my.MyTravel
 import com.ssafy.groute.src.main.my.MyTravelAdapter
 import com.ssafy.groute.src.main.route.RouteDetailDayPlanAdapter
+import com.ssafy.groute.src.main.route.RouteDetailReviewAdapter
 import com.ssafy.groute.src.main.travel.TravelPlanListRecyclerviewAdapter
 
 @BindingAdapter("imageUrlArea")
@@ -104,6 +105,19 @@ fun bindPlanDetailRecyclerView(recyclerView:RecyclerView, data: List<RouteDetail
         adapter = recyclerView.adapter as TravelPlanListRecyclerviewAdapter
     }
     adapter.list = data as MutableList<RouteDetail>
+    adapter.notifyDataSetChanged()
+}
+
+@BindingAdapter("planReviewListData")
+fun bindPlanReviewRecyclerView(recyclerView:RecyclerView, data: List<PlanReview>){
+    var adapter = recyclerView.adapter as RouteDetailReviewAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as RouteDetailReviewAdapter
+    }
+    adapter.list = data as MutableList<PlanReview>
     adapter.notifyDataSetChanged()
 }
 

@@ -1,5 +1,7 @@
 package com.ssafy.groute.src.api
 
+import com.ssafy.groute.src.dto.PlaceReview
+import com.ssafy.groute.src.dto.PlanReview
 import com.ssafy.groute.src.dto.UserPlan
 import retrofit2.Call
 import retrofit2.Response
@@ -23,5 +25,8 @@ interface UserPlanApi {
 
     @GET("/plan/list/end/{userId}")
     suspend fun getMyPlanEnd(@Path("userId") userId:String) : Response<MutableList<UserPlan>>
+
+    @GET("/plan/review/list/{planId}")
+    suspend fun getPlanReviewListbyId(@Path("planId") planId:Int) : Response<MutableList<PlanReview>>
 
 }

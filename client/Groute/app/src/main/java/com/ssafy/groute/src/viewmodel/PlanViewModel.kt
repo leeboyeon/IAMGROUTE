@@ -5,10 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ssafy.groute.src.dto.Place
-import com.ssafy.groute.src.dto.Route
-import com.ssafy.groute.src.dto.RouteDetail
-import com.ssafy.groute.src.dto.UserPlan
+import com.ssafy.groute.src.dto.*
+import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.service.UserPlanService
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -22,6 +20,7 @@ class PlanViewModel : ViewModel(){
     private val _routeDetailResponse = MutableLiveData<MutableList<RouteDetail>>()
     private val _planNotEndResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _planEndResponse = MutableLiveData<MutableList<UserPlan>>()
+    private val _planReviewListResponse = MutableLiveData<MutableList<PlanReview>>()
 
 //    private val _routeResponse = MutableLiveData<MutableList<>>
 //    private val _routeDetailResponse = MutableLiveData<MutableList<>>
@@ -39,6 +38,8 @@ class PlanViewModel : ViewModel(){
         get() =_planNotEndResponse
     val planEndList : LiveData<MutableList<UserPlan>>
         get() =_planEndResponse
+    val planReviewList :LiveData<MutableList<PlanReview>>
+        get() = _planReviewListResponse
 
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planBestResponse.value = plan
@@ -60,6 +61,10 @@ class PlanViewModel : ViewModel(){
     }
     fun setPlanEndList(plan:MutableList<UserPlan>) = viewModelScope.launch {
         _planEndResponse.value = plan
+    }
+    fun setPlanReviewList(planReview:MutableList<PlanReview>) = viewModelScope.launch {
+        _planReviewListResponse.value = planReview
+        Log.d(TAG, "setPlanReviewList: $planReview")
     }
 
     suspend fun getPlanBestList(){
@@ -239,6 +244,22 @@ class PlanViewModel : ViewModel(){
                 }
             }else{
                 Log.d(TAG, "getMyEndPlan: ")
+            }
+        }
+    }
+
+    suspend fun getPlanReviewListbyId(planId:Int){
+        val response = UserPlanService().getPlanReviewbyId(planId)
+        viewModelScope.launch {
+            var res = response.body()
+            if(response.code()==200){
+                if(res!=null){
+                    setPlanReviewList(res)
+                    Log.d(TAG, "getPlanReviewListbyId: ")
+                }
+
+            }else{
+                Log.d(TAG, "getPlanReviewListbyId: ")
             }
         }
     }

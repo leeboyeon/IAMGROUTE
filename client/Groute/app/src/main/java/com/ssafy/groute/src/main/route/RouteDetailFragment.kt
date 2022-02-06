@@ -61,8 +61,8 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         val routeDetailTabPagerAdapter = RouteDetailTabPagerAdapter(this)
         val tabList = arrayListOf("Info","Review")
 
-        routeDetailTabPagerAdapter.addFragment(RouteDetailInfoFragment())
-        routeDetailTabPagerAdapter.addFragment(RouteDetailReviewFragment())
+        routeDetailTabPagerAdapter.addFragment(RouteDetailInfoFragment.newInstance("planId", planId))
+        routeDetailTabPagerAdapter.addFragment(RouteDetailReviewFragment.newInstance("planId", planId))
 
         binding.RouteDetailVpLayout.adapter = routeDetailTabPagerAdapter
         TabLayoutMediator(binding.RouteDetailTablayout, binding.RouteDetailVpLayout) {tab, position ->

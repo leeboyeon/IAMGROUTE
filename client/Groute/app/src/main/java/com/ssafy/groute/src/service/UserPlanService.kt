@@ -1,5 +1,7 @@
 package com.ssafy.groute.src.service
 
+import com.ssafy.groute.src.dto.PlaceReview
+import com.ssafy.groute.src.dto.PlanReview
 import com.ssafy.groute.src.dto.UserPlan
 import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil
@@ -43,5 +45,9 @@ class UserPlanService {
 
     suspend fun getMyPlanEnd(userId:String) : Response<MutableList<UserPlan>>{
         return RetrofitUtil.userPlanService.getMyPlanEnd(userId)
+    }
+
+    suspend fun getPlanReviewbyId(planId:Int) : Response<MutableList<PlanReview>>{
+        return RetrofitUtil.userPlanService.getPlanReviewListbyId(planId)
     }
 }
