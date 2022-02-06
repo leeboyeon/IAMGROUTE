@@ -54,7 +54,7 @@ public class UserController {
 //        return new ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK);
 //    }
 
-//사진 안바꾸고 완료 눌렀을 때 에러나는 부분 처리하기
+
     @ApiOperation(value = "회원가입", notes = "회원가입")
     @PostMapping(value = "/signup")
     public Boolean registerUser(@RequestBody User user) throws Exception{
@@ -143,7 +143,7 @@ public class UserController {
             String fileName = storageService.store(img, uploadPath + "/user");
             inputUser.setImg(fileName);
         } else {
-            if(beforeUserImg.equals("")){
+            if(beforeUserImg.equals("") || beforeUserImg.equals("null")){
                 inputUser.setImg(null);
             } else {
                 inputUser.setImg(beforeUserImg);

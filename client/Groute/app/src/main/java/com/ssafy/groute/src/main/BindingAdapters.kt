@@ -15,6 +15,7 @@ import com.ssafy.groute.src.main.home.PlaceFilterAdapter
 import com.ssafy.groute.src.main.home.ReviewAdapter
 import com.ssafy.groute.src.main.my.MyTravel
 import com.ssafy.groute.src.main.my.MyTravelAdapter
+import com.ssafy.groute.src.main.travel.PlaceShopAdapter
 import com.ssafy.groute.src.main.route.RouteDetailDayPlanAdapter
 import com.ssafy.groute.src.main.route.RouteDetailReviewAdapter
 import com.ssafy.groute.src.main.travel.TravelPlanListRecyclerviewAdapter
@@ -108,6 +109,19 @@ fun bindPlanDetailRecyclerView(recyclerView:RecyclerView, data: List<RouteDetail
     adapter.notifyDataSetChanged()
 }
 
+@BindingAdapter("placeshopListData")
+fun bindPlaceShopRecyclerView(recyclerView: RecyclerView, data : List<Place>?){
+    var adapter = recyclerView.adapter as PlaceShopAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as PlaceShopAdapter
+    }
+    adapter.list = data as List<Place>
+    adapter.notifyDataSetChanged()
+}
+
 @BindingAdapter("planReviewListData")
 fun bindPlanReviewRecyclerView(recyclerView:RecyclerView, data: List<PlanReview>){
     var adapter = recyclerView.adapter as RouteDetailReviewAdapter
@@ -120,6 +134,4 @@ fun bindPlanReviewRecyclerView(recyclerView:RecyclerView, data: List<PlanReview>
     adapter.list = data as MutableList<PlanReview>
     adapter.notifyDataSetChanged()
 }
-
-
 

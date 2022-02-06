@@ -29,7 +29,7 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
 
     private lateinit var mainActivity : MainActivity
     private lateinit var areaFilterAdapter : PlaceFilterAdapter
-
+    private var planId = -1
 //    val lists = listOf<Places>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +39,10 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
+        arguments?.let {
+            planId = it.getInt("planId",-1)
+            Log.d(TAG, "onAttach: ${planId}")
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,7 +69,7 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
             areaFilterAdapter = PlaceFilterAdapter(it, placeViewModel.placeLikeList, viewLifecycleOwner)
             areaFilterAdapter.setItemClickListener(object : PlaceFilterAdapter.ItemClickListener{
                 override fun onClick(view: View, position: Int, placeId: Int) {
-                    mainActivity.moveFragment(4,"placeId", placeId)
+                    mainActivity.moveFragment(4,"placeId", placeId,"planId",planId)
                 }
             })
             areaFilterAdapter.setHeartClickListener(object :PlaceFilterAdapter.HeartClickListener{
@@ -159,6 +163,7 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
             PlaceFragment().apply {
                 arguments = Bundle().apply {
                     putInt(key, value)
+//                    putInt(key1,value1)
                 }
             }
     }

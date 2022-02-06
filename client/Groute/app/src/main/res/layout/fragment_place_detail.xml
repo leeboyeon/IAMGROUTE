@@ -59,6 +59,7 @@
                     app:lottie_autoPlay="false"
                     app:lottie_fileName="star.json"
                     app:lottie_loop="true" />
+
                 <TextView
                     android:id="@+id/placeDetail_tv_review"
                     android:layout_width="wrap_content"
@@ -67,14 +68,43 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/placeDetail_layout_addPlan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="right"
+                android:orientation="horizontal"
+                android:paddingRight="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/boardDetail_appbar">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/placeDetail_lottie_addPlan"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20dp"
+                    app:lottie_autoPlay="false"
+                    app:lottie_fileName="plus.json"
+                    app:lottie_loop="true" />
+
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="내 여행에 추가하기"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/pd_tablayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/boardDetail_appbar">
+                app:layout_constraintTop_toBottomOf="@id/placeDetail_layout_addPlan">
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"

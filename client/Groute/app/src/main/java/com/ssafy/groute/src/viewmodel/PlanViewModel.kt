@@ -20,6 +20,7 @@ class PlanViewModel : ViewModel(){
     private val _routeDetailResponse = MutableLiveData<MutableList<RouteDetail>>()
     private val _planNotEndResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _planEndResponse = MutableLiveData<MutableList<UserPlan>>()
+    private val placeShopResponse = mutableListOf<Place>()
     private val _planReviewListResponse = MutableLiveData<MutableList<PlanReview>>()
 
 //    private val _routeResponse = MutableLiveData<MutableList<>>
@@ -41,6 +42,7 @@ class PlanViewModel : ViewModel(){
     val planReviewList :LiveData<MutableList<PlanReview>>
         get() = _planReviewListResponse
 
+
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planBestResponse.value = plan
     }
@@ -61,6 +63,13 @@ class PlanViewModel : ViewModel(){
     }
     fun setPlanEndList(plan:MutableList<UserPlan>) = viewModelScope.launch {
         _planEndResponse.value = plan
+    }
+    val livePlaceshopList = MutableLiveData<MutableList<Place>>().apply {
+        value = placeShopResponse
+    }
+    fun insertPlaceShopList(place:Place){
+        placeShopResponse.add(place)
+        livePlaceshopList.value = placeShopResponse
     }
     fun setPlanReviewList(planReview:MutableList<PlanReview>) = viewModelScope.launch {
         _planReviewListResponse.value = planReview

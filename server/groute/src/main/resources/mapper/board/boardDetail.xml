@@ -70,7 +70,7 @@
 
     <update id="updateBoardDetail" parameterType="BoardDetail">
         update boarddetail
-        set title = #{title}, content = #{content}, img = #{img}, board_id = #{boardId}, update_date = now()
+        set title = #{title}, content = #{content}, img = #{img}, board_id = #{boardId}, update_date = now(), place_id = #{placeId}
         where id = #{id}
     </update>
 

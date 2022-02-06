@@ -1,19 +1,28 @@
 package com.ssafy.groute.controller.board;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.groute.controller.UserController;
+import com.ssafy.groute.dto.PlaceReview;
 import com.ssafy.groute.dto.board.BoardDetail;
 import com.ssafy.groute.dto.board.BoardDetailLike;
 import com.ssafy.groute.dto.board.Comment;
+import com.ssafy.groute.service.StorageService;
 import com.ssafy.groute.service.UserService;
 import com.ssafy.groute.service.board.BoardDetailLikeService;
 import com.ssafy.groute.service.board.BoardDetailService;
 import com.ssafy.groute.service.board.CommentService;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +33,7 @@ import java.util.Map;
         RequestMethod.DELETE }, maxAge = 6000)
 @RequestMapping("/boardDetail")
 public class BoardDetailController {
-
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     BoardDetailService boardDetailService;
@@ -35,13 +44,40 @@ public class BoardDetailController {
     @Autowired
     BoardDetailLikeService boardDetailLikeService;
 
+    @Autowired
+    StorageService storageService;
+
+    @Autowired
+    private ObjectMapper mapper;
+
+    @Value("${spring.servlet.multipart.location}")
+    private String uploadPath;
+
+//    public BoardDetailController() {
+//    }
+
     @ApiOperation(value = "boardDetail 추가",notes = "boardDetail 추가")
     @PostMapping(value = "/insert")
-    public ResponseEntity<?> insertBoardDetail(@RequestBody BoardDetail req){
-
+    public ResponseEntity<?> insertBoardDetail(@RequestPart(value = "board") String board, @RequestPart(value = "img", required = false) MultipartFile img) throws Exception {
         try {
+//            logger.debug("boardDetail : {}", board);
+            BoardDetail req = mapper.readValue(board, BoardDetail.class);
+//            logger.debug("boardDetail : {}", req.getContent());
+
+            if (img != null) {
+                String filePath = "";
+                if (req.getBoardId() == 1) {
+                    filePath = "/board/freeBoard";
+                } else if(req.getBoardId() == 2) {
+                    filePath = "/board/qnaBoard";
+                }
+                String fileName = storageService.store(img, uploadPath + filePath);
+                req.setImg(filePath + "/" + fileName);
+            } else {
+                req.setImg(null);
+            }
             boardDetailService.insertBoardDetail(req);
-        }catch (Exception e){
+        }catch (Exception e){ 
             e.printStackTrace();
             return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
@@ -102,9 +138,32 @@ public class BoardDetailController {
 
     @ApiOperation(value = "updateBoardDetail",notes = "boardDetail 수정")
     @PutMapping(value = "/update")
-    public ResponseEntity<?> updateBoardDetail(@RequestBody BoardDetail boardDetail) throws Exception{
+//    public ResponseEntity<?> updateBoardDetail(@RequestBody BoardDetail boardDetail) throws Exception{
+    public ResponseEntity<?> updateBoardDetail(@RequestPart(value = "board") String board, @RequestPart(value = "img", required = false) MultipartFile img) throws Exception {
 
         try {
+//            logger.debug("updateBoardDetail : {}", board);
+            BoardDetail boardDetail = mapper.readValue(board, BoardDetail.class);
+            String beforeImg = boardDetailService.selectBoardDetail(boardDetail.getId()).getImg();
+//            logger.debug("updateBoardDetail : {}", boardDetail.getImg());
+
+            if (img != null) {
+                String filePath = "";
+                if (boardDetail.getBoardId() == 1) {
+                    filePath = "/board/freeBoard";
+                } else if(boardDetail.getBoardId() == 2) {
+                    filePath = "/board/qnaBoard";
+                }
+                String fileName = storageService.store(img, uploadPath + filePath);
+                boardDetail.setImg(filePath + "/" + fileName);
+            } else {    // img == null
+                if(beforeImg.equals("") || beforeImg.equals("null")){
+                    boardDetail.setImg(null);
+                } else {
+                    boardDetail.setImg(beforeImg);
+                }
+            }
+
             boardDetailService.updateBoardDetail(boardDetail);
         }catch (Exception e){
             e.printStackTrace();
