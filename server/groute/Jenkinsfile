@@ -1,8 +1,10 @@
 pipeline {
-    agent none
-    options { skipDefaultCheckout(true) }
+//     agent any
+    options { skipDefaultCheckout(true) }   // agent 지시문에서 기본적으로 소스 제어에서 코드 체크 아웃을 건너 뜁니다.
+    options { disableConcurrentBuilds() }   // 파이프 라인 동시 실행 허용 X
     stages {
-        stage('Prepare') {
+    
+        stage('Checkout Repository') {
             agent any
 
             steps {
@@ -10,7 +12,6 @@ pipeline {
             }
 
             post {
-
                 success {
                     echo 'prepare success'
                 }
@@ -33,7 +34,6 @@ pipeline {
 //                     sh  'chmod +x gradlew; ./gradlew build'
                     sh  'chmod +x gradlew'
                     sh  './gradlew clean build'
-
 
                     sh 'ls -al ./build'
                 }
@@ -59,6 +59,7 @@ pipeline {
                 }
             }
         }
+
         stage('Docker run') {
             agent any
             steps {
