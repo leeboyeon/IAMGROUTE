@@ -3,6 +3,7 @@ package com.ssafy.groute.controller.board;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.groute.controller.UserController;
+import com.ssafy.groute.dto.PlaceReview;
 import com.ssafy.groute.dto.board.BoardDetail;
 import com.ssafy.groute.dto.board.BoardDetailLike;
 import com.ssafy.groute.dto.board.Comment;
@@ -137,9 +138,32 @@ public class BoardDetailController {
 
     @ApiOperation(value = "updateBoardDetail",notes = "boardDetail 수정")
     @PutMapping(value = "/update")
-    public ResponseEntity<?> updateBoardDetail(@RequestBody BoardDetail boardDetail) throws Exception{
+//    public ResponseEntity<?> updateBoardDetail(@RequestBody BoardDetail boardDetail) throws Exception{
+    public ResponseEntity<?> updateBoardDetail(@RequestPart(value = "board") String board, @RequestPart(value = "img", required = false) MultipartFile img) throws Exception {
 
         try {
+//            logger.debug("updateBoardDetail : {}", board);
+            BoardDetail boardDetail = mapper.readValue(board, BoardDetail.class);
+            String beforeImg = boardDetailService.selectBoardDetail(boardDetail.getId()).getImg();
+//            logger.debug("updateBoardDetail : {}", boardDetail.getImg());
+
+            if (img != null) {
+                String filePath = "";
+                if (boardDetail.getBoardId() == 1) {
+                    filePath = "/board/freeBoard";
+                } else if(boardDetail.getBoardId() == 2) {
+                    filePath = "/board/qnaBoard";
+                }
+                String fileName = storageService.store(img, uploadPath + filePath);
+                boardDetail.setImg(filePath + "/" + fileName);
+            } else {    // img == null
+                if(beforeImg.equals("") || beforeImg.equals("null")){
+                    boardDetail.setImg(null);
+                } else {
+                    boardDetail.setImg(beforeImg);
+                }
+            }
+
             boardDetailService.updateBoardDetail(boardDetail);
         }catch (Exception e){
             e.printStackTrace();

@@ -171,9 +171,9 @@ public class PlaceController {
     public ResponseEntity<?> insertPlaceReview(@RequestPart(value = "review") String review, @RequestPart(value = "img", required = false) MultipartFile img) throws Exception {
 
         try {
-            logger.debug("PlaceReview : {}", review);
+//            logger.debug("PlaceReview : {}", review);
             PlaceReview req = mapper.readValue(review, PlaceReview.class);
-            logger.debug("boardDetail : {}", req.getContent());
+//            logger.debug("boardDetail : {}", req.getContent());
 
             if (img != null) {
                 String fileName = storageService.store(img, uploadPath + "/review");
@@ -235,10 +235,10 @@ public class PlaceController {
     public ResponseEntity<?> updatePlaceReview(@RequestPart(value = "review") String review, @RequestPart(value = "img", required = false) MultipartFile img) throws Exception {
 
         try {
-            logger.debug("PlaceReview : {}", review);
+//            logger.debug("PlaceReview : {}", review);
             PlaceReview placeReview = mapper.readValue(review, PlaceReview.class);
             String beforeImg = placeReviewService.selectPlaceReview(placeReview.getId()).getImg();
-            logger.debug("boardDetail : {}", placeReview.getImg());
+//            logger.debug("PlaceReview : {}", placeReview.getImg());
 
             if (img != null) {
                 String fileName = storageService.store(img, uploadPath + "/review");
