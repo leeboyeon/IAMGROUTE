@@ -4,7 +4,7 @@ pipeline {
 
     stages {
         stage('Checkout Repository') {
-            options { skipDefaultCheckout(true) }
+//             options { skipDefaultCheckout(true) }
 
             agent any
 
@@ -28,10 +28,10 @@ pipeline {
         }
 
         stage('build gradle') {
-            options { skipDefaultCheckout(true) }
+//             options { skipDefaultCheckout(true) }
 
             steps {
-                dir('server/groute/') {
+                dir('Jenkins-SpringBoot-Groute/server/groute/') {
 //                     sh  'chmod +x gradlew; ./gradlew build'
                     sh  'chmod +x gradlew'
                     sh  './gradlew clean build'
@@ -51,11 +51,11 @@ pipeline {
         }
 
         stage('Docker build') {
-            options { skipDefaultCheckout(true) }
+//             options { skipDefaultCheckout(true) }
 
             agent any
             steps {
-                dir('server/groute/') {
+                dir('Jenkins-SpringBoot-Groute/server/groute/') {
                     sh 'docker build --build-arg JAR_FILE=build/libs/*.jar -t springboot-groute-image:latest .'
                 }
             }
