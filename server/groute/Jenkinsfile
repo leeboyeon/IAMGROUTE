@@ -1,6 +1,6 @@
 pipeline {
     agent any
-
+    options { skipDefaultCheckout(true) }
     stages {
         stage('Prepare') {
             agent any
@@ -26,7 +26,6 @@ pipeline {
         }
 
         stage('build gradle') {
-            
             steps {
                 dir('server/groute/') {
 //                     sh  'chmod +x gradlew; ./gradlew build'
@@ -49,7 +48,8 @@ pipeline {
         }
 
         stage('Docker build') {
-            
+            options { skipDefaultCheckout(true) }
+
             agent any
             steps {
                 dir('server/groute/') {
