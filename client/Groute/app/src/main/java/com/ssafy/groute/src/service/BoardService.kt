@@ -7,6 +7,8 @@ import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.response.BoardDetailWithCommentResponse
 import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -84,8 +86,13 @@ class BoardService {
 //        return list
 //    }
 
-    fun insertBoardDetail(boardDetail:BoardDetail, callback: RetrofitCallback<Boolean>){
-        RetrofitUtil.boardService.insertBoardDetail(boardDetail).enqueue(object : Callback<Boolean> {
+    /**
+     * 게시판 글 작성, image 업로드는 선택 사항이다.
+     * @param board
+     * @param img
+     */
+    fun insertBoardDetail(board: RequestBody, img: MultipartBody.Part?, callback: RetrofitCallback<Boolean>){
+        RetrofitUtil.boardService.insertBoardDetail(board, img).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 val res = response.body()
                 if(response.code() == 200){
@@ -96,11 +103,9 @@ class BoardService {
                     callback.onFailure(response.code())
                 }
             }
-
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
                 callback.onError(t)
             }
-
         })
     }
 

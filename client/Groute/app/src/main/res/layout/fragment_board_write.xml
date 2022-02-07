@@ -130,22 +130,64 @@
                 <EditText
                     android:id="@+id/boardWrite_et_content"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
                     android:background="@android:color/transparent"
                     android:ems="10"
                     android:gravity="start|top"
                     android:hint="내용을 입력하세요"
                     android:inputType="textMultiLine"
                     android:padding="15dp"
+                    app:layout_constraintBottom_toTopOf="@+id/boardWrite_lLayout_setImg"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.315"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view15" />
 
+
                 <LinearLayout
+                    android:id="@+id/boardWrite_lLayout_setImg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/edittext_background"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@+id/linearLayout10"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/boardWrite_et_content">
+
+
+                    <ImageView
+                        android:id="@+id/boardWrite_iv_selectImg"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:scaleType="centerInside"
+                        app:srcCompat="@drawable/defaultimg" />
+
+                    <TextView
+                        android:id="@+id/boardWrite_tv_imgName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="20dp"
+                        android:layout_weight="1"
+                        android:text="" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout10"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginStart="10dp"
@@ -158,7 +200,7 @@
                     app:layout_constraintStart_toStartOf="parent">
 
                     <ImageButton
-                        android:id="@+id/imageButton6"
+                        android:id="@+id/boardWrite_ibtn_img"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_gravity="center"

@@ -67,17 +67,12 @@ class ProfileEditActivity : AppCompatActivity() {
         userEmail = userData.email
         userGender = userData.gender.toString()
 
-//        android:src="@drawable/profile"
-//        imgUri = Uri.parse("content://com.android.providers.downloads.documents/document/${userData.img}")
-//        imgUri = Uri.parse(userData.img)
-//        Log.d(TAG, "onCreate: $imgUri")
+
         if (::imgUri.isInitialized) {
-            //처리할 코드
             Log.d(TAG, "onCreate: $imgUri")
         } else {
             imgUri = Uri.EMPTY
             Log.d(TAG, "fileUri가 초기화  $imgUri")
-
         }
 
         binding.profileEditFinish.setOnClickListener {
@@ -104,7 +99,6 @@ class ProfileEditActivity : AppCompatActivity() {
     }
 
     // 갤러리에서 이미지 클릭한 후
-    @SuppressLint("LongLogTag")
     private val filterActivityLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if(it.resultCode == RESULT_OK && it.data !=null) {
@@ -276,7 +270,7 @@ class ProfileEditActivity : AppCompatActivity() {
         }
     }
 
-    fun updateUser(user: User) {
+    private fun updateUser(user: User) {
         // 사진 선택 안하고 사용자 정보 수정 시 user 정보만 서버로 전송
         if(imgUri == Uri.EMPTY) {
             Log.d(TAG, "updateUser: ${user}")
