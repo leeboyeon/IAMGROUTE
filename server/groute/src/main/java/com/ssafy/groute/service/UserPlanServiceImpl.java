@@ -160,6 +160,7 @@ public class UserPlanServiceImpl implements UserPlanService {
             routesMapper.deleteRoutes(r.getId());
             routeMapper.deleteRoute(r.getRouteId());
         }
+        accountMapper.deleteByUserPlanId(id);
         userPlanMapper.deleteUserPlan(id);
     }
 

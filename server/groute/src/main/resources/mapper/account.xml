@@ -40,4 +40,9 @@
         select * from account
         where userplan_id = #{userPlanId}
     </select>
+
+    <delete id="deleteByUserPlanId" parameterType="int">
+        delete from account
+        where userplan_id = #{userPlanId}
+    </delete>
 </mapper>
