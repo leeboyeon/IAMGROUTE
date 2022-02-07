@@ -46,6 +46,9 @@ class RouteDetailReviewFragment : BaseFragment<FragmentRouteDetailReviewBinding>
             planViewModel.getPlanReviewListbyId(planId)
         }
         initAdapter()
+        binding.routedetailReviewIbtnWrite.setOnClickListener{
+            mainActivity.moveFragment(14, "planId", planId)
+        }
     }
 
     fun initAdapter(){

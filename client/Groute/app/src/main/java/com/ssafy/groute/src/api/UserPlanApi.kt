@@ -29,4 +29,16 @@ interface UserPlanApi {
     @GET("/plan/review/list/{planId}")
     suspend fun getPlanReviewListbyId(@Path("planId") planId:Int) : Response<MutableList<PlanReview>>
 
+    @POST("/plan/review")
+    fun insertPlanReview(@Body planReview: PlanReview):Call<Boolean>
+
+    @DELETE("/plan/review/del")
+    fun deletePlanReview(@Query("id")id:Int):Call<Boolean>
+
+    @PUT("/plan/review/update")
+    fun updatePlanReview(@Body planReview: PlanReview) : Call<Boolean>
+
+    @GET("/plan/review/detail")
+    suspend fun getPlanReviewbyId(@Query("id")id:Int): Response<PlanReview>
+
 }
