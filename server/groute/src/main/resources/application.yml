@@ -25,13 +25,15 @@ spring:
       matching-strategy: ant_path_matcher
   jwt:
     secret: DvqcGn8mnFjqSL4a
-    
-  servlet:
+
+#  servlet:
+  http:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
-#      location: ../groute/src/main/resources/static/imgs
-      location: file:///home/ubuntu/iamgroute/imgs/
+#      location: ../groute/src/main/resources/static/imgs # server static
+#      location: file:///C:/SSAFY/iamgroute/imgs/ # jiwoo local
+      location: file:///home/ubuntu/iamgroute/imgs/  # aws ubuntu
 
 
 

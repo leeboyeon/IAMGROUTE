@@ -50,7 +50,8 @@ public class BoardDetailController {
     @Autowired
     private ObjectMapper mapper;
 
-    @Value("${spring.servlet.multipart.location}")
+//    @Value("${spring.servlet.multipart.location}")
+    @Value("${spring.http.multipart.location}")
     private String uploadPath;
 
 //    public BoardDetailController() {
@@ -94,7 +95,7 @@ public class BoardDetailController {
         res.put("boardDetail",board);
         res.put("comments",comments);
         if(res==null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<Map<String,Object>>(res,HttpStatus.OK);
@@ -106,7 +107,7 @@ public class BoardDetailController {
 
         List<BoardDetail> res = boardDetailService.selectAllBoardDetail();
         if(res==null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<List<BoardDetail>>(res,HttpStatus.OK);
@@ -117,7 +118,7 @@ public class BoardDetailController {
     public ResponseEntity<?> listBoardDetailDivision(@RequestParam("boardId") int boardId) throws Exception{
         List<BoardDetail> res = boardDetailService.selectBoardDetailSeparetedByTag(boardId);
         if(res==null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<List<BoardDetail>>(res,HttpStatus.OK);
@@ -186,16 +187,20 @@ public class BoardDetailController {
         @ApiOperation(value = "boardDetail like",notes = "boardDetail like")
     @PostMapping(value = "/like")
     public ResponseEntity<?> boardDetailLike(@RequestParam("userId") String userId, @RequestParam("boardDetailId") int boardDetailId) throws Exception{
-        BoardDetailLike boardDetailLike = boardDetailLikeService.findBoardLikeByUIdBDId(userId, boardDetailId);
-        if (boardDetailLike != null) {
-            // 좋아요가 존재하면 삭제
-            boardDetailLikeService.deleteBoardDetailLike(boardDetailLike.getId());
-        } else {
-            // 좋아요가 존재하지 않으면 추가
-            boardDetailLikeService.insertBoardDetailLike(userId, boardDetailId);
+        try {
+            BoardDetailLike boardDetailLike = boardDetailLikeService.findBoardLikeByUIdBDId(userId, boardDetailId);
+            if (boardDetailLike != null) {
+                // 좋아요가 존재하면 삭제
+                boardDetailLikeService.deleteBoardDetailLike(boardDetailLike.getId());
+            } else {
+                // 좋아요가 존재하지 않으면 추가
+                boardDetailLikeService.insertBoardDetailLike(userId, boardDetailId);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
-
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "comment 추가",notes = "comment 추가")
@@ -206,23 +211,26 @@ public class BoardDetailController {
             commentService.insertComment(req);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "comment 검색",notes = "이름으로 comment 하나 검색")
     @GetMapping(value = "/comment/detail")
-    public ResponseEntity<?> detailComment(@RequestParam("id") int id) throws Exception{
+    public ResponseEntity<?> detailComment(@RequestParam("id") int id) throws Exception {
 
         Comment res = commentService.selectComment(id);
-        if(res==null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+        if (res == null) {
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<Comment>(res,HttpStatus.OK);
+        return new ResponseEntity<Comment>(res, HttpStatus.OK);
+
     }
+
+
 
     @ApiOperation(value = "list comment",notes = "모든 comment 반환")
     @GetMapping(value = "/comment/list")
@@ -230,7 +238,7 @@ public class BoardDetailController {
 
         List<Comment> res = commentService.selectAllComment();
         if(res==null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<List<Comment>>(res,HttpStatus.OK);

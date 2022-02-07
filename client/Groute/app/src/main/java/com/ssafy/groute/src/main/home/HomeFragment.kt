@@ -108,6 +108,7 @@ class HomeFragment : Fragment() {
         subscribeObservers()
         autoScrollViewPage()
     }
+
     /**
      * BEST Place 5개 출력하기
      * */
