@@ -69,7 +69,7 @@ pipeline {
                 sh 'docker ps -f name=springboot-groute-container -q | xargs --no-run-if-empty docker container stop'
                 sh 'docker container ls -a -fname=springboot-groute-container -q | xargs -r docker container rm'
                 sh 'docker images --no-trunc --all --quiet --filter="dangling=true" | xargs --no-run-if-empty docker rmi'
-                sh 'docker run -d --name springboot-groute-container -p 8888:8888 springboot-groute-image:latest'
+                sh 'docker run -d --name springboot-groute-container -v ~/home/ubuntu/iamgroute/imgs:/home/ubuntu/iamgroute/imgs -p 8888:8888 springboot-groute-image:latest'
             }
         }
     }
