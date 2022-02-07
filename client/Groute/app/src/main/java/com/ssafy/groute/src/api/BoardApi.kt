@@ -2,6 +2,8 @@ package com.ssafy.groute.src.api
 
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.response.BoardDetailWithCommentResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -15,9 +17,13 @@ interface BoardApi {
     @GET("/boardDetail/list/division")
     fun listBoardDetail(@Query("boardId") boardId : Int) : Call<MutableList<BoardDetail>>
 
-    // 게시판에 글쓰기
+    /**
+     * #S06P12D109-189
+     * 게시판 글쓰기 + img upload
+     */
+    @Multipart
     @POST("/boardDetail/insert")
-    fun insertBoardDetail(@Body boardDetail:BoardDetail) : Call<Boolean>
+    fun insertBoardDetail(@Part("board") board : RequestBody, @Part img : MultipartBody.Part?) : Call<Boolean>
 
     // 게시판 글삭제
     @DELETE("/boardDetail/del")

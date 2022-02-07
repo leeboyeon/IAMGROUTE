@@ -239,7 +239,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .load(it.img)
                     .circleCrop()
                     .into(binding.mainIvUserimg)
-            } else{
+            } else {
                 Log.d(TAG, "initProfileBar: ${it.img}")
                 Glide.with(this)
                     .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
