@@ -27,10 +27,10 @@ public class RoutesController {
             routesService.insertRoutes(req);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "routes 검색",notes = "이름으로 routes 하나 검색")
@@ -39,7 +39,7 @@ public class RoutesController {
 
         Routes res = routesService.selectRoutes(id);
         if(res==null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<Routes>(res,HttpStatus.OK);
@@ -51,7 +51,7 @@ public class RoutesController {
 
         List<Routes> res = routesService.selectAllRoutes();
         if(res==null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<List<Routes>>(res,HttpStatus.OK);
@@ -65,10 +65,10 @@ public class RoutesController {
             routesService.deleteRoutes(id);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "updateRoutes",notes = "routes 수정")
@@ -79,9 +79,9 @@ public class RoutesController {
             routesService.updateRoutes(routes);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 }

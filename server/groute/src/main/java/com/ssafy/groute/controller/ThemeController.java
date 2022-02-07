@@ -27,10 +27,10 @@ public class ThemeController {
             themeService.insertTheme(req);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "theme 검색",notes = "이름으로 theme 하나 검색")
@@ -39,7 +39,7 @@ public class ThemeController {
 
         Theme res = themeService.selectTheme(id);
         if(res==null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<Theme>(res,HttpStatus.OK);
@@ -51,7 +51,7 @@ public class ThemeController {
 
         List<Theme> res = themeService.selectAllTheme();
         if(res==null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<List<Theme>>(res,HttpStatus.OK);
@@ -65,10 +65,10 @@ public class ThemeController {
             themeService.deleteTheme(id);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "updateTheme",notes = "theme 수정")
@@ -79,9 +79,9 @@ public class ThemeController {
             themeService.updateTheme(theme);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 }

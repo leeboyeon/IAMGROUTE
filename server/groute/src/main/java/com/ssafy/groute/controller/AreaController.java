@@ -30,10 +30,10 @@ public class AreaController {
             areaService.insertArea(req);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "area 검색",notes = "이름으로 area 하나 검색")
@@ -42,7 +42,7 @@ public class AreaController {
 
         Area res = areaService.selectArea(id);
         if(res==null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<Area>(res,HttpStatus.OK);
@@ -54,7 +54,7 @@ public class AreaController {
 
         List<Area> res = areaService.selectAllArea();
         if(res==null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<List<Area>>(res,HttpStatus.OK);
@@ -68,10 +68,10 @@ public class AreaController {
             areaService.deleteArea(id);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "updateArea",notes = "area 수정")
@@ -82,9 +82,9 @@ public class AreaController {
             areaService.updateArea(area);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 }

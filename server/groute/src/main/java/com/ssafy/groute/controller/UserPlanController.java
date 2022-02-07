@@ -87,7 +87,7 @@ public class UserPlanController {
 
         List<UserPlan> res = userPlanService.selectAllUserPlan();
         if(res==null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<List<UserPlan>>(res,HttpStatus.OK);
@@ -101,10 +101,10 @@ public class UserPlanController {
             userPlanService.deleteUserPlan(id);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "updateUserPlan",notes = "userPlan 수정")
@@ -115,10 +115,10 @@ public class UserPlanController {
             userPlanService.updateUserPlan(userPlan);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "place 추가",notes = "해당 일정에 place 추가")
@@ -129,10 +129,10 @@ public class UserPlanController {
             routeDetailService.insertRouteDetail(routeDetail);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "place 삭제",notes = "해당 일정에 place 삭제")
@@ -143,10 +143,10 @@ public class UserPlanController {
             routeDetailService.deleteRouteDetail(id);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "list my userPlan",notes = "userId로 내 전체 여행일정 검색")
@@ -155,7 +155,7 @@ public class UserPlanController {
 
         List<UserPlan> res = userPlanService.selectAllUserPlanById(userId);
         if(res==null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<List<UserPlan>>(res,HttpStatus.OK);
