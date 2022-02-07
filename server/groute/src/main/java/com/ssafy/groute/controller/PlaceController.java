@@ -178,7 +178,7 @@ public class PlaceController {
 
             if (img != null) {
                 String fileName = storageService.store(img, uploadPath + "/review");
-                req.setImg("/review/" + fileName);
+                req.setImg("review/" + fileName);
             } else {
                 req.setImg(null);
             }
@@ -243,7 +243,7 @@ public class PlaceController {
 
             if (img != null) {
                 String fileName = storageService.store(img, uploadPath + "/review");
-                placeReview.setImg("/review/" + fileName);
+                placeReview.setImg("review/" + fileName);
             } else {    // img == null
                 if(beforeImg.equals("") || beforeImg.equals("null")){
                     placeReview.setImg(null);
