@@ -27,6 +27,12 @@
         from userplan
     </select>
 
+    <select id="selectTUserPlan"  resultMap="UserPlanDTO">
+        select id, user_id, title, description, startDate, endDate, totalDate, isPublic, round(rate,2) rate, heartCnt, area_id
+        from userplan
+        where ispublic = "T"
+    </select>
+
     <select id="bestPlanList" resultMap="UserPlanDTO">
         select id, user_id, title, description, startDate, endDate, totalDate, isPublic, round(rate,2) rate, heartCnt, area_id
         from userplan

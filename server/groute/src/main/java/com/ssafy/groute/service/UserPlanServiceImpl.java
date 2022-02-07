@@ -110,12 +110,17 @@ public class UserPlanServiceImpl implements UserPlanService {
         return userPlanMapper.findNotEndPlanById(userId);
     }
 
+    @Override
+    public List<UserPlan> selectTUserPlan() throws Exception {
+        return setThemeList(userPlanMapper.selectTUserPlan());
+    }
+
     @Transactional
     @Override
     public Map<String,Object> selectUserPlan(int id) throws Exception {
         Map<String,Object> res = new HashMap<>();
         UserPlan userPlan = userPlanMapper.selectUserPlan(id);
-        res.put("userPlan",userPlan);
+
         List<Routes> routesList = routesMapper.selectByPlanId(userPlan.getId());
         List<Route> routeList = new ArrayList<>();
         for(Routes r: routesList) {
@@ -128,6 +133,8 @@ public class UserPlanServiceImpl implements UserPlanService {
             route.setRouteDetailList(routeDetailList);;
             routeList.add(route);
         }
+        userPlan.setThemeIdList(userPlanMapper.selectThemeListByPlanId(userPlan.getId()));
+        res.put("userPlan",userPlan);
         res.put("routeList",routeList);
         return res;
     }

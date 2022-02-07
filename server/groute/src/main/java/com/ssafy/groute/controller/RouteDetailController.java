@@ -27,10 +27,10 @@ public class RouteDetailController {
             routeDetailService.insertRouteDetail(req);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "routeDetail 검색",notes = "이름으로 routeDetail 하나 검색")
@@ -39,7 +39,7 @@ public class RouteDetailController {
 
         RouteDetail res = routeDetailService.selectRouteDetail(id);
         if(res==null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<RouteDetail>(res,HttpStatus.OK);
@@ -51,7 +51,7 @@ public class RouteDetailController {
 
         List<RouteDetail> res = routeDetailService.selectAllRouteDetail();
         if(res==null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<List<RouteDetail>>(res,HttpStatus.OK);
@@ -65,10 +65,10 @@ public class RouteDetailController {
             routeDetailService.deleteRouteDetail(id);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "updateRouteDetail",notes = "routeDetail 수정")
@@ -79,9 +79,9 @@ public class RouteDetailController {
             routeDetailService.updateRouteDetail(routeDetail);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 }

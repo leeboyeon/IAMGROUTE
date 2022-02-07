@@ -81,9 +81,9 @@ public class UserController {
         User selected = userService.findByUidType(req.getId(), req.getType());
 
         if(selected == null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }else if(!passwordEncoder.matches(req.getPassword(), selected.getPassword())){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
         Map<String, Object> resultMap = new HashMap<>();

@@ -27,10 +27,10 @@ public class PlanShareUserController {
             planShareUserService.insertPlanShareUser(req);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "planShareUser 검색",notes = "이름으로 planShareUser 하나 검색")
@@ -39,7 +39,7 @@ public class PlanShareUserController {
 
         PlanShareUser res = planShareUserService.selectPlanShareUser(id);
         if(res==null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<PlanShareUser>(res,HttpStatus.OK);
@@ -51,7 +51,7 @@ public class PlanShareUserController {
 
         List<PlanShareUser> res = planShareUserService.selectAllPlanShareUser();
         if(res==null){
-            return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<List<PlanShareUser>>(res,HttpStatus.OK);
@@ -65,10 +65,10 @@ public class PlanShareUserController {
             planShareUserService.deletePlanShareUser(id);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "updatePlanShareUser",notes = "planShareUser 수정")
@@ -79,9 +79,9 @@ public class PlanShareUserController {
             planShareUserService.updatePlanShareUser(planShareUser);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 }
