@@ -33,7 +33,7 @@ spring:
       max-request-size: 100MB
 #      location: ../groute/src/main/resources/static/imgs # server static
 #      location: file:///C:/SSAFY/iamgroute/imgs/ # jiwoo local
-      location: file://~/home/ubuntu/iamgroute/imgs/  # aws ubuntu
+      location: file:///home/ubuntu/iamgroute/imgs/  # aws ubuntu
 
 
 
