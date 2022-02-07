@@ -68,9 +68,9 @@ public class BoardDetailController {
             if (img != null) {
                 String filePath = "";
                 if (req.getBoardId() == 1) {
-                    filePath = "/board/freeBoard";
+                    filePath = "board/freeBoard";
                 } else if(req.getBoardId() == 2) {
-                    filePath = "/board/qnaBoard";
+                    filePath = "board/qnaBoard";
                 }
                 String fileName = storageService.store(img, uploadPath + filePath);
                 req.setImg(filePath + "/" + fileName);
@@ -151,9 +151,9 @@ public class BoardDetailController {
             if (img != null) {
                 String filePath = "";
                 if (boardDetail.getBoardId() == 1) {
-                    filePath = "/board/freeBoard";
+                    filePath = "board/freeBoard";
                 } else if(boardDetail.getBoardId() == 2) {
-                    filePath = "/board/qnaBoard";
+                    filePath = "board/qnaBoard";
                 }
                 String fileName = storageService.store(img, uploadPath + filePath);
                 boardDetail.setImg(filePath + "/" + fileName);
