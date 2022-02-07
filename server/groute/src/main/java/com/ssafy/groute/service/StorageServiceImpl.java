@@ -21,6 +21,7 @@ import java.time.LocalDate;
 
 @Service
 public class StorageServiceImpl implements StorageService {
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 //    @Value("${spring.servlet.multipart.location}")
     @Value("${spring.http.multipart.location}")
@@ -37,8 +38,9 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public String store(MultipartFile file, String location) throws Exception{
 //        Path root = Paths.get(location);
-        Path root = Paths.get(URI.create(location));
-
+        Path root = Paths.get(URI.create(location));  // window
+//        Path root = Paths.get(file.getName());
+        logger.debug("file:{} location: {} root : {}", file, location, root);
         LocalDate date = LocalDate.now();
         String fileName = date + "_" + file.getOriginalFilename();
         if (!Files.exists(root)) {
