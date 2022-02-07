@@ -1,19 +1,36 @@
 package com.ssafy.groute.src.main.route
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
+import com.ssafy.groute.src.dto.Theme
+import com.ssafy.groute.src.viewmodel.PlanViewModel
+import kotlinx.coroutines.runBlocking
 
-class RouteDetailThemeAdapter(var themeList: List<String>) : RecyclerView.Adapter<RouteDetailThemeAdapter.RouteDetailThemeHolder>(){
+private const val TAG = "RouteDetailThemeAdapter"
+class RouteDetailThemeAdapter(val viewLifecycleOwner: LifecycleOwner, val planViewModel: PlanViewModel) : RecyclerView.Adapter<RouteDetailThemeAdapter.RouteDetailThemeHolder>(){
+    var list = mutableListOf<Theme>()
 
+    fun setThemeList(list: List<Theme>?) {
+        if(list == null) {
+            this.list = ArrayList()
+        } else {
+            this.list = list.toMutableList()!!
+            notifyDataSetChanged()
+        }
+    }
     inner class RouteDetailThemeHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val themeTv = itemView.findViewById<TextView>(R.id.routeDetailThemeTxt)
+        fun bindInfo(theme : Theme) {
+            Log.d(TAG, "bindInfo: ${theme.name}")
+            themeTv.text = theme.name
 
-        fun bindInfo(theme : String) {
-            themeTv.text = theme
         }
     }
 
@@ -22,13 +39,17 @@ class RouteDetailThemeAdapter(var themeList: List<String>) : RecyclerView.Adapte
         return RouteDetailThemeHolder(view)
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     override fun onBindViewHolder(holder: RouteDetailThemeHolder, position: Int) {
         holder.apply {
-            bindInfo(themeList[position])
+            bindInfo(list[position])
         }
     }
 
     override fun getItemCount(): Int {
-        return themeList.size
+        return list.size
     }
 }

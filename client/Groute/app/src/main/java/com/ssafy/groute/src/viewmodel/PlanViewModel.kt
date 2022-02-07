@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.groute.src.dto.*
 import com.ssafy.groute.src.service.PlaceService
+import com.ssafy.groute.src.service.ThemeService
 import com.ssafy.groute.src.service.UserPlanService
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -23,6 +24,7 @@ class PlanViewModel : ViewModel(){
     private val placeShopResponse = mutableListOf<Place>()
     private val _planReviewListResponse = MutableLiveData<MutableList<PlanReview>>()
     private val _reviewResponse = MutableLiveData<PlanReview>()
+    private val _themeResponse = MutableLiveData<MutableList<Theme>>()
 
 //    private val _routeResponse = MutableLiveData<MutableList<>>
 //    private val _routeDetailResponse = MutableLiveData<MutableList<>>
@@ -44,6 +46,8 @@ class PlanViewModel : ViewModel(){
         get() = _planReviewListResponse
     val review : LiveData<PlanReview>
         get() = _reviewResponse
+    val theme: LiveData<MutableList<Theme>>
+        get() = _themeResponse
 
 
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
@@ -80,6 +84,10 @@ class PlanViewModel : ViewModel(){
     }
     fun setReivew(review: PlanReview) = viewModelScope.launch {
         _reviewResponse.value = review
+    }
+
+    fun setTheme(themeList: MutableList<Theme>) = viewModelScope.launch {
+        _themeResponse.value = themeList
     }
 
     suspend fun getPlanBestList(){
@@ -119,6 +127,13 @@ class PlanViewModel : ViewModel(){
                     Log.d(TAG, "getPlanById: $res")
                     val userPlantmp = JSONObject(res).getJSONObject("userPlan")
                     Log.d(TAG, "getPlanById: ${userPlantmp}")
+                    val themeList = userPlantmp.getJSONArray("themeIdList")
+                    var themeIdList = mutableListOf<Int>()
+                    var k = 0
+                    while (k < themeList.length()) {
+                        themeIdList.add(themeList.getInt(k))
+                        k++
+                    }
                     val userPlan = UserPlan(
                         id = userPlantmp.getInt("id"),
                         title= userPlantmp.getString("title"),
@@ -130,7 +145,8 @@ class PlanViewModel : ViewModel(){
                         isPublic = userPlantmp.getString("isPublic"),
                         rate = userPlantmp.getDouble("rate"),
                         heartCnt = userPlantmp.getInt("heartCnt"),
-                        areaId = userPlantmp.getInt("areaId")
+                        areaId = userPlantmp.getInt("areaId"),
+                        themeIdList = themeIdList
                     )
 
                     val routetmp = JSONObject(res).getJSONArray("routeList")
@@ -213,6 +229,7 @@ class PlanViewModel : ViewModel(){
                     }
                     setPlanList(userPlan)
                     setRouteList(routeList)
+                    getThemeById(userPlan.themeIdList)
 
 
                     Log.d(TAG, "getPlanById_USERPlan: ${userPlan}")
@@ -221,6 +238,7 @@ class PlanViewModel : ViewModel(){
             }else{
                 Log.d(TAG, "getPlanById: ")
             }
+
         }
     }
     fun getRouteDetailbyDay(day:Int){
@@ -292,5 +310,27 @@ class PlanViewModel : ViewModel(){
                 Log.d(TAG, "UserPlanService: ")
             }
         }
+    }
+
+    suspend fun getThemeById(idList: List<Int>) {
+        var list = mutableListOf<Theme>()
+        for(i in 0 until idList.size) {
+            val response = ThemeService().getThemeById(idList.get(i))
+            viewModelScope.launch {
+                var res = response.body()
+                if(response.code() == 200) {
+                    if(res != null) {
+                        //Log.d(TAG, "getThemeById: $res")
+                        list.add(res)
+                    }
+                } else {
+                    Log.d(TAG, "getThemeById: ")
+                }
+            }
+
+        }
+        Log.d(TAG, "getThemeById: $list")
+        setTheme(list)
+
     }
 }

@@ -60,6 +60,7 @@
                     app:layout_constraintTop_toBottomOf="@id/RouteDetail_title_tv" />
 
                 <TextView
+                    android:id="@+id/RouteDetail_plan_add_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -87,12 +88,14 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/RouteDetail_theme_rv"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/RouteDetail_period_tv"
+                    app:layout_constraintEnd_toStartOf="@id/RouteDetail_add_plan_btn"
                     tools:itemCount="1"
                     tools:listitem="@layout/list_item_route_theme" />
 

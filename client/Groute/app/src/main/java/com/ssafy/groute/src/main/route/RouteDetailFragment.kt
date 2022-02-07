@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.R
@@ -49,14 +50,8 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         runBlocking {
             planViewModel.getPlanById(planId)
         }
-        val themeList = arrayListOf("#힐링", "#관광지")
 
-        routeDetailThemeAdapter = RouteDetailThemeAdapter(themeList)
-        binding.RouteDetailThemeRv.apply {
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = routeDetailThemeAdapter
-        }
+        initAdapter()
 
         val routeDetailTabPagerAdapter = RouteDetailTabPagerAdapter(this)
         val tabList = arrayListOf("Info","Review")
@@ -75,6 +70,19 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         }
 
 
+    }
+
+    fun initAdapter() {
+        planViewModel.theme.observe(viewLifecycleOwner, Observer {
+            routeDetailThemeAdapter = RouteDetailThemeAdapter(viewLifecycleOwner, planViewModel)
+            routeDetailThemeAdapter.setThemeList(it)
+            routeDetailThemeAdapter.setHasStableIds(true)
+            binding.RouteDetailThemeRv.apply {
+                layoutManager =
+                    LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                adapter = routeDetailThemeAdapter
+            }
+        })
     }
 
     companion object {

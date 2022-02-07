@@ -13,5 +13,6 @@ class RetrofitUtil {
         val routeService = ApplicationClass.retrofit.create(RouteApi::class.java)
         val routeDetailService = ApplicationClass.retrofit.create(RouteDetailApi::class.java)
         val userPlanService = ApplicationClass.retrofit.create(UserPlanApi::class.java)
+        val themeService = ApplicationClass.retrofit.create(ThemeApi::class.java)
     }
 }

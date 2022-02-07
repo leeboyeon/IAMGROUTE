@@ -18,6 +18,6 @@ data class UserPlan(
             :this(areaId, description, endDate, 0, 0, isPublic, 0.0, startDate,
         listOf(), title, totalDate, userId)
 
-    constructor(id: Int,userId: String,title: String,description: String,startDate: String,endDate: String,totalDate: Int,isPublic: String,rate: Double,heartCnt: Int,areaId: Int)
-        :this(areaId, description, endDate, heartCnt, id, isPublic, rate, startDate, listOf(), title, totalDate, userId)
+    constructor(id: Int,userId: String,title: String,description: String,startDate: String,endDate: String,totalDate: Int,isPublic: String,rate: Double,heartCnt: Int,areaId: Int, themeIdList: List<Int>)
+        :this(areaId, description, endDate, heartCnt, id, isPublic, rate, startDate, themeIdList, title, totalDate, userId)
 }
