@@ -81,11 +81,11 @@ public class UserPlanController {
         return new ResponseEntity<Map<String,Object>>(res,HttpStatus.OK);
     }
 
-    @ApiOperation(value = "list userPlan",notes = "모든 userPlan 반환")
+    @ApiOperation(value = "list userPlan",notes = "공개된 모든 userPlan 반환")
     @GetMapping(value = "/list")
     public ResponseEntity<?> listUserPlan() throws Exception{
 
-        List<UserPlan> res = userPlanService.selectAllUserPlan();
+        List<UserPlan> res = userPlanService.selectTUserPlan();
         if(res==null){
             return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
