@@ -53,8 +53,14 @@ class RouteDetailReviewFragment : BaseFragment<FragmentRouteDetailReviewBinding>
 
     fun initAdapter(){
         planViewModel.planReviewList.observe(viewLifecycleOwner, Observer {
-            routeDetailReviewAdapter = RouteDetailReviewAdapter(viewLifecycleOwner)
+            routeDetailReviewAdapter = RouteDetailReviewAdapter(viewLifecycleOwner, requireContext())
             routeDetailReviewAdapter.list = it
+            routeDetailReviewAdapter.setModifyClickListener(object : RouteDetailReviewAdapter.ModifyClickListener {
+                override fun onClick(position: Int) {
+                    mainActivity.moveFragment(14, "planId", planId, "reviewId", it[position].id)
+                }
+
+            })
 
             binding.routedetailReviewRvList.apply{
                 layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)

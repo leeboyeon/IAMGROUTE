@@ -14,10 +14,9 @@ import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentRouteReviewWriteBinding
-import com.ssafy.groute.src.dto.PlaceReview
 import com.ssafy.groute.src.dto.PlanReview
+import androidx.lifecycle.Observer
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.RetrofitCallback
@@ -49,6 +48,7 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
         binding.planViewModel = planViewModel
         runBlocking {
             planViewModel.getPlanById(planId)
+            planViewModel.getPlanReviewById(reviewId)
         }
 
         binding.routeReviewWriteIbtnBack.setOnClickListener{
@@ -56,11 +56,36 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
             mainActivity.supportFragmentManager.popBackStack()
         }
         if(reviewId > 0) {
+            binding.routeReviewWriteBtnWrite.text = "리뷰 수정"
+            planViewModel.review.observe(viewLifecycleOwner, Observer {
+                Log.d(TAG, "onViewCreated: ${it.toString()}")
+                binding.routeReviewWriteEtContent.setText(it.content)
+                binding.routeReviewWriteRatingBar.rating = it.rate.toFloat()
+            })
+            initModifyButton()
 
         } else {
             initButton()
         }
 
+
+    }
+
+    fun initModifyButton(){
+        binding.routeReviewWriteBtnWrite.setOnClickListener {
+            val content = binding.routeReviewWriteEtContent.text.toString()
+            var rate = binding.routeReviewWriteRatingBar.rating.toDouble()
+            val userId = ApplicationClass.sharedPreferencesUtil.getUser().id
+            val review = PlanReview(
+                planId,
+                userId,
+                content,
+                rate,
+                "",
+                reviewId
+            )
+            modifyReview(review)
+        }
 
     }
 
@@ -78,6 +103,25 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
             )
             insertReview(review)
         }
+    }
+
+    fun modifyReview(review: PlanReview){
+        UserPlanService().updatePlanReview(review, object : RetrofitCallback<Boolean> {
+            override fun onError(t: Throwable) {
+                Log.d(TAG, "onError: ")
+            }
+
+            override fun onSuccess(code: Int, responseData: Boolean) {
+                Log.d(TAG, "onSuccess: ")
+                mainActivity.moveFragment(12,"planId", planId)
+                Toast.makeText(requireContext(),"리뷰수정 성공", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onFailure(code: Int) {
+                Log.d(TAG, "onFailure: ")
+            }
+
+        })
     }
 
     fun insertReview(review: PlanReview){

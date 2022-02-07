@@ -69,6 +69,11 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
             tab.text = tabList.get(position)
         }.attach()
 
+        binding.RouteDetailIbtnBack.setOnClickListener{
+            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
+            mainActivity.supportFragmentManager.popBackStack()
+        }
+
 
     }
 

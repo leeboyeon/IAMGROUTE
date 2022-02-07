@@ -22,6 +22,7 @@ class PlanViewModel : ViewModel(){
     private val _planEndResponse = MutableLiveData<MutableList<UserPlan>>()
     private val placeShopResponse = mutableListOf<Place>()
     private val _planReviewListResponse = MutableLiveData<MutableList<PlanReview>>()
+    private val _reviewResponse = MutableLiveData<PlanReview>()
 
 //    private val _routeResponse = MutableLiveData<MutableList<>>
 //    private val _routeDetailResponse = MutableLiveData<MutableList<>>
@@ -41,6 +42,8 @@ class PlanViewModel : ViewModel(){
         get() =_planEndResponse
     val planReviewList :LiveData<MutableList<PlanReview>>
         get() = _planReviewListResponse
+    val review : LiveData<PlanReview>
+        get() = _reviewResponse
 
 
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
@@ -74,6 +77,9 @@ class PlanViewModel : ViewModel(){
     fun setPlanReviewList(planReview:MutableList<PlanReview>) = viewModelScope.launch {
         _planReviewListResponse.value = planReview
         Log.d(TAG, "setPlanReviewList: $planReview")
+    }
+    fun setReivew(review: PlanReview) = viewModelScope.launch {
+        _reviewResponse.value = review
     }
 
     suspend fun getPlanBestList(){
@@ -269,6 +275,21 @@ class PlanViewModel : ViewModel(){
 
             }else{
                 Log.d(TAG, "getPlanReviewListbyId: ")
+            }
+        }
+    }
+
+    suspend fun getPlanReviewById(id:Int){
+        val response = UserPlanService().getReviewById(id)
+        viewModelScope.launch {
+            var res = response.body()
+            if(response.code() == 200) {
+                if(res!=null){
+                    Log.d(TAG, "UserPlanService: ")
+                    setReivew(res)
+                }
+            }else{
+                Log.d(TAG, "UserPlanService: ")
             }
         }
     }

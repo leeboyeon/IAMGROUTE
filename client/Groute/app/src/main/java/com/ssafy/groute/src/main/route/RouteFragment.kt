@@ -29,7 +29,13 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
+        mainActivity.hideBottomNav(false)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainActivity.hideBottomNav(false)
     }
 
     override fun onAttach(context: Context) {
