@@ -1,19 +1,29 @@
 package com.ssafy.groute.src.main.route
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.ssafy.groute.R
+import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentRouteReviewWriteBinding
+import com.ssafy.groute.src.dto.PlaceReview
+import com.ssafy.groute.src.dto.PlanReview
 import com.ssafy.groute.src.main.MainActivity
+import com.ssafy.groute.src.service.PlaceService
+import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.viewmodel.PlanViewModel
+import com.ssafy.groute.util.RetrofitCallback
+import kotlinx.coroutines.runBlocking
 
-
+private const val TAG = "RouteReviewWriteFrament"
 class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(FragmentRouteReviewWriteBinding::bind, R.layout.fragment_route_review_write) {
     private lateinit var mainActivity: MainActivity
     private val planViewModel: PlanViewModel by activityViewModels()
@@ -37,8 +47,55 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.planViewModel = planViewModel
+        runBlocking {
+            planViewModel.getPlanById(planId)
+        }
+
+        binding.routeReviewWriteIbtnBack.setOnClickListener{
+            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
+            mainActivity.supportFragmentManager.popBackStack()
+        }
+        if(reviewId > 0) {
+
+        } else {
+            initButton()
+        }
 
 
+    }
+
+    fun initButton(){
+        binding.routeReviewWriteBtnWrite.setOnClickListener {
+            val content = binding.routeReviewWriteEtContent.text.toString()
+            var rate = binding.routeReviewWriteRatingBar.rating.toDouble()
+            val userId = ApplicationClass.sharedPreferencesUtil.getUser().id
+            val review = PlanReview(
+                planId,
+                userId,
+                content,
+                rate,
+                ""
+            )
+            insertReview(review)
+        }
+    }
+
+    fun insertReview(review: PlanReview){
+        UserPlanService().insertPlanReview(review, object : RetrofitCallback<Boolean> {
+            override fun onError(t: Throwable) {
+                Log.d(TAG, "onError: ")
+            }
+
+            override fun onSuccess(code: Int, responseData: Boolean) {
+                Log.d(TAG, "onSuccess: ")
+                mainActivity.moveFragment(12,"planId", planId)
+                Toast.makeText(requireContext(),"리뷰작성 성공", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onFailure(code: Int) {
+                Log.d(TAG, "onFailure: ")
+            }
+        })
     }
 
     companion object {

@@ -66,32 +66,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-            <ImageView
-                android:id="@+id/route_review_img"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@drawable/jejueat3" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:paddingLeft="20dp">
+                >
 
                 <TextView
                     android:id="@+id/route_reviewWrite_tv_planName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{}"
+                    android:text="@{planViewModel.planList.title}"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textStyle="bold"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/route_reviewWrite_tv_planPeriod"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{}" />
+                    android:text="@{planViewModel.planList.totalDate == 1 ? @string/plan_totalDate_one_day : @string/covert_plan_totalDate(planViewModel.planList.totalDate - 1, planViewModel.planList.totalDate)}" />
             </LinearLayout>
 
         </LinearLayout>
