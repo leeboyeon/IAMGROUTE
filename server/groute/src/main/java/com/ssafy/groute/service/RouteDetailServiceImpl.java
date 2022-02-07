@@ -48,5 +48,12 @@ public class RouteDetailServiceImpl implements RouteDetailService{
         return routeDetailMapper.selectByPlaceId(placeId);
     }
 
+    @Override
+    public void updatePriority(List<RouteDetail> routeDetailList) throws Exception {
+        for(RouteDetail routeDetail: routeDetailList){
+            routeDetailMapper.updatePriority(routeDetail);
+        }
+    }
+
 
 }

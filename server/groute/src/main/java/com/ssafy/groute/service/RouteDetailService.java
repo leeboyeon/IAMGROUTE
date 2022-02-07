@@ -14,4 +14,5 @@ public interface RouteDetailService {
     void updateRouteDetail(RouteDetail routeDetail) throws Exception;
     List<RouteDetail> selectByRouteId(int routeId) throws Exception;
     List<RouteDetail> selectByPlaceId(int placeId) throws Exception;
+    void updatePriority(List<RouteDetail> routeDetailList) throws Exception;
 }
