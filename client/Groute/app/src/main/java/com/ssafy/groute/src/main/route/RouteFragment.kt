@@ -21,6 +21,7 @@ import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.dto.Area
 import com.ssafy.groute.src.dto.UserPlan
 import com.ssafy.groute.src.main.home.CategoryAdapter
+import com.ssafy.groute.src.main.home.PlaceDetailFragment
 import com.ssafy.groute.src.main.home.HomeAreaAdapter
 import com.ssafy.groute.src.service.AreaService
 import com.ssafy.groute.src.viewmodel.HomeViewModel
@@ -30,7 +31,12 @@ import kotlinx.coroutines.runBlocking
 
 private const val TAG = "RouteFragment_Groute"
 class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::bind, R.layout.fragment_route) {
+//    lateinit var binding: FragmentRouteBinding
     private lateinit var mainActivity: MainActivity
+    lateinit var pagerAdapter: RouteTabPageAdapter
+    private var categoryAdapter:CategoryAdapter = CategoryAdapter()
+
+    private var days = 0
     lateinit var routeAreaAdapter: HomeAreaAdapter
     private val homeViewModel: HomeViewModel by activityViewModels()
     private val planViewModel: PlanViewModel by activityViewModels()
@@ -40,8 +46,7 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
-
-
+        mainActivity.hideBottomNav(false)
     }
 
     override fun onResume() {
@@ -52,6 +57,10 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
+        arguments?.let {
+            days = it.getInt("days", -1)
+            Log.d(TAG, "onAttach: ${days}")
+        }
     }
 
 
@@ -186,6 +195,15 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             }
 
         })
+    }
+    companion object {
+        @JvmStatic
+        fun newInstance(key1:String, value1:Int) =
+            RouteFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(key1,value1)
+                }
+            }
     }
 
     fun initRouteListAdapter() {

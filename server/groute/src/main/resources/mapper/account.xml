@@ -4,12 +4,12 @@
 
 <mapper namespace="com.ssafy.groute.mapper.AccountMapper">
     <insert id="insertAccount" parameterType="Account">
-        insert into account(spentMoney, description, category, routes_id)
-        values(#{spentMoney}, #{description}, #{category}, #{routesId})
+        insert into account(spentMoney, description, category, userplan_id)
+        values(#{spentMoney}, #{description}, #{category}, #{userPlanId})
     </insert>
 
     <resultMap id="AccountDTO" type="Account">
-        <result column="routes_id" property="routesId"></result>
+        <result column="userplan_id" property="userPlanId"></result>
     </resultMap>
     <select id="selectAccount" parameterType="int" resultMap="AccountDTO">
         select * from account
@@ -27,12 +27,22 @@
 
     <update id="updateAccount" parameterType="Account">
         update account
-        set spentMoney = #{spentMoney}, description = #{description}, category = #{category}, routes_id = #{routesId}
+        set spentMoney = #{spentMoney}, description = #{description}, category = #{category}
         where id = #{id}
     </update>
 
     <delete id="deleteAllAccountByRId" parameterType="int">
         delete from account
         where routes_id = #{routesId}
+    </delete>
+
+    <select id="selectByUserPlanId" parameterType="int" resultMap="AccountDTO">
+        select * from account
+        where userplan_id = #{userPlanId}
+    </select>
+
+    <delete id="deleteByUserPlanId" parameterType="int">
+        delete from account
+        where userplan_id = #{userPlanId}
     </delete>
 </mapper>

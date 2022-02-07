@@ -33,9 +33,16 @@
         where id = #{id}
     </update>
 
+    <update id="updatePriority" parameterType="RouteDetail">
+        update routedetail
+        set priority = #{priority}
+        where id = #{id}
+    </update>
+
     <select id="selectByRouteId" parameterType="int" resultMap="RouteDetailDTO">
         select * from routedetail
         where route_id = #{routeId}
+        order by priority asc
     </select>
 
     <select id="selectByPlaceId" parameterType="int" resultMap="RouteDetailDTO">

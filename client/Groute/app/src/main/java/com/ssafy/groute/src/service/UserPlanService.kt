@@ -3,6 +3,7 @@ package com.ssafy.groute.src.service
 import android.util.Log
 import com.ssafy.groute.src.dto.PlaceReview
 import com.ssafy.groute.src.dto.PlanReview
+import com.ssafy.groute.src.dto.RouteDetail
 import com.ssafy.groute.src.dto.UserPlan
 import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil
@@ -57,11 +58,11 @@ class UserPlanService {
         RetrofitUtil.userPlanService.insertPlanReview(review).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 val res = response.body()
-                if(response.code()==200){
-                    if(res==true){
-                        callback.onSuccess(response.code(),res)
+                if (response.code() == 200) {
+                    if (res == true) {
+                        callback.onSuccess(response.code(), res)
                         Log.d(TAG, "onResponse: insert Success!")
-                    }else{
+                    } else {
                         Log.d(TAG, "onResponse: insert fail")
                     }
                 }
@@ -70,19 +71,38 @@ class UserPlanService {
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
                 Log.d(TAG, "onFailure: $t")
             }
+        })
+    }
+
+    fun insertPlaceToUserPlan(routeDetail: RouteDetail, callback: RetrofitCallback<Boolean>) {
+        RetrofitUtil.userPlanService.insertPlaceToUserPlan(routeDetail).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if (response.code() == 200) {
+                    if (res == true) {
+                        callback.onSuccess(response.code(), res)
+                    }
+                } else {
+                    callback.onFailure(response.code())
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callback.onError(t)
+            }
 
         })
     }
 
-    fun updatePlanReview(review: PlanReview, callback : RetrofitCallback<Boolean>) {
+    fun updatePlanReview(review: PlanReview, callback: RetrofitCallback<Boolean>) {
         RetrofitUtil.userPlanService.updatePlanReview(review).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 val res = response.body()
-                if(response.code()==200){
-                    if(res==true){
-                        callback.onSuccess(response.code(),res)
+                if (response.code() == 200) {
+                    if (res == true) {
+                        callback.onSuccess(response.code(), res)
                         Log.d(TAG, "onResponse: update Success!")
-                    }else{
+                    } else {
                         Log.d(TAG, "onResponse: update fail")
                     }
                 }
@@ -95,15 +115,15 @@ class UserPlanService {
         })
     }
 
-    fun deletePlanReview(id:Int, callback: RetrofitCallback<Boolean>){
+    fun deletePlanReview(id: Int, callback: RetrofitCallback<Boolean>) {
         RetrofitUtil.userPlanService.deletePlanReview(id).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 val res = response.body()
-                if(response.code()==200){
-                    if(res==true){
-                        callback.onSuccess(response.code(),res)
+                if (response.code() == 200) {
+                    if (res == true) {
+                        callback.onSuccess(response.code(), res)
                         Log.d(TAG, "onResponse: delete Success!")
-                    }else{
+                    } else {
                         Log.d(TAG, "onResponse: delete fail")
                     }
                 }
@@ -116,7 +136,7 @@ class UserPlanService {
         })
     }
 
-    suspend fun getReviewById(id:Int) :Response<PlanReview>{
+    suspend fun getReviewById(id: Int): Response<PlanReview> {
         return RetrofitUtil.userPlanService.getPlanReviewbyId(id)
     }
 

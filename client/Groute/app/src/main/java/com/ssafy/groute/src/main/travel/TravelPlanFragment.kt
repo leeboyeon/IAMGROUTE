@@ -1,10 +1,12 @@
 package com.ssafy.groute.src.main.travel
 
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -39,10 +41,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.DateValidatorPointBackward
-import com.google.android.material.datepicker.DateValidatorPointForward
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.GsonBuilder
 import com.ssafy.groute.databinding.ActivityCommentNestedBinding.inflate
 import java.lang.Integer.max
@@ -54,12 +52,24 @@ import java.util.Date.from
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 import android.widget.DatePicker
+import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.ItemTouchHelper
+import com.google.android.material.datepicker.*
+import com.google.android.material.tabs.TabLayout
+import com.ssafy.groute.databinding.ActivityCommentNestedBinding.bind
+import com.ssafy.groute.src.dto.Place
+import com.ssafy.groute.src.dto.RouteDetail
+import com.ssafy.groute.src.service.UserPlanService
+import com.ssafy.groute.src.viewmodel.PlaceViewModel
+import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.selects.select
+import kotlin.time.days
 
 
 private const val TAG = "TravelPlanFragment"
 //class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTravelPlanBinding::bind, R.layout.fragment_travel_plan) {
  class TravelPlanFragment: Fragment(){
+
     private lateinit var binding:FragmentTravelPlanBinding
     private lateinit var mainActivity: MainActivity
     lateinit var con : ViewGroup
@@ -69,12 +79,16 @@ private const val TAG = "TravelPlanFragment"
     lateinit var placeAddButton: FloatingActionButton
 
     private val planViewModel:PlanViewModel by activityViewModels()
+    private val placeViewModel:PlaceViewModel by activityViewModels()
+
     var isFabOpen: Boolean = false
     private var planId = -1
     private var placeId = -1
     val routeSelectList = arrayListOf<RouteRecom>()
+
     private lateinit var routeRecomDialogAdapter:RouteRecomDialogAdapter
-    private lateinit var placeShopAdapter: PlaceShopAdapter
+    private lateinit var travelPlanListRecyclerviewAdapter: TravelPlanListRecyclerviewAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideBottomNav(true)
@@ -107,63 +121,35 @@ private const val TAG = "TravelPlanFragment"
         runBlocking {
             planViewModel.getPlanById(planId)
         }
-        initAdapter()
-        initPlaceList()
+        initPlaceListAdapter()
+        initTabLayout()
+//        initPlaceList()
         floatingButtonEvent()
-    }
-    //임시 플레이스 저장리스트
-    fun initPlaceList(){
-        planViewModel.livePlaceshopList.observe(viewLifecycleOwner, Observer {
-            placeShopAdapter = PlaceShopAdapter()
-            Log.d(TAG, "initPlaceList: ${it}")
-            if(!it.isEmpty() || it != null){
-                binding.travelPlanRvPlaceList.visibility = View.VISIBLE
-
-                placeShopAdapter.list = it
-                binding.travelPlanRvPlaceList.apply {
-                    layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
-                    adapter = placeShopAdapter
-                    adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-                }
-                placeShopAdapter.setItemClickListener(object : PlaceShopAdapter.ItemClickListener{
-                    @RequiresApi(Build.VERSION_CODES.O)
-                    override fun onClick(view: View, position: Int, id: Int) {
-                        showDataRangePicker()
-                    }
-
-                })
+        binding.travelplanBackIv.setOnClickListener {
+            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
+            mainActivity.supportFragmentManager.popBackStack()
+        }
+        binding.travelplanCalcBtn.setOnClickListener {
+            val money = binding.travelplanCalcIv
+            val animator = ValueAnimator.ofFloat(0f,0.5f).setDuration(500)
+            animator.addUpdateListener { animation ->
+                money.progress = animation.animatedValue as Float
             }
-        })
+            animator.start()
+        }
+
+        binding.travelplanMemberBtn.setOnClickListener {
+            val member = binding.travelplanMemberIv
+            val animator = ValueAnimator.ofFloat(0f,1f).setDuration(1000)
+            animator.addUpdateListener { animation ->
+                member.progress = animation.animatedValue as Float
+            }
+            animator.start()
+        }
     }
-    //달력 띄우기
-    @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("SetTextI18n")
-    fun showDataRangePicker(){
-        var selectDay = ""
-        planViewModel.planList.observe(viewLifecycleOwner, Observer {
-            val calendar = Calendar.getInstance()
-            val minDate = Calendar.getInstance()
-            val maxDate = Calendar.getInstance()
-            var formmater = SimpleDateFormat("yyyy-MM-dd")
-            var sDate = formmater.parse(it.startDate)
-            var eDate = formmater.parse(it.endDate)
-            calendar.time = sDate
-
-            val datePickerDialog = DatePickerDialog(
-                requireContext(),
-                { view, year, month, dayOfMonth -> selectDay = "$year - $month - $dayOfMonth"},
-                calendar[Calendar.YEAR],
-                calendar[Calendar.MONTH],
-                calendar[Calendar.DAY_OF_MONTH]
-            )
-            datePickerDialog.datePicker.minDate = sDate.time
-            datePickerDialog.datePicker.maxDate = eDate.time
-
-            datePickerDialog.show()
-        })
 
 
-    }
+
     // 플로팅 버튼 이벤트 처리
     fun floatingButtonEvent() {
         addButton = binding.travelplanAddFb
@@ -174,6 +160,7 @@ private const val TAG = "TravelPlanFragment"
 
         addButton.setOnClickListener{
             fbAnim()
+
         }
         memoAddButton.setOnClickListener{
             fbAnim()
@@ -184,6 +171,7 @@ private const val TAG = "TravelPlanFragment"
         }
         placeAddButton.setOnClickListener {
             fbAnim()
+            mainActivity.moveFragment(15,"planId",planId)
         }
     }
 
@@ -220,38 +208,45 @@ private const val TAG = "TravelPlanFragment"
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun initAdapter(){
-        planViewModel.planList.observe(viewLifecycleOwner, Observer {
-            val travelPlanAdapter = TravelPlanTabPageAdapter(this)
-            var totalDays = it.totalDate
-            val tabDayList:ArrayList<String> = arrayListOf()
-            for(i in 1..totalDays){
-                tabDayList.apply {
-                    add("day${i}")
-                }
+    fun initTabLayout(){
+        planViewModel.routeList.observe(viewLifecycleOwner, Observer {
+            for(i in 1.. it.size-1){
+                binding.travelplanTabLayout.addTab(binding.travelplanTabLayout.newTab().setText(it.get(i).name))
             }
-            val tabDateList = arrayListOf<String>()
-            tabDateList.apply {
-                var sdate = it.startDate
-                var edate = it.endDate
+        })
+        binding.travelplanTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                travelPlanListRecyclerviewAdapter.filter.filter((tab?.position?.plus(1)).toString())
+            }
 
-                var sdateTmp = LocalDate.parse(sdate,DateTimeFormatter.ISO_DATE)
-//                var edateTmp = LocalDate.parse(edate,DateTimeFormatter.ISO_DATE)
-                for(i in 0..totalDays){
-                    add(sdateTmp.plusDays(i.toLong()).toString())
-                }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
             }
-            for(i in 1..totalDays){
-                travelPlanAdapter.addFragment(TravelPlanListFragment.newInstance("day",i,"planId",planId))
-            }
-            binding.pager.adapter = travelPlanAdapter
 
-            TabLayoutMediator(binding.travelplanTabLayout, binding.pager) { tab, position ->
-                val customTabView = LayoutInflater.from(context).inflate(R.layout.item_travelplan_tab, con, false)
-                customTabView.findViewById<TextView>(R.id.item_travelplan_day_tv).text = tabDayList.get(position)
-                customTabView.findViewById<TextView>(R.id.item_travelplan_date_tv).text = tabDateList.get(position)
-                tab.setCustomView(customTabView)
-            }.attach()
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+
+        })
+
+    }
+    @SuppressLint("ClickableViewAccessibility")
+    fun initPlaceListAdapter(){
+        planViewModel.routeList.observe(viewLifecycleOwner, Observer {
+            travelPlanListRecyclerviewAdapter = TravelPlanListRecyclerviewAdapter(requireContext(),it)
+            binding.travelplanListRv.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+                adapter = travelPlanListRecyclerviewAdapter
+            }
+
+            val travelPlanListRvHelperCallback = TravelPlanListRvHelperCallback(travelPlanListRecyclerviewAdapter).apply {
+                setClamp(resources.displayMetrics.widthPixels.toFloat() / 4)
+            }
+
+            ItemTouchHelper(travelPlanListRvHelperCallback).attachToRecyclerView(binding.travelplanListRv)
+
+            binding.travelplanListRv.setOnTouchListener{ _, _ ->
+                travelPlanListRvHelperCallback.removePreviousClamp(binding.travelplanListRv)
+                false
+            }
         })
 
     }
@@ -259,9 +254,8 @@ private const val TAG = "TravelPlanFragment"
     fun showRouteSelectDialog(){
         routeRecomDialogAdapter = RouteRecomDialogAdapter(requireContext())
         routeSelectList.apply {
-            add(RouteRecom(lottie="auto.json",typeName="AUTO",typeDescript="계획을 짜야하지만 시간이 없을 때, 당신이 원하는 지역의 원하는 테마로! 당신의 여행경로를 완성해드립니다"))
-            add(RouteRecom(lottie="semiauto.json",typeName="SEMIAUTO",typeDescript="원하는 장소가 있으신가요? 그 장소가 추가된 경로를 추천드립니다!"))
-            add(RouteRecom(lottie="manual.json",typeName="MANUAL",typeDescript="완벽한 계획형인 당신! 처음부터 끝까지 세세하게 계획을 짜는 것을 도와드립니다"))
+            add(RouteRecom(lottie="oneday.json",typeName="당일일정",typeDescript="하루의 일정만 \n 추천받으시고 싶으신가요?"))
+            add(RouteRecom(lottie="allday.json",typeName="전체일정",typeDescript="모든 일정을 \n 추천받으시고 싶으신가요?"))
 
             routeRecomDialogAdapter.list = routeSelectList
             routeRecomDialogAdapter.notifyDataSetChanged()
@@ -271,7 +265,6 @@ private const val TAG = "TravelPlanFragment"
         var dialogRv = dialogView.findViewById<RecyclerView>(R.id.routeRecom_rv_typeSelect)
         dialogRv.apply {
             layoutManager = GridLayoutManager(requireContext(),1,LinearLayoutManager.HORIZONTAL,false)
-//            layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
             adapter = routeRecomDialogAdapter
             adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
@@ -282,27 +275,6 @@ private const val TAG = "TravelPlanFragment"
             }
         })
 
-//        dialogRv.addOnScrollListener(object: RecyclerView.OnScrollListener(){
-//            @RequiresApi(Build.VERSION_CODES.O)
-//            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-//                super.onScrollStateChanged(recyclerView, newState)
-//                if(newState == RecyclerView.SCROLL_STATE_IDLE){
-//                    val firstPos = (dialogRv.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
-//                    val secondPos = (dialogRv.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-//                    val lastPos = (dialogRv.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-//                    val selectPos = max(lastPos,max(firstPos,secondPos))
-////                    val selectPos = (dialogRv.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-//                    if(selectPos != -1){
-//                        val viewItem =  (dialogRv.layoutManager as LinearLayoutManager).findViewByPosition(selectPos)
-//                        viewItem?.run{
-//                            val itemMargin = (dialogRv.measuredWidth - viewItem.measuredWidth) / 3
-//                            dialogRv.smoothScrollBy(this.x.toInt()-itemMargin, 0)
-//                        }
-//                    }
-//                }
-//            }
-//        })
-
         var dialog = Dialog(requireContext())
         dialog.setContentView(dialogView)
         dialogView.findViewById<Button>(R.id.routeRecom_btn_cancle).setOnClickListener {
@@ -310,14 +282,17 @@ private const val TAG = "TravelPlanFragment"
         }
         dialogView.findViewById<Button>(R.id.routeRecom_btn_ok).setOnClickListener {
             if(selectPosition == 0){
-                //auto
+                //당일
+                mainActivity.moveFragment(16,"days",1)
+                dialog.cancel()
             }
             if(selectPosition == 1){
-                //semiauto
-            }
-            if(selectPosition == 2){
-                //manual
-                mainActivity.moveFragment(3,"planId",planId)
+                //전체
+                    var total = 0
+                     planViewModel.planList.observe(viewLifecycleOwner, Observer {
+                        total = it.totalDate
+                    })
+                mainActivity.moveFragment(16,"days",total)
                 dialog.cancel()
             }
         }

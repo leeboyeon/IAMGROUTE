@@ -58,6 +58,18 @@ public class AccountController {
         return new ResponseEntity<List<Account>>(res,HttpStatus.OK);
     }
 
+    @ApiOperation(value = "list account",notes = "해당 일정 account 반환")
+    @GetMapping(value = "/list/{userPlanId}")
+    public ResponseEntity<?> selectAccountByUserPlanId(@PathVariable("userPlanId") int userPlanId) throws Exception{
+
+        List<Account> res = accountService.selectByUserPlanId(userPlanId);
+        if(res==null){
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<List<Account>>(res,HttpStatus.OK);
+    }
+
     @ApiOperation(value = "delete account",notes = "account 삭제")
     @DeleteMapping(value = "/del")
     public ResponseEntity<?> deleteAccount(@RequestParam("id") int id) throws Exception{

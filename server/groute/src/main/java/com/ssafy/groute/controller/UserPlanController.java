@@ -149,6 +149,20 @@ public class UserPlanController {
         return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
+    @ApiOperation(value = "update priority",notes = "priority 변경")
+    @PutMapping(value = "/place/priority")
+    public ResponseEntity<?> updatePriority(@RequestBody List<RouteDetail> routeDetailList) throws Exception{
+
+        try {
+            routeDetailService.updatePriority(routeDetailList);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+    }
+
     @ApiOperation(value = "list my userPlan",notes = "userId로 내 전체 여행일정 검색")
     @GetMapping(value = "/list/{userId}")
     public ResponseEntity<?> listMyUserPlan(@PathVariable String userId) throws Exception{

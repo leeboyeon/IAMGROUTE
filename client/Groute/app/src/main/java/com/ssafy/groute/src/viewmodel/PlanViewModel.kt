@@ -84,6 +84,15 @@ class PlanViewModel : ViewModel(){
         placeShopResponse.add(place)
         livePlaceshopList.value = placeShopResponse
     }
+    fun removePlaceShopList(placeId:Int){
+        for(i in 0..placeShopResponse.size-1){
+            if(placeShopResponse.get(i).id == placeId){
+                placeShopResponse.removeAt(i)
+                break
+            }
+        }
+        livePlaceshopList.value = placeShopResponse
+    }
     fun setPlanReviewList(planReview:MutableList<PlanReview>) = viewModelScope.launch {
         _planReviewListResponse.value = planReview
         Log.d(TAG, "setPlanReviewList: $planReview")
@@ -227,6 +236,7 @@ class PlanViewModel : ViewModel(){
                                 routeId = routeId
                             )
                             routeDetaillist.add(routeDetail)
+                            setRouteDetailList(routeDetaillist)
                             j++
                         }
                         var route = Route(

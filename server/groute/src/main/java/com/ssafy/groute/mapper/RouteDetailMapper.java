@@ -17,4 +17,5 @@ public interface RouteDetailMapper {
     List<RouteDetail> selectByPlaceId(int placeId) throws Exception;
     void deleteAllRouteDetailByPId(int placeId) throws Exception;
     void deleteAllRouteDetailByRouteId(int routeId) throws Exception;
+    void updatePriority(RouteDetail routeDetail) throws Exception;
 }

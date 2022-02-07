@@ -36,4 +36,9 @@ public class AccountServiceImpl implements AccountService {
     public void updateAccount(Account account) throws Exception {
         accountMapper.updateAccount(account);
     }
+
+    @Override
+    public List<Account> selectByUserPlanId(int userPlanId) throws Exception {
+        return accountMapper.selectByUserPlanId(userPlanId);
+    }
 }

@@ -96,7 +96,7 @@ fun bindMyPlanRecyclerView(recyclerView: RecyclerView,data:List<UserPlan>){
 }
 
 @BindingAdapter("plandetailListData")
-fun bindPlanDetailRecyclerView(recyclerView:RecyclerView, data: List<RouteDetail>){
+fun bindPlanDetailRecyclerView(recyclerView:RecyclerView, data: List<Route>?){
     var adapter = recyclerView.adapter as TravelPlanListRecyclerviewAdapter
     if(recyclerView.adapter == null){
         adapter.setHasStableIds(true)
@@ -104,7 +104,7 @@ fun bindPlanDetailRecyclerView(recyclerView:RecyclerView, data: List<RouteDetail
     }else{
         adapter = recyclerView.adapter as TravelPlanListRecyclerviewAdapter
     }
-    adapter.list = data as MutableList<RouteDetail>
+    adapter.list = data as MutableList<Route>
     adapter.notifyDataSetChanged()
 }
 
