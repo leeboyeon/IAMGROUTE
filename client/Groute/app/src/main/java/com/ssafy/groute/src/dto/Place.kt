@@ -16,4 +16,6 @@ data class Place(
     val type: String,
     val userId: String,
     val zipCode: String
-)
+){
+    constructor():this("",0,"","",0,0,"","","","",0F,0,"","","")
+}

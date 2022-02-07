@@ -7,4 +7,6 @@ data class Route(
     val memo: String,
     val name: String,
     val routeDetailList: List<RouteDetail>
-)
+)  {
+    constructor():this(0,0,"","","", listOf())
+}
