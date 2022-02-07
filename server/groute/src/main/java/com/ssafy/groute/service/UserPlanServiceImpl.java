@@ -110,6 +110,11 @@ public class UserPlanServiceImpl implements UserPlanService {
         return userPlanMapper.findNotEndPlanById(userId);
     }
 
+    @Override
+    public List<UserPlan> selectTUserPlan() throws Exception {
+        return setThemeList(userPlanMapper.selectTUserPlan());
+    }
+
     @Transactional
     @Override
     public Map<String,Object> selectUserPlan(int id) throws Exception {
