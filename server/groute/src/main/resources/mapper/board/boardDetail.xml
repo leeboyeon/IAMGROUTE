@@ -70,7 +70,13 @@
 
     <update id="updateBoardDetail" parameterType="BoardDetail">
         update boarddetail
-        set title = #{title}, content = #{content}, img = #{img}, board_id = #{boardId}, update_date = now(), place_id = #{placeId}
+        <if test="placeId lte 0">
+            set title = #{title}, content = #{content}, img = #{img}, board_id = #{boardId}, update_date = now()
+        </if>
+        <if test="placeId gt 0">
+            set title = #{title}, content = #{content}, img = #{img}, board_id = #{boardId}, update_date = now(), place_id = #{placeId}
+        </if>
+        <!--        set title = #{title}, content = #{content}, img = #{img}, board_id = #{boardId}, update_date = now(), place_id = #{placeId}-->
         where id = #{id}
     </update>
 

@@ -31,7 +31,7 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public void init(String location) throws Exception{
 
-        Files.createDirectories(Paths.get(location));
+        Files.createDirectories(Paths.get(URI.create(location)));
 
     }
 
