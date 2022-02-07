@@ -130,7 +130,7 @@ public class UserPlanServiceImpl implements UserPlanService {
                 routeDetailList.get(routeDetail.getPriority()-1)
                         .setPlace(placeMapper.selectPlace(routeDetail.getPlaceId()));
             }
-            route.setRouteDetailList(routeDetailList);;
+            route.setRouteDetailList(routeDetailList);
             routeList.add(route);
         }
         userPlan.setThemeIdList(userPlanMapper.selectThemeListByPlanId(userPlan.getId()));
