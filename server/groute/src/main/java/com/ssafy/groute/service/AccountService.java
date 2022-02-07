@@ -12,4 +12,5 @@ public interface AccountService {
     List<Account> selectAllAccount() throws Exception;
     void deleteAccount(int id) throws Exception;
     void updateAccount(Account account) throws Exception;
+    List<Account> selectByUserPlanId(int userPlanId) throws Exception;
 }
