@@ -23,11 +23,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.R
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentBoardBinding
-import com.ssafy.groute.databinding.FragmentRouteListBinding
 import com.ssafy.groute.databinding.FragmentTravelPlanBinding
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.main.my.MyTravelFragment
-import com.ssafy.groute.src.main.route.RouteListFragment
 import com.ssafy.groute.src.main.route.RouteTabPageAdapter
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import kotlinx.coroutines.runBlocking

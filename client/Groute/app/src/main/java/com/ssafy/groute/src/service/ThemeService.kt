@@ -8,4 +8,6 @@ class ThemeService {
     suspend fun getThemeById(id: Int) : Response<Theme> {
         return RetrofitUtil.themeService.getThemeById(id)
     }
+
+    suspend fun getThemeList() = RetrofitUtil.themeService.getThemeList()
 }

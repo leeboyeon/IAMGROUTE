@@ -26,7 +26,7 @@ class HomeAreaAdapter(private val areaList: MutableList<Area>) : RecyclerView.Ad
         val dto = areaList[position]
         holder.apply {
             itemView.setOnClickListener {
-                itemClickListener.onClick(it, position, dto.name)
+                itemClickListener.onClick(it, position, dto.name, dto.id)
             }
             bind(dto)
         }
@@ -49,7 +49,7 @@ class HomeAreaAdapter(private val areaList: MutableList<Area>) : RecyclerView.Ad
 //    }
 
     interface ItemClickListener{
-        fun onClick(view: View, position: Int, name: String)
+        fun onClick(view: View, position: Int, name: String, id: Int)
     }
 
     private lateinit var itemClickListener : ItemClickListener

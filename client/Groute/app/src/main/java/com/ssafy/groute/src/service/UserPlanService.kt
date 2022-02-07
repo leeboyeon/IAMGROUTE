@@ -119,4 +119,6 @@ class UserPlanService {
     suspend fun getReviewById(id:Int) :Response<PlanReview>{
         return RetrofitUtil.userPlanService.getPlanReviewbyId(id)
     }
+
+    suspend fun getPlanList() = RetrofitUtil.userPlanService.getPlanList()
 }

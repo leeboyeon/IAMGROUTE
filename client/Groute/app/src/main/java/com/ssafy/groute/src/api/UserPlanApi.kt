@@ -41,4 +41,7 @@ interface UserPlanApi {
     @GET("/plan/review/detail")
     suspend fun getPlanReviewbyId(@Query("id")id:Int): Response<PlanReview>
 
+    @GET("/plan/list")
+    suspend fun getPlanList() : Response<MutableList<UserPlan>>
+
 }

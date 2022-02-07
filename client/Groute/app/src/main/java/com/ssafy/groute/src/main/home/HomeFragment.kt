@@ -83,7 +83,7 @@ class HomeFragment : Fragment() {
         homeViewModel.areaList.observe(viewLifecycleOwner, Observer {
             homeAreaAdapter = HomeAreaAdapter(it)
             homeAreaAdapter.setItemClickListener(object : HomeAreaAdapter.ItemClickListener {
-                override fun onClick(view: View, position: Int, name: String) {
+                override fun onClick(view: View, position: Int, name: String, id: Int) {
                     mainActivity.moveFragment(3)
                 }
             })

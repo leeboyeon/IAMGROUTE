@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.ssafy.groute.src.viewmodel.PlanViewModel" />
+    </data>
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="5dp"
@@ -28,7 +36,8 @@
             android:id="@+id/item_route_iv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/seoul"
+            android:src="@drawable/defaultimg"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +53,7 @@
         android:layout_marginTop="2dp"
         android:textColor="@color/black"
         android:gravity="center"
-        android:text="12 March, 20"
+        android:text="1박 2일"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/item_route_layout_iv"
         app:layout_constraintTop_toTopOf="@+id/item_route_layout_iv" />
@@ -64,16 +73,20 @@
 
     <TextView
         android:id="@+id/item_route_title_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="10dp"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:text="경복궁, 당일치기 겨울여행"
         android:textColor="@color/black"
         android:includeFontPadding="false"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/item_route_layout_iv"
-        app:layout_constraintTop_toBottomOf="@+id/item_route_area_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/item_route_area_tv"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_route_comment_btn"
@@ -95,9 +108,10 @@
         />
 
         <TextView
+            android:id="@+id/item_route_comment_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Comment"
+            android:text="0"
             android:textColor="@color/black"
             android:layout_marginStart="10dp"
             app:layout_constraintLeft_toRightOf="@id/item_route_comment_iv"
@@ -118,6 +132,7 @@
         app:tint="@color/black" />
 
     <TextView
+        android:id="@+id/item_route_like_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Like"
@@ -130,3 +145,4 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

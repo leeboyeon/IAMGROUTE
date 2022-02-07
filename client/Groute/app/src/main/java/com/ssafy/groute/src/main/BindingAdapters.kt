@@ -15,11 +15,8 @@ import com.ssafy.groute.src.main.home.PlaceFilterAdapter
 import com.ssafy.groute.src.main.home.ReviewAdapter
 import com.ssafy.groute.src.main.my.MyTravel
 import com.ssafy.groute.src.main.my.MyTravelAdapter
+import com.ssafy.groute.src.main.route.*
 import com.ssafy.groute.src.main.travel.PlaceShopAdapter
-import com.ssafy.groute.src.main.route.RouteDetailDayPlanAdapter
-import com.ssafy.groute.src.main.route.RouteDetailReviewAdapter
-import com.ssafy.groute.src.main.route.RouteDetailThemeAdapter
-import com.ssafy.groute.src.main.route.RouteThemeRecyclerviewAdapter
 import com.ssafy.groute.src.main.travel.TravelPlanListRecyclerviewAdapter
 
 @BindingAdapter("imageUrlArea")
@@ -140,6 +137,20 @@ fun bindPlanReviewRecyclerView(recyclerView:RecyclerView, data: List<PlanReview>
 @BindingAdapter("planThemeListData")
 fun bindThemeReviewRecyclerView(recyclerView:RecyclerView, data: List<Theme>?){
     var adapter = recyclerView.adapter as RouteDetailThemeAdapter
+    adapter.setThemeList(data)
+    adapter.notifyDataSetChanged()
+}
+
+@BindingAdapter("routeListData")
+fun bindRouteListRecyclerView(recyclerView: RecyclerView, data: List<UserPlan>?) {
+    var adapter = recyclerView.adapter as RouteListRecyclerviewAdapter
+    adapter.setRouteList(data)
+    adapter.notifyDataSetChanged()
+}
+
+@BindingAdapter("routeThemeListData")
+fun bindRouteThemeRecyclerView(recyclerView: RecyclerView, data: List<Theme>?) {
+    var adapter = recyclerView.adapter as RouteThemeRecyclerviewAdapter
     adapter.setThemeList(data)
     adapter.notifyDataSetChanged()
 }

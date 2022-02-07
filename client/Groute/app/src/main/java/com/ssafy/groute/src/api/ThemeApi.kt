@@ -8,4 +8,7 @@ import retrofit2.http.Query
 interface ThemeApi {
     @GET("/theme/detail")
     suspend fun getThemeById(@Query("id") id : Int) : Response<Theme>
+
+    @GET("/theme/list")
+    suspend fun getThemeList() : Response<MutableList<Theme>>
 }

@@ -25,6 +25,8 @@ class PlanViewModel : ViewModel(){
     private val _planReviewListResponse = MutableLiveData<MutableList<PlanReview>>()
     private val _reviewResponse = MutableLiveData<PlanReview>()
     private val _themeResponse = MutableLiveData<MutableList<Theme>>()
+    private val _userPlanListResponse = MutableLiveData<MutableList<UserPlan>>()
+    private val _userPlanListByDayResponse = MutableLiveData<MutableList<UserPlan>>()
 
 //    private val _routeResponse = MutableLiveData<MutableList<>>
 //    private val _routeDetailResponse = MutableLiveData<MutableList<>>
@@ -48,6 +50,10 @@ class PlanViewModel : ViewModel(){
         get() = _reviewResponse
     val theme: LiveData<MutableList<Theme>>
         get() = _themeResponse
+    val userPlanList: LiveData<MutableList<UserPlan>>
+        get() = _userPlanListResponse
+    val userPlanByDayList: LiveData<MutableList<UserPlan>>
+            get() = _userPlanListByDayResponse
 
 
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
@@ -89,6 +95,13 @@ class PlanViewModel : ViewModel(){
     fun setTheme(themeList: MutableList<Theme>) = viewModelScope.launch {
         _themeResponse.value = themeList
     }
+    fun setUserPlanList(userPlanList: MutableList<UserPlan>) = viewModelScope.launch {
+        _userPlanListResponse.value = userPlanList
+    }
+    fun setUserPlanByDayList(userPlanList: MutableList<UserPlan>) = viewModelScope.launch {
+        _userPlanListByDayResponse.value = userPlanList
+    }
+
 
     suspend fun getPlanBestList(){
         val response = UserPlanService().getBestUserPlan()
@@ -288,7 +301,7 @@ class PlanViewModel : ViewModel(){
             if(response.code()==200){
                 if(res!=null){
                     setPlanReviewList(res)
-                    Log.d(TAG, "getPlanReviewListbyId: ")
+                    Log.d(TAG, "getPlanReviewListbyId: $res")
                 }
 
             }else{
@@ -332,5 +345,55 @@ class PlanViewModel : ViewModel(){
         Log.d(TAG, "getThemeById: $list")
         setTheme(list)
 
+    }
+
+    suspend fun getThemeList() {
+        val response = ThemeService().getThemeList()
+        viewModelScope.launch {
+            var res = response.body()
+            if (response.code() == 200) {
+                if (res != null) {
+                    setTheme(res)
+                    Log.d(TAG, "onResponse: $res")
+                }
+
+            } else {
+                Log.d(TAG, "Error : ${response.message()} ")
+            }
+        }
+
+    }
+
+    suspend fun getUserPlanList() {
+        val response = UserPlanService().getPlanList()
+        viewModelScope.launch {
+            var res = response.body()
+            if (response.code() == 200) {
+                if (res != null) {
+                    setUserPlanList(res)
+                    setUserPlanByDayList(res)
+                    Log.d(TAG, "onResponse: $res")
+                }
+
+            } else {
+                Log.d(TAG, "Error : ${response.message()} ")
+            }
+        }
+    }
+
+    fun getRoutebyDay(totalDate :Int){
+        viewModelScope.launch {
+            var list = mutableListOf<UserPlan>()
+            if(totalDate == 0) {
+                list = userPlanList.value!!
+            } else {
+                for(i in 0 until userPlanList.value!!.size){
+                    if(userPlanList.value!!.get(i).totalDate == totalDate){
+                        list.add(userPlanList.value!!.get(i))
+                    }
+                }
+            }
+            setUserPlanByDayList(list)
+        }
     }
 }
