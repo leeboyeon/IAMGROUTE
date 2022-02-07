@@ -199,9 +199,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .addToBackStack(null)
             }
             14 -> {
-                transaction.replace(R.id.frame_main_layout, RouteReviewWriteFragment.newInstance(key1,value1,key2,value2))
-            15 ->{
+                transaction.replace(
+                    R.id.frame_main_layout,
+                    RouteReviewWriteFragment.newInstance(key1, value1, key2, value2)
+                )
+            }
+            15 -> {
                 transaction.replace(R.id.frame_main_layout, PlaceTmpFragment.newInstance(key1,value1))
+                    .addToBackStack(null)
+            }
+            16 ->{
+                transaction.replace(R.id.frame_main_layout, RouteFragment.newInstance(key1,value1))
                     .addToBackStack(null)
             }
 

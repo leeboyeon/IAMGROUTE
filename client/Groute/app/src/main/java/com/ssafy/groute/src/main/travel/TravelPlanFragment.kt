@@ -89,7 +89,6 @@ private const val TAG = "TravelPlanFragment"
     val routeSelectList = arrayListOf<RouteRecom>()
 
     private lateinit var routeRecomDialogAdapter:RouteRecomDialogAdapter
-    private lateinit var placeShopAdapter: PlaceShopAdapter
     private lateinit var travelPlanListRecyclerviewAdapter: TravelPlanListRecyclerviewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -128,7 +127,10 @@ private const val TAG = "TravelPlanFragment"
         initTabLayout()
 //        initPlaceList()
         floatingButtonEvent()
-
+        binding.travelplanBackIv.setOnClickListener {
+            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
+            mainActivity.supportFragmentManager.popBackStack()
+        }
         binding.travelplanCalcBtn.setOnClickListener {
             val money = binding.travelplanCalcIv
             val animator = ValueAnimator.ofFloat(0f,0.5f).setDuration(500)
@@ -171,7 +173,7 @@ private const val TAG = "TravelPlanFragment"
         }
         placeAddButton.setOnClickListener {
             fbAnim()
-            mainActivity.moveFragment(14,"planId",planId)
+            mainActivity.moveFragment(15,"planId",planId)
         }
     }
 
@@ -265,7 +267,6 @@ private const val TAG = "TravelPlanFragment"
         var dialogRv = dialogView.findViewById<RecyclerView>(R.id.routeRecom_rv_typeSelect)
         dialogRv.apply {
             layoutManager = GridLayoutManager(requireContext(),1,LinearLayoutManager.HORIZONTAL,false)
-//            layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
             adapter = routeRecomDialogAdapter
             adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
@@ -284,9 +285,17 @@ private const val TAG = "TravelPlanFragment"
         dialogView.findViewById<Button>(R.id.routeRecom_btn_ok).setOnClickListener {
             if(selectPosition == 0){
                 //당일
+                mainActivity.moveFragment(16,"days",1)
+                dialog.cancel()
             }
             if(selectPosition == 1){
                 //전체
+                    var total = 0
+                     planViewModel.planList.observe(viewLifecycleOwner, Observer {
+                        total = it.totalDate
+                    })
+                mainActivity.moveFragment(16,"days",total)
+                dialog.cancel()
             }
         }
         dialog.setTitle("원하는 타입을 선택해주세요")

@@ -16,6 +16,7 @@ import com.ssafy.groute.databinding.FragmentRouteCreateBinding
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.dto.Area
 import com.ssafy.groute.src.main.home.CategoryAdapter
+import com.ssafy.groute.src.main.home.PlaceDetailFragment
 import com.ssafy.groute.src.service.AreaService
 import com.ssafy.groute.util.RetrofitCallback
 
@@ -26,11 +27,12 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
     lateinit var pagerAdapter: RouteTabPageAdapter
     lateinit var routeAreaAdapter: RouteAreaAdapter
     private var categoryAdapter:CategoryAdapter = CategoryAdapter()
+
+    private var days = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
         mainActivity.hideBottomNav(false)
-
     }
 
     override fun onResume() {
@@ -41,6 +43,10 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
+        arguments?.let {
+            days = it.getInt("days", -1)
+            Log.d(TAG, "onAttach: ${days}")
+        }
     }
 
 //    override fun onCreateView(
@@ -110,5 +116,14 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         override fun onFailure(code: Int) {
             Log.d(TAG, "onFailure: ")
         }
+    }
+    companion object {
+        @JvmStatic
+        fun newInstance(key1:String, value1:Int) =
+            RouteFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(key1,value1)
+                }
+            }
     }
 }
