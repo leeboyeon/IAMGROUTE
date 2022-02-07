@@ -302,8 +302,7 @@ class ProfileEditActivity : AppCompatActivity() {
             val byteArrayOutputStream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 20, byteArrayOutputStream)  // 압축해서 저장
             val requestBody = RequestBody.create(MediaType.parse("image/*"), byteArrayOutputStream.toByteArray())
-            fileExtension = fileExtension?.substring(6)
-            val uploadFile = MultipartBody.Part.createFormData("img", "${file.name}.$fileExtension", requestBody)
+            val uploadFile = MultipartBody.Part.createFormData("img", "${file.name}.${fileExtension?.substring(6)}", requestBody)
             val gson : Gson = Gson()
             val json = gson.toJson(user)
             val requestBody_user = RequestBody.create(MediaType.parse("text/plain"), json)

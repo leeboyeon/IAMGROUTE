@@ -1,27 +1,29 @@
 package com.ssafy.groute.service;
 
+import com.ssafy.groute.controller.UserController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
-
-
-import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.Objects;
+
 
 @Service
-public class StorageServiceImpl implements StorageService{
+public class StorageServiceImpl implements StorageService {
 
-    @Value("${spring.servlet.multipart.location}")
+//    @Value("${spring.servlet.multipart.location}")
+    @Value("${spring.http.multipart.location}")
     private String uploadPath;
 
 
@@ -34,7 +36,9 @@ public class StorageServiceImpl implements StorageService{
 
     @Override
     public String store(MultipartFile file, String location) throws Exception{
-        Path root = Paths.get(location);
+//        Path root = Paths.get(location);
+        Path root = Paths.get(URI.create(location));
+
         LocalDate date = LocalDate.now();
         String fileName = date + "_" + file.getOriginalFilename();
         if (!Files.exists(root)) {

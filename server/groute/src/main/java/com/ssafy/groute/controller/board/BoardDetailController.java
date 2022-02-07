@@ -50,7 +50,8 @@ public class BoardDetailController {
     @Autowired
     private ObjectMapper mapper;
 
-    @Value("${spring.servlet.multipart.location}")
+//    @Value("${spring.servlet.multipart.location}")
+    @Value("${spring.http.multipart.location}")
     private String uploadPath;
 
 //    public BoardDetailController() {

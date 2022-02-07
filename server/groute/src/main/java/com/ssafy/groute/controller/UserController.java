@@ -42,7 +42,8 @@ public class UserController {
     @Autowired
     private ObjectMapper mapper;
 
-    @Value("${spring.servlet.multipart.location}")
+//    @Value("${spring.servlet.multipart.location}")
+    @Value("${spring.http.multipart.location}")
     private String uploadPath;
 
 //    @ApiOperation(value = "프로필사진", notes = "프로필사진")
@@ -140,7 +141,7 @@ public class UserController {
         }
 
         if (img != null) {
-            String fileName = storageService.store(img, uploadPath + "/user");
+            String fileName = storageService.store(img, uploadPath + "user");
             inputUser.setImg(fileName);
         } else {
             if(beforeUserImg.equals("") || beforeUserImg.equals("null")){

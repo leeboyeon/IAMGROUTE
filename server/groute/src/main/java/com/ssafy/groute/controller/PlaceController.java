@@ -42,7 +42,8 @@ public class PlaceController {
     @Autowired
     private ObjectMapper mapper;
 
-    @Value("${spring.servlet.multipart.location}")
+//    @Value("${spring.servlet.multipart.location}")
+    @Value("${spring.http.multipart.location}")
     private String uploadPath;
 
     @ApiOperation(value = "place 추가",notes = "place 추가")
