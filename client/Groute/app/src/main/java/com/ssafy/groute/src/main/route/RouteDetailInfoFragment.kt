@@ -58,6 +58,13 @@ class RouteDetailInfoFragment : BaseFragment<FragmentRouteDetailInfoBinding>(Fra
             layoutManager = LinearLayoutManager(requireContext())
             adapter = routeDetailDayPerAdapter
         }
+
+        routeDetailDayPerAdapter.setItemClickListener(object : RouteDetailDayPerAdapter.ItemClickListener {
+            override fun onClick(position: Int, placeId: Int) {
+                mainActivity.moveFragment(4, "placeId", placeId)
+            }
+
+        })
     }
 
 

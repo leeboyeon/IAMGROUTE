@@ -19,12 +19,16 @@ class RouteDetailDayPlanAdapter() : RecyclerView.Adapter<RouteDetailDayPlanAdapt
         val placeImg = itemView.findViewById<ImageView>(R.id.routedetail_recycler_item_item_day_place_img)
         val placeBtn = itemView.findViewById<ImageView>(R.id.routedetail_recycler_item_item_day_place_iv)
 
-        fun bindInfo(data : RouteDetail) {
+        fun bindInfo(data : RouteDetail, position: Int) {
             Glide.with(itemView)
                 .load("${ApplicationClass.IMGS_URL_PLACE}${data.place.img}")
                 .into(placeImg)
             placeName.text = "${data.place.name}"
             placeType.text = "${data.place.type}"
+
+            placeBtn.setOnClickListener{
+                itemClickListener.onClick(position, data.placeId)
+            }
 
         }
     }
@@ -40,11 +44,20 @@ class RouteDetailDayPlanAdapter() : RecyclerView.Adapter<RouteDetailDayPlanAdapt
 
     override fun onBindViewHolder(holder: RouteDetailDayPlanHolder, position: Int) {
         holder.apply {
-            bindInfo(list[position])
+            bindInfo(list[position], position)
+
         }
     }
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+    interface ItemClickListener{
+        fun onClick(position: Int, placeId: Int)
+    }
+    private lateinit var itemClickListener : ItemClickListener
+    fun setItemClickListener(itemClickListener: ItemClickListener){
+        this.itemClickListener = itemClickListener
     }
 }

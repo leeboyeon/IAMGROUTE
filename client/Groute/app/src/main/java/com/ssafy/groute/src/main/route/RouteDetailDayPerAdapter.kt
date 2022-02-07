@@ -41,6 +41,14 @@ class RouteDetailDayPerAdapter(val viewLifecycleOwner: LifecycleOwner, var list:
                 adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
 
+            routeDetailDayPlanAdapter.setItemClickListener(object : RouteDetailDayPlanAdapter.ItemClickListener{
+                override fun onClick(position: Int, placeId: Int) {
+                    itemClickListener.onClick(position, placeId)
+                    Log.d(TAG, "onClick: $placeId")
+                }
+
+            })
+
 
 
         }
@@ -69,5 +77,13 @@ class RouteDetailDayPerAdapter(val viewLifecycleOwner: LifecycleOwner, var list:
     override fun getItemCount(): Int {
         Log.d(TAG, "getItemCount: ${list.size}")
         return list.size
+    }
+
+    interface ItemClickListener{
+        fun onClick(position: Int, placeId: Int)
+    }
+    private lateinit var itemClickListener : ItemClickListener
+    fun setItemClickListener(itemClickListener: ItemClickListener){
+        this.itemClickListener = itemClickListener
     }
 }
