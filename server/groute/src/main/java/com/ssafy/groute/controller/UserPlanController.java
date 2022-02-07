@@ -129,10 +129,10 @@ public class UserPlanController {
             routeDetailService.insertRouteDetail(routeDetail);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "place 삭제",notes = "해당 일정에 place 삭제")

@@ -6,19 +6,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RelativeLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.src.dto.Route
 import com.ssafy.groute.src.dto.RouteDetail
+import java.lang.NullPointerException
 import java.util.*
 import kotlin.collections.ArrayList
 
 private const val TAG = "TravelPlanListRecyclerviewAdapter_groute"
-class TravelPlanListRecyclerviewAdapter(val context: Context) : RecyclerView.Adapter<TravelPlanListRecyclerviewAdapter.TravelPlanListHolder>(){
-    var list = mutableListOf<RouteDetail>()
+class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableList<Route>) : RecyclerView.Adapter<TravelPlanListRecyclerviewAdapter.TravelPlanListHolder>(),
+    Filterable {
+    private var dayFilterList = list
+    private var route:Route = Route()
     inner class TravelPlanListHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val numTv = itemView.findViewById<TextView>(R.id.item_travelplan_num_tv)
         val placeTv = itemView.findViewById<TextView>(R.id.item_travelplan_day_list_place_tv)
@@ -27,11 +28,11 @@ class TravelPlanListRecyclerviewAdapter(val context: Context) : RecyclerView.Ada
         val dottedLine2 = itemView.findViewById<RelativeLayout>(R.id.item_travelplan_dotted_line2)
         val removeTv = itemView.findViewById<TextView>(R.id.item_swipe_delete_tv)
 
-        @SuppressLint("LongLogTag")
+        @SuppressLint("LongLogTag", "SetTextI18n")
         fun bindInfo(data: RouteDetail, position: Int, flag: Int) {
             numTv.text = "${this.layoutPosition+1}"
-            placeTv.text = "${data.place.name}"
-            locTv.text = "${data.place.type}"
+            placeTv.text = data.place.name
+            locTv.text = data.place.address
 
             // item의 위치에 따라 점선 보이거나 안보이거나 처리
             if(flag == 0) {
@@ -61,27 +62,63 @@ class TravelPlanListRecyclerviewAdapter(val context: Context) : RecyclerView.Ada
     override fun onBindViewHolder(holder: TravelPlanListHolder, position: Int) {
         holder.apply {
             if(position == 0) {
-                bindInfo(list[position], position,0)
-            } else if(position == list.size-1){
-                bindInfo(list[position], position, 1)
+                bindInfo(route.routeDetailList[position], position,0)
+            } else if(position == dayFilterList.size-1){
+                bindInfo(route.routeDetailList[position], position, 1)
             } else {
-                bindInfo(list[position], position, 2)
+                bindInfo(route.routeDetailList[position], position, 2)
             }
-
         }
     }
 
     override fun getItemCount(): Int {
-        return list.size
+//        return dayFilterList.size
+        return route.routeDetailList.size
     }
 
     fun removeData(position: Int) {
-        list.removeAt(position)
+        dayFilterList.removeAt(position)
         notifyItemRemoved(position)
     }
 
     fun swapData(fromPos: Int, toPos: Int) {
-        Collections.swap(list, fromPos, toPos)
+        Collections.swap(dayFilterList, fromPos, toPos)
         notifyItemMoved(fromPos, toPos)
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            @SuppressLint("LongLogTag")
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val charString = constraint.toString()
+                dayFilterList = if(charString.isEmpty()){
+                    list
+                }else{
+                    var result = Route()
+                    val resultList = ArrayList<Route>()
+                    Log.d(TAG, "performFiltering: ${charString}")
+                    Log.d(TAG, "performFiltering: ${list}")
+                    var size = list.size
+                    for(item in 0..size-1){
+                        Log.d(TAG, "performFiltering: ${result.day}")
+                        if(list[item].day == charString.toInt()){
+
+                            result = list[item]
+                            route = result
+                        }
+                    }
+                    resultList
+                }
+                val filteredResult = FilterResults()
+                filteredResult.values = dayFilterList
+                return filteredResult
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                dayFilterList = mutableListOf()
+                notifyDataSetChanged()
+            }
+
+        }
     }
 }

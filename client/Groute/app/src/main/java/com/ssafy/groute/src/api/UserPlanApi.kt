@@ -2,6 +2,7 @@ package com.ssafy.groute.src.api
 
 import com.ssafy.groute.src.dto.PlaceReview
 import com.ssafy.groute.src.dto.PlanReview
+import com.ssafy.groute.src.dto.RouteDetail
 import com.ssafy.groute.src.dto.UserPlan
 import retrofit2.Call
 import retrofit2.Response
@@ -29,4 +30,6 @@ interface UserPlanApi {
     @GET("/plan/review/list/{planId}")
     suspend fun getPlanReviewListbyId(@Path("planId") planId:Int) : Response<MutableList<PlanReview>>
 
+    @POST("/plan/place")
+    fun insertPlaceToUserPlan(@Body routeDetail: RouteDetail) : Call<Boolean>
 }

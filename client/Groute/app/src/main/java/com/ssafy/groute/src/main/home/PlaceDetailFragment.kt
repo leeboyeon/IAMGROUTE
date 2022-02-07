@@ -56,6 +56,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
 
         runBlocking {
             placeViewModel.getPlace(placeId)
+            planViewModel.getPlanMyList(ApplicationClass.sharedPreferencesUtil.getUser().id)
         }
         val areaTabPagerAdapter = AreaTabPagerAdapter(this)
         val tabList = arrayListOf("Info","Review")
@@ -72,19 +73,22 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
             mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
             mainActivity.supportFragmentManager.popBackStack()
         }
-        if(planId > 0){
-            binding.placeDetailLayoutAddPlan.visibility = View.VISIBLE
-            binding.placeDetailLayoutAddPlan.setOnClickListener {
-                binding.placeDetailLottieAddPlan.playAnimation()
-                placeViewModel.place.observe(viewLifecycleOwner, Observer {
-                    planViewModel.insertPlaceShopList(it)
-                    Log.d(TAG, "onViewCreated_PlaceSHOP: ${it}")
-                })
+        planViewModel.planMyList.observe(viewLifecycleOwner, Observer {
+            if(it.size > 0){
+                binding.placeDetailLayoutAddPlan.setOnClickListener {
+                    binding.placeDetailLottieAddPlan.playAnimation()
+                    placeViewModel.place.observe(viewLifecycleOwner, Observer {
+                        planViewModel.insertPlaceShopList(it)
+                        Log.d(TAG, "onViewCreated_PlaceSHOP: ${it}")
+                    })
+                }
+                showCustomToast("추가되었습니다!")
+            }else{
+                binding.placeDetailLayoutAddPlan.setOnClickListener {
+                    showCustomToast("추가하실 일정이 없습니다")
+                }
             }
-            showCustomToast("추가되었습니다!")
-        }else{
-            binding.placeDetailLayoutAddPlan.visibility = View.GONE
-        }
+        })
 
     }
 

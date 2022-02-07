@@ -2,6 +2,7 @@ package com.ssafy.groute.src.service
 
 import com.ssafy.groute.src.dto.PlaceReview
 import com.ssafy.groute.src.dto.PlanReview
+import com.ssafy.groute.src.dto.RouteDetail
 import com.ssafy.groute.src.dto.UserPlan
 import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil
@@ -49,5 +50,25 @@ class UserPlanService {
 
     suspend fun getPlanReviewbyId(planId:Int) : Response<MutableList<PlanReview>>{
         return RetrofitUtil.userPlanService.getPlanReviewListbyId(planId)
+    }
+
+    fun insertPlaceToUserPlan(routeDetail: RouteDetail, callback: RetrofitCallback<Boolean>){
+        RetrofitUtil.userPlanService.insertPlaceToUserPlan(routeDetail).enqueue(object :Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if(response.code() == 200){
+                    if(res==true){
+                        callback.onSuccess(response.code(),res)
+                    }
+                }else{
+                    callback.onFailure(response.code())
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callback.onError(t)
+            }
+
+        })
     }
 }
