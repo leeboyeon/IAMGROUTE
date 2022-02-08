@@ -23,13 +23,15 @@
     </select>
 
     <select id="selectAllUserPlan"  resultMap="UserPlanDTO">
-        select id, user_id, title, description, startDate, endDate, totalDate, isPublic, round(rate,2) rate, heartCnt, area_id
-        from userplan
+        select u.id, u.user_id, u.title, u.description, u.startDate, u.endDate, u.totalDate, u.isPublic, round(u.rate,2) rate, u.heartCnt, u.area_id,
+               (select count(*) from planreview p where p.userplan_id = u.id) as reviewCnt
+        from userplan u;
     </select>
 
     <select id="selectTUserPlan"  resultMap="UserPlanDTO">
-        select id, user_id, title, description, startDate, endDate, totalDate, isPublic, round(rate,2) rate, heartCnt, area_id
-        from userplan
+        select u.id, u.user_id, u.title, u.description, u.startDate, u.endDate, u.totalDate, u.isPublic, round(u.rate,2) rate, u.heartCnt, u.area_id,
+               (select count(*) from planreview p where p.userplan_id = u.id) as reviewCnt
+        from userplan u
         where ispublic = "T"
     </select>
 

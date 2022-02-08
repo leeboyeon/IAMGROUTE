@@ -24,4 +24,5 @@ public class UserPlan {
     private int heartCnt;
     private int areaId;
     private List<Integer> themeIdList;
+    private int reviewCnt;
 }
