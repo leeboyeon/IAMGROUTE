@@ -115,6 +115,11 @@ public class UserPlanServiceImpl implements UserPlanService {
         return setThemeList(userPlanMapper.selectTUserPlan());
     }
 
+    @Override
+    public List<UserPlan> selectAllPlanByUserId(String userId) throws Exception {
+        return userPlanMapper.selectAllPlanByUserId(userId);
+    }
+
     @Transactional
     @Override
     public Map<String,Object> selectUserPlan(int id) throws Exception {

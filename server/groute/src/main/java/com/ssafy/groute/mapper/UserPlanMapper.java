@@ -26,4 +26,5 @@ public interface UserPlanMapper {
     List<Integer> selectThemeListByPlanId(int id) throws Exception;
     List<UserPlan> findEndPlanById(String userId) throws Exception;
     List<UserPlan> findNotEndPlanById(String userId) throws Exception;
+    List<UserPlan> selectAllPlanByUserId(String userId) throws Exception;
 }

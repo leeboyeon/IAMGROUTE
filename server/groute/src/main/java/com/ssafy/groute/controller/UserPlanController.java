@@ -313,4 +313,15 @@ public class UserPlanController {
 
         return new ResponseEntity<List<PlanReview>>(res,HttpStatus.OK);
     }
+
+    @ApiOperation(value = "return like plan list",notes = "내가 좋아요한 plan 리스트 반환")
+    @GetMapping(value = "/like/{userId}")
+    public ResponseEntity<?> myPlan(@PathVariable("userId") String userId) throws Exception{
+        List<UserPlan> res = userPlanService.selectAllPlanByUserId(userId);
+        if(res==null){
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<List<UserPlan>>(res,HttpStatus.OK);
+    }
 }
