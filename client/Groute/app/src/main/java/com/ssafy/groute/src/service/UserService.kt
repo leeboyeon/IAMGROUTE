@@ -3,6 +3,7 @@ package com.ssafy.groute.src.service
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.ssafy.groute.src.dto.SharedUser
 import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.util.RetrofitCallback
@@ -180,5 +181,82 @@ class UserService {
             }
 
         })
+    }
+
+    /**
+     * 사용자의 공유유저의 정보를 추가한다.
+     * @param shareUser
+     */
+    fun insertSharedUser(shareUser:SharedUser, callback: RetrofitCallback<Boolean>){
+        RetrofitUtil.userService.insertSharedUser(shareUser).enqueue(object: Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if(response.code() == 200) {
+                    if (res != null) {
+                        callback.onSuccess(response.code(), res)
+                    }
+                } else {
+                    callback.onFailure(response.code())
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callback.onError(t)
+            }
+        })
+    }
+
+    /**
+     * 사용자의 공유유저의 정보를 수정한다.
+     * @param shareUser
+     */
+    fun updateSharedUser(shareUser: SharedUser,callback: RetrofitCallback<Boolean>){
+        RetrofitUtil.userService.updateSharedUser(shareUser).enqueue(object: Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if(response.code() == 200) {
+                    if (res != null) {
+                        callback.onSuccess(response.code(), res)
+                    }
+                } else {
+                    callback.onFailure(response.code())
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callback.onError(t)
+            }
+        })
+    }
+
+    /**
+     * 사용자의 공유유저의 정보를 삭제한다.
+     * @param shareUser
+     */
+    fun deleteSharedUser(shareUser: SharedUser, callback: RetrofitCallback<Boolean>){
+        RetrofitUtil.userService.deleteSharedUser(shareUser).enqueue(object: Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if(response.code() == 200) {
+                    if (res != null) {
+                        callback.onSuccess(response.code(), res)
+                    }
+                } else {
+                    callback.onFailure(response.code())
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callback.onError(t)
+            }
+        })
+    }
+
+    /**
+     * 사용자의 공유유저의 정보를 불러온다
+     * @param shareUser
+     */
+    suspend fun getShareUserbyPlanId(planId:Int) : Response<MutableList<User>>{
+        return RetrofitUtil.userService.getShareUserList(planId)
     }
 }

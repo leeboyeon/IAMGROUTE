@@ -17,6 +17,7 @@ import com.ssafy.groute.src.main.my.MyTravel
 import com.ssafy.groute.src.main.my.MyTravelAdapter
 import com.ssafy.groute.src.main.route.*
 import com.ssafy.groute.src.main.travel.PlaceShopAdapter
+import com.ssafy.groute.src.main.travel.SharedMemberAdapter
 import com.ssafy.groute.src.main.travel.TravelPlanListRecyclerviewAdapter
 
 @BindingAdapter("imageUrlArea")
@@ -154,5 +155,16 @@ fun bindRouteThemeRecyclerView(recyclerView: RecyclerView, data: List<Theme>?) {
     adapter.setThemeList(data)
     adapter.notifyDataSetChanged()
 }
-
+@BindingAdapter("shareMamberListData")
+fun bindShareMemberRecyclerView(recyclerView: RecyclerView, data:List<User>?){
+    var adapter = recyclerView.adapter as SharedMemberAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as SharedMemberAdapter
+    }
+    adapter.list = data as ArrayList<User>
+    adapter.notifyDataSetChanged()
+}
 

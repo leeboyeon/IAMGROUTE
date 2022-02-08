@@ -145,9 +145,12 @@ private const val TAG = "TravelPlanFragment"
                 member.progress = animation.animatedValue as Float
             }
             animator.start()
+            mainActivity.moveFragment(17,"planId",planId)
         }
     }
+    fun showMemberDialog(){
 
+    }
 
 
     // 플로팅 버튼 이벤트 처리

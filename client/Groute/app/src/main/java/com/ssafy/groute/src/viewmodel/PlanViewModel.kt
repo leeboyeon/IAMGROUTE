@@ -9,6 +9,7 @@ import com.ssafy.groute.src.dto.*
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.service.ThemeService
 import com.ssafy.groute.src.service.UserPlanService
+import com.ssafy.groute.src.service.UserService
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
@@ -27,6 +28,8 @@ class PlanViewModel : ViewModel(){
     private val _themeResponse = MutableLiveData<MutableList<Theme>>()
     private val _userPlanListResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _userPlanListByDayResponse = MutableLiveData<MutableList<UserPlan>>()
+    private val _shareUserListResponse = MutableLiveData<MutableList<User>>()
+
 
 //    private val _routeResponse = MutableLiveData<MutableList<>>
 //    private val _routeDetailResponse = MutableLiveData<MutableList<>>
@@ -53,8 +56,9 @@ class PlanViewModel : ViewModel(){
     val userPlanList: LiveData<MutableList<UserPlan>>
         get() = _userPlanListResponse
     val userPlanByDayList: LiveData<MutableList<UserPlan>>
-            get() = _userPlanListByDayResponse
-
+        get() = _userPlanListByDayResponse
+    val shareUserList: LiveData<MutableList<User>>
+        get() = _shareUserListResponse
 
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planBestResponse.value = plan
@@ -77,6 +81,11 @@ class PlanViewModel : ViewModel(){
     fun setPlanEndList(plan:MutableList<UserPlan>) = viewModelScope.launch {
         _planEndResponse.value = plan
     }
+    fun setShareUserList(users:MutableList<User>) = viewModelScope.launch {
+        _shareUserListResponse.value = users
+    }
+
+
     val livePlaceshopList = MutableLiveData<MutableList<Place>>().apply {
         value = placeShopResponse
     }
@@ -404,6 +413,20 @@ class PlanViewModel : ViewModel(){
                 }
             }
             setUserPlanByDayList(list)
+        }
+    }
+    
+    suspend fun getShareUserbyPlanId(planId:Int){
+        val response = UserService().getShareUserbyPlanId(planId)
+        viewModelScope.launch { 
+            var res = response.body()
+            if(response.code() == 200 ){
+                if(res!=null){
+                    setShareUserList(res)
+                }
+            }else{
+                Log.d(TAG, "getShareUserbyPlanId: ")
+            }
         }
     }
 }

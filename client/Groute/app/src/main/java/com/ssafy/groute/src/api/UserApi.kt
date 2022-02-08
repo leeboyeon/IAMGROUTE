@@ -1,5 +1,6 @@
 package com.ssafy.groute.src.api
 import android.content.Entity
+import com.ssafy.groute.src.dto.SharedUser
 import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.response.UserInfoResponse
 import okhttp3.MultipartBody
@@ -40,4 +41,18 @@ interface UserApi {
 
     @DELETE("/user/{userId}")
     fun deleteUser(@Path("userId") userId:String) : Call<Boolean>
+
+    //SharedUser
+
+    @POST("/planShareUser/insert")
+    fun insertSharedUser(@Body shareUser:SharedUser) : Call<Boolean>
+
+    @PUT("/planShareUser/update")
+    fun updateSharedUser(@Body shareUser:SharedUser) : Call<Boolean>
+
+    @DELETE("/planShareUser/del")
+    fun deleteSharedUser(@Body shareUser: SharedUser) : Call<Boolean>
+
+    @GET("planShareUser/list/{planId}")
+    suspend fun getShareUserList(@Path("planId")planId:Int) : Response<MutableList<User>>
 }

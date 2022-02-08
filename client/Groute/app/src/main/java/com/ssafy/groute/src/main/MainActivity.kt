@@ -40,6 +40,7 @@ import com.ssafy.groute.src.main.route.RouteDetailFragment
 import com.ssafy.groute.src.main.route.RouteFragment
 import com.ssafy.groute.src.main.route.RouteReviewWriteFragment
 import com.ssafy.groute.src.main.travel.PlaceTmpFragment
+import com.ssafy.groute.src.main.travel.SharedMemberFragment
 import com.ssafy.groute.src.main.travel.TravelPlanFragment
 import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
@@ -211,6 +212,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             16 ->{
                 transaction.replace(R.id.frame_main_layout, RouteFragment.newInstance(key1,value1))
                     .addToBackStack(null)
+            }
+            17 -> {
+                transaction.replace(R.id.frame_main_layout, SharedMemberFragment.newInstance(key1,value1))
             }
 
         }
