@@ -184,7 +184,8 @@ class PlanViewModel : ViewModel() {
                         rate = userPlantmp.getDouble("rate"),
                         heartCnt = userPlantmp.getInt("heartCnt"),
                         areaId = userPlantmp.getInt("areaId"),
-                        themeIdList = themeIdList
+                        themeIdList = themeIdList,
+                        reviewCnt = userPlantmp.getInt("reviewCnt")
                     )
 
                     val routetmp = JSONObject(res).getJSONArray("routeList")
