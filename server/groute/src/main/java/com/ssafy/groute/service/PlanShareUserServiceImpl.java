@@ -28,8 +28,8 @@ public class PlanShareUserServiceImpl implements PlanShareUserService {
     }
 
     @Override
-    public void deletePlanShareUser(int id) throws Exception {
-        planShareUserMapper.deletePlanShareUser(id);
+    public void deletePlanShareUser(PlanShareUser planShareUser) throws Exception {
+        planShareUserMapper.deletePlanShareUserByPlanIdUserId(planShareUser);
     }
 
     @Override

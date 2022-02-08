@@ -10,7 +10,7 @@ public interface PlanShareUserService {
     void insertPlanShareUser(PlanShareUser planShareUser) throws Exception;
     PlanShareUser selectPlanShareUser(int id) throws Exception;
     List<PlanShareUser> selectAllPlanShareUser() throws Exception;
-    void deletePlanShareUser(int id) throws Exception;
+    void deletePlanShareUser(PlanShareUser planShareUser) throws Exception;
     void updatePlanShareUser(PlanShareUser planShareUser) throws Exception;
     List<PlanShareUser> selectByUserId(String userId) throws Exception;
     List<PlanShareUser> selectByPlanId(int planId) throws Exception;
