@@ -163,8 +163,8 @@ class SharedMemberFragment: BaseFragment<FragmentSharedMemberBinding>(FragmentSh
     }
     fun deleteUser(userId:String){
         var shareUser = SharedUser(
-            planId,
-            userId
+            planId = planId,
+            userId = userId
         )
         UserService().deleteSharedUser(shareUser, object: RetrofitCallback<Boolean>{
             override fun onError(t: Throwable) {
@@ -174,7 +174,9 @@ class SharedMemberFragment: BaseFragment<FragmentSharedMemberBinding>(FragmentSh
             override fun onSuccess(code: Int, responseData: Boolean) {
                 Log.d(TAG, "onSuccess: ")
                 showCustomToast("삭제되었습니다.")
-                initAdapter()
+                suspend {
+                    planViewModel.getShareUserbyPlanId(planId)
+                }
             }
 
             override fun onFailure(code: Int) {
