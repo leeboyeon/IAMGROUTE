@@ -1,9 +1,6 @@
 package com.ssafy.groute.src.api
 
-import com.ssafy.groute.src.dto.PlaceReview
-import com.ssafy.groute.src.dto.PlanReview
-import com.ssafy.groute.src.dto.RouteDetail
-import com.ssafy.groute.src.dto.UserPlan
+import com.ssafy.groute.src.dto.*
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -47,5 +44,14 @@ interface UserPlanApi {
 
     @GET("/plan/list")
     suspend fun getPlanList() : Response<MutableList<UserPlan>>
+
+    @POST("/plan/isLike")
+    fun planIsLike(@Body planLike: PlanLike) : Call<Boolean>
+
+    @POST("/plan/like")
+    fun planLike(@Body planLike: PlanLike) : Call<Boolean>
+
+    @GET("/plan/like/{userId}")
+    suspend fun getPlanLikeListbyUserId(@Path("userId")userId:String) : Response<MutableList<UserPlan>>
 
 }

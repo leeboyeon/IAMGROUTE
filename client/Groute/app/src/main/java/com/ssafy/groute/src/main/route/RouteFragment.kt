@@ -14,24 +14,30 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.R
+import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentRouteBinding
 import com.ssafy.groute.databinding.FragmentRouteCreateBinding
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.dto.Area
+import com.ssafy.groute.src.dto.PlanLike
 import com.ssafy.groute.src.dto.UserPlan
 import com.ssafy.groute.src.main.home.CategoryAdapter
 import com.ssafy.groute.src.main.home.PlaceDetailFragment
 import com.ssafy.groute.src.main.home.HomeAreaAdapter
 import com.ssafy.groute.src.service.AreaService
+import com.ssafy.groute.src.service.BoardService
+import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.viewmodel.HomeViewModel
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
 
 private const val TAG = "RouteFragment_Groute"
-class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::bind, R.layout.fragment_route) {
-//    lateinit var binding: FragmentRouteBinding
+
+class RouteFragment :
+    BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::bind, R.layout.fragment_route) {
+    //    lateinit var binding: FragmentRouteBinding
     private lateinit var mainActivity: MainActivity
     lateinit var pagerAdapter: RouteTabPageAdapter
     private var days = 0
@@ -43,6 +49,7 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
     lateinit var RouteListAdapter: RouteListRecyclerviewAdapter
     var selectedTheme = mutableListOf<Int>()
     var tabPosition = 0
+    lateinit var userId: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -66,12 +73,15 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        userId = ApplicationClass.sharedPreferencesUtil.getUser().id
         binding.viewModel = planViewModel
         runBlocking {
             planViewModel.getUserPlanList()
             planViewModel.getThemeList()
             homeViewModel.getAreaLists()
+            planViewModel.getPlanLikeList(userId)
         }
+
         initTab()
         initAdapter()
         binding.routeCreateBtn.setOnClickListener {
@@ -80,7 +90,8 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
 
 
     }
-    fun initAdapter(){
+
+    fun initAdapter() {
         homeViewModel.areaList.observe(viewLifecycleOwner, Observer {
             routeAreaAdapter = HomeAreaAdapter(it)
             routeAreaAdapter.setItemClickListener(object : HomeAreaAdapter.ItemClickListener {
@@ -91,23 +102,25 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             })
             routeAreaAdapter.notifyDataSetChanged()
             binding.routeAreaRv.apply {
-                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = routeAreaAdapter
-                adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+                adapter!!.stateRestorationPolicy =
+                    RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
         })
 
         ThemeAdapter = RouteThemeRecyclerviewAdapter(requireContext())
         binding.routeThemeRv.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = ThemeAdapter
         }
         ThemeAdapter.setItemClickListener(object : RouteThemeRecyclerviewAdapter.ItemClickListener {
             override fun onClick(position: Int, id: Int, selectCheck: ArrayList<Int>) {
                 ThemeAdapter.notifyDataSetChanged()
                 selectedTheme.clear()
-                for(i in 0 until selectCheck.size) {
-                    if(selectCheck.get(i) == 1) {
+                for (i in 0 until selectCheck.size) {
+                    if (selectCheck.get(i) == 1) {
                         selectedTheme.add(i + 1)
                     }
                 }
@@ -120,14 +133,26 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         planViewModel.userPlanByDayList.observe(viewLifecycleOwner, Observer {
             RouteListAdapter = RouteListRecyclerviewAdapter(planViewModel, viewLifecycleOwner)
             RouteListAdapter.setRouteList(it)
-            binding.routeListRv.apply{
+            RouteListAdapter.setHasStableIds(true)
+            binding.routeListRv.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = RouteListAdapter
-                adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+                adapter!!.stateRestorationPolicy =
+                    RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
-            RouteListAdapter.setItemClickListener(object : RouteListRecyclerviewAdapter.ItemClickListener {
+            RouteListAdapter.setItemClickListener(object :
+                RouteListRecyclerviewAdapter.ItemClickListener {
                 override fun onClick(position: Int, id: Int) {
                     mainActivity.moveFragment(12, "planId", id)
+                }
+
+            })
+
+            RouteListAdapter.setHeartClickListener(object :
+                RouteListRecyclerviewAdapter.HeartClickListener {
+                override fun onClick(view: View, position: Int, planId: Int) {
+                    Log.d(TAG, "PlanLike onClick: ")
+                    planLike(PlanLike(userId, planId), position)
                 }
 
             })
@@ -140,9 +165,9 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         binding.routeTabLayout.addTab(binding.routeTabLayout.newTab().setText("3박4일"))
         binding.routeTabLayout.addTab(binding.routeTabLayout.newTab().setText("4박5일"))
 
-        binding.routeTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+        binding.routeTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                when(tab?.position) {
+                when (tab?.position) {
                     0 -> {
                         tabPosition = 0
                         planViewModel.getRoutebyDay(0, selectedTheme)
@@ -178,12 +203,30 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
 
         })
     }
+
+    fun planLike(planLike: PlanLike, position: Int) {
+        UserPlanService().planLike(planLike, object : RetrofitCallback<Boolean> {
+            override fun onError(t: Throwable) {
+                Log.d(TAG, "onError: 루트 좋아요 에러")
+            }
+            override fun onSuccess(code: Int, responseData: Boolean) {
+                //planViewModel.getRoutebyDay(tabPosition, selectedTheme)
+                //RouteListAdapter.notifyDataSetChanged()
+                Log.d(TAG, "onSuccess: 루트 좋아요 성공")
+
+            }
+            override fun onFailure(code: Int) {
+                Log.d(TAG, "onFailure: ")
+            }
+        })
+    }
+
     companion object {
         @JvmStatic
-        fun newInstance(key1:String, value1:Int) =
+        fun newInstance(key1: String, value1: Int) =
             RouteFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(key1,value1)
+                    putInt(key1, value1)
                 }
             }
     }

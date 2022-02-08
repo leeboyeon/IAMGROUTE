@@ -10,8 +10,10 @@ import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.service.ThemeService
 import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.service.UserService
+import com.ssafy.groute.util.RetrofitUtil
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import retrofit2.Response
 
 private const val TAG = "PlanViewModel_Groute"
 
@@ -30,7 +32,7 @@ class PlanViewModel : ViewModel() {
     private val _userPlanListResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _userPlanListByDayResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _shareUserListResponse = MutableLiveData<MutableList<User>>()
-
+    private val _planLikeListResponse = MutableLiveData<MutableList<UserPlan>>()
 
     //    private val _routeResponse = MutableLiveData<MutableList<>>
 //    private val _routeDetailResponse = MutableLiveData<MutableList<>>
@@ -60,6 +62,8 @@ class PlanViewModel : ViewModel() {
         get() = _userPlanListByDayResponse
     val shareUserList: LiveData<MutableList<User>>
         get() = _shareUserListResponse
+    val planLikeList : LiveData<MutableList<UserPlan>>
+        get() = _planLikeListResponse
 
 
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
@@ -133,6 +137,10 @@ class PlanViewModel : ViewModel() {
     fun setUserPlanByDayList(userPlanList: MutableList<UserPlan>) = viewModelScope.launch {
         _userPlanListByDayResponse.value = userPlanList
     }
+    fun setPlanLikeList(plan: MutableList<UserPlan>) = viewModelScope.launch {
+        _planLikeListResponse.value = plan
+    }
+
 
 
     suspend fun getPlanBestList() {
@@ -471,5 +479,24 @@ class PlanViewModel : ViewModel() {
             }
         }
     }
+
+    suspend fun getPlanLikeList(userId:String){
+        val response = UserPlanService().getPlanLikeList(userId)
+        viewModelScope.launch {
+            var res = response.body()
+            if(response.code() == 200){
+                if(res!=null){
+                    setPlanLikeList(res)
+                    Log.d(TAG, "getPlanLikeList: ${res}")
+                }else{
+                    Log.d(TAG, "getPlanLikeList: ISNULL")
+                }
+            }else{
+                Log.d(TAG, "getPlanLikeList: FAIL")
+            }
+        }
+    }
+
+
 
 }

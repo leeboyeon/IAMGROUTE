@@ -4,7 +4,7 @@ data class UserPlan(
     val areaId: Int,
     val description: String?,
     val endDate: String,
-    val heartCnt: Int,
+    var heartCnt: Int,
     val id: Int,
     val isPublic: String,
     val rate: Double,
