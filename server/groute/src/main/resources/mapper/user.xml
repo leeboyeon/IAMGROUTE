@@ -27,4 +27,10 @@
         set nickname = #{nickname}, phone = #{phone}, gender = #{gender}, birth = #{birth}, email = #{email}, img = #{img}, type = #{type}, token = #{token}
         where id = #{id}
     </update>
+
+    <select id="selectByPlanId" parameterType="int" resultType="User">
+        select *
+        from user
+        where id in (select user_id from planshareuser where plan_id = #{planId})
+    </select>
 </mapper>
