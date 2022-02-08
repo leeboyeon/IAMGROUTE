@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.groute.src.dto.BoardDetail
+import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.response.BoardDetailWithCommentResponse
 import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil
@@ -191,8 +192,13 @@ class BoardService {
         })
     }
 
-    fun modifyBoardDetail(boardDetail: BoardDetail, callback: RetrofitCallback<Boolean>){
-        RetrofitUtil.boardService.modifyBoardDetail(boardDetail).enqueue(object : Callback<Boolean> {
+    /**
+     * 게시글 수정, image upload는 선택 사항이다.
+     * @param boardDetail
+     * @param img
+     */
+    fun modifyBoardDetail(boardDetail: RequestBody, img: MultipartBody.Part?, callback: RetrofitCallback<Boolean>){
+        RetrofitUtil.boardService.modifyBoardDetail(boardDetail, img).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 val res = response.body()
                 if(response.code() == 200){
@@ -203,7 +209,6 @@ class BoardService {
                     callback.onFailure(response.code())
                 }
             }
-
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
                 callback.onError(t)
             }
@@ -233,4 +238,16 @@ class BoardService {
         })
         return responseLiveData
     }
+
+
+    /**
+     * id에 해당하는 게시글과 댓글 조회 - coroutine ver.
+     * getBoardDetailWithCmtByCor
+     * @param id
+     * @return response
+     */
+    suspend fun getBoardDetailWithCmt(id: Int): Response<BoardDetailWithCommentResponse> {
+        return RetrofitUtil.boardService.getBoardDetailWithCmtByCor(id)
+    }
+
 }

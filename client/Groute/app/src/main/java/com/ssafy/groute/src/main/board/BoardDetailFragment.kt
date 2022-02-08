@@ -56,6 +56,7 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
             binding.boardDetailBoardNameTv.text = "질문게시판"
         }
         initAdapter()
+
         //그냥 글쓰기
         binding.boardDetailBtnWrite.setOnClickListener {
             Log.d(TAG, "onViewCreated: ${boardId}")

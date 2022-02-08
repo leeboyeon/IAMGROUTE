@@ -137,4 +137,41 @@ class BoardViewModel : ViewModel(){
             setQuestionList(it)
         })
     }
+
+
+    // jiwoo
+    private val _boardDetailResponse = MutableLiveData<BoardDetail>()
+    private val _boardDetailWithCmtListResponse = MutableLiveData<MutableList<Comment>>()
+
+    val boardDetail : LiveData<BoardDetail>
+        get() = _boardDetailResponse
+
+    val boardDetailWithCmtList : LiveData<MutableList<Comment>>
+        get() = _boardDetailWithCmtListResponse
+
+    fun setBoardDetail(boardDetail: BoardDetail) = viewModelScope.launch {
+        _boardDetailResponse.value = boardDetail
+    }
+
+    fun setBoardDetailWithCmtList(commentList : MutableList<Comment>) = viewModelScope.launch {
+        _boardDetailWithCmtListResponse.value = commentList
+    }
+
+    suspend fun getBoardDetail(boardDetailId : Int) {
+        val response = BoardService().getBoardDetailWithCmt(boardDetailId)
+        viewModelScope.launch {
+            val res = response.body()
+            if(response.code() == 200) {
+                if(res != null) {
+                    setBoardDetail(res.boardDetail)
+                    setBoardDetailWithCmtList(res.commentList as MutableList<Comment>)
+                    Log.d(TAG, "getBoardDetail: $res ${res.boardDetail} ${res.commentList}")
+                } else {
+                    Log.d(TAG, "getBoardDetailError: ${response.message()}")
+                }
+            }
+        }
+    }
+
+
 }

@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @CrossOrigin(origins = { "*" }, methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
@@ -145,7 +146,8 @@ public class BoardDetailController {
         try {
 //            logger.debug("updateBoardDetail : {}", board);
             BoardDetail boardDetail = mapper.readValue(board, BoardDetail.class);
-            String beforeImg = boardDetailService.selectBoardDetail(boardDetail.getId()).getImg();
+            String beforeImg = boardDetail.getImg();
+//            BoardDetail before = boardDetailService.selectBoardDetail(boardDetail.getId());
 //            logger.debug("updateBoardDetail : {}", boardDetail.getImg());
 
             if (img != null) {
@@ -158,7 +160,8 @@ public class BoardDetailController {
                 String fileName = storageService.store(img, uploadPath + filePath);
                 boardDetail.setImg(filePath + "/" + fileName);
             } else {    // img == null
-                if(beforeImg.equals("") || beforeImg.equals("null")){
+                logger.debug("img null {} {}", beforeImg, img);
+                if(beforeImg.isEmpty() || beforeImg.equals("null")){
                     boardDetail.setImg(null);
                 } else {
                     boardDetail.setImg(beforeImg);
