@@ -61,7 +61,6 @@ class PlanViewModel : ViewModel() {
     val shareUserList: LiveData<MutableList<User>>
         get() = _shareUserListResponse
 
-
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planBestResponse.value = plan
     }

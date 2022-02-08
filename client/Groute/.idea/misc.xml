@@ -7,8 +7,6 @@
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/activity_main.xml" value="0.1296875" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/dialog_loading.xml" value="0.27239583333333334" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/fragment_area.xml" value="0.264" />
-        <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/fragment_board_detail.xml" value="0.10625" />
-        <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/fragment_board_detail_detail.xml" value="0.176" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/fragment_board_write.xml" value="0.264" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/fragment_home.xml" value="0.136" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/fragment_info.xml" value="0.264" />
@@ -16,21 +14,28 @@
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/fragment_place_detail.xml" value="0.4" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/fragment_review_fragment.xml" value="0.27239583333333334" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/fragment_sign.xml" value="0.3435897435897436" />
-        <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/fragment_travel_plan.xml" value="0.25" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/recyclerview_category_item.xml" value="0.27239583333333334" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/recyclerview_travleing_item.xml" value="0.4" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/menu/bottomnav_item.xml" value="0.264" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/drawable/back.xml" value="0.17604166666666668" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/drawable/button_in_camera.xml" value="0.3536458333333333" />
+        <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/drawable/drawable_button_cycler.xml" value="0.22962962962962963" />
+        <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/drawable/drawable_button_stoke_right.xml" value="0.26851851851851855" />
+        <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/drawable/drawable_button_stroke.xml" value="0.26851851851851855" />
+        <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/drawable/drawable_dialog_backgroud.xml" value="0.26851851851851855" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/drawable/drawable_layerlist_write.xml" value="0.3263534218590398" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/drawable/drawable_select_recyclerview.xml" value="0.3536458333333333" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/drawable/drawable_write_button_background.xml" value="0.3263534218590398" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/drawable/edittext_background.xml" value="0.3536458333333333" />
+        <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/drawable/memo_background.xml" value="0.2324074074074074" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/drawable/profilebar_gradient_background.xml" value="0.17604166666666668" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/activity_login.xml" value="0.1734375" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/dialog_comment_edit.xml" value="0.16145307769929365" />
+        <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/dialog_insert_memo.xml" value="0.31354166666666666" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/dialog_select_the_recomroute.xml" value="0.18" />
+        <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/dialog_sharemember.xml" value="0.5" />
+        <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/dialog_show_memo.xml" value="0.33" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/fragment_area.xml" value="0.2" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/fragment_board.xml" value="0.2820083682008368" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/fragment_board_detail.xml" value="0.33" />
@@ -42,6 +47,7 @@
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/fragment_my.xml" value="0.20260416666666667" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/fragment_my_travel.xml" value="0.33" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/fragment_place_detail.xml" value="0.25" />
+        <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/fragment_place_tmp.xml" value="0.25" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/fragment_review.xml" value="0.25" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/fragment_review_fragment.xml" value="0.31302083333333336" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/fragment_review_write.xml" value="0.3333333333333333" />
@@ -50,28 +56,32 @@
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/fragment_route_list.xml" value="0.2776268115942029" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/fragment_save_travel.xml" value="0.2971014492753623" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/fragment_search.xml" value="0.22" />
+        <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/fragment_shared_member.xml" value="0.25" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/fragment_shared_travel.xml" value="0.1" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/fragment_sign.xml" value="0.22" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/fragment_travel_plan.xml" value="0.25" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/fragment_travel_plan_list.xml" value="0.1268920282542886" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/item_layout_banner.xml" value="0.20208333333333334" />
-        <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/item_travelplan_day_list.xml" value="0.20208333333333334" />
+        <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/item_travelplan_day_list.xml" value="0.33" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/item_travelplan_tab.xml" value="0.25" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/list_item_board.xml" value="0.22" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/list_item_route.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/list_item_theme.xml" value="0.5" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/recyclerview_area_place_item.xml" value="0.15" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/recyclerview_bestroute_item.xml" value="0.1" />
-        <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/recyclerview_board_list_item.xml" value="0.1" />
+        <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/recyclerview_board_list_item.xml" value="0.18" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/recyclerview_board_magazine_litem.xml" value="0.17552083333333332" />
+        <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/recyclerview_cart_list_item.xml" value="0.33" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/recyclerview_category_item.xml" value="0.33" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/recyclerview_comment_list_item.xml" value="0.75" />
+        <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/recyclerview_memo_list_item.xml" value="0.33" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/recyclerview_place_search.xml" value="0.25" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/recyclerview_place_shop_list_item.xml" value="0.2994791666666667" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/recyclerview_placereview_item.xml" value="0.22" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/recyclerview_recomroute_list_item.xml" value="0.25" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/recyclerview_route_addmember_item.xml" value="0.75" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/recyclerview_route_areaitem.xml" value="0.67" />
+        <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/recyclerview_sharedmember_list_item.xml" value="0.22708333333333333" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/layout/recyclerview_travleing_item.xml" value="0.1" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/menu/board_menu_item.xml" value="0.18177083333333333" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/menu/bottomnav_item.xml" value="0.1" />

@@ -7,14 +7,13 @@ import android.app.DatePickerDialog.OnDateSetListener
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.annotation.RequiresApi
@@ -33,7 +32,6 @@ import com.ssafy.groute.src.viewmodel.PlanViewModel
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import android.view.Display
 import android.view.View.inflate
 import android.widget.*
 import androidx.databinding.DataBindingUtil.inflate
@@ -52,13 +50,17 @@ import java.util.Date.from
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 import android.widget.DatePicker
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.datepicker.*
 import com.google.android.material.tabs.TabLayout
 import com.ssafy.groute.databinding.ActivityCommentNestedBinding.bind
 import com.ssafy.groute.src.dto.Place
+import com.ssafy.groute.src.dto.Route
 import com.ssafy.groute.src.dto.RouteDetail
+import com.ssafy.groute.src.service.RouteService
 import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.viewmodel.HomeViewModel
 import com.ssafy.groute.src.viewmodel.PlaceViewModel
@@ -90,9 +92,12 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     private var planId = -1
     private var placeId = -1
     val routeSelectList = arrayListOf<RouteRecom>()
+    private var curPos = 0
 
     private lateinit var routeRecomDialogAdapter:RouteRecomDialogAdapter
     private lateinit var travelPlanListRecyclerviewAdapter: TravelPlanListRecyclerviewAdapter
+    private lateinit var memoAdapter: MemoAdapter
+
     private var AreaLat = 0.0
     private var AreaLng = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,16 +114,6 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         }
         Log.d(TAG, "onAttach: ${planId}")
     }
-
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//
-//        binding = FragmentTravelPlanBinding.inflate(layoutInflater,container,false)
-//        con = container!!
-//        return binding.root
-//    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -157,6 +152,27 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             animator.start()
             mainActivity.moveFragment(17,"planId",planId)
         }
+        binding.travelPlanIbtnMemo.setOnClickListener {
+            initMemo()
+        }
+    }
+    fun initMemo(){
+        planViewModel.routeList.observe(viewLifecycleOwner, {
+            if(it[curPos].memo != null){
+                val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_show_memo,null)
+                val dialog = Dialog(requireContext())
+                dialog.setContentView(dialogView)
+                dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+                dialogView.findViewById<ImageButton>(R.id.memo_cancle).setOnClickListener {
+                    dialog.dismiss()
+                }
+                dialogView.findViewById<TextView>(R.id.dayMemo).text = it[curPos].memo
+                dialog.show()
+            }else {
+                showCustomToast("메모가 없습니다.")
+            }
+        })
     }
     fun initKakaoMap(){
         var mapView = MapView(requireContext())
@@ -193,6 +209,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         }
         memoAddButton.setOnClickListener{
             fbAnim()
+            insertMemo()
         }
         routeRecomButton.setOnClickListener {
             fbAnim()
@@ -246,6 +263,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         binding.travelplanTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 travelPlanListRecyclerviewAdapter.filter.filter((tab?.position?.plus(1)).toString())
+                curPos = tab!!.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -279,7 +297,49 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         })
 
     }
+    fun insertMemo(){
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_insert_memo,null)
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(dialogView)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        dialogView.findViewById<Button>(R.id.memo_btn_cancle).setOnClickListener {
+            dialog.dismiss()
+        }
+        dialogView.findViewById<Button>(R.id.memo_btn_insert).setOnClickListener {
+            //추가
+            val memo = dialogView.findViewById<TextView>(R.id.memo_tv_content).text.toString()
+//            RouteService().updateRoute()
+
+            planViewModel.routeList.observe(viewLifecycleOwner, {
+                var route = Route(
+                    day = it[curPos].day,
+                    id = it[curPos].id,
+                    isCustom = it[curPos].isCustom,
+                    memo = memo,
+                    name = it[curPos].name,
+                    routeDetailList = it[curPos].routeDetailList,
+                )
+                RouteService().updateRoute(route, object:RetrofitCallback<Boolean> {
+                    override fun onError(t: Throwable) {
+                        Log.d(TAG, "onError: ")
+                    }
+
+                    override fun onSuccess(code: Int, responseData: Boolean) {
+                        showCustomToast("메모가 추가되었습니다.")
+                        dialog.dismiss()
+                        initPlaceListAdapter()
+                    }
+
+                    override fun onFailure(code: Int) {
+                        Log.d(TAG, "onFailure: ")
+                    }
+
+                })
+            })
+        }
+        dialog.show()
+    }
     fun showRouteSelectDialog(){
         routeRecomDialogAdapter = RouteRecomDialogAdapter(requireContext())
         routeSelectList.apply {
