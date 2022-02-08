@@ -3,6 +3,8 @@ package com.ssafy.groute.service;
 import com.ssafy.groute.dto.Place;
 import com.ssafy.groute.dto.PlaceLike;
 import com.ssafy.groute.mapper.PlaceMapper;
+import com.ssafy.groute.mapper.PlaceReviewMapper;
+import com.ssafy.groute.mapper.RouteDetailMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,10 @@ import java.util.List;
 public class PlaceServiceImpl implements PlaceService {
     @Autowired
     PlaceMapper placeMapper;
+    @Autowired
+    RouteDetailMapper routeDetailMapper;
+    @Autowired
+    PlaceReviewMapper placeReviewMapper;
 
     @Override
     public void insertPlace(Place place) throws Exception {
@@ -31,6 +37,9 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public void deletePlace(int id) throws Exception {
+        routeDetailMapper.deleteAllRouteDetailByPlaceId(id);
+        placeMapper.deletePlaceLikeByPlaceId(id);
+        placeReviewMapper.deletePlaceReviewByPlaceId(id);
         placeMapper.deletePlace(id);
     }
 

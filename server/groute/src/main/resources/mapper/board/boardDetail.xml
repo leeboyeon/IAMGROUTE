@@ -86,8 +86,9 @@
         where id = #{id}
     </update>
 
-    <delete id="deleteAllBoardDetailByUid" parameterType="String">
-        delete from boarddetail
+    <select id="findBoardDetailIdsByUid" parameterType="String" resultType="int">
+        select id
+        from boarddetail
         where user_id = #{userId}
-    </delete>
+    </select>
 </mapper>

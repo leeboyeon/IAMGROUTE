@@ -50,7 +50,7 @@
         where place_id = #{placeId}
     </select>
 
-    <delete id="deleteAllRouteDetailByPId" parameterType="int">
+    <delete id="deleteAllRouteDetailByPlaceId" parameterType="int">
         delete from routedetail
         where place_id = #{placeId}
     </delete>

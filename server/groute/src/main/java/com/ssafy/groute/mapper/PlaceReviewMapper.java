@@ -14,5 +14,6 @@ public interface PlaceReviewMapper {
     void updatePlaceReview(PlaceReview placeReview) throws Exception;
     List<PlaceReview> selectByUserId(String userId) throws Exception;
     List<PlaceReview> selectByPlaceId(int planId) throws Exception;
-    void deleteAllPlaceReviewByUId(String userId) throws Exception;
+    void deletePlaceReviewByUserId(String userId) throws Exception;
+    void deletePlaceReviewByPlaceId(int placeId) throws Exception;
 }

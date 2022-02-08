@@ -114,4 +114,9 @@
                             where plan_id = #{id}))
         order by theme_id asc
     </select>
+
+    <delete id="deleteUserPlanByUSerId" parameterType="String">
+        delete from userplan
+        where user_id = #{userId}
+    </delete>
 </mapper>
