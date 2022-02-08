@@ -238,7 +238,7 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
                     binding.boardDetailIvImg.visibility = GONE
                 }else{
                     Glide.with(this@BoardDetailDetailFragment)
-                        .load(img)
+                        .load("${ApplicationClass.IMGS_URL}${bd.img}")
                         .into(binding.boardDetailIvImg)
                 }
             }
