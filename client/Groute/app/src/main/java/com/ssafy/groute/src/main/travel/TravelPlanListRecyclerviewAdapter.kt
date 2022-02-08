@@ -20,6 +20,7 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
     Filterable {
     private var dayFilterList = list
     private var route:Route = Route()
+    private var routeDetailList = mutableListOf<RouteDetail>()
     inner class TravelPlanListHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val numTv = itemView.findViewById<TextView>(R.id.item_travelplan_num_tv)
         val placeTv = itemView.findViewById<TextView>(R.id.item_travelplan_day_list_place_tv)
@@ -62,27 +63,27 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
     override fun onBindViewHolder(holder: TravelPlanListHolder, position: Int) {
         holder.apply {
             if(position == 0) {
-                bindInfo(route.routeDetailList[position], position,0)
-            } else if(position == dayFilterList.size-1){
-                bindInfo(route.routeDetailList[position], position, 1)
+                bindInfo(routeDetailList[position], position,0)
+            } else if(position == routeDetailList.size-1){
+                bindInfo(routeDetailList[position], position, 1)
             } else {
-                bindInfo(route.routeDetailList[position], position, 2)
+                bindInfo(routeDetailList[position], position, 2)
             }
         }
     }
 
     override fun getItemCount(): Int {
 //        return dayFilterList.size
-        return route.routeDetailList.size
+        return routeDetailList.size
     }
 
     fun removeData(position: Int) {
-        dayFilterList.removeAt(position)
+        routeDetailList.removeAt(position)
         notifyItemRemoved(position)
     }
 
     fun swapData(fromPos: Int, toPos: Int) {
-        Collections.swap(dayFilterList, fromPos, toPos)
+        Collections.swap(routeDetailList, fromPos, toPos)
         notifyItemMoved(fromPos, toPos)
     }
 
@@ -105,6 +106,7 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
 
                             result = list[item]
                             route = result
+                            routeDetailList = result.routeDetailList.toMutableList()
                         }
                     }
                     resultList
