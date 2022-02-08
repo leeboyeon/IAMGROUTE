@@ -78,12 +78,12 @@ public class BoardDetailController {
                 req.setImg(null);
             }
             boardDetailService.insertBoardDetail(req);
-        }catch (Exception e){ 
+            return new ResponseEntity<Integer>(req.getBoardId(), HttpStatus.OK);
+        }catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Integer>(0, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "boardDetail 검색",notes = "이름으로 boardDetail 하나 검색")
@@ -166,12 +166,12 @@ public class BoardDetailController {
             }
 
             boardDetailService.updateBoardDetail(boardDetail);
-        }catch (Exception e){
+            return new ResponseEntity<Integer>(boardDetail.getBoardId(), HttpStatus.OK);
+        } catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<Integer>(0, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
     @ApiOperation(value = "boardDetail like 확인",notes = "boardDetail like 확인")
