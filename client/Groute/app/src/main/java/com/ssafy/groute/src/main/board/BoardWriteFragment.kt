@@ -1,13 +1,12 @@
 package com.ssafy.groute.src.main.board
 
 import android.Manifest
-import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -28,7 +27,6 @@ import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentBoardWriteBinding
 import com.ssafy.groute.src.dto.BoardDetail
-import com.ssafy.groute.src.dto.PlaceReview
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.viewmodel.BoardViewModel
@@ -38,17 +36,24 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
-import java.util.ArrayList
+import android.view.Display
+import android.view.LayoutInflater
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import android.view.WindowManager
+import android.graphics.Point
+import android.text.TextUtils
+import android.widget.ImageButton
+import android.widget.SearchView
 
 
 private const val TAG = "BoardWriteF_Groute"
 class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoardWriteBinding::bind, R.layout.fragment_board_write) {
-//    private lateinit var binding: FragmentBoardWriteBinding
     private lateinit var mainActivity:MainActivity
     private val placeViewModel: PlaceViewModel by activityViewModels()
     private val boardViewModel: BoardViewModel by activityViewModels()
@@ -56,7 +61,10 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
     private var boardId = -1
     private var placeId = -1
 
+    private lateinit var searchAdapter: SearchAdapter
+
     private var boardDetailImg : String = ""
+
     // 사진 선택
     private lateinit var imgUri: Uri    // 파일 uri
     private var fileExtension : String? = ""    // 파일 확장자
@@ -79,10 +87,8 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
         arguments?.let{
             boardDetailId = it.getInt("boardDetailId", -1)
             boardId = it.getInt("boardId",-1)
-            placeId = it.getInt("placeId",-1)
             Log.d(TAG, "onCreate: boardDetailId ${boardDetailId}")
             Log.d(TAG, "onCreate: boardId ${boardId}")
-            Log.d(TAG, "onCreate: placeId ${placeId}")
         }
 
     }
@@ -112,15 +118,6 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
             registerBtnEvent(true)
         }
 
-        // 질문 게시판에서 place 선택 후(SearchFragment에서 placeId 넘어옴)
-        if(placeId > 0) {
-            boardId = 2
-            runBlocking {
-                placeViewModel.getPlace(placeId)
-            }
-            binding.boardWriteTvPlaceName.text = placeViewModel.place.value?.name
-        }
-
         cancelButtonEvent()
         selectPlaceBtnEvent()
         selectImgBtnEvent()
@@ -129,7 +126,6 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
 
     // 수정인 경우 게시판 구분해서 view에 기존 데이터 setting
     private fun initModifyView() {
-        Log.d(TAG, "onViewCreated: $placeId")
 
         binding.boardDetailBtnComplete.setText("수정")
 
@@ -194,12 +190,11 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
         binding.boardDetailBtnComplete.setOnClickListener {
             val title = binding.boardWriteEtTitle.text.toString()
             val content = binding.boardWriteEtContent.text.toString()
-            var boardId = boardId
+            val boardId = boardId
             val img = boardDetailImg
             val userId = ApplicationClass.sharedPreferencesUtil.getUser().id
 
             if (boardId == 1) { // Free Board
-                Log.d(TAG, "initButton: ${boardId}")
                 val boardDetail = BoardDetail(
                     id = boardDetailId,
                     title = title,
@@ -208,12 +203,8 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
                     boardId = boardId,
                     userId = userId
                 )
-                setData(boardDetail, 1, chk)
+                setData(boardDetail, chk)
             } else if(boardId == 2) {    // Question Board
-
-                Log.d(TAG, "initButton: ${boardId}")
-                Log.d(TAG, "initButton_Place: ${placeId}")
-                boardId = 2
                 val boardDetail = BoardDetail(
                     id = boardDetailId,
                     title = title,
@@ -223,21 +214,88 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
                     userId = userId,
                     placeId = placeId
                 )
-                Log.d(TAG, "initButton: ${boardDetail}")
-                setData(boardDetail, 2, chk)
+                setData(boardDetail, chk)
             }
         }
     }
 
     /**
-     * 수정해야됨. -> dialog 등 fragment 전환 없도록 구현
+     * 질문 게시판인 경우
+     * 장소 선택 레이아웃 클릭 이벤트
      */
-    // 장소 선택 레이아웃 클릭 이벤트
     private fun selectPlaceBtnEvent() {
         binding.boardWriteLLPlaceSerach.setOnClickListener {
-            mainActivity.moveFragment(9)    // SearchFragment
+            runBlocking {
+                placeViewModel.getPlaceList()
+            }
+            showSelectPlaceDialog()
         }
     }
+
+    /**
+     * show place selection dialog
+     */
+    private fun showSelectPlaceDialog() {
+//        val dialog = Dialog(requireContext(), android.R.style.Theme_Translucent_NoTitleBar_Fullscreen)    // fullscreen
+        val dialog = Dialog(requireContext())
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_select_place, null)
+        val dialogRecycleView = dialogView.findViewById<RecyclerView>(R.id.dialogSelectPlace_rv)
+
+        val display: Display = requireActivity().windowManager.defaultDisplay
+        val size = Point()
+        display.getRealSize(size)
+        val lp = WindowManager.LayoutParams()
+
+        lp.copyFrom(dialog.window?.attributes)
+
+        lp.width = size.x * 80 / 100 // 사용자 화면의 80%
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT // 높이는 내용 전체 높이만큼
+        dialog.window?.attributes = lp
+
+        placeViewModel.placeList.observe(viewLifecycleOwner, Observer {
+            searchAdapter = SearchAdapter(it)
+
+            dialogRecycleView.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+                adapter = searchAdapter
+                adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+            }
+
+            searchAdapter.setItemClickListener(object : SearchAdapter.ItemClickListener {
+                override fun onClick(view: View, position: Int, id: Int) {
+                    placeId = it[position].id
+                    binding.boardWriteTvPlaceName.text = it[position].name
+                    dialog.dismiss()
+                }
+            })
+        })
+
+        dialog.setContentView(dialogView)
+        dialog.setCanceledOnTouchOutside(true)
+
+        dialogView.findViewById<ImageButton>(R.id.dialogSelectPlace_ibtn_cancle).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialogView.findViewById<SearchView>(R.id.dialogSelectPlace_sv_placeName).setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if(TextUtils.isEmpty(newText)){
+                    searchAdapter.filter.filter("")
+                }else{
+                    searchAdapter.filter.filter(newText.toString())
+                    searchAdapter.notifyDataSetChanged()
+                }
+                return false
+            }
+        })
+
+        dialog.show()
+    }
+
 
     /**
      * 사진 선택 버튼 클릭 이벤트
@@ -248,7 +306,7 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
             Log.d(TAG, "onCreate: $imgUri")
         } else {
             imgUri = Uri.EMPTY
-            Log.d(TAG, "fileUri가 초기화  $imgUri")
+            Log.d(TAG, "fileUri 초기화  $imgUri")
         }
 
         binding.boardWriteIbtnImg.setOnClickListener {
@@ -307,11 +365,6 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
                 try {
                     currentImageUri?.let {
                         if(Build.VERSION.SDK_INT < 28) {
-                            val bitmap = MediaStore.Images.Media.getBitmap(
-                                requireActivity().contentResolver,
-                                currentImageUri
-                            )
-
                             // 사진 set
                             Glide.with(this)
                                 .load(currentImageUri)
@@ -321,16 +374,8 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
                             binding.boardWriteTvImgName.text = currentImageUri.lastPathSegment.toString()
 
                             imgUri = currentImageUri
-
                             fileExtension = requireActivity().contentResolver.getType(currentImageUri)
-                            Log.d(TAG, "filterActivityLauncher_1:$currentImageUri\n$imgUri\n$fileExtension")
-
                         } else {
-                            val source = ImageDecoder.createSource(requireActivity().contentResolver, currentImageUri)
-                            val bitmap = ImageDecoder.decodeBitmap(source)
-                            Log.d(TAG, "filterActivityLauncher_2 :$currentImageUri ${bitmap.width} ")
-                            //binding.profileEditImg.setImageBitmap(bitmap)
-
                             // 사진 set
                             Glide.with(this)
                                 .load(currentImageUri)
@@ -340,10 +385,7 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
                             binding.boardWriteTvImgName.text = currentImageUri.lastPathSegment.toString()
 
                             imgUri = currentImageUri
-//                            Log.d(TAG, "filterAL: ${imgUri}")
                             fileExtension = requireActivity().contentResolver.getType(currentImageUri)
-                            Log.d(TAG, "filterActivityLauncher_1:$currentImageUri\n$imgUri\n" +
-                                    "$fileExtension")
                         }
                     }
                 }catch(e:Exception) {
@@ -367,7 +409,7 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
      * insert & update BoardDetail
      * call server
      */
-    private fun setData(boardDetail: BoardDetail, boardId: Int, chk: Boolean) {
+    private fun setData(boardDetail: BoardDetail, chk: Boolean) {
 
         // 게시글만 작성한 경우
         if(imgUri == Uri.EMPTY) {
@@ -379,10 +421,8 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
             Log.d(TAG, "updateUser_requestBodyUser: ${rBody_boardDetail.contentType()}, ${json}")
             if(chk) {   // 게시글 작성인 경우
                 BoardService().insertBoardDetail(rBody_boardDetail, null, InsertBoardDetailCallback())
-//                boardWrite(boardDetail = rBody_boardDetail, null, boardId)
             } else {    // 게시글 수정인 경우
                 BoardService().modifyBoardDetail(rBody_boardDetail, null, UpdateBoardDetailCallback())
-//                boardModify(rBody_boardDetail, null, boardId)
             }
         }
         // 게시글 작성 + 사진 선택한 경우
@@ -407,10 +447,8 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
             val rBody_boardDetail = RequestBody.create(MediaType.parse("text/plain"), json)
             if(chk) {   // 게시글 작성인 경우
                 BoardService().insertBoardDetail(rBody_boardDetail, uploadFile, InsertBoardDetailCallback())
-//                boardWrite(boardDetail = rBody_boardDetail, uploadFile, boardId)
             } else {    // 게시글 수정인 경우
                 BoardService().modifyBoardDetail(rBody_boardDetail, uploadFile, UpdateBoardDetailCallback())
-//                boardModify(rBody_boardDetail, uploadFile, boardId)
             }
         }
     }
