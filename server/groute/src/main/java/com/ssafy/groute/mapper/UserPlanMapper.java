@@ -27,4 +27,5 @@ public interface UserPlanMapper {
     List<UserPlan> findEndPlanById(String userId) throws Exception;
     List<UserPlan> findNotEndPlanById(String userId) throws Exception;
     void deleteUserPlanByUSerId(String userId) throws Exception;
+    List<UserPlan> selectAllPlanByUserId(String userId) throws Exception;
 }
