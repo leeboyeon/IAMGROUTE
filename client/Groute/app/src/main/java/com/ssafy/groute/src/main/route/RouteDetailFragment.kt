@@ -65,8 +65,9 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         }.attach()
 
         binding.RouteDetailIbtnBack.setOnClickListener{
-            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
-            mainActivity.supportFragmentManager.popBackStack()
+//            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
+//            mainActivity.supportFragmentManager.popBackStack()
+            mainActivity.moveFragment(16, "days", -1)
         }
 
 
