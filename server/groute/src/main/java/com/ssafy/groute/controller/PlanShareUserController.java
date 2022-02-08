@@ -77,10 +77,10 @@ public class PlanShareUserController {
 
     @ApiOperation(value = "delete planShareUser",notes = "planShareUser 삭제")
     @DeleteMapping(value = "/del")
-    public ResponseEntity<?> deletePlanShareUser(@RequestParam("id") int id) throws Exception{
+    public ResponseEntity<?> deletePlanShareUser(@RequestBody PlanShareUser planShareUser) throws Exception{
 
         try {
-            planShareUserService.deletePlanShareUser(id);
+            planShareUserService.deletePlanShareUser(planShareUser);
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);

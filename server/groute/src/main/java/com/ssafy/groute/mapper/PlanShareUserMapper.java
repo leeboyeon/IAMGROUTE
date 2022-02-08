@@ -15,4 +15,5 @@ public interface PlanShareUserMapper {
     List<PlanShareUser> selectByUserId(String userId) throws Exception;
     List<PlanShareUser> selectByPlanId(int planId) throws Exception;
     void deleteAllPlanShareUserByUId(String userId) throws Exception;
+    void deletePlanShareUserByPlanIdUserId(PlanShareUser planShareUser) throws Exception;
 }
