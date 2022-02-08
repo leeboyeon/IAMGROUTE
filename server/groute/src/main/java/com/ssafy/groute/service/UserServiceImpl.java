@@ -80,4 +80,9 @@ public class UserServiceImpl implements UserService {
     public void updateUser(User user) {
         userMapper.updateUser(user);
     }
+
+    @Override
+    public List<User> selectByPlanId(int planId) throws Exception {
+        return userMapper.selectByPlanId(planId);
+    }
 }
