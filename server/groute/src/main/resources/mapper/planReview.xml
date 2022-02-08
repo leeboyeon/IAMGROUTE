@@ -61,7 +61,7 @@
         order by id desc;
     </select>
 
-    <delete id="deleteAllPlanReviewByUId" parameterType="String">
+    <delete id="deletePlanReviewByUserId" parameterType="String">
         delete from planreview
         where user_id = #{userId}
     </delete>

@@ -20,4 +20,6 @@ public interface PlaceMapper {
     PlaceLike isLike(PlaceLike placeLike) throws Exception;
     List<Place> bestPlace() throws Exception;
     List<Place> selectAllPlaceIdByUserId(String userId)throws Exception;
+    void deletePlaceLikeByPlaceId(int placeId) throws Exception;
+    void deletePlaceLikeByUserId(String userId) throws Exception;
 }

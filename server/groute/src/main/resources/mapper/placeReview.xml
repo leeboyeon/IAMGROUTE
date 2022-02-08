@@ -65,4 +65,14 @@
         delete from placereview
         where user_id = #{userId}
     </delete>
+
+    <delete id="deletePlaceReviewByPlaceId" parameterType="int">
+        delete from placereiview
+        where place_id = #{placeId}
+    </delete>
+
+    <delete id="deletePlaceReviewByUserId" parameterType="String">
+        delete from placereiview
+        where user_id = #{userId}
+    </delete>
 </mapper>

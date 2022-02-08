@@ -16,4 +16,5 @@ public interface BoardDetailMapper {
     void updateBoardDetail(BoardDetail boardDetail) throws Exception;
     void updateBoardDetailHitCntOrLikeOrCommentCnt(BoardDetail boardDetail) throws Exception;
     void deleteAllBoardDetailByUid(String userId) throws Exception;
+    List<Integer> findBoardDetailIdsByUid(String userId) throws Exception;
 }

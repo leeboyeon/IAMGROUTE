@@ -77,4 +77,13 @@
         where l.user_id = #{userId} and p.id = l.place_id
     </select>
 
+    <delete id="deletePlaceLikeByPlaceId" parameterType="int">
+        delete from placelike
+        where place_id = #{placeId}
+    </delete>
+
+    <delete id="deletePlaceLikeByUserId" parameterType="String">
+        delete from placelike
+        where user_id = #{userId}
+    </delete>
 </mapper>
