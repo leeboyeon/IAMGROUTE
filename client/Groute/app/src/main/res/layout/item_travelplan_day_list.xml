@@ -45,20 +45,22 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#eeeeee"
+                android:layout_marginStart="10dp"
+                android:background="@color/red"
                 android:layout_weight="1"
                />
             <TextView
                 android:id="@+id/item_swipe_delete_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingRight="30dp"
                 android:text="삭제"
                 android:textColor="@color/white"
-                android:background="@color/red"
+                android:background="@drawable/corner_radius"
                 android:textSize="16sp"
-                android:gravity="center"
+                android:gravity="end|center_vertical"
                 android:includeFontPadding="false"
-                android:layout_weight="3"
+                android:layout_weight="1"
                 />
 
 
@@ -121,16 +123,20 @@
 
             <TextView
                 android:id="@+id/item_travelplan_day_list_loc_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="애월 한림"
                 android:textSize="16sp"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
                 android:includeFontPadding="false"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_travelplan_day_list_place_tv"
-                app:layout_constraintLeft_toRightOf="@id/item_travelplan_num_layout"
+                app:layout_constraintStart_toEndOf="@id/item_travelplan_num_layout"
                 app:layout_constraintBottom_toBottomOf="parent"
                 />
 
