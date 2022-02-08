@@ -81,7 +81,7 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
                 }
             })
             boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
-                override fun onClick(view: View, position: Int, name: String) {
+                override fun onClick(view: View, position: Int, name: String) { // BoardPostDetailFragment
                     mainActivity.moveFragment(6,"boardDetailId", boardViewModel.boardFreeList.value!!.get(position).id)
                 }
 
@@ -89,7 +89,7 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
                     boardLike(id, userId)
                 }
             })
-            boardRecyclerAdapter.setModifyClickListener(object : BoardRecyclerviewAdapter.ItemModifyListener{
+            boardRecyclerAdapter.setModifyClickListener(object : BoardRecyclerviewAdapter.ItemModifyListener{   // BoardWriteFragment
                 override fun onClick(position: Int) {
                     mainActivity.moveFragment(8,"boardDetailId",boardViewModel.boardFreeList.value!!.get(position).id)
                 }
