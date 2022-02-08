@@ -24,7 +24,7 @@ interface BoardApi {
      */
     @Multipart
     @POST("/boardDetail/insert")
-    fun insertBoardDetail(@Part("board") board : RequestBody, @Part img : MultipartBody.Part?) : Call<Boolean>
+    fun insertBoardDetail(@Part("board") board : RequestBody, @Part img : MultipartBody.Part?) : Call<Int>
 
     /**
      * #S06P12D109-253
@@ -32,7 +32,7 @@ interface BoardApi {
      */
     @Multipart
     @PUT("boardDetail/update")
-    fun modifyBoardDetail(@Part("board") board : RequestBody, @Part img : MultipartBody.Part?) : Call<Boolean>
+    fun modifyBoardDetail(@Part("board") board : RequestBody, @Part img : MultipartBody.Part?) : Call<Int>
 
     // 게시판 글삭제
     @DELETE("/boardDetail/del")
