@@ -3,7 +3,6 @@ package com.ssafy.groute.src.main.board
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,7 +20,7 @@ import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
-import com.ssafy.groute.databinding.FragmentBoardDetailDetailBinding
+import com.ssafy.groute.databinding.FragmentBoardPostDetailBinding
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.dto.Comment
 import com.ssafy.groute.src.main.MainActivity
@@ -34,7 +33,7 @@ import com.ssafy.groute.util.RetrofitCallback
 import org.json.JSONObject
 
 private const val TAG = "BoardDetailDF_Groute"
-class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>(FragmentBoardDetailDetailBinding::bind, R.layout.fragment_board_detail_detail) {
+class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(FragmentBoardPostDetailBinding::bind, R.layout.fragment_board_post_detail) {
     private lateinit var mainActivity: MainActivity
     private lateinit var commentAdapter:CommentAdapter
     private var userId : Any= ""
@@ -239,7 +238,7 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardDetailDetailBinding>
                     binding.boardDetailIvImg.visibility = GONE
                 }else{
                     Glide.with(this@BoardDetailDetailFragment)
-                        .load(img)
+                        .load("${ApplicationClass.IMGS_URL}${bd.img}")
                         .into(binding.boardDetailIvImg)
                 }
             }

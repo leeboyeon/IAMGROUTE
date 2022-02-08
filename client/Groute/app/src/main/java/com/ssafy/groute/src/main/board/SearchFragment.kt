@@ -23,6 +23,7 @@ import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
 
+// 사용 X
 private const val TAG = "SearchFragment"
 class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding::bind, R.layout.fragment_search) {
     private lateinit var mainActivity: MainActivity
@@ -57,7 +58,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
     fun initAdapter(){
 
         placeViewModel.placeList.observe(viewLifecycleOwner, Observer {
-            searchAdapter = SearchAdapter(it, requireContext())
+            searchAdapter = SearchAdapter(it)
             searchAdapter.setItemClickListener(object : SearchAdapter.ItemClickListener {
                 override fun onClick(view: View, position: Int, id: Int) {
                     mainActivity.moveFragment(8,"placeId", it[position].id)

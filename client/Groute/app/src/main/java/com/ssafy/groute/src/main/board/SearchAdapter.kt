@@ -9,28 +9,33 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
+import com.ssafy.groute.databinding.RecyclerviewPlaceSearchBinding
 import com.ssafy.groute.src.dto.Place
 
 private const val TAG = "SearchAdapter"
-class SearchAdapter(var places: List<Place>, var context:Context) : RecyclerView.Adapter <SearchAdapter.SearchHolder>(),
+class SearchAdapter(var places: List<Place>) : RecyclerView.Adapter <SearchAdapter.SearchHolder>(),
     Filterable {
 
     private var placeFilterList = places
 
-    inner class SearchHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class SearchHolder(private val binding:RecyclerviewPlaceSearchBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindInfo(data: Place){
-            itemView.findViewById<TextView>(R.id.search_tv_type).text = data.type
-            itemView.findViewById<TextView>(R.id.search_tv_Name).text = data.name
+            binding.place = data
+            binding.executePendingBindings()
+//            itemView.findViewById<TextView>(R.id.search_tv_type).text = data.type
+//            itemView.findViewById<TextView>(R.id.search_tv_Name).text = data.name
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_place_search,parent,false)
-        return SearchHolder(view)
+//        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_place_search,parent,false)
+//        return SearchHolder(view)
+        return SearchHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.recyclerview_place_search, parent, false))
     }
 
     override fun onBindViewHolder(holder: SearchHolder, position: Int) {
@@ -56,7 +61,9 @@ class SearchAdapter(var places: List<Place>, var context:Context) : RecyclerView
     interface ItemClickListener{
         fun onClick(view:View, position: Int, id: Int)
     }
+
     private lateinit var itemClickListener : ItemClickListener
+
     fun setItemClickListener(itemClickListener: ItemClickListener){
         this.itemClickListener = itemClickListener
     }

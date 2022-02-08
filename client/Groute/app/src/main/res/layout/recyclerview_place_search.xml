@@ -2,10 +2,16 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+<!--    <data>-->
+<!--        <variable-->
+<!--            name="viewModel"-->
+<!--            type="com.ssafy.groute.src.viewmodel.PlaceViewModel" />-->
+<!--    </data>-->
     <data>
+        <import type="android.view.View"/>
         <variable
-            name="viewModel"
-            type="com.ssafy.groute.src.viewmodel.PlaceViewModel" />
+            name="place"
+            type="com.ssafy.groute.src.dto.Place" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -19,7 +25,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:text="@{viewModel.place.type}"
+            android:text="@{place.type}"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -34,7 +40,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:text="@{viewModel.place.name}"
+            android:text="@{place.name}"
             android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"

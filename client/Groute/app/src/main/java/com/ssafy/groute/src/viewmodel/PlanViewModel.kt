@@ -65,7 +65,6 @@ class PlanViewModel : ViewModel() {
     val planLikeList : LiveData<MutableList<UserPlan>>
         get() = _planLikeListResponse
 
-
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planBestResponse.value = plan
     }

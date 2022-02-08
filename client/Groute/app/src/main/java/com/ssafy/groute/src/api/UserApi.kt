@@ -50,8 +50,8 @@ interface UserApi {
     @PUT("/planShareUser/update")
     fun updateSharedUser(@Body shareUser:SharedUser) : Call<Boolean>
 
-    @DELETE("/planShareUser/del")
-    fun deleteSharedUser(@Body shareUser: SharedUser) : Call<Boolean>
+    @POST("/planShareUser/del")
+    fun deleteSharedUser(@Body shareUser:SharedUser) : Call<Boolean>
 
     @GET("planShareUser/list/{planId}")
     suspend fun getShareUserList(@Path("planId")planId:Int) : Response<MutableList<User>>

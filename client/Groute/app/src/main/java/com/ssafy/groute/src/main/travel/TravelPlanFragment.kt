@@ -7,14 +7,13 @@ import android.app.DatePickerDialog.OnDateSetListener
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.annotation.RequiresApi
@@ -33,7 +32,6 @@ import com.ssafy.groute.src.viewmodel.PlanViewModel
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import android.view.Display
 import android.view.View.inflate
 import android.widget.*
 import androidx.databinding.DataBindingUtil.inflate
@@ -52,27 +50,35 @@ import java.util.Date.from
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 import android.widget.DatePicker
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.datepicker.*
 import com.google.android.material.tabs.TabLayout
 import com.ssafy.groute.databinding.ActivityCommentNestedBinding.bind
 import com.ssafy.groute.src.dto.Place
+import com.ssafy.groute.src.dto.Route
 import com.ssafy.groute.src.dto.RouteDetail
+import com.ssafy.groute.src.service.RouteService
 import com.ssafy.groute.src.service.UserPlanService
+import com.ssafy.groute.src.viewmodel.HomeViewModel
 import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.selects.select
+import net.daum.mf.map.api.MapPOIItem
+import net.daum.mf.map.api.MapPoint
+import net.daum.mf.map.api.MapView
 import kotlin.time.days
 
 
 private const val TAG = "TravelPlanFragment"
-//class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTravelPlanBinding::bind, R.layout.fragment_travel_plan) {
- class TravelPlanFragment: Fragment(){
+class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTravelPlanBinding::bind, R.layout.fragment_travel_plan) {
+// class TravelPlanFragment: Fragment(){
 
-    private lateinit var binding:FragmentTravelPlanBinding
+//    private lateinit var binding:FragmentTravelPlanBinding
     private lateinit var mainActivity: MainActivity
-    lateinit var con : ViewGroup
+//    lateinit var con : ViewGroup
     lateinit var addButton: FloatingActionButton
     lateinit var memoAddButton: FloatingActionButton
     lateinit var routeRecomButton: FloatingActionButton
@@ -80,15 +86,20 @@ private const val TAG = "TravelPlanFragment"
 
     private val planViewModel:PlanViewModel by activityViewModels()
     private val placeViewModel:PlaceViewModel by activityViewModels()
+    private val homeViewModel:HomeViewModel by activityViewModels()
 
     var isFabOpen: Boolean = false
     private var planId = -1
     private var placeId = -1
     val routeSelectList = arrayListOf<RouteRecom>()
+    private var curPos = 0
 
     private lateinit var routeRecomDialogAdapter:RouteRecomDialogAdapter
     private lateinit var travelPlanListRecyclerviewAdapter: TravelPlanListRecyclerviewAdapter
+    private lateinit var memoAdapter: MemoAdapter
 
+    private var AreaLat = 0.0
+    private var AreaLng = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideBottomNav(true)
@@ -104,26 +115,20 @@ private const val TAG = "TravelPlanFragment"
         Log.d(TAG, "onAttach: ${planId}")
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentTravelPlanBinding.inflate(layoutInflater,container,false)
-        con = container!!
-        return binding.root
-    }
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "onViewCreated: ${con}")
+
         binding.viewModel = planViewModel
         runBlocking {
             planViewModel.getPlanById(planId)
+            homeViewModel.getAreaLists()
         }
+
         initPlaceListAdapter()
+
+        initKakaoMap()
         initTabLayout()
-//        initPlaceList()
         floatingButtonEvent()
         binding.travelplanBackIv.setOnClickListener {
             mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
@@ -147,11 +152,48 @@ private const val TAG = "TravelPlanFragment"
             animator.start()
             mainActivity.moveFragment(17,"planId",planId)
         }
+        binding.travelPlanIbtnMemo.setOnClickListener {
+            initMemo()
+        }
     }
-    fun showMemberDialog(){
+    fun initMemo(){
+        planViewModel.routeList.observe(viewLifecycleOwner, {
+            if(it[curPos].memo != null){
+                val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_show_memo,null)
+                val dialog = Dialog(requireContext())
+                dialog.setContentView(dialogView)
+                dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+                dialogView.findViewById<ImageButton>(R.id.memo_cancle).setOnClickListener {
+                    dialog.dismiss()
+                }
+                dialogView.findViewById<TextView>(R.id.dayMemo).text = it[curPos].memo
+                dialog.show()
+            }else {
+                showCustomToast("메모가 없습니다.")
+            }
+        })
+    }
+    fun initKakaoMap(){
+        var mapView = MapView(requireContext())
+        binding.travelplanMapview.addView(mapView)
+        Log.d(TAG, "findLatLng: ")
+        homeViewModel.areaList.observe(viewLifecycleOwner, Observer { it1 ->
+            planViewModel.planList.observe(viewLifecycleOwner, Observer { it2 ->
+                for(i in 0 until it1.size){
+                    if(it1[i].id == it2.areaId){
+                        AreaLat = it1[i].lat.toDouble()
+                        AreaLng = it1[i].lng.toDouble()
+                        var mapPoint = MapPoint.mapPointWithGeoCoord(AreaLat, AreaLng)
+                        mapView.setMapCenterPoint(mapPoint,true)
+                        mapView.setZoomLevel(9, true)
+                        Log.d(TAG, "findLatLng: ${AreaLat} || ${AreaLng}")
+                    }
+                }
+            })
+        })
 
     }
-
 
     // 플로팅 버튼 이벤트 처리
     fun floatingButtonEvent() {
@@ -167,6 +209,7 @@ private const val TAG = "TravelPlanFragment"
         }
         memoAddButton.setOnClickListener{
             fbAnim()
+            insertMemo()
         }
         routeRecomButton.setOnClickListener {
             fbAnim()
@@ -220,6 +263,7 @@ private const val TAG = "TravelPlanFragment"
         binding.travelplanTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 travelPlanListRecyclerviewAdapter.filter.filter((tab?.position?.plus(1)).toString())
+                curPos = tab!!.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -253,7 +297,49 @@ private const val TAG = "TravelPlanFragment"
         })
 
     }
+    fun insertMemo(){
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_insert_memo,null)
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(dialogView)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        dialogView.findViewById<Button>(R.id.memo_btn_cancle).setOnClickListener {
+            dialog.dismiss()
+        }
+        dialogView.findViewById<Button>(R.id.memo_btn_insert).setOnClickListener {
+            //추가
+            val memo = dialogView.findViewById<TextView>(R.id.memo_tv_content).text.toString()
+//            RouteService().updateRoute()
+
+            planViewModel.routeList.observe(viewLifecycleOwner, {
+                var route = Route(
+                    day = it[curPos].day,
+                    id = it[curPos].id,
+                    isCustom = it[curPos].isCustom,
+                    memo = memo,
+                    name = it[curPos].name,
+                    routeDetailList = it[curPos].routeDetailList,
+                )
+                RouteService().updateRoute(route, object:RetrofitCallback<Boolean> {
+                    override fun onError(t: Throwable) {
+                        Log.d(TAG, "onError: ")
+                    }
+
+                    override fun onSuccess(code: Int, responseData: Boolean) {
+                        showCustomToast("메모가 추가되었습니다.")
+                        dialog.dismiss()
+                        initPlaceListAdapter()
+                    }
+
+                    override fun onFailure(code: Int) {
+                        Log.d(TAG, "onFailure: ")
+                    }
+
+                })
+            })
+        }
+        dialog.show()
+    }
     fun showRouteSelectDialog(){
         routeRecomDialogAdapter = RouteRecomDialogAdapter(requireContext())
         routeSelectList.apply {
@@ -281,13 +367,13 @@ private const val TAG = "TravelPlanFragment"
         var dialog = Dialog(requireContext())
         dialog.setContentView(dialogView)
         dialogView.findViewById<Button>(R.id.routeRecom_btn_cancle).setOnClickListener {
-            dialog.cancel()
+            dialog.dismiss()
         }
         dialogView.findViewById<Button>(R.id.routeRecom_btn_ok).setOnClickListener {
             if(selectPosition == 0){
                 //당일
                 mainActivity.moveFragment(16,"days",1)
-                dialog.cancel()
+                dialog.dismiss()
             }
             if(selectPosition == 1){
                 //전체
@@ -296,7 +382,7 @@ private const val TAG = "TravelPlanFragment"
                         total = it.totalDate
                     })
                 mainActivity.moveFragment(16,"days",total)
-                dialog.cancel()
+                dialog.dismiss()
             }
         }
         dialog.setTitle("원하는 타입을 선택해주세요")

@@ -121,4 +121,8 @@
         delete from userplan
         where user_id = #{userId}
     </delete>
+    <select id="selectAllPlanByUserId" parameterType="String" resultMap="UserPlanDTO">
+        select p.* from planlike l, userplan p
+        where l.user_id = #{userId} and p.id = l.userplan_id
+    </select>
 </mapper>

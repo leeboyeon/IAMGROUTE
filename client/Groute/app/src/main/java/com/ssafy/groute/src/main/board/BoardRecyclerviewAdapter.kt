@@ -1,5 +1,6 @@
 package com.ssafy.groute.src.main.board
 
+import android.app.Application
 import android.content.Context
 import android.util.Log
 import android.view.*
@@ -60,7 +61,7 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
             }else{
                 thumbnailIv.visibility = View.VISIBLE
                 Glide.with(itemView)
-                    .load(data.img)
+                    .load("${ApplicationClass.IMGS_URL}${data.img}")
                     .into(thumbnailIv)
             }
             Log.d(TAG, "bindInfo_DATA: ${data}")

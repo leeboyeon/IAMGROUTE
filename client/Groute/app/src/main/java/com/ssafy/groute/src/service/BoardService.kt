@@ -91,10 +91,11 @@ class BoardService {
      * 게시판 글 작성, image 업로드는 선택 사항이다.
      * @param board
      * @param img
+     * @return boardId
      */
-    fun insertBoardDetail(board: RequestBody, img: MultipartBody.Part?, callback: RetrofitCallback<Boolean>){
-        RetrofitUtil.boardService.insertBoardDetail(board, img).enqueue(object : Callback<Boolean> {
-            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+    fun insertBoardDetail(board: RequestBody, img: MultipartBody.Part?, callback: RetrofitCallback<Int>){
+        RetrofitUtil.boardService.insertBoardDetail(board, img).enqueue(object : Callback<Int> {
+            override fun onResponse(call: Call<Int>, response: Response<Int>) {
                 val res = response.body()
                 if(response.code() == 200){
                     if(res != null){
@@ -104,7 +105,7 @@ class BoardService {
                     callback.onFailure(response.code())
                 }
             }
-            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+            override fun onFailure(call: Call<Int>, t: Throwable) {
                 callback.onError(t)
             }
         })
@@ -196,10 +197,11 @@ class BoardService {
      * 게시글 수정, image upload는 선택 사항이다.
      * @param boardDetail
      * @param img
+     * @return boardId
      */
-    fun modifyBoardDetail(boardDetail: RequestBody, img: MultipartBody.Part?, callback: RetrofitCallback<Boolean>){
-        RetrofitUtil.boardService.modifyBoardDetail(boardDetail, img).enqueue(object : Callback<Boolean> {
-            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+    fun modifyBoardDetail(boardDetail: RequestBody, img: MultipartBody.Part?, callback: RetrofitCallback<Int>){
+        RetrofitUtil.boardService.modifyBoardDetail(boardDetail, img).enqueue(object : Callback<Int> {
+            override fun onResponse(call: Call<Int>, response: Response<Int>) {
                 val res = response.body()
                 if(response.code() == 200){
                     if(res != null){
@@ -209,10 +211,9 @@ class BoardService {
                     callback.onFailure(response.code())
                 }
             }
-            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+            override fun onFailure(call: Call<Int>, t: Throwable) {
                 callback.onError(t)
             }
-
         })
     }
 

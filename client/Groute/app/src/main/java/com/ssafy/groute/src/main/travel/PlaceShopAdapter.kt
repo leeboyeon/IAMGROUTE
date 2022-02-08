@@ -8,7 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.RecyclerviewCartListItemBinding
-import com.ssafy.groute.databinding.RecyclerviewPlaceShopListItemBinding
 import com.ssafy.groute.src.dto.Place
 
 class PlaceShopAdapter : RecyclerView.Adapter<PlaceShopAdapter.PlaceShopHolder>(){

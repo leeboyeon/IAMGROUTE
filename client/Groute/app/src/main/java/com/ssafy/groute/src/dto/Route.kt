@@ -9,4 +9,5 @@ data class Route(
     val routeDetailList: List<RouteDetail>
 )  {
     constructor():this(0,0,"","","", listOf())
+
 }

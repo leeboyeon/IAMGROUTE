@@ -24,4 +24,5 @@ public interface UserPlanService {
     List<UserPlan> findEndPlanById(String userId) throws Exception;
     List<UserPlan> findNotEndPlanById(String userId) throws Exception;
     List<UserPlan> selectTUserPlan() throws Exception;
+    List<UserPlan> selectAllPlanByUserId(String userId) throws Exception;
 }
