@@ -34,8 +34,6 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
 //    lateinit var binding: FragmentRouteBinding
     private lateinit var mainActivity: MainActivity
     lateinit var pagerAdapter: RouteTabPageAdapter
-    private var categoryAdapter:CategoryAdapter = CategoryAdapter()
-
     private var days = 0
     lateinit var routeAreaAdapter: HomeAreaAdapter
     private val homeViewModel: HomeViewModel by activityViewModels()
@@ -43,6 +41,8 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
     private var areaId = 1
     lateinit var ThemeAdapter: RouteThemeRecyclerviewAdapter
     lateinit var RouteListAdapter: RouteListRecyclerviewAdapter
+    var selectedTheme = mutableListOf<Int>()
+    var tabPosition = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -105,38 +105,14 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         ThemeAdapter.setItemClickListener(object : RouteThemeRecyclerviewAdapter.ItemClickListener {
             override fun onClick(position: Int, id: Int, selectCheck: ArrayList<Int>) {
                 ThemeAdapter.notifyDataSetChanged()
-                Log.d(TAG, "onClick: $id")
-                Log.d(TAG, "onClick selectCheck List : $selectCheck")
-                var list = mutableListOf<UserPlan>()
-                var select = mutableListOf<Int>()
+                selectedTheme.clear()
                 for(i in 0 until selectCheck.size) {
                     if(selectCheck.get(i) == 1) {
-                        select.add(i + 1)
+                        selectedTheme.add(i + 1)
                     }
                 }
-//                Log.d(TAG, "onClick select List: $select")
-//                planViewModel.userPlanByDayList.observe(viewLifecycleOwner, Observer {
-//                    for(i in 0 until it.size) {
-//                        var themeList = it.get(i).themeIdList
-//                        if(select.size == themeList.size) {
-//                            var flag = true
-//                            for(j in 0 until select.size) {
-//                                if(select.get(j) == themeList.get(j)) {
-//                                    continue
-//                                }else {
-//                                    flag = false
-//                                    break
-//                                }
-//                            }
-//                            if(flag) {
-//                                Log.d(TAG, "onClick flag == true : ${it.get(i)}")
-//                                list.add(it.get(i))
-//                            }
-//                        }
-//                    }
-//                    planViewModel.setUserPlanByDayList(list)
-//                    Log.d(TAG, "onClick setUserPlanByDayList : $list")
-//                })
+                Log.d(TAG, "onClick select List: $selectedTheme")
+                planViewModel.getRoutebyDay(tabPosition, selectedTheme)
             }
 
         })
@@ -168,22 +144,28 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when(tab?.position) {
                     0 -> {
-                        planViewModel.getRoutebyDay(0)
+                        tabPosition = 0
+                        planViewModel.getRoutebyDay(0, selectedTheme)
                     }
                     1 -> {
-                        planViewModel.getRoutebyDay(1)
+                        tabPosition = 1
+                        planViewModel.getRoutebyDay(1, selectedTheme)
                     }
                     2 -> {
-                        planViewModel.getRoutebyDay(2)
+                        tabPosition = 2
+                        planViewModel.getRoutebyDay(2, selectedTheme)
                     }
                     3 -> {
-                        planViewModel.getRoutebyDay(3)
+                        tabPosition = 3
+                        planViewModel.getRoutebyDay(3, selectedTheme)
                     }
                     4 -> {
-                        planViewModel.getRoutebyDay(4)
+                        tabPosition = 4
+                        planViewModel.getRoutebyDay(4, selectedTheme)
                     }
                     5 -> {
-                        planViewModel.getRoutebyDay(5)
+                        tabPosition = 5
+                        planViewModel.getRoutebyDay(5, selectedTheme)
                     }
                 }
             }

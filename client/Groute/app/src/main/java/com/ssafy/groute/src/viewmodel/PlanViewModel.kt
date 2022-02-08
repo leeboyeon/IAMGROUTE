@@ -14,7 +14,8 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 private const val TAG = "PlanViewModel_Groute"
-class PlanViewModel : ViewModel(){
+
+class PlanViewModel : ViewModel() {
     private val _planBestResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _planMyResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _planResponse = MutableLiveData<UserPlan>()
@@ -31,25 +32,25 @@ class PlanViewModel : ViewModel(){
     private val _shareUserListResponse = MutableLiveData<MutableList<User>>()
 
 
-//    private val _routeResponse = MutableLiveData<MutableList<>>
+    //    private val _routeResponse = MutableLiveData<MutableList<>>
 //    private val _routeDetailResponse = MutableLiveData<MutableList<>>
-    val planBestList : LiveData<MutableList<UserPlan>>
+    val planBestList: LiveData<MutableList<UserPlan>>
         get() = _planBestResponse
-    val planMyList : LiveData<MutableList<UserPlan>>
+    val planMyList: LiveData<MutableList<UserPlan>>
         get() = _planMyResponse
-    val planList : LiveData<UserPlan>
+    val planList: LiveData<UserPlan>
         get() = _planResponse
-    val routeList : LiveData<MutableList<Route>>
+    val routeList: LiveData<MutableList<Route>>
         get() = _routeResponse
-    val routeDetailList : LiveData<MutableList<RouteDetail>>
+    val routeDetailList: LiveData<MutableList<RouteDetail>>
         get() = _routeDetailResponse
-    val planNotEndList : LiveData<MutableList<UserPlan>>
-        get() =_planNotEndResponse
-    val planEndList : LiveData<MutableList<UserPlan>>
-        get() =_planEndResponse
-    val planReviewList :LiveData<MutableList<PlanReview>>
+    val planNotEndList: LiveData<MutableList<UserPlan>>
+        get() = _planNotEndResponse
+    val planEndList: LiveData<MutableList<UserPlan>>
+        get() = _planEndResponse
+    val planReviewList: LiveData<MutableList<PlanReview>>
         get() = _planReviewListResponse
-    val review : LiveData<PlanReview>
+    val review: LiveData<PlanReview>
         get() = _reviewResponse
     val theme: LiveData<MutableList<Theme>>
         get() = _themeResponse
@@ -60,25 +61,32 @@ class PlanViewModel : ViewModel(){
     val shareUserList: LiveData<MutableList<User>>
         get() = _shareUserListResponse
 
+
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planBestResponse.value = plan
     }
-    fun setPlanMyList(plan: MutableList<UserPlan>) = viewModelScope.launch { 
+
+    fun setPlanMyList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planMyResponse.value = plan
     }
+
     fun setPlanList(plan: UserPlan) = viewModelScope.launch {
         _planResponse.value = plan
     }
+
     fun setRouteList(route: MutableList<Route>) = viewModelScope.launch {
         _routeResponse.value = route
     }
+
     fun setRouteDetailList(routeDetail: MutableList<RouteDetail>) = viewModelScope.launch {
         _routeDetailResponse.value = routeDetail
     }
-    fun setPlanNotEndList(plan:MutableList<UserPlan>) = viewModelScope.launch {
+
+    fun setPlanNotEndList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planNotEndResponse.value = plan
     }
-    fun setPlanEndList(plan:MutableList<UserPlan>) = viewModelScope.launch {
+
+    fun setPlanEndList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planEndResponse.value = plan
     }
     fun setShareUserList(users:MutableList<User>) = viewModelScope.launch {
@@ -89,23 +97,27 @@ class PlanViewModel : ViewModel(){
     val livePlaceshopList = MutableLiveData<MutableList<Place>>().apply {
         value = placeShopResponse
     }
-    fun insertPlaceShopList(place:Place){
+
+    fun insertPlaceShopList(place: Place) {
         placeShopResponse.add(place)
         livePlaceshopList.value = placeShopResponse
     }
-    fun removePlaceShopList(placeId:Int){
-        for(i in 0..placeShopResponse.size-1){
-            if(placeShopResponse.get(i).id == placeId){
+
+    fun removePlaceShopList(placeId: Int) {
+        for (i in 0..placeShopResponse.size - 1) {
+            if (placeShopResponse.get(i).id == placeId) {
                 placeShopResponse.removeAt(i)
                 break
             }
         }
         livePlaceshopList.value = placeShopResponse
     }
-    fun setPlanReviewList(planReview:MutableList<PlanReview>) = viewModelScope.launch {
+
+    fun setPlanReviewList(planReview: MutableList<PlanReview>) = viewModelScope.launch {
         _planReviewListResponse.value = planReview
         Log.d(TAG, "setPlanReviewList: $planReview")
     }
+
     fun setReivew(review: PlanReview) = viewModelScope.launch {
         _reviewResponse.value = review
     }
@@ -113,48 +125,52 @@ class PlanViewModel : ViewModel(){
     fun setTheme(themeList: MutableList<Theme>) = viewModelScope.launch {
         _themeResponse.value = themeList
     }
+
     fun setUserPlanList(userPlanList: MutableList<UserPlan>) = viewModelScope.launch {
         _userPlanListResponse.value = userPlanList
     }
+
     fun setUserPlanByDayList(userPlanList: MutableList<UserPlan>) = viewModelScope.launch {
         _userPlanListByDayResponse.value = userPlanList
     }
 
 
-    suspend fun getPlanBestList(){
+    suspend fun getPlanBestList() {
         val response = UserPlanService().getBestUserPlan()
-        viewModelScope.launch { 
+        viewModelScope.launch {
             var res = response.body()
-            if(response.code() == 200){
-                if(res!=null){
+            if (response.code() == 200) {
+                if (res != null) {
                     setPlanBestList(res)
                     Log.d(TAG, "getPlanBestList: ")
                 }
-            }else{
+            } else {
                 Log.d(TAG, "getPlanBestList: ")
             }
         }
     }
-    suspend fun getPlanMyList(userId:String){
+
+    suspend fun getPlanMyList(userId: String) {
         val response = UserPlanService().getMyUserPlan(userId)
-        viewModelScope.launch { 
+        viewModelScope.launch {
             var res = response.body()
-            if(response.code() == 200){
-                if(res!=null){
+            if (response.code() == 200) {
+                if (res != null) {
                     setPlanMyList(res)
                     Log.d(TAG, "getPlanMyList: ")
                 }
-            }else{
+            } else {
                 Log.d(TAG, "getPlanMyList: ")
             }
         }
     }
-    suspend fun getPlanById(id:Int){
+
+    suspend fun getPlanById(id: Int) {
         val response = UserPlanService().getUserPlanById(id)
-        viewModelScope.launch { 
+        viewModelScope.launch {
             var res = response.body()
-            if(response.code() == 200){
-                if(res!=null){
+            if (response.code() == 200) {
+                if (res != null) {
                     Log.d(TAG, "getPlanById: $res")
                     val userPlantmp = JSONObject(res).getJSONObject("userPlan")
                     Log.d(TAG, "getPlanById: ${userPlantmp}")
@@ -167,8 +183,8 @@ class PlanViewModel : ViewModel(){
                     }
                     val userPlan = UserPlan(
                         id = userPlantmp.getInt("id"),
-                        title= userPlantmp.getString("title"),
-                        userId= userPlantmp.getString("userId"),
+                        title = userPlantmp.getString("title"),
+                        userId = userPlantmp.getString("userId"),
                         description = userPlantmp.getString("description"),
                         startDate = userPlantmp.getString("startDate"),
                         endDate = userPlantmp.getString("endDate"),
@@ -177,14 +193,15 @@ class PlanViewModel : ViewModel(){
                         rate = userPlantmp.getDouble("rate"),
                         heartCnt = userPlantmp.getInt("heartCnt"),
                         areaId = userPlantmp.getInt("areaId"),
-                        themeIdList = themeIdList
+                        themeIdList = themeIdList,
+                        reviewCnt = userPlantmp.getInt("reviewCnt")
                     )
 
                     val routetmp = JSONObject(res).getJSONArray("routeList")
                     var i = 0
 
                     var routeList = mutableListOf<Route>()
-                    while(i < routetmp.length()){
+                    while (i < routetmp.length()) {
                         var routeDetaillist = arrayListOf<RouteDetail>()
                         val jsonObject = routetmp.getJSONObject(i)
                         var rid = jsonObject.getInt("id")
@@ -194,7 +211,7 @@ class PlanViewModel : ViewModel(){
                         var isCustom = jsonObject.getString("isCustom")
                         var detailtmp = jsonObject.getJSONArray("routeDetailList")
                         var j = 0
-                        while(j < detailtmp.length()){
+                        while (j < detailtmp.length()) {
                             val detailObject = detailtmp.getJSONObject(j)
                             var routeId = detailObject.getInt("routeId")
                             var did = detailObject.getInt("id")
@@ -204,7 +221,7 @@ class PlanViewModel : ViewModel(){
                             var placeObject = detailObject.getJSONObject("place")
 
                             var pid = placeObject.getInt("id")
-                            var name =placeObject.getString("name")
+                            var name = placeObject.getString("name")
                             var type = placeObject.getString("type")
                             var lat = placeObject.getString("lat")
                             var lng = placeObject.getString("lng")
@@ -214,7 +231,7 @@ class PlanViewModel : ViewModel(){
                             var description = placeObject.getString("description")
                             var themeId = placeObject.getInt("themeId")
                             var areaId = placeObject.getInt("areaId")
-                            var img =placeObject.getString("img")
+                            var img = placeObject.getString("img")
                             var userId = placeObject.getString("userId")
                             var rate = placeObject.getDouble("rate")
                             var heartCnt = placeObject.getInt("heartCnt")
@@ -237,7 +254,7 @@ class PlanViewModel : ViewModel(){
                                 zipCode = zipCode
                             )
                             var routeDetail = RouteDetail(
-                                id=did,
+                                id = did,
                                 memo = dmemo,
                                 place = place,
                                 placeId = placeId,
@@ -267,78 +284,79 @@ class PlanViewModel : ViewModel(){
                     Log.d(TAG, "getPlanById_USERPlan: ${userPlan}")
                     Log.d(TAG, "getPlanById: ${routeList}")
                 }
-            }else{
+            } else {
                 Log.d(TAG, "getPlanById: ")
             }
 
         }
     }
-    fun getRouteDetailbyDay(day:Int){
+
+    fun getRouteDetailbyDay(day: Int) {
         viewModelScope.launch {
-            for(i in 0..routeList.value!!.size-1){
-                if(routeList.value!!.get(i).day == day){
+            for (i in 0..routeList.value!!.size - 1) {
+                if (routeList.value!!.get(i).day == day) {
                     setRouteDetailList(routeList.value!!.get(i).routeDetailList.toMutableList())
                 }
             }
         }
     }
-    
-    suspend fun getMyNotendPlan(userId:String){
+
+    suspend fun getMyNotendPlan(userId: String) {
         val response = UserPlanService().getMyPlanNotEnd(userId)
         viewModelScope.launch {
             var res = response.body()
-            if(response.code() == 200){
-                if(res!=null){
+            if (response.code() == 200) {
+                if (res != null) {
                     setPlanNotEndList(res)
                     Log.d(TAG, "getMyNotendPlan: ")
                 }
-            }else{
+            } else {
                 Log.d(TAG, "getMyNotendPlan: ")
             }
         }
     }
-    
-    suspend fun getMyEndPlan(userId:String){
+
+    suspend fun getMyEndPlan(userId: String) {
         val response = UserPlanService().getMyPlanEnd(userId)
-        viewModelScope.launch { 
+        viewModelScope.launch {
             var res = response.body()
-            if(response.code() == 200){
-                if(res!=null){
+            if (response.code() == 200) {
+                if (res != null) {
                     setPlanEndList(res)
                     Log.d(TAG, "getMyEndPlan: ")
                 }
-            }else{
+            } else {
                 Log.d(TAG, "getMyEndPlan: ")
             }
         }
     }
 
-    suspend fun getPlanReviewListbyId(planId:Int){
+    suspend fun getPlanReviewListbyId(planId: Int) {
         val response = UserPlanService().getPlanReviewbyId(planId)
         viewModelScope.launch {
             var res = response.body()
-            if(response.code()==200){
-                if(res!=null){
+            if (response.code() == 200) {
+                if (res != null) {
                     setPlanReviewList(res)
                     Log.d(TAG, "getPlanReviewListbyId: $res")
                 }
 
-            }else{
+            } else {
                 Log.d(TAG, "getPlanReviewListbyId: ")
             }
         }
     }
 
-    suspend fun getPlanReviewById(id:Int){
+    suspend fun getPlanReviewById(id: Int) {
         val response = UserPlanService().getReviewById(id)
         viewModelScope.launch {
             var res = response.body()
-            if(response.code() == 200) {
-                if(res!=null){
+            if (response.code() == 200) {
+                if (res != null) {
                     Log.d(TAG, "UserPlanService: ")
                     setReivew(res)
                 }
-            }else{
+            } else {
                 Log.d(TAG, "UserPlanService: ")
             }
         }
@@ -346,12 +364,12 @@ class PlanViewModel : ViewModel(){
 
     suspend fun getThemeById(idList: List<Int>) {
         var list = mutableListOf<Theme>()
-        for(i in 0 until idList.size) {
+        for (i in 0 until idList.size) {
             val response = ThemeService().getThemeById(idList.get(i))
             viewModelScope.launch {
                 var res = response.body()
-                if(response.code() == 200) {
-                    if(res != null) {
+                if (response.code() == 200) {
+                    if (res != null) {
                         //Log.d(TAG, "getThemeById: $res")
                         list.add(res)
                     }
@@ -400,19 +418,43 @@ class PlanViewModel : ViewModel(){
         }
     }
 
-    fun getRoutebyDay(totalDate :Int){
+    fun getRoutebyDay(totalDate: Int, selectedTheme: MutableList<Int>) {
         viewModelScope.launch {
             var list = mutableListOf<UserPlan>()
-            if(totalDate == 0) {
-                list = userPlanList.value!!
+            if (totalDate == 0) {
+                for (i in 0 until userPlanList.value!!.size) {
+                        var themeList = userPlanList.value!!.get(i).themeIdList
+                        var count = 0
+                        for(j in 0 until selectedTheme.size) {
+                            if(themeList.contains(selectedTheme.get(j))) {
+                                count++
+                            }
+                        }
+                        if(count == selectedTheme.size) {
+                            list.add(userPlanList.value!!.get(i))
+                        }
+                }
+                //list = userPlanList.value!!
             } else {
-                for(i in 0 until userPlanList.value!!.size){
-                    if(userPlanList.value!!.get(i).totalDate == totalDate){
-                        list.add(userPlanList.value!!.get(i))
+                for (i in 0 until userPlanList.value!!.size) {
+                    if (userPlanList.value!!.get(i).totalDate == totalDate) {
+                        //list.add(userPlanList.value!!.get(i))
+                        var themeList = userPlanList.value!!.get(i).themeIdList
+                        var count = 0
+                        for(j in 0 until selectedTheme.size) {
+                            if(themeList.contains(selectedTheme.get(j))) {
+                                count++
+                            }
+                        }
+                        if(count == selectedTheme.size) {
+                            list.add(userPlanList.value!!.get(i))
+                        }
                     }
                 }
             }
+
             setUserPlanByDayList(list)
+
         }
     }
     
@@ -429,4 +471,5 @@ class PlanViewModel : ViewModel(){
             }
         }
     }
+
 }

@@ -27,6 +27,11 @@
         where id = #{id}
     </delete>
 
+    <delete id="deletePlanShareUserByPlanIdUserId" parameterType="PlanShareUser">
+        delete from planshareuser
+        where user_id = #{userId} and plan_id = #{planId}
+    </delete>
+
     <update id="updatePlanShareUser" parameterType="PlanShareUser">
         update planshareuser
         set plan_id = #{planId}, user_id = #{userId}

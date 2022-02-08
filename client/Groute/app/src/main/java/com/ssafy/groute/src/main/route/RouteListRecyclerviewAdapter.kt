@@ -34,7 +34,7 @@ class RouteListRecyclerviewAdapter(val planViewModel: PlanViewModel, val viewLif
         val routeDate = itemView.findViewById<TextView>(R.id.item_route_date_tv)
         val routeArea = itemView.findViewById<TextView>(R.id.item_route_area_tv)
         val routeTitle = itemView.findViewById<TextView>(R.id.item_route_title_tv)
-        val commentCnt = itemView.findViewById<TextView>(R.id.item_route_comment_tv)
+        val reviewCnt = itemView.findViewById<TextView>(R.id.item_route_comment_tv)
         val heartCnt = itemView.findViewById<TextView>(R.id.item_route_like_tv)
 
         @SuppressLint("LongLogTag")
@@ -48,13 +48,7 @@ class RouteListRecyclerviewAdapter(val planViewModel: PlanViewModel, val viewLif
             routeArea.text = "[제주도]"
             routeTitle.text = "${data.title}"
             heartCnt.text = "${data.heartCnt}"
-//            runBlocking {
-//                planViewModel.getPlanReviewListbyId(data.id)
-//            }
-//            planViewModel.planReviewList.observe(viewLifecycleOwner, Observer {
-//                Log.d(TAG, "bindInfo: ${it.size}")
-//                commentCnt.text = "${it.size}"
-//            })
+            reviewCnt.text = "${data.reviewCnt}"
         }
     }
 
