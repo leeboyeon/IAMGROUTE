@@ -60,19 +60,23 @@ import com.ssafy.groute.databinding.ActivityCommentNestedBinding.bind
 import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.dto.RouteDetail
 import com.ssafy.groute.src.service.UserPlanService
+import com.ssafy.groute.src.viewmodel.HomeViewModel
 import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.selects.select
+import net.daum.mf.map.api.MapPOIItem
+import net.daum.mf.map.api.MapPoint
+import net.daum.mf.map.api.MapView
 import kotlin.time.days
 
 
 private const val TAG = "TravelPlanFragment"
-//class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTravelPlanBinding::bind, R.layout.fragment_travel_plan) {
- class TravelPlanFragment: Fragment(){
+class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTravelPlanBinding::bind, R.layout.fragment_travel_plan) {
+// class TravelPlanFragment: Fragment(){
 
-    private lateinit var binding:FragmentTravelPlanBinding
+//    private lateinit var binding:FragmentTravelPlanBinding
     private lateinit var mainActivity: MainActivity
-    lateinit var con : ViewGroup
+//    lateinit var con : ViewGroup
     lateinit var addButton: FloatingActionButton
     lateinit var memoAddButton: FloatingActionButton
     lateinit var routeRecomButton: FloatingActionButton
@@ -80,6 +84,7 @@ private const val TAG = "TravelPlanFragment"
 
     private val planViewModel:PlanViewModel by activityViewModels()
     private val placeViewModel:PlaceViewModel by activityViewModels()
+    private val homeViewModel:HomeViewModel by activityViewModels()
 
     var isFabOpen: Boolean = false
     private var planId = -1
@@ -88,7 +93,8 @@ private const val TAG = "TravelPlanFragment"
 
     private lateinit var routeRecomDialogAdapter:RouteRecomDialogAdapter
     private lateinit var travelPlanListRecyclerviewAdapter: TravelPlanListRecyclerviewAdapter
-
+    private var AreaLat = 0.0
+    private var AreaLng = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideBottomNav(true)
@@ -104,26 +110,30 @@ private const val TAG = "TravelPlanFragment"
         Log.d(TAG, "onAttach: ${planId}")
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentTravelPlanBinding.inflate(layoutInflater,container,false)
-        con = container!!
-        return binding.root
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//
+//        binding = FragmentTravelPlanBinding.inflate(layoutInflater,container,false)
+//        con = container!!
+//        return binding.root
+//    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "onViewCreated: ${con}")
+
         binding.viewModel = planViewModel
         runBlocking {
             planViewModel.getPlanById(planId)
+            homeViewModel.getAreaLists()
         }
+
         initPlaceListAdapter()
+
+        initKakaoMap()
         initTabLayout()
-//        initPlaceList()
         floatingButtonEvent()
         binding.travelplanBackIv.setOnClickListener {
             mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
@@ -148,10 +158,26 @@ private const val TAG = "TravelPlanFragment"
             mainActivity.moveFragment(17,"planId",planId)
         }
     }
-    fun showMemberDialog(){
+    fun initKakaoMap(){
+        var mapView = MapView(requireContext())
+        binding.travelplanMapview.addView(mapView)
+        Log.d(TAG, "findLatLng: ")
+        homeViewModel.areaList.observe(viewLifecycleOwner, Observer { it1 ->
+            planViewModel.planList.observe(viewLifecycleOwner, Observer { it2 ->
+                for(i in 0 until it1.size){
+                    if(it1[i].id == it2.areaId){
+                        AreaLat = it1[i].lat.toDouble()
+                        AreaLng = it1[i].lng.toDouble()
+                        var mapPoint = MapPoint.mapPointWithGeoCoord(AreaLat, AreaLng)
+                        mapView.setMapCenterPoint(mapPoint,true)
+                        mapView.setZoomLevel(9, true)
+                        Log.d(TAG, "findLatLng: ${AreaLat} || ${AreaLng}")
+                    }
+                }
+            })
+        })
 
     }
-
 
     // 플로팅 버튼 이벤트 처리
     fun floatingButtonEvent() {
@@ -281,13 +307,13 @@ private const val TAG = "TravelPlanFragment"
         var dialog = Dialog(requireContext())
         dialog.setContentView(dialogView)
         dialogView.findViewById<Button>(R.id.routeRecom_btn_cancle).setOnClickListener {
-            dialog.cancel()
+            dialog.dismiss()
         }
         dialogView.findViewById<Button>(R.id.routeRecom_btn_ok).setOnClickListener {
             if(selectPosition == 0){
                 //당일
                 mainActivity.moveFragment(16,"days",1)
-                dialog.cancel()
+                dialog.dismiss()
             }
             if(selectPosition == 1){
                 //전체
@@ -296,7 +322,7 @@ private const val TAG = "TravelPlanFragment"
                         total = it.totalDate
                     })
                 mainActivity.moveFragment(16,"days",total)
-                dialog.cancel()
+                dialog.dismiss()
             }
         }
         dialog.setTitle("원하는 타입을 선택해주세요")

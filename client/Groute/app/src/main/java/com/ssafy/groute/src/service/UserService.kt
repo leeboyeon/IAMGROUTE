@@ -238,7 +238,7 @@ class UserService {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 val res = response.body()
                 if(response.code() == 200) {
-                    if (res != null) {
+                    if (res!=null) {
                         callback.onSuccess(response.code(), res)
                     }
                 } else {
