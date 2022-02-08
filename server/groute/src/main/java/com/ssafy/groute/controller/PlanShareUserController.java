@@ -76,7 +76,7 @@ public class PlanShareUserController {
     }
 
     @ApiOperation(value = "delete planShareUser",notes = "planShareUser 삭제")
-    @DeleteMapping(value = "/del")
+    @PostMapping(value = "/del")
     public ResponseEntity<?> deletePlanShareUser(@RequestBody PlanShareUser planShareUser) throws Exception{
 
         try {
