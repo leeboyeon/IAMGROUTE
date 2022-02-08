@@ -23,6 +23,7 @@ class ApplicationClass : Application() {
 //        const val SERVER_URL = "http://172.30.1.10:8888/"   // Jiwoo
         //AWS servoer
         const val SERVER_URL = "http://i6d109.p.ssafy.io:8888/"
+        const val IMGS_URL = "${SERVER_URL}imgs/"
         const val IMGS_URL_USER = "${SERVER_URL}imgs/user/"
         const val IMGS_URL_AREA = "${SERVER_URL}imgs/area/"
         const val IMGS_URL_PLACE = "${SERVER_URL}imgs/place"

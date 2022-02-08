@@ -30,6 +30,7 @@ import com.ssafy.groute.databinding.FragmentBoardWriteBinding
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.BoardService
+import com.ssafy.groute.src.viewmodel.BoardViewModel
 import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
@@ -49,15 +50,18 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
 //    private lateinit var binding: FragmentBoardWriteBinding
     private lateinit var mainActivity:MainActivity
     private val placeViewModel: PlaceViewModel by activityViewModels()
+    private val boardViewModel: BoardViewModel by activityViewModels()
     private var boardDetailId = -1
     private var boardId = -1
     private var placeId = -1
 
+    private var boardDetailImg : String = ""
     // 사진 선택
     private lateinit var imgUri: Uri    // 파일 uri
     private var fileExtension : String? = ""    // 파일 확장자
 
-    private var permissionlistener: PermissionListener = object : PermissionListener {
+    // 권한 허가
+    private var permissionListener: PermissionListener = object : PermissionListener {
         override fun onPermissionGranted() { // 권한 허가시 실행 할 내용
             selectImg()
         }
@@ -75,8 +79,9 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
             boardDetailId = it.getInt("boardDetailId", -1)
             boardId = it.getInt("boardId",-1)
             placeId = it.getInt("placeId",-1)
-            Log.d(TAG, "onCreate: ${boardDetailId}")
-            Log.d(TAG, "onCreate: ${boardId}")
+            Log.d(TAG, "onCreate: boardDetailId ${boardDetailId}")
+            Log.d(TAG, "onCreate: boardId ${boardId}")
+            Log.d(TAG, "onCreate: placeId ${placeId}")
         }
 
     }
@@ -88,49 +93,79 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 게시글 작성인 경우(BoardDetailFragment에서 boardId가 넘어옴)
+        if(boardId == 1) {  // 질문 게시판
+            binding.boardWriteLLPlaceSerach.visibility = View.GONE
+        } else if(boardId == 2) {    // 질문 게시판
+            binding.boardWriteLLPlaceSerach.visibility = View.VISIBLE
+        }
+
+        // 게시글 수정인 경우(BoardDetailFragment에서 boardDetailId가 넘어옴)
+        if(boardDetailId > 0) {
+            runBlocking {
+                boardViewModel.getBoardDetail(boardDetailId)
+            }
+            initModifyView()
+            registerBtnEvent(false)
+        } else {
+            registerBtnEvent(true)
+        }
+
         cancelButtonEvent()
-        registerBtnEvent()
         selectPlaceBtnEvent()
         selectImgBtnEvent()
 
-        // 질문 게시판이고, 수정하는 경우 기존에 선택된 place setting
-        if(boardId == 1) {
-            binding.searchLayout.visibility = View.GONE
-        } else {
-            if(placeId > 0) {
-                runBlocking {
-                    placeViewModel.getPlace(placeId)
+        Log.d(TAG, "onViewCreated: $boardId")
+
+    }
+
+    // 수정인 경우 게시판 구분해서 view에 기존 데이터 setting
+    private fun initModifyView() {
+        Log.d(TAG, "onViewCreated: $placeId")
+
+        binding.boardDetailBtnComplete.setText("수정")
+
+        boardViewModel.boardDetail.observe(viewLifecycleOwner) {
+            boardDetailId = it.id
+            boardId = it.boardId
+            placeId = it.placeId
+
+            if(it.boardId == 1) {
+                binding.boardWriteLLPlaceSerach.visibility = View.GONE  // 장소 선택 layout gone
+                setView(it)
+            } else if(it.boardId == 2) {    // it.boardId == 2
+                binding.boardWriteLLPlaceSerach.visibility = View.VISIBLE
+                if(it.placeId > 0) {
+                    runBlocking {
+                        placeViewModel.getPlace(it.placeId)
+                    }
                     binding.boardWriteTvPlaceName.text = placeViewModel.place.value?.name
+                    placeId = it.placeId
                 }
+                setView(it)
             }
         }
+    }
 
-        // 수정하는 경우(boardDetailId가 있는 경우)
-        if(boardDetailId > 0){
-            Log.d(TAG, "onViewCreated: ${boardDetailId}")
-            binding.boardDetailBtnComplete.setText("수정")
-            getListBoardDetail(boardDetailId)
+    // 수정인 경우 set BoardWrite Layout
+    private fun setView(boardDetail: BoardDetail) {
+        binding.boardWriteEtTitle.setText(boardDetail.title)
+        binding.boardWriteEtContent.setText(boardDetail.content)
 
-            binding.boardDetailBtnComplete.setOnClickListener {
-                val title = binding.boardWriteEtTitle.text.toString()
-                val content = binding.boardWriteEtContent.text.toString()
-                var boardId = boardId
-                var img = ""
-                var userId = ApplicationClass.sharedPreferencesUtil.getUser().id
+        val img = boardDetail.img
+        if(!(img == "null" || img == "" || img == null)) {
+            binding.boardWriteLLayoutSetImg.visibility = View.VISIBLE
+            boardDetailImg = img
+            // 사진 set
+            Glide.with(requireContext())
+                .load("${ApplicationClass.IMGS_URL}${img}")
+                .into(binding.boardWriteIvSelectImg)
 
-                val boardDetail = BoardDetail(
-                    id = boardDetailId,
-                    title = title,
-                    content = content,
-                    img = img,
-                    boardId=boardId,
-                    userId = userId
-                )
-                boardModify(boardDetail)
-            }
+            // 파일 이름 set
+            binding.boardWriteTvImgName.text = img.substring(img.lastIndexOf("/") + 1, img.length)
+        } else {
+            binding.boardWriteLLayoutSetImg.visibility = View.GONE
         }
-
-
     }
 
     // 게시글 작성 취소(우측 상단 'x') 버튼 클릭 이벤트
@@ -142,30 +177,38 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
     }
 
     // 게시글 작성 완료(우측 하단 '완료') 버튼 클릭 이벤트
-    private fun registerBtnEvent() {
+    private fun registerBtnEvent(chk: Boolean) {
+        var boardDetailId = 0
+        if(chk) {
+            boardDetailId = 0
+        } else {
+            boardDetailId = boardViewModel.boardDetail.value!!.id
+        }
         binding.boardDetailBtnComplete.setOnClickListener {
             val title = binding.boardWriteEtTitle.text.toString()
             val content = binding.boardWriteEtContent.text.toString()
             var boardId = boardId
-            val img = ""
+            val img = boardDetailImg
             val userId = ApplicationClass.sharedPreferencesUtil.getUser().id
 
             if (boardId == 1) { // Free Board
                 Log.d(TAG, "initButton: ${boardId}")
                 val boardDetail = BoardDetail(
+                    id = boardDetailId,
                     title = title,
                     content = content,
                     img = img,
                     boardId = boardId,
                     userId = userId
                 )
-                setData(boardDetail, 1)
-            } else {    // Question Board
+                setData(boardDetail, 1, chk)
+            } else if(boardId == 2) {    // Question Board
 
                 Log.d(TAG, "initButton: ${boardId}")
                 Log.d(TAG, "initButton_Place: ${placeId}")
                 boardId = 2
                 val boardDetail = BoardDetail(
+                    id = boardDetailId,
                     title = title,
                     content = content,
                     img = img,
@@ -174,14 +217,17 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
                     placeId = placeId
                 )
                 Log.d(TAG, "initButton: ${boardDetail}")
-                setData(boardDetail, 2)
+                setData(boardDetail, 2, chk)
             }
         }
     }
 
+    /**
+     * 수정해야됨. -> dialog 등 fragment 전환 없도록 구현
+     */
     // 장소 선택 레이아웃 클릭 이벤트
     private fun selectPlaceBtnEvent() {
-        binding.searchLayout.setOnClickListener {
+        binding.boardWriteLLPlaceSerach.setOnClickListener {
             mainActivity.moveFragment(9)
         }
     }
@@ -208,9 +254,7 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
      */
     private fun selectImg() {
         val intent = Intent(Intent.ACTION_PICK)
-
-        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-
+        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
         filterActivityLauncher.launch(intent)
     }
 
@@ -232,7 +276,7 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
 
         if (Build.VERSION.SDK_INT >= 23) { // 마시멜로(안드로이드 6.0) 이상 권한 체크
             TedPermission.create()
-                .setPermissionListener(permissionlistener)
+                .setPermissionListener(permissionListener)
                 .setRationaleMessage("앱을 이용하기 위해서는 접근 권한이 필요합니다")
                 .setDeniedMessage("If you reject permission,you can not use this service\n" +
                         "\n\nPlease turn on permissions at [Setting] > [Permission] ")
@@ -293,17 +337,19 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
                             fileExtension = requireActivity().contentResolver.getType(currentImageUri)
                             Log.d(TAG, "filterActivityLauncher_1:$currentImageUri\n$imgUri\n" +
                                     "$fileExtension")
-
                         }
                     }
-
                 }catch(e:Exception) {
                     e.printStackTrace()
                 }
             } else if(it.resultCode == AppCompatActivity.RESULT_CANCELED){
                 showCustomToast("사진 선택 취소")
-                binding.boardWriteLLayoutSetImg.visibility = View.GONE
-                imgUri = Uri.EMPTY
+                if(binding.boardWriteTvImgName.length() > 0) {  // 기존 사진이 있으면 visible
+                    binding.boardWriteLLayoutSetImg.visibility = View.VISIBLE
+                } else {
+                    binding.boardWriteLLayoutSetImg.visibility = View.GONE
+                    imgUri = Uri.EMPTY
+                }
             } else{
                 binding.boardWriteLLayoutSetImg.visibility = View.GONE
                 Log.d(TAG,"filterActivityLauncher 실패")
@@ -314,7 +360,7 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
      * insert & update BoardDetail
      * call server
      */
-    private fun setData(boardDetail: BoardDetail, boardId: Int) {
+    private fun setData(boardDetail: BoardDetail, boardId: Int, chk: Boolean) {
 
         // 게시글만 작성한 경우
         if(imgUri == Uri.EMPTY) {
@@ -324,7 +370,11 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
             var json = gson.toJson(boardDetail)
             var rBody_boardDetail = RequestBody.create(MediaType.parse("text/plain"), json)
             Log.d(TAG, "updateUser_requestBodyUser: ${rBody_boardDetail.contentType()}, ${json}")
-            boardWrite(boardDetail = rBody_boardDetail, null, boardId)
+            if(chk) {   // 게시글 작성인 경우
+                boardWrite(boardDetail = rBody_boardDetail, null, boardId)
+            } else {    // 게시글 수정인 경우
+                boardModify(rBody_boardDetail, null, boardId)
+            }
 
         }
         // 게시글 작성 + 사진 선택한 경우
@@ -347,8 +397,12 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
             val gson : Gson = Gson()
             val json = gson.toJson(boardDetail)
             val rBody_boardDetail = RequestBody.create(MediaType.parse("text/plain"), json)
+            if(chk) {   // 게시글 작성인 경우
+                boardWrite(boardDetail = rBody_boardDetail, uploadFile, boardId)
+            } else {    // 게시글 수정인 경우
+                boardModify(rBody_boardDetail, uploadFile, boardId)
+            }
 
-            boardWrite(boardDetail = rBody_boardDetail, uploadFile, boardId)
         }
     }
 
@@ -363,9 +417,8 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
             }
 
             override fun onSuccess(code: Int, responseData: Boolean) {
-                mainActivity.moveFragment(5,"boardId",boardId)
+                mainActivity.moveFragment(5,"boardId", boardId)
                 showCustomToast("글쓰기 성공")
-//                Toast.makeText(requireContext(),"글쓰기 성공",Toast.LENGTH_SHORT).show()
             }
 
             override fun onFailure(code: Int) {
@@ -378,14 +431,14 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
     /**
      * 게시글 수정 callback
      */
-    private fun boardModify(boardDetail:BoardDetail){
-        BoardService().modifyBoardDetail(boardDetail, object : RetrofitCallback<Boolean> {
+    private fun boardModify(boardDetail:RequestBody, img: MultipartBody.Part?, boardId: Int){
+        BoardService().modifyBoardDetail(boardDetail, img, object : RetrofitCallback<Boolean> {
             override fun onError(t: Throwable) {
                 Log.d(TAG, "onError: ")
             }
 
             override fun onSuccess(code: Int, responseData: Boolean) {
-                mainActivity.moveFragment(5,"boardId",boardId)
+                mainActivity.moveFragment(5,"boardId", boardId)
                 showCustomToast("수정 성공")
 //                Toast.makeText(requireContext(),"수정 성공",Toast.LENGTH_SHORT).show()
             }
@@ -398,33 +451,60 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
 
     /**
      * id에 해당하는 게시글 1개 조회
-     * 수정 버튼 클릭으로 넘어왔을 때 title, content setting
+     * 수정 버튼 클릭으로 넘어왔을 때 title, content img, place setting
      */
-    fun getListBoardDetail(id:Int){
-        BoardService().getListBoardDetail(id, object : RetrofitCallback<Map<String,Any>> {
-            override fun onError(t: Throwable) {
-                Log.d(TAG, "onError: ")
-            }
-
-            override fun onSuccess(code: Int, responseData: Map<String, Any>) {
-                Log.d(TAG, "onSuccess: ${JSONObject(responseData).getJSONObject("boardDetail")}")
-                Log.d(TAG, "onSuccess: ${JSONObject(responseData)}")
-                
-                val boardDetail = JSONObject(responseData).getJSONObject("boardDetail")
-                val title = boardDetail.get("title")
-                val content = boardDetail.get("content")
-                boardId = boardDetail.get("boardId").toString().substring(0,1).toInt()
-                Log.d(TAG, "onSuccess: ${title}")
-
-                binding.boardWriteEtTitle.setText(title.toString())
-                binding.boardWriteEtContent.setText(content.toString())
-            }
-
-            override fun onFailure(code: Int) {
-                Log.d(TAG, "onFailure: ")
-            }
-        })
-    }
+//    fun getListBoardDetail(id:Int){
+//        BoardService().getListBoardDetail(id, object : RetrofitCallback<Map<String,Any>> {
+//            override fun onError(t: Throwable) {
+//                Log.d(TAG, "onError: ")
+//            }
+//
+//            override fun onSuccess(code: Int, responseData: Map<String, Any>) {
+//                Log.d(TAG, "onSuccess: ${JSONObject(responseData).getJSONObject("boardDetail")}")
+//                Log.d(TAG, "onSuccess: ${JSONObject(responseData)}")
+//
+//                val boardDetail = JSONObject(responseData).getJSONObject("boardDetail")
+//                val title = boardDetail.get("title").toString()
+//                val content = boardDetail.get("content").toString()
+//                val img = boardDetail.get("img").toString()
+//                placeId = boardDetail.get("placeId").toString().substring(0,1).toInt()
+//                boardId = boardDetail.get("boardId").toString().substring(0,1).toInt()
+//                Log.d(TAG, "onSuccess: ${title} $content $img $placeId $boardId")
+//                Log.d(TAG, "initView: $boardId")
+//                if(boardId == 1) {  // 자유게시판이면
+//                    binding.boardWriteLLPlaceSerach.visibility = View.GONE  // 장소 선택 layout gone
+//                } else {    // 질문 게시판이면
+//                    binding.boardWriteLLPlaceSerach.visibility = View.VISIBLE
+//                    if(placeId > 0) {
+//                        runBlocking {
+//                            placeViewModel.getPlace(placeId)
+//                            binding.boardWriteTvPlaceName.text = placeViewModel.place.value?.name
+//                        }
+//                    }
+//                }
+//                binding.boardWriteEtTitle.setText(title.toString())
+//                binding.boardWriteEtContent.setText(content.toString())
+//
+//                if(!(img.equals("null") || img.equals("") || img == null)) {
+//                    binding.boardWriteLLayoutSetImg.visibility = View.VISIBLE
+//                    // 사진 set
+//                    Glide.with(requireContext())
+//                        .load("${ApplicationClass.IMGS_URL}${img}")
+//                        .into(binding.boardWriteIvSelectImg)
+//
+//                    // 파일 이름 set
+//                    binding.boardWriteTvImgName.text = img.substring(img.lastIndexOf("/") + 1, img.length).toString()
+//                } else {
+//                    binding.boardWriteLLayoutSetImg.visibility = View.GONE
+//                }
+//                registerBtnEvent(false)
+//            }
+//
+//            override fun onFailure(code: Int) {
+//                Log.d(TAG, "onFailure: ")
+//            }
+//        })
+//    }
 
 
     companion object {

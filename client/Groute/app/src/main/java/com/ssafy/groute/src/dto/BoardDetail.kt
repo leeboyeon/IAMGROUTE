@@ -17,6 +17,7 @@ data class BoardDetail(
     constructor(title:String,content:String,img:String, boardId:Int, userId:String):this(0,title,content,img,"","",0,0, boardId,userId,0,0)
     constructor(id:Int,title:String,content:String,img:String, boardId:Int, userId:String): this(id,title,content,img,"","",0,0, boardId,userId,0,0)
     constructor(title:String,content:String,img:String, boardId:Int, userId:String, placeId:Int):this(0,title,content,img,"","",0,0, boardId,userId,placeId,0)
+    constructor(id:Int, title:String,content:String,img:String, boardId:Int, userId:String, placeId:Int):this(id,title,content,img,"","",0,0, boardId,userId,placeId,0)
     constructor(title:String,content:String,img:String, boardId:Int, heartCnt: Int, userId:String):this(0,title,content,img,"","",heartCnt,0, boardId,userId,0,0)
 }
 
