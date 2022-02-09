@@ -5,13 +5,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/recycler_bottom_sheet_days_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/corner_radius_grey"
+        android:backgroundTint="@color/grey"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="3dp"
+        app:contentPaddingLeft="15dp"
+        app:contentPaddingRight="15dp"
         android:layout_marginEnd="10dp"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -38,5 +41,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recycler_bottom_sheet_days_day"
         android:text="2.9"/>-->
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

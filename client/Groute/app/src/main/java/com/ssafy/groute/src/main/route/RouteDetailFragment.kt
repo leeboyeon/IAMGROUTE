@@ -132,7 +132,7 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         }
         planViewModel.userPlan.observe(viewLifecycleOwner, Observer {
             bottomSheetRecyclerviewAdapter =
-                BottomSheetRecyclerviewAdapter(viewLifecycleOwner, planViewModel)
+                BottomSheetRecyclerviewAdapter(viewLifecycleOwner, planViewModel, requireContext())
             bottomSheetRecyclerviewAdapter.setUserPlanList(it)
             Log.d(TAG, "showRouteAddBottomSheet: $it")
 
@@ -145,6 +145,13 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
                 adapter!!.stateRestorationPolicy =
                     RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
+
+            bottomSheetRecyclerviewAdapter.setItemClickListener(object : BottomSheetRecyclerviewAdapter.ItemClickListener {
+                override fun onClick(position: Int, day: Int) {
+
+                }
+
+            })
 
 
         })

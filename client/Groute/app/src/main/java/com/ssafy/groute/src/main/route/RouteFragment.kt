@@ -71,7 +71,6 @@ class RouteFragment :
         arguments?.let {
             planId = it.getInt("planId", -1)
             flag = it.getInt("flag", -1)
-            Log.d(TAG, "onAttach: ${days}")
         }
     }
 
