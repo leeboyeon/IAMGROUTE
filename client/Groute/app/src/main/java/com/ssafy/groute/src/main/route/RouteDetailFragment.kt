@@ -25,7 +25,8 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
 ) {
     private lateinit var mainActivity: MainActivity
     private lateinit var routeDetailThemeAdapter: RouteDetailThemeAdapter
-    private var planId = -1
+    private var planIdDetail = -1
+    private var planIdUser = -1
     private val planViewModel: PlanViewModel by activityViewModels()
 
     @SuppressLint("LongLogTag")
@@ -34,9 +35,10 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         mainActivity.hideMainProfileBar(true)
         mainActivity.hideBottomNav(true)
         arguments?.let {
-            planId = it.getInt("planId",-1)
+            planIdDetail = it.getInt("planIdDetail",-1)
+            planIdUser = it.getInt("planIdUser",-1)
         }
-        Log.d(TAG, "onCreate: ${planId}")
+        Log.d(TAG, "onCreate: ${planIdDetail}")
     }
 
     override fun onAttach(context: Context) {
@@ -48,7 +50,7 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = planViewModel
         runBlocking {
-            planViewModel.getPlanById(planId)
+            planViewModel.getPlanById(planIdDetail)
         }
 
         initAdapter()
@@ -56,8 +58,8 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         val routeDetailTabPagerAdapter = RouteDetailTabPagerAdapter(this)
         val tabList = arrayListOf("Info","Review")
 
-        routeDetailTabPagerAdapter.addFragment(RouteDetailInfoFragment.newInstance("planId", planId))
-        routeDetailTabPagerAdapter.addFragment(RouteDetailReviewFragment.newInstance("planId", planId))
+        routeDetailTabPagerAdapter.addFragment(RouteDetailInfoFragment.newInstance("planId", planIdDetail))
+        routeDetailTabPagerAdapter.addFragment(RouteDetailReviewFragment.newInstance("planId", planIdDetail))
 
         binding.RouteDetailVpLayout.adapter = routeDetailTabPagerAdapter
         TabLayoutMediator(binding.RouteDetailTablayout, binding.RouteDetailVpLayout) {tab, position ->
@@ -67,7 +69,11 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         binding.RouteDetailIbtnBack.setOnClickListener{
 //            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
 //            mainActivity.supportFragmentManager.popBackStack()
-            mainActivity.moveFragment(16, "days", -1)
+            mainActivity.moveFragment(16, "planId", -1, "flag", -1 )
+        }
+
+        binding.RouteDetailAddPlanBtn.setOnClickListener {
+            
         }
 
 
@@ -88,10 +94,11 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
 
     companion object {
         @JvmStatic
-        fun newInstance(key: String, value: Int) =
+        fun newInstance(key1:String, value1:Int, key2:String, value2:Int) =
             RouteDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(key, value)
+                    putInt(key1, value1)
+                    putInt(key2,value2)
                 }
             }
     }
