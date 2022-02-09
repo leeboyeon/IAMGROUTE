@@ -14,5 +14,8 @@ public class Account {
     private int spentMoney;
     private String description;
     private String category;
+    private String cateImg;
     private int userPlanId;
+    private String type;
+    private int day;
 }
