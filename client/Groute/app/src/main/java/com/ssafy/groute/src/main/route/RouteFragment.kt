@@ -1,5 +1,6 @@
 package com.ssafy.groute.src.main.route
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -158,8 +160,17 @@ class RouteFragment :
             }
             RouteListAdapter.setItemClickListener(object :
                 RouteListRecyclerviewAdapter.ItemClickListener {
-                override fun onClick(position: Int, id: Int) {
-                    mainActivity.moveFragment(12, "planId", id)
+                override fun onClick(position: Int, id: Int, totalDate: Int) {
+                    if(planId == -1) {
+                        mainActivity.moveFragment(12, "planIdDetail", id, "planIdUser", planId)
+                    } else {
+                        if(planViewModel.planList.value!!.totalDate < totalDate) {
+                            showTotalDateOverDialog()
+                        } else {
+                            mainActivity.moveFragment(12, "planIdDetail", id, "planIdUser", planId)
+                        }
+                    }
+
                 }
 
             })
@@ -174,6 +185,17 @@ class RouteFragment :
             })
         })
 
+    }
+
+    fun showTotalDateOverDialog() {
+        var dialogView:View = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_totaldate_over,null)
+        var dialog = Dialog(requireContext())
+        dialog.setContentView(dialogView)
+        dialogView.findViewById<Button>(R.id.btn).setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.setTitle("")
+        dialog.show()
     }
 
     fun initTab() {
