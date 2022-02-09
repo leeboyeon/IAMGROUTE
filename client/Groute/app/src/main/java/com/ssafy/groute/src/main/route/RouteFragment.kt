@@ -90,6 +90,7 @@ class RouteFragment :
         } else {
             if(flag == 0) { // 장소별루트추천
                 runBlocking {
+                    planViewModel.getUserPlanList()
                     planViewModel.getPlanByPlace(planId)
                     planViewModel.getThemeList()
                     homeViewModel.getAreaLists()

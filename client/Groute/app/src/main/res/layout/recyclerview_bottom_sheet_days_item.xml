@@ -8,10 +8,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/corner_radius_blue"
+        android:background="@drawable/corner_radius_grey"
         android:layout_marginEnd="10dp"
-        android:paddingHorizontal="25dp"
-        android:paddingVertical="5dp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,14 +21,15 @@
         android:id="@+id/recycler_bottom_sheet_days_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginVertical="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:text="DAY1"/>
 
-    <TextView
+    <!--<TextView
         android:id="@+id/recycler_bottom_sheet_days_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,6 +37,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recycler_bottom_sheet_days_day"
-        android:text="2.9"/>
+        android:text="2.9"/>-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

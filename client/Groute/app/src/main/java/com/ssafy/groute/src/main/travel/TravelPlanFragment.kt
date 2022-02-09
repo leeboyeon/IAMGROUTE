@@ -122,7 +122,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
 
         binding.viewModel = planViewModel
         runBlocking {
-            planViewModel.getPlanById(planId)
+            planViewModel.getPlanById(planId, false)
             homeViewModel.getAreaLists()
         }
 
@@ -372,7 +372,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                             showCustomToast("메모가 추가되었습니다.")
                             dialog.dismiss()
                             runBlocking {
-                                planViewModel.getPlanById(planId)
+                                planViewModel.getPlanById(planId, false)
                             }
                         }
 
@@ -408,7 +408,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                     override fun onSuccess(code: Int, responseData: Boolean) {
                         dialog.dismiss()
                         runBlocking {
-                            planViewModel.getPlanById(planId)
+                            planViewModel.getPlanById(planId, false)
                         }
                     }
 
