@@ -390,6 +390,7 @@ class PlanViewModel : ViewModel() {
     }
 
     suspend fun getThemeById(idList: List<Int>) {
+        setTheme(mutableListOf())
         var list = mutableListOf<Theme>()
         for (i in 0 until idList.size) {
             val response = ThemeService().getThemeById(idList.get(i))
@@ -518,6 +519,8 @@ class PlanViewModel : ViewModel() {
 
     fun getPlanByPlace(planId: Int) {
         viewModelScope.launch {
+            setUserPlanList(mutableListOf())
+            setUserPlanByDayList(mutableListOf())
             var placeIds = mutableListOf<Int>()
             getPlanById(planId, false)
             for (i in 0 until routeList.value!!.size) {
@@ -526,7 +529,7 @@ class PlanViewModel : ViewModel() {
                     placeIds.add(detailList.get(j).placeId)
                 }
             }
-            val response = UserPlanService().getPlanIncludePlace(placeIds)
+            val response = UserPlanService().getPlanIncludePlace(1, placeIds)
             var res = response.body()
             if (response.code() == 200) {
                 if (res != null) {

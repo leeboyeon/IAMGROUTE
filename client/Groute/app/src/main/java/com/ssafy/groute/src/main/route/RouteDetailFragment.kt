@@ -41,6 +41,7 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
     private val planViewModel: PlanViewModel by activityViewModels()
     private lateinit var bottomSheetRecyclerviewAdapter: BottomSheetRecyclerviewAdapter
     private var addDay = -1 // 선택한 day에 일정 추가
+    private var isAddPlan = false
 
     @SuppressLint("LongLogTag")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,9 +94,15 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         }.attach()
 
         binding.RouteDetailIbtnBack.setOnClickListener {
-//            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
-//            mainActivity.supportFragmentManager.popBackStack()
-            mainActivity.moveFragment(16, "planId", -1, "flag", -1)
+            if(planIdUser == -1) {
+                mainActivity.moveFragment(16, "planId", -1, "flag", -1)
+            } else {
+                if(isAddPlan) {
+                    mainActivity.moveFragment(16, "planId", -1, "flag", -1)
+                } else {
+                    mainActivity.moveFragment(16, "planId", planIdUser, "flag", 0)
+                }
+            }
         }
 
         binding.RouteDetailAddPlanBtn.setOnClickListener {
@@ -153,9 +160,6 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
             bottomSheetRecyclerviewAdapter.setItemClickListener(object : BottomSheetRecyclerviewAdapter.ItemClickListener {
                 override fun onClick(position: Int, day: Int) {
                     Log.d(TAG, "onClick day: $day")
-                    // 추가할 route viewModel.planList
-                    // planId -> planIdUser
-                    // day
                     addDay = day
                 }
 
@@ -176,6 +180,7 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
                         override fun onSuccess(code: Int, responseData: Boolean) {
                             Log.d(TAG, "onSuccess: 루트 반자동 추가 성공")
                             showCustomToast("일정에 추가되었습니다!")
+                            isAddPlan = true
                         }
 
                         override fun onFailure(code: Int) {

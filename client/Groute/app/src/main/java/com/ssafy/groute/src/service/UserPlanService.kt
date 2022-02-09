@@ -217,8 +217,8 @@ class UserPlanService {
             })
     }
 
-    suspend fun getPlanIncludePlace(placeIds: List<Int>) : Response<MutableList<UserPlan>> {
-        return RetrofitUtil.userPlanService.getPlanIncludePlace(placeIds)
+    suspend fun getPlanIncludePlace(flag: Int, placeIds: List<Int>) : Response<MutableList<UserPlan>> {
+        return RetrofitUtil.userPlanService.getPlanIncludePlace(flag, placeIds)
     }
 
 }

@@ -58,6 +58,6 @@ interface UserPlanApi {
     fun insertPlanToUserPlan(@Query("day") day : Int, @Query("planId") planId : Int, @Body userPlan: UserPlan) : Call<Boolean>
 
     @GET("/plan/filter")
-    suspend fun getPlanIncludePlace(@Query("placeIds") placeIds: List<Int>) :Response<MutableList<UserPlan>>
+    suspend fun getPlanIncludePlace(@Query("flag") flag: Int, @Query("placeIds") placeIds: List<Int>) :Response<MutableList<UserPlan>>
 
 }
