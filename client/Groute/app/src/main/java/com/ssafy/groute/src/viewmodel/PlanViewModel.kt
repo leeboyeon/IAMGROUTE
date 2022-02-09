@@ -34,6 +34,7 @@ class PlanViewModel : ViewModel() {
     private val _shareUserListResponse = MutableLiveData<MutableList<User>>()
     private val _planLikeListResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _userPlanResponse = MutableLiveData<MutableList<UserPlan>>()
+    private val _currentUserPlanResponse = MutableLiveData<UserPlan>()
 
     //    private val _routeResponse = MutableLiveData<MutableList<>>
 //    private val _routeDetailResponse = MutableLiveData<MutableList<>>
@@ -67,6 +68,8 @@ class PlanViewModel : ViewModel() {
         get() = _planLikeListResponse
     val userPlan: LiveData<MutableList<UserPlan>>
         get() = _userPlanResponse
+    val currentUserPlan:LiveData<UserPlan>
+        get() = _currentUserPlanResponse
 
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planBestResponse.value = plan
@@ -147,6 +150,7 @@ class PlanViewModel : ViewModel() {
 
     fun setUserPlan(userPlan: UserPlan) = viewModelScope.launch {
         var list = mutableListOf<UserPlan>()
+        _currentUserPlanResponse.value = userPlan
         list.add(userPlan)
         _userPlanResponse.value = list
     }

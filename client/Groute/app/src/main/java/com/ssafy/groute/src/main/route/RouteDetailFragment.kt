@@ -22,7 +22,10 @@ import com.ssafy.groute.src.dto.RouteDetail
 import com.ssafy.groute.src.dto.UserPlan
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.main.home.AreaTabPagerAdapter
+import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.viewmodel.PlanViewModel
+import com.ssafy.groute.util.RetrofitCallback
+import com.ssafy.groute.util.RetrofitUtil
 import kotlinx.coroutines.runBlocking
 
 private const val TAG = "RouteDetailFragment"
@@ -37,6 +40,7 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
     private var planIdUser = -1
     private val planViewModel: PlanViewModel by activityViewModels()
     private lateinit var bottomSheetRecyclerviewAdapter: BottomSheetRecyclerviewAdapter
+    private var addDay = -1 // 선택한 day에 일정 추가
 
     @SuppressLint("LongLogTag")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,7 +152,11 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
 
             bottomSheetRecyclerviewAdapter.setItemClickListener(object : BottomSheetRecyclerviewAdapter.ItemClickListener {
                 override fun onClick(position: Int, day: Int) {
-
+                    Log.d(TAG, "onClick day: $day")
+                    // 추가할 route viewModel.planList
+                    // planId -> planIdUser
+                    // day
+                    addDay = day
                 }
 
             })
@@ -159,7 +167,27 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         dialog.setContentView(dialogView)
         dialogView.findViewById<RelativeLayout>(R.id.bottom_sheet_route_add_btn)
             .setOnClickListener {
-                dialog.dismiss()
+                if(addDay != -1) {
+                    UserPlanService().insertPlanToUserPlan(addDay, planViewModel.planList.value!!.id, planViewModel.currentUserPlan.value!!, object : RetrofitCallback<Boolean> {
+                        override fun onError(t: Throwable) {
+                            Log.d(TAG, "onError: 루트 반자동 추가 에러")
+                        }
+
+                        override fun onSuccess(code: Int, responseData: Boolean) {
+                            Log.d(TAG, "onSuccess: 루트 반자동 추가 성공")
+                            showCustomToast("일정에 추가되었습니다!")
+                        }
+
+                        override fun onFailure(code: Int) {
+                            Log.d(TAG, "onFailure: ")
+                        }
+
+                    })
+                    dialog.dismiss()
+                } else {
+                    showCustomToast("day를 선택해주세요.")
+                }
+
             }
         dialog.setTitle("")
         dialog.show()
