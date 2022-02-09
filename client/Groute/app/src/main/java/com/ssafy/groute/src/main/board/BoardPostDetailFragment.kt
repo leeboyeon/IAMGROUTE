@@ -129,6 +129,7 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
 
     private fun initCommentAdapter(){
         boardViewModel.commentList.observe(viewLifecycleOwner, {
+            Log.d(TAG, "initCommentAdapter: $it")
             commentAdapter = CommentAdapter(it, requireContext(), viewLifecycleOwner, boardViewModel, mainViewModel)
 
             binding.boardDetailRvComment.apply{

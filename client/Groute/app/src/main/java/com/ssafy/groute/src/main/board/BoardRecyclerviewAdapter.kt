@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
@@ -28,9 +29,9 @@ import kotlinx.coroutines.runBlocking
 import retrofit2.Retrofit
 
 private const val TAG = "BoardRecyclerviewAdapte"
-//class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: MutableList<BoardDetail>, var boardType: Int, var context:Context) : RecyclerView.Adapter<BoardRecyclerviewAdapter.BoardHolder>(){
-class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: MutableList<BoardDetail>, var boardType: Int, var context:Context)
-    : ListAdapter<BoardDetail, BoardRecyclerviewAdapter.BoardRecyclerHolder>(BoardAdapter.DiffCallback) {
+class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: MutableList<BoardDetail>, var boardType: Int, var context:Context) : RecyclerView.Adapter<BoardRecyclerviewAdapter.BoardRecyclerHolder>(){
+//class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: MutableList<BoardDetail>, var boardType: Int, var context:Context)
+//    : ListAdapter<BoardDetail, BoardRecyclerviewAdapter.BoardRecyclerHolder>(DiffCallback) {
 
     lateinit var ThemeAdapter: RouteThemeRecyclerviewAdapter
 
@@ -180,9 +181,9 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
         }
     }
 
-//    override fun getItemId(position: Int): Long {
-//        return boardList.get(position).id.toLong()
-//    }
+    override fun getItemId(position: Int): Long {
+        return boardList.get(position).id.toLong()
+    }
 
     override fun getItemCount(): Int {
         return boardList.size
@@ -225,6 +226,17 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
     }
     fun setModifyClickListener(itemModifyListener: ItemModifyListener){
         this.itemModifyListener = itemModifyListener
+    }
+
+
+    object DiffCallback : DiffUtil.ItemCallback<BoardDetail>() {
+        override fun areItemsTheSame(oldItem: BoardDetail, newItem: BoardDetail): Boolean {
+            return oldItem === newItem
+        }
+
+        override fun areContentsTheSame(oldItem: BoardDetail, newItem: BoardDetail): Boolean {
+            return oldItem.id == newItem.id
+        }
     }
 
 }

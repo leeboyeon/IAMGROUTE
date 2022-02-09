@@ -249,5 +249,22 @@ class BoardViewModel : ViewModel(){
         }
     }
 
+    suspend fun getPostCmtList(boardDetailId: Int) {
+        val response = BoardService().getBoardPostList(boardDetailId)
+        viewModelScope.launch {
+            val res = response.body()
+            if(response.code() == 200) {
+                if(res != null) {
+//                    setBoardDetail(res.boardDetail)
+//                    setCommentAllList(res.commentList as MutableList<Comment>)
+                    setCommentList(res as MutableList<Comment>)
+                    Log.d(TAG, "getPostCmtListSuccess: ${response.message()}")
+                } else {
+                    Log.d(TAG, "getPostCmtListError: ${response.message()}")
+                }
+            }
+        }
+    }
+
 
 }

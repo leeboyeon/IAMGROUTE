@@ -31,9 +31,9 @@ import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.main.home.PlaceFilterAdapter
 
 private const val TAG = "BoardAdapter_groute"
-//class BoardAdapter(val context: Context, var lifecycleOwner: LifecycleOwner) : RecyclerView.Adapter<BoardAdapter.BoardHolder>(){
-class BoardAdapter(var boardList : MutableList<BoardDetail>, val context: Context, var lifecycleOwner: LifecycleOwner)
-    : ListAdapter<BoardDetail, BoardAdapter.BoardHolder>(DiffCallback) {
+class BoardAdapter(var boardList : MutableList<BoardDetail>, val context: Context, var lifecycleOwner: LifecycleOwner) : RecyclerView.Adapter<BoardAdapter.BoardHolder>(){
+//class BoardAdapter(var boardList : MutableList<BoardDetail>, val context: Context, var lifecycleOwner: LifecycleOwner)
+//    : ListAdapter<BoardDetail, BoardAdapter.BoardHolder>(DiffCallback) {
 
 //    var boardList = mutableListOf<BoardDetail>()
 
@@ -121,9 +121,9 @@ class BoardAdapter(var boardList : MutableList<BoardDetail>, val context: Contex
         }
     }
 
-//    override fun getItemId(position: Int): Long {
-//        return boardList.get(position).id.toLong()
-//    }
+    override fun getItemId(position: Int): Long {
+        return boardList.get(position).id.toLong()
+    }
 
     override fun getItemCount(): Int {
         return boardList.size
@@ -143,14 +143,14 @@ class BoardAdapter(var boardList : MutableList<BoardDetail>, val context: Contex
 //        this.goodBtnClickListener = itemClickListener
 //    }
 
-
-    object DiffCallback : DiffUtil.ItemCallback<BoardDetail>() {
-        override fun areItemsTheSame(oldItem: BoardDetail, newItem: BoardDetail): Boolean {
-            return oldItem === newItem
-        }
-
-        override fun areContentsTheSame(oldItem: BoardDetail, newItem: BoardDetail): Boolean {
-            return oldItem.id == newItem.id
-        }
-    }
+//
+//    object DiffCallback : DiffUtil.ItemCallback<BoardDetail>() {
+//        override fun areItemsTheSame(oldItem: BoardDetail, newItem: BoardDetail): Boolean {
+//            return oldItem === newItem
+//        }
+//
+//        override fun areContentsTheSame(oldItem: BoardDetail, newItem: BoardDetail): Boolean {
+//            return oldItem.id == newItem.id
+//        }
+//    }
 }

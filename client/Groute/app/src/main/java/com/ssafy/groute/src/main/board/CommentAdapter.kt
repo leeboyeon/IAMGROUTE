@@ -72,12 +72,18 @@ class CommentAdapter(val commentList : MutableList<Comment>, val context: Contex
 //            binding.boardViewModels = boardViewModel
             binding.executePendingBindings()
 
-            boardViewModel.commentList.observe(lifecycleOwner, {
+//            runBlocking {
+//                boardViewModel.getPostCmtList(data.boardDetailId)
+//            }
+
+            boardViewModel.commentAllList.observe(lifecycleOwner, {
+                Log.d(TAG, "bindInfo: $it")
                 val list = mutableListOf<Comment>()
                 for(i in 0 until it.size) {
                     if(it[i].groupNum == data.groupNum) {
                         if(it[i].level == 1) {
                             list.add(it[i])
+                            Log.d(TAG, "bindInfo: ${it[i]}, $list")
                         }
                     }
                 }

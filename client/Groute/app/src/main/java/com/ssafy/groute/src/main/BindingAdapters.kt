@@ -210,16 +210,32 @@ fun bindShareMemberRecyclerView(recyclerView: RecyclerView, data:List<User>?){
  */
 @BindingAdapter("listData") // BoardFragment + BoardAdapter
 fun bindBoardRecyclerView(recyclerView: RecyclerView, data: List<BoardDetail>?) {
-    val adapter = recyclerView.adapter as BoardAdapter
-    adapter.submitList(data)
+    var adapter = recyclerView.adapter as BoardAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as BoardAdapter
+    }
+    adapter.boardList = data as MutableList<BoardDetail>
+    adapter.notifyDataSetChanged()
+//    adapter.submitList(data)
 //            adapter.setList(data)
 //            adapter.notifyDataSetChanged()
 }
 
 @BindingAdapter("boardPostListData")
 fun bindBoardPostListRecyclerView(recyclerView: RecyclerView, data: List<BoardDetail>?) {
-    val adapter = recyclerView.adapter as BoardRecyclerviewAdapter
-    adapter.submitList(data)
+    var adapter = recyclerView.adapter as BoardRecyclerviewAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as BoardRecyclerviewAdapter
+    }
+    adapter.boardList = data as MutableList<BoardDetail>
+    adapter.notifyDataSetChanged()
+//    adapter.submitList(data)
 }
 
 @BindingAdapter("listCommentData")
