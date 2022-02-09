@@ -39,10 +39,7 @@ import com.ssafy.groute.src.main.route.RouteCreateFragment
 import com.ssafy.groute.src.main.route.RouteDetailFragment
 import com.ssafy.groute.src.main.route.RouteFragment
 import com.ssafy.groute.src.main.route.RouteReviewWriteFragment
-import com.ssafy.groute.src.main.travel.PlaceTmpFragment
-import com.ssafy.groute.src.main.travel.SharePlanWriteFragment
-import com.ssafy.groute.src.main.travel.SharedMemberFragment
-import com.ssafy.groute.src.main.travel.TravelPlanFragment
+import com.ssafy.groute.src.main.travel.*
 import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.LocationPermissionManager
@@ -220,6 +217,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             }
             18 -> {
                 transaction.replace(R.id.frame_main_layout, SharePlanWriteFragment.newInstance(key1,value1))
+            }
+            19 -> {
+                transaction.replace(R.id.frame_main_layout, AccountFragment.newInstance(key1,value1))
             }
 
         }

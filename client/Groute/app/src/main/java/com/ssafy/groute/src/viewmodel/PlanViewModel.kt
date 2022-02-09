@@ -1,19 +1,21 @@
 package com.ssafy.groute.src.viewmodel
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.groute.src.dto.*
-import com.ssafy.groute.src.service.PlaceService
-import com.ssafy.groute.src.service.ThemeService
-import com.ssafy.groute.src.service.UserPlanService
-import com.ssafy.groute.src.service.UserService
+import com.ssafy.groute.src.service.*
 import com.ssafy.groute.util.RetrofitUtil
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 private const val TAG = "PlanViewModel_Groute"
 
@@ -33,6 +35,7 @@ class PlanViewModel : ViewModel() {
     private val _userPlanListByDayResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _shareUserListResponse = MutableLiveData<MutableList<User>>()
     private val _planLikeListResponse = MutableLiveData<MutableList<UserPlan>>()
+    private val _accountListResponse = MutableLiveData<MutableList<AccountOut>>()
 
     //    private val _routeResponse = MutableLiveData<MutableList<>>
 //    private val _routeDetailResponse = MutableLiveData<MutableList<>>
@@ -64,6 +67,9 @@ class PlanViewModel : ViewModel() {
         get() = _shareUserListResponse
     val planLikeList : LiveData<MutableList<UserPlan>>
         get() = _planLikeListResponse
+    val accountList : LiveData<MutableList<AccountOut>>
+        get() = _accountListResponse
+
 
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planBestResponse.value = plan
@@ -138,6 +144,9 @@ class PlanViewModel : ViewModel() {
     }
     fun setPlanLikeList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planLikeListResponse.value = plan
+    }
+    fun setAccountList(account: MutableList<AccountOut>) = viewModelScope.launch {
+
     }
 
 
@@ -496,6 +505,44 @@ class PlanViewModel : ViewModel() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getAccountList(planId:Int){
+        val response = AccountService().getListByPlanId(planId)
+        viewModelScope.launch { 
+            var res = response.body()
+            if(response.code() == 200 ){
+                if(res!=null){
+                    var sDate = planList.value!!.startDate
+                    var totalDate = planList.value!!.totalDate
+                    var format = SimpleDateFormat("yyyy-MM-dd")
+                    var date = LocalDate.parse(sDate, DateTimeFormatter.ISO_DATE)
+                    var outlist = arrayListOf<AccountOut>()
+                    var accountlist = arrayListOf<Account>()
+                    Log.d(TAG, "getAccountList: ${sDate} && ${totalDate} ")
+                    for(i in 0 until totalDate){
+                        var day = date.plusDays(i.toLong())
+                        Log.d(TAG, "getAccountList: $day")
+
+                        for(j in 0..res.size-1){
+                            if(res[j].day == i+1){
+                                accountlist.add(res[j])
+                            }
+                        }
+
+                        var accounts = AccountOut(day.toString(),accountlist)
+                        outlist.add(accounts)
+                    }
+                    Log.d(TAG, "getAccountList: ${outlist}")
+                    setAccountList(outlist)
+                    Log.d(TAG, "getAccountList: ")
+                }else{
+                    Log.d(TAG, "getAccountList: ")
+                }
+            }else{
+                Log.d(TAG, "getAccountList: ")
+            }
+        }
+    }
 
 
 }
