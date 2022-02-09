@@ -60,6 +60,7 @@ import com.ssafy.groute.databinding.ActivityCommentNestedBinding.bind
 import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.dto.Route
 import com.ssafy.groute.src.dto.RouteDetail
+import com.ssafy.groute.src.service.RouteDetailService
 import com.ssafy.groute.src.service.RouteService
 import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.viewmodel.HomeViewModel
@@ -126,9 +127,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         }
 
         initPlaceListAdapter()
-
-        initKakaoMap()
-        initTabLayout()
+//        initKakaoMap()
         floatingButtonEvent()
         binding.travelplanBackIv.setOnClickListener {
             mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
@@ -155,24 +154,32 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         binding.travelPlanIbtnMemo.setOnClickListener {
             initMemo()
         }
+
     }
     fun initMemo(){
-        planViewModel.routeList.observe(viewLifecycleOwner, {
-            if(it[curPos].memo != null){
-                val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_show_memo,null)
-                val dialog = Dialog(requireContext())
-                dialog.setContentView(dialogView)
-                dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            planViewModel.routeList.observe(viewLifecycleOwner, {
+                if(it[curPos].memo != null){
+                    val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_show_memo,null)
+                    val dialog = Dialog(requireContext())
+                    if(dialogView.parent != null){
+                        (dialogView.parent as ViewGroup).removeView(dialogView)
+                    }
+                    dialog.setContentView(dialogView)
+                    dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-                dialogView.findViewById<ImageButton>(R.id.memo_cancle).setOnClickListener {
-                    dialog.dismiss()
+                    dialogView.findViewById<ImageButton>(R.id.memo_cancle).setOnClickListener {
+                        dialog.dismiss()
+                    }
+                    Log.d(TAG, "initMemo: day")
+                    dialogView.findViewById<TextView>(R.id.dayMemo).text = it[curPos].memo
+                    dialog.show()
+                }else {
+                    showCustomToast("메모가 없습니다.")
                 }
-                dialogView.findViewById<TextView>(R.id.dayMemo).text = it[curPos].memo
-                dialog.show()
-            }else {
-                showCustomToast("메모가 없습니다.")
-            }
-        })
+            })
+
+
+
     }
     fun initKakaoMap(){
         var mapView = MapView(requireContext())
@@ -209,7 +216,8 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         }
         memoAddButton.setOnClickListener{
             fbAnim()
-            insertMemo()
+            var placeId = 0
+            insertMemo(placeId)
         }
         routeRecomButton.setOnClickListener {
             fbAnim()
@@ -255,11 +263,12 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun initTabLayout(){
-        planViewModel.routeList.observe(viewLifecycleOwner, Observer {
-            for(i in 1.. it.size-1){
-                binding.travelplanTabLayout.addTab(binding.travelplanTabLayout.newTab().setText(it.get(i).name))
-            }
-        })
+        binding.travelplanTabLayout.removeAllTabs()
+        for(i in 0 until planViewModel.routeList.value!!.size){
+            binding.travelplanTabLayout.addTab(binding.travelplanTabLayout.newTab().setText(planViewModel.routeList.value!!.get(i).name))
+        }
+
+        travelPlanListRecyclerviewAdapter.filter.filter("1")
         binding.travelplanTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 travelPlanListRecyclerviewAdapter.filter.filter((tab?.position?.plus(1)).toString())
@@ -275,14 +284,45 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         })
 
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility")
     fun initPlaceListAdapter(){
         planViewModel.routeList.observe(viewLifecycleOwner, Observer {
             travelPlanListRecyclerviewAdapter = TravelPlanListRecyclerviewAdapter(requireContext(),it)
+            initTabLayout()
             binding.travelplanListRv.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
                 adapter = travelPlanListRecyclerviewAdapter
             }
+            travelPlanListRecyclerviewAdapter.setMemoClickListener(object:TravelPlanListRecyclerviewAdapter.MemoClickListener{
+                override fun onClick(view: View, position: Int, placeId: Int) {
+                    Log.d(TAG, "onClick: memo button Click")
+
+                    var memo = ""
+                    planViewModel.routeList.observe(viewLifecycleOwner, {
+                        val details = it[curPos].routeDetailList
+
+                        Log.d(TAG, "onClick: ${details}")
+                        for(i in 0.. details.size-1){
+                            Log.d(TAG, "onClick: ${placeId} ||${details[i].placeId}")
+                            if (details[i].placeId == placeId) {
+                                Log.d(TAG, "onClick: findPlace")
+                                Log.d(TAG, "onClick_MEMO: ${details[i].memo}")
+                                memo = details[i].memo
+                                break;
+                            }
+                        }
+                    })
+
+                    if(memo.equals("")|| memo.isEmpty() || memo.length == 0){
+                        //메모가 없으면
+                        insertMemo(placeId)
+                    }
+
+                }
+            })
+
+
 
             val travelPlanListRvHelperCallback = TravelPlanListRvHelperCallback(travelPlanListRecyclerviewAdapter).apply {
                 setClamp(resources.displayMetrics.widthPixels.toFloat() / 4)
@@ -294,10 +334,12 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 travelPlanListRvHelperCallback.removePreviousClamp(binding.travelplanListRv)
                 false
             }
+
         })
 
     }
-    fun insertMemo(){
+    fun insertMemo(placeId:Int){
+        Log.d(TAG, "insertMemo: ${placeId}")
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_insert_memo,null)
         val dialog = Dialog(requireContext())
         dialog.setContentView(dialogView)
@@ -310,25 +352,64 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             //추가
             val memo = dialogView.findViewById<TextView>(R.id.memo_tv_content).text.toString()
 //            RouteService().updateRoute()
+            if(placeId == 0){
+                //day별 메모추가
+                planViewModel.routeList.observe(viewLifecycleOwner, {
+                    var route = Route(
+                        day = it[curPos].day,
+                        id = it[curPos].id,
+                        isCustom = it[curPos].isCustom,
+                        memo = memo,
+                        name = it[curPos].name,
+                        routeDetailList = it[curPos].routeDetailList,
+                    )
+                    RouteService().updateRoute(route, object:RetrofitCallback<Boolean> {
+                        override fun onError(t: Throwable) {
+                            Log.d(TAG, "onError: ")
+                        }
 
-            planViewModel.routeList.observe(viewLifecycleOwner, {
-                var route = Route(
-                    day = it[curPos].day,
-                    id = it[curPos].id,
-                    isCustom = it[curPos].isCustom,
-                    memo = memo,
-                    name = it[curPos].name,
-                    routeDetailList = it[curPos].routeDetailList,
-                )
-                RouteService().updateRoute(route, object:RetrofitCallback<Boolean> {
+                        override fun onSuccess(code: Int, responseData: Boolean) {
+                            showCustomToast("메모가 추가되었습니다.")
+                            dialog.dismiss()
+                            runBlocking {
+                                planViewModel.getPlanById(planId)
+                            }
+                        }
+
+                        override fun onFailure(code: Int) {
+                            Log.d(TAG, "onFailure: ")
+                        }
+
+                    })
+                })
+            }
+            if(placeId > 0){
+                Log.d(TAG, "insertMemo: ${placeId}")
+                var routeDetail = RouteDetail()
+                planViewModel.routeList.observe(viewLifecycleOwner, {
+                    val details = it[curPos].routeDetailList
+                    Log.d(TAG, "onClick: ${details}")
+                    for(i in 0.. details.size-1){
+                        Log.d(TAG, "onClick: ${placeId} ||${details[i].placeId}")
+                        if (details[i].placeId == placeId) {
+                            routeDetail = RouteDetail(
+                                id= details[i].id,
+                                memo = memo,
+                                priority = details[i].priority
+                            )
+                        }
+                    }
+                })
+                RouteDetailService().updateRouteDetail(routeDetail, object:RetrofitCallback<Boolean> {
                     override fun onError(t: Throwable) {
                         Log.d(TAG, "onError: ")
                     }
 
                     override fun onSuccess(code: Int, responseData: Boolean) {
-                        showCustomToast("메모가 추가되었습니다.")
                         dialog.dismiss()
-                        initPlaceListAdapter()
+                        runBlocking {
+                            planViewModel.getPlanById(planId)
+                        }
                     }
 
                     override fun onFailure(code: Int) {
@@ -336,15 +417,15 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                     }
 
                 })
-            })
+            }
         }
         dialog.show()
     }
     fun showRouteSelectDialog(){
         routeRecomDialogAdapter = RouteRecomDialogAdapter(requireContext())
         routeSelectList.apply {
-            add(RouteRecom(lottie="oneday.json",typeName="당일일정",typeDescript="하루의 일정만 \n 추천받으시고 싶으신가요?"))
-            add(RouteRecom(lottie="allday.json",typeName="전체일정",typeDescript="모든 일정을 \n 추천받으시고 싶으신가요?"))
+            add(RouteRecom(lottie="oneday.json",typeName="장소 필터링",typeDescript="추가하신 장소를 포함한 일정을 추천해드립니다."))
+            add(RouteRecom(lottie="allday.json",typeName="전체일정 추천",typeDescript="모든 일정을 \n 추천받으시고 싶으신가요?"))
 
             routeRecomDialogAdapter.list = routeSelectList
             routeRecomDialogAdapter.notifyDataSetChanged()
@@ -371,17 +452,17 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         }
         dialogView.findViewById<Button>(R.id.routeRecom_btn_ok).setOnClickListener {
             if(selectPosition == 0){
-                //당일
-                mainActivity.moveFragment(16,"days",1)
+                //장소필터링
+                mainActivity.moveFragment(16,"planId",planId,"flag",0)
                 dialog.dismiss()
             }
             if(selectPosition == 1){
-                //전체
+                //일정추천
                     var total = 0
                      planViewModel.planList.observe(viewLifecycleOwner, Observer {
                         total = it.totalDate
                     })
-                mainActivity.moveFragment(16,"days",total)
+                mainActivity.moveFragment(16,"planId",planId,"flag",1)
                 dialog.dismiss()
             }
         }

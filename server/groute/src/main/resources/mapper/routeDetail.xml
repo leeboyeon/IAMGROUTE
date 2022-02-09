@@ -29,7 +29,7 @@
 
     <update id="updateRouteDetail" parameterType="RouteDetail">
         update routedetail
-        set route_id = #{routeId}, place_id = #{placeId}, priority = #{priority}, memo = #{memo}
+        set priority = #{priority}, memo = #{memo}
         where id = #{id}
     </update>
 
