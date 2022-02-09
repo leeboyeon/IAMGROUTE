@@ -49,29 +49,18 @@ public class UserPlanServiceImpl implements UserPlanService {
         List<Routes> userRoutesList = routesMapper.selectByPlanId(userPlan.getId());
         List<Routes> originRoutesList = routesMapper.selectByPlanId(originPlan.getId());
 
-
-        List<Routes> routesList = routesMapper.selectByPlanId(userPlan.getId());
-        for(Routes routes:routesList){
+        for(Routes routes:userRoutesList){
             int routeId = routes.getRouteId();
-            if(day == 0 || routeMapper.selectRoute(routeId).getDay()==day){
+            if(day <= routeMapper.selectRoute(routeId).getDay() && routeMapper.selectRoute(routeId).getDay() < day + originPlan.getTotalDate()){
                 routeDetailMapper.deleteAllRouteDetailByRouteId(routeId);
             }
         }
 
-
-        int i=0;
         for(Routes routes: originRoutesList){
+            if(day>userPlan.getTotalDate())
+                break;
             List<RouteDetail> routeDetailList = routeDetailMapper.selectByRouteId(routes.getRouteId());
-            int routeId = 0;
-            if(day==0) {
-                routeId = userRoutesList.get(i++).getRouteId();
-            }else{
-                for(Routes userRoutes:userRoutesList){
-                    if(routeMapper.selectRoute(userRoutes.getRouteId()).getDay()==day){
-                        routeId = userRoutes.getRouteId();
-                    }
-                }
-            }
+            int routeId = userRoutesList.get((day++)-1).getRouteId();
             for(RouteDetail routeDetail:routeDetailList){
                 RouteDetail newRouteDetail = routeDetail;
                 newRouteDetail.setRouteId(routeId);

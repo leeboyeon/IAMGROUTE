@@ -54,7 +54,8 @@ public class UserPlanController {
         return new ResponseEntity<List<UserPlan>>(userPlans,HttpStatus.OK);
     }
 
-    @ApiOperation(value = "userPlan 카피",notes = "이미 만들어진 일정에서 추천루트 선택했을때 전체 일정 변경이면 day 0, 특정 날짜 변경이면 day에 몇번째 날인지")
+    @ApiOperation(value = "userPlan 카피",notes = "이미 만들어진 일정에서 추천루트 선택했을때 day에 일정을 넣을 날짜의 시작날짜 입력" +
+            "ex)3박4일 일정에서 1박 2일짜리 루트로 2,3 번째 날의 일정을 변경하고 싶으면 day에 2 입력")
     @PostMapping(value = "/copy")
     public ResponseEntity<?> copyUserPlan(@RequestBody UserPlan req,@RequestParam("planId") int planId,@RequestParam("day")int day){
 
