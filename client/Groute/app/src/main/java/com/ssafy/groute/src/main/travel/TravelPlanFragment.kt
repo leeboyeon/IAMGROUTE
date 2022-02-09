@@ -201,7 +201,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                     showCustomToast("삭제되었습니다.")
                 }
                 runBlocking {
-                    planViewModel.getPlanById(planId)
+                    planViewModel.getPlanById(planId, false)
                 }
             }
 
@@ -480,15 +480,9 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                         override fun onSuccess(code: Int, responseData: Boolean) {
                             dialog.dismiss()
                             runBlocking {
-                                planViewModel.getPlanById(planId)
+                                planViewModel.getPlanById(planId, false)
                             }
                         }
-                    override fun onSuccess(code: Int, responseData: Boolean) {
-                        dialog.dismiss()
-                        runBlocking {
-                            planViewModel.getPlanById(planId, false)
-                        }
-                    }
 
                         override fun onFailure(code: Int) {
                             Log.d(TAG, "onFailure: ")
