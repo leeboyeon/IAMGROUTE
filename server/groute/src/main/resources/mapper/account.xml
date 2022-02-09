@@ -4,8 +4,8 @@
 
 <mapper namespace="com.ssafy.groute.mapper.AccountMapper">
     <insert id="insertAccount" parameterType="Account">
-        insert into account(spentMoney, description, category, userplan_id)
-        values(#{spentMoney}, #{description}, #{category}, #{userPlanId})
+        insert into account(spentMoney, description, category, userplan_id, type, day, cateimg)
+        values(#{spentMoney}, #{description}, #{category}, #{userPlanId}, #{type}, #{day}, #{cateImg})
     </insert>
 
     <resultMap id="AccountDTO" type="Account">
@@ -27,7 +27,7 @@
 
     <update id="updateAccount" parameterType="Account">
         update account
-        set spentMoney = #{spentMoney}, description = #{description}, category = #{category}
+        set spentMoney = #{spentMoney}, description = #{description}, category = #{category}, type = #{type }, day = #{day}, cateimg = #{cateImg}
         where id = #{id}
     </update>
 

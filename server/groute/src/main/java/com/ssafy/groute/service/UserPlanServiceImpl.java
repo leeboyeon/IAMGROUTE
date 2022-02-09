@@ -49,29 +49,18 @@ public class UserPlanServiceImpl implements UserPlanService {
         List<Routes> userRoutesList = routesMapper.selectByPlanId(userPlan.getId());
         List<Routes> originRoutesList = routesMapper.selectByPlanId(originPlan.getId());
 
-
-        List<Routes> routesList = routesMapper.selectByPlanId(userPlan.getId());
-        for(Routes routes:routesList){
+        for(Routes routes:userRoutesList){
             int routeId = routes.getRouteId();
-            if(day == 0 || routeMapper.selectRoute(routeId).getDay()==day){
+            if(day <= routeMapper.selectRoute(routeId).getDay() && routeMapper.selectRoute(routeId).getDay() < day + originPlan.getTotalDate()){
                 routeDetailMapper.deleteAllRouteDetailByRouteId(routeId);
             }
         }
 
-
-        int i=0;
         for(Routes routes: originRoutesList){
+            if(day>userPlan.getTotalDate())
+                break;
             List<RouteDetail> routeDetailList = routeDetailMapper.selectByRouteId(routes.getRouteId());
-            int routeId = 0;
-            if(day==0) {
-                routeId = userRoutesList.get(i++).getRouteId();
-            }else{
-                for(Routes userRoutes:userRoutesList){
-                    if(routeMapper.selectRoute(userRoutes.getRouteId()).getDay()==day){
-                        routeId = userRoutes.getRouteId();
-                    }
-                }
-            }
+            int routeId = userRoutesList.get((day++)-1).getRouteId();
             for(RouteDetail routeDetail:routeDetailList){
                 RouteDetail newRouteDetail = routeDetail;
                 newRouteDetail.setRouteId(routeId);
@@ -82,14 +71,23 @@ public class UserPlanServiceImpl implements UserPlanService {
 
     @Transactional
     @Override
-    public List<UserPlan> selectAllByPlaceId(List<Integer> placeIds) throws Exception {
-//        List<Integer> planIdList = userPlanMapper.selectAllUserPlanByTotalDate(day);
+    public List<UserPlan> selectAllByPlaceId(List<Integer> placeIds,int flag) throws Exception {
         List<UserPlan> planList = selectTUserPlan();
         List<UserPlan> userPlans = new ArrayList<>();
-        for(UserPlan userPlan: planList){
-            List<Integer> placeList = userPlanMapper.selectPlaceListByPlanId(userPlan.getId());
-            if(placeList.containsAll(placeIds)){
-                userPlans.add(userPlan);
+        if(flag==1) {
+            for (UserPlan userPlan : planList) {
+                List<Integer> placeList = userPlanMapper.selectPlaceListByPlanId(userPlan.getId());
+                if (placeList.containsAll(placeIds)) {
+                    userPlans.add(userPlan);
+                }
+            }
+        }else{
+            for (UserPlan userPlan : planList) {
+                List<Integer> placeList = userPlanMapper.selectPlaceListByPlanId(userPlan.getId());
+                placeList.retainAll(placeIds);
+                if (placeList.size()==0) {
+                    userPlans.add(userPlan);
+                }
             }
         }
         return userPlans;

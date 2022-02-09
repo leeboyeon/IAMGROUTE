@@ -196,6 +196,47 @@ class UserPlanService {
         return RetrofitUtil.userPlanService.getPlanLikeListbyUserId(userId)
     }
 
+    fun updatePriority(routeDetailList: List<RouteDetail>, callback:RetrofitCallback<Boolean>){
+        RetrofitUtil.userPlanService.updatePriority(routeDetailList).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if (response.code() == 200) {
+                    if (res == true) {
+                        callback.onSuccess(response.code(), res)
+                        Log.d(TAG, "onResponse: ")
+                    } else {
+                        Log.d(TAG, "onResponse: ")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                Log.d(TAG, "onFailure: ")
+            }
+
+        })
+    }
+
+    fun updateUserPlan(userPlan:UserPlan, callback:RetrofitCallback<Boolean>){
+        RetrofitUtil.userPlanService.updateUserPlan(userPlan).enqueue(object: Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if (response.code() == 200) {
+                    if (res == true) {
+                        callback.onSuccess(response.code(), res)
+                        Log.d(TAG, "onResponse: ")
+                    } else {
+                        Log.d(TAG, "onResponse: ")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                Log.d(TAG, "onFailure: ")
+            }
+
+        })
+    }
     fun insertPlanToUserPlan(day: Int, planId: Int, userPlan: UserPlan, callback: RetrofitCallback<Boolean>) {
         RetrofitUtil.userPlanService.insertPlanToUserPlan(day, planId, userPlan)
             .enqueue(object : Callback<Boolean> {

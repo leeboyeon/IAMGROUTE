@@ -54,6 +54,11 @@ interface UserPlanApi {
     @GET("/plan/like/{userId}")
     suspend fun getPlanLikeListbyUserId(@Path("userId")userId:String) : Response<MutableList<UserPlan>>
 
+    @PUT("/plan/place/priority")
+    fun updatePriority(@Body routeDetailList:List<RouteDetail>) : Call<Boolean>
+
+    @PUT("/plan/update")
+    fun updateUserPlan(@Body userPlan:UserPlan) : Call<Boolean>
     @POST("/plan/copy")
     fun insertPlanToUserPlan(@Query("day") day : Int, @Query("planId") planId : Int, @Body userPlan: UserPlan) : Call<Boolean>
 
