@@ -33,6 +33,8 @@ class PlanViewModel : ViewModel() {
     private val _userPlanListByDayResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _shareUserListResponse = MutableLiveData<MutableList<User>>()
     private val _planLikeListResponse = MutableLiveData<MutableList<UserPlan>>()
+    private val _userPlanResponse = MutableLiveData<MutableList<UserPlan>>()
+    private val _currentUserPlanResponse = MutableLiveData<UserPlan>()
 
     //    private val _routeResponse = MutableLiveData<MutableList<>>
 //    private val _routeDetailResponse = MutableLiveData<MutableList<>>
@@ -62,8 +64,12 @@ class PlanViewModel : ViewModel() {
         get() = _userPlanListByDayResponse
     val shareUserList: LiveData<MutableList<User>>
         get() = _shareUserListResponse
-    val planLikeList : LiveData<MutableList<UserPlan>>
+    val planLikeList: LiveData<MutableList<UserPlan>>
         get() = _planLikeListResponse
+    val userPlan: LiveData<MutableList<UserPlan>>
+        get() = _userPlanResponse
+    val currentUserPlan:LiveData<UserPlan>
+        get() = _currentUserPlanResponse
 
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planBestResponse.value = plan
@@ -92,7 +98,8 @@ class PlanViewModel : ViewModel() {
     fun setPlanEndList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planEndResponse.value = plan
     }
-    fun setShareUserList(users:MutableList<User>) = viewModelScope.launch {
+
+    fun setShareUserList(users: MutableList<User>) = viewModelScope.launch {
         _shareUserListResponse.value = users
     }
 
@@ -136,10 +143,20 @@ class PlanViewModel : ViewModel() {
     fun setUserPlanByDayList(userPlanList: MutableList<UserPlan>) = viewModelScope.launch {
         _userPlanListByDayResponse.value = userPlanList
     }
+
     fun setPlanLikeList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planLikeListResponse.value = plan
     }
 
+    fun setUserPlan(userPlan: UserPlan) = viewModelScope.launch {
+        var list = mutableListOf<UserPlan>()
+        _currentUserPlanResponse.value = userPlan
+        list.add(userPlan)
+        _userPlanResponse.value = list
+    }
+    fun setUserNotPlanList() = viewModelScope.launch {
+        _userPlanResponse.value = planNotEndList.value
+    }
 
 
     suspend fun getPlanBestList() {
@@ -172,7 +189,7 @@ class PlanViewModel : ViewModel() {
         }
     }
 
-    suspend fun getPlanById(id: Int) {
+    suspend fun getPlanById(id: Int, flag: Boolean) {
         val response = UserPlanService().getUserPlanById(id)
         viewModelScope.launch {
             var res = response.body()
@@ -283,13 +300,16 @@ class PlanViewModel : ViewModel() {
                         routeList.add(route)
                         i++
                     }
-                    setPlanList(userPlan)
-                    setRouteList(routeList)
-                    getThemeById(userPlan.themeIdList)
+                    if(flag) { // RouteDetail에서 사용자의 현재 짜고있는 일정 보여줄때
+                        setUserPlan(userPlan)
+                    } else {
+                        setPlanList(userPlan)
+                        setRouteList(routeList)
+                        getThemeById(userPlan.themeIdList)
+                        Log.d(TAG, "getPlanById_USERPlan: ${userPlan}")
+                        Log.d(TAG, "getPlanById: ${routeList}")
+                    }
 
-
-                    Log.d(TAG, "getPlanById_USERPlan: ${userPlan}")
-                    Log.d(TAG, "getPlanById: ${routeList}")
                 }
             } else {
                 Log.d(TAG, "getPlanById: ")
@@ -370,6 +390,7 @@ class PlanViewModel : ViewModel() {
     }
 
     suspend fun getThemeById(idList: List<Int>) {
+        setTheme(mutableListOf())
         var list = mutableListOf<Theme>()
         for (i in 0 until idList.size) {
             val response = ThemeService().getThemeById(idList.get(i))
@@ -430,16 +451,16 @@ class PlanViewModel : ViewModel() {
             var list = mutableListOf<UserPlan>()
             if (totalDate == 0) {
                 for (i in 0 until userPlanList.value!!.size) {
-                        var themeList = userPlanList.value!!.get(i).themeIdList
-                        var count = 0
-                        for(j in 0 until selectedTheme.size) {
-                            if(themeList.contains(selectedTheme.get(j))) {
-                                count++
-                            }
+                    var themeList = userPlanList.value!!.get(i).themeIdList
+                    var count = 0
+                    for (j in 0 until selectedTheme.size) {
+                        if (themeList.contains(selectedTheme.get(j))) {
+                            count++
                         }
-                        if(count == selectedTheme.size) {
-                            list.add(userPlanList.value!!.get(i))
-                        }
+                    }
+                    if (count == selectedTheme.size) {
+                        list.add(userPlanList.value!!.get(i))
+                    }
                 }
                 //list = userPlanList.value!!
             } else {
@@ -448,12 +469,12 @@ class PlanViewModel : ViewModel() {
                         //list.add(userPlanList.value!!.get(i))
                         var themeList = userPlanList.value!!.get(i).themeIdList
                         var count = 0
-                        for(j in 0 until selectedTheme.size) {
-                            if(themeList.contains(selectedTheme.get(j))) {
+                        for (j in 0 until selectedTheme.size) {
+                            if (themeList.contains(selectedTheme.get(j))) {
                                 count++
                             }
                         }
-                        if(count == selectedTheme.size) {
+                        if (count == selectedTheme.size) {
                             list.add(userPlanList.value!!.get(i))
                         }
                     }
@@ -464,38 +485,64 @@ class PlanViewModel : ViewModel() {
 
         }
     }
-    
-    suspend fun getShareUserbyPlanId(planId:Int){
+
+    suspend fun getShareUserbyPlanId(planId: Int) {
         val response = UserService().getShareUserbyPlanId(planId)
-        viewModelScope.launch { 
+        viewModelScope.launch {
             var res = response.body()
-            if(response.code() == 200 ){
-                if(res!=null){
+            if (response.code() == 200) {
+                if (res != null) {
                     setShareUserList(res)
                 }
-            }else{
+            } else {
                 Log.d(TAG, "getShareUserbyPlanId: ")
             }
         }
     }
 
-    suspend fun getPlanLikeList(userId:String){
+    suspend fun getPlanLikeList(userId: String) {
         val response = UserPlanService().getPlanLikeList(userId)
         viewModelScope.launch {
             var res = response.body()
-            if(response.code() == 200){
-                if(res!=null){
+            if (response.code() == 200) {
+                if (res != null) {
                     setPlanLikeList(res)
                     Log.d(TAG, "getPlanLikeList: ${res}")
-                }else{
+                } else {
                     Log.d(TAG, "getPlanLikeList: ISNULL")
                 }
-            }else{
+            } else {
                 Log.d(TAG, "getPlanLikeList: FAIL")
             }
         }
     }
 
-
+    fun getPlanByPlace(planId: Int) {
+        viewModelScope.launch {
+            setUserPlanList(mutableListOf())
+            setUserPlanByDayList(mutableListOf())
+            var placeIds = mutableListOf<Int>()
+            getPlanById(planId, false)
+            for (i in 0 until routeList.value!!.size) {
+                var detailList = routeList.value!!.get(i).routeDetailList
+                for (j in 0 until detailList.size) {
+                    placeIds.add(detailList.get(j).placeId)
+                }
+            }
+            val response = UserPlanService().getPlanIncludePlace(1, placeIds)
+            var res = response.body()
+            if (response.code() == 200) {
+                if (res != null) {
+                    setUserPlanList(res)
+                    setUserPlanByDayList(res)
+                    Log.d(TAG, "getPlanByPlace: ${res}")
+                } else {
+                    Log.d(TAG, "getPlanByPlace: ISNULL")
+                }
+            } else {
+                Log.d(TAG, "getPlanByPlace: FAIL")
+            }
+        }
+    }
 
 }

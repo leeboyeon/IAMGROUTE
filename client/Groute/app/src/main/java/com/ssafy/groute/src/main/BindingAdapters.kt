@@ -168,3 +168,10 @@ fun bindShareMemberRecyclerView(recyclerView: RecyclerView, data:List<User>?){
     adapter.notifyDataSetChanged()
 }
 
+@BindingAdapter("bottomSheetListData")
+fun bindbottomSheetRecyclerView(recyclerView: RecyclerView, data: List<UserPlan>?) {
+    var adapter = recyclerView.adapter as BottomSheetRecyclerviewAdapter
+    adapter.setUserPlanList(data)
+    adapter.notifyDataSetChanged()
+}
+

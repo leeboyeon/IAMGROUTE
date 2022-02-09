@@ -59,4 +59,10 @@ interface UserPlanApi {
 
     @PUT("/plan/update")
     fun updateUserPlan(@Body userPlan:UserPlan) : Call<Boolean>
+    @POST("/plan/copy")
+    fun insertPlanToUserPlan(@Query("day") day : Int, @Query("planId") planId : Int, @Body userPlan: UserPlan) : Call<Boolean>
+
+    @GET("/plan/filter")
+    suspend fun getPlanIncludePlace(@Query("flag") flag: Int, @Query("placeIds") placeIds: List<Int>) :Response<MutableList<UserPlan>>
+
 }

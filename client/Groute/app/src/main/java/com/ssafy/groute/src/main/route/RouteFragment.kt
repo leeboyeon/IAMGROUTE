@@ -1,5 +1,6 @@
 package com.ssafy.groute.src.main.route
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,6 +51,8 @@ class RouteFragment :
     lateinit var RouteListAdapter: RouteListRecyclerviewAdapter
     var selectedTheme = mutableListOf<Int>()
     var tabPosition = 0
+    private var planId = -1 // TravelPlanFragment에서 넘어오는 사용자의 일정 아이디
+    private var flag = -1  // 장소별루트추천인지, 전체루트추천인지 판별
     lateinit var userId: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,8 +69,8 @@ class RouteFragment :
         super.onAttach(context)
         mainActivity = context as MainActivity
         arguments?.let {
-            days = it.getInt("days", -1)
-            Log.d(TAG, "onAttach: ${days}")
+            planId = it.getInt("planId", -1)
+            flag = it.getInt("flag", -1)
         }
     }
 
@@ -75,11 +79,30 @@ class RouteFragment :
         super.onViewCreated(view, savedInstanceState)
         userId = ApplicationClass.sharedPreferencesUtil.getUser().id
         binding.viewModel = planViewModel
-        runBlocking {
-            planViewModel.getUserPlanList()
-            planViewModel.getThemeList()
-            homeViewModel.getAreaLists()
-            planViewModel.getPlanLikeList(userId)
+        if(planId == -1) { // 그냥 루트 페이지
+            runBlocking {
+                planViewModel.getUserPlanList()
+                planViewModel.getThemeList()
+                homeViewModel.getAreaLists()
+                planViewModel.getPlanLikeList(userId)
+            }
+        } else {
+            if(flag == 0) { // 장소별루트추천
+                runBlocking {
+                    planViewModel.getUserPlanList()
+                    planViewModel.getPlanByPlace(planId)
+                    planViewModel.getThemeList()
+                    homeViewModel.getAreaLists()
+                    planViewModel.getPlanLikeList(userId)
+                }
+            } else if(flag == 1) { // 전체루트추천
+                runBlocking {
+                    planViewModel.getUserPlanList()
+                    planViewModel.getThemeList()
+                    homeViewModel.getAreaLists()
+                    planViewModel.getPlanLikeList(userId)
+                }
+            }
         }
 
         initTab()
@@ -142,8 +165,18 @@ class RouteFragment :
             }
             RouteListAdapter.setItemClickListener(object :
                 RouteListRecyclerviewAdapter.ItemClickListener {
-                override fun onClick(position: Int, id: Int) {
-                    mainActivity.moveFragment(12, "planId", id)
+                override fun onClick(position: Int, id: Int, totalDate: Int) {
+                    if(planId == -1) {
+                        mainActivity.moveFragment(12, "planIdDetail", id, "planIdUser", planId)
+                    } else {
+//                        여행기간보다 일정이 초과되는 루트를 선택하면 경고 다이얼로그
+//                        if(planViewModel.planList.value!!.totalDate < totalDate) {
+//                            showTotalDateOverDialog()
+//                        } else {
+                            mainActivity.moveFragment(12, "planIdDetail", id, "planIdUser", planId)
+//                        }
+                    }
+
                 }
 
             })
@@ -160,10 +193,32 @@ class RouteFragment :
 
     }
 
+    fun showTotalDateOverDialog() {
+        var dialogView:View = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_totaldate_over,null)
+        var dialog = Dialog(requireContext())
+        dialog.setContentView(dialogView)
+        dialogView.findViewById<Button>(R.id.btn).setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.setTitle("")
+        dialog.show()
+    }
+
     fun initTab() {
         binding.routeTabLayout.addTab(binding.routeTabLayout.newTab().setText("2박3일"))
         binding.routeTabLayout.addTab(binding.routeTabLayout.newTab().setText("3박4일"))
         binding.routeTabLayout.addTab(binding.routeTabLayout.newTab().setText("4박5일"))
+
+        if(flag == 1) {
+            runBlocking {
+                planViewModel.getPlanById(planId, true)
+            }
+            var totalDate = planViewModel.currentUserPlan.value!!.totalDate
+            binding.routeTabLayout.getTabAt(totalDate)!!.select()
+            tabPosition = totalDate
+            planViewModel.getRoutebyDay(totalDate, selectedTheme)
+        }
+
 
         binding.routeTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -196,6 +251,7 @@ class RouteFragment :
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
+
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -223,10 +279,11 @@ class RouteFragment :
 
     companion object {
         @JvmStatic
-        fun newInstance(key1: String, value1: Int) =
+        fun newInstance(key1:String, value1:Int, key2:String, value2:Int) =
             RouteFragment().apply {
                 arguments = Bundle().apply {
                     putInt(key1, value1)
+                    putInt(key2,value2)
                 }
             }
     }

@@ -119,7 +119,7 @@ class RouteListRecyclerviewAdapter(val planViewModel: PlanViewModel, val viewLif
             bindInfo(list[position], position)
 
             itemView.setOnClickListener{
-                itemClickListener.onClick(position, list[position].id)
+                itemClickListener.onClick(position, list[position].id, list[position].totalDate)
             }
 
         }
@@ -134,7 +134,7 @@ class RouteListRecyclerviewAdapter(val planViewModel: PlanViewModel, val viewLif
     }
 
     interface ItemClickListener{
-        fun onClick(position: Int, id: Int)
+        fun onClick(position: Int, id: Int, totalDate: Int)
     }
     private lateinit var itemClickListener : ItemClickListener
     fun setItemClickListener(itemClickListener: ItemClickListener){

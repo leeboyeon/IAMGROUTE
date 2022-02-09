@@ -193,7 +193,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             }
 
             12-> {
-                transaction.replace(R.id.frame_main_layout, RouteDetailFragment.newInstance(key1, value1))
+                transaction.replace(R.id.frame_main_layout, RouteDetailFragment.newInstance(key1,value1,key2,value2))
                     .addToBackStack(null)
             }
             13 ->{
@@ -212,7 +212,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .addToBackStack(null)
             }
             16 ->{
-                transaction.replace(R.id.frame_main_layout, RouteFragment.newInstance(key1,value1))
+                transaction.replace(R.id.frame_main_layout, RouteFragment.newInstance(key1,value1, key2, value2))
                     .addToBackStack(null)
             }
             17 -> {
