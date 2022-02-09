@@ -49,6 +49,8 @@ class RouteFragment :
     lateinit var RouteListAdapter: RouteListRecyclerviewAdapter
     var selectedTheme = mutableListOf<Int>()
     var tabPosition = 0
+    private var planId = -1 // TravelPlanFragment에서 넘어오는 사용자의 일정 아이디
+    private var flag = -1  // 장소별루트추천인지, 전체루트추천인지 판별
     lateinit var userId: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +82,22 @@ class RouteFragment :
             planViewModel.getThemeList()
             homeViewModel.getAreaLists()
             planViewModel.getPlanLikeList(userId)
+        }
+        planId = 50
+        flag = 1
+        if(planId == -1) { // 그냥 루트 페이지
+
+        } else {
+            if(flag == 1) { // 장소별루트추천
+                runBlocking {
+                    planViewModel.getPlanByPlace(planId)
+                    planViewModel.getThemeList()
+                    homeViewModel.getAreaLists()
+                    planViewModel.getPlanLikeList(userId)
+                }
+            } else if(flag == 2) { // 전체루트추천
+
+            }
         }
 
         initTab()

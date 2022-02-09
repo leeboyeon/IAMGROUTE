@@ -196,4 +196,29 @@ class UserPlanService {
         return RetrofitUtil.userPlanService.getPlanLikeListbyUserId(userId)
     }
 
+    fun insertPlanToUserPlan(day: Int, planId: Int, userPlan: UserPlan, callback: RetrofitCallback<Boolean>) {
+        RetrofitUtil.userPlanService.insertPlanToUserPlan(day, planId, userPlan)
+            .enqueue(object : Callback<Boolean> {
+                override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                    val res = response.body()
+                    if (response.code() == 200) {
+                        if (res == true) {
+                            callback.onSuccess(response.code(), res)
+                        }
+                    } else {
+                        callback.onFailure(response.code())
+                    }
+                }
+
+                override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                    callback.onError(t)
+                }
+
+            })
+    }
+
+    suspend fun getPlanIncludePlace(placeIds: List<Int>) : Response<MutableList<UserPlan>> {
+        return RetrofitUtil.userPlanService.getPlanIncludePlace(placeIds)
+    }
+
 }

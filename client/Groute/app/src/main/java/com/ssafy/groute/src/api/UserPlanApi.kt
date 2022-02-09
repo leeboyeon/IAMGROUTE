@@ -54,4 +54,10 @@ interface UserPlanApi {
     @GET("/plan/like/{userId}")
     suspend fun getPlanLikeListbyUserId(@Path("userId")userId:String) : Response<MutableList<UserPlan>>
 
+    @POST("/plan/copy")
+    fun insertPlanToUserPlan(@Query("day") day : Int, @Query("planId") planId : Int, @Body userPlan: UserPlan) : Call<Boolean>
+
+    @GET("/plan/filter")
+    suspend fun getPlanIncludePlace(@Query("placeIds") placeIds: List<Int>) :Response<MutableList<UserPlan>>
+
 }

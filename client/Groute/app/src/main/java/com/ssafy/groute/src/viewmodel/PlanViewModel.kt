@@ -496,6 +496,30 @@ class PlanViewModel : ViewModel() {
         }
     }
 
-
+    fun getPlanByPlace(planId: Int) {
+        viewModelScope.launch {
+            var placeIds = mutableListOf<Int>()
+            getPlanById(planId)
+            for(i in 0 until routeList.value!!.size) {
+                var detailList =routeList.value!!.get(i).routeDetailList
+                for(j in 0 until detailList.size) {
+                    placeIds.add(detailList.get(j).placeId)
+                }
+            }
+            val response = UserPlanService().getPlanIncludePlace(placeIds)
+            var res = response.body()
+            if(response.code() == 200){
+                if(res!=null){
+                    setUserPlanList(res)
+                    setUserPlanByDayList(res)
+                    Log.d(TAG, "getPlanByPlace: ${res}")
+                }else{
+                    Log.d(TAG, "getPlanByPlace: ISNULL")
+                }
+            }else{
+                Log.d(TAG, "getPlanByPlace: FAIL")
+            }
+        }
+    }
 
 }
