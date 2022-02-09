@@ -6,6 +6,15 @@
 
     <data>
         <variable
+            name="loginUser"
+            type="com.ssafy.groute.src.dto.User" />
+        <variable
+            name="writeUser"
+            type="com.ssafy.groute.src.dto.User" />
+        <variable
+            name="comment"
+            type="com.ssafy.groute.src.dto.Comment" />
+        <variable
             name="boardViewModels"
             type="com.ssafy.groute.src.viewmodel.BoardViewModel" />
     </data>
@@ -33,6 +42,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="50dp"
             android:scaleType="centerInside"
+            app:imageUrlUser="@{writeUser.img}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/circle_back"
@@ -44,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="50dp"
-            android:text="최지우"
+            android:text="@{writeUser.nickname}"
             android:textColor="@color/black"
             app:layout_constraintStart_toEndOf="@+id/comment_nested_detail_iv_userImg"
             app:layout_constraintTop_toTopOf="parent" />
@@ -55,11 +65,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
-            android:text="최지우진짜진짜 자닌해....자닌해진쨔..."
             android:textColor="@color/black"
             android:textSize="12sp"
+            android:text="@{comment.content}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/comment_nested_detail_tv_userNick" />
+<!--            android:text="최지우진짜진짜 자닌해....자닌해진쨔..."-->
 
         <View
             android:id="@+id/view5"
@@ -78,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/recyclerview_nested_comment_list_item"
-            listCommentNestedData="@{boardViewModels.commentNestedList}"
+            app:listCommentNestedData="@{boardViewModels.commentNestedList}"
             app:layout_constraintTop_toBottomOf="@id/view5"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -108,6 +119,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/circle_back"
+                app:imageUrlUser="@{loginUser.img}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/view" />

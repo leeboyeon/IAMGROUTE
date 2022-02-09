@@ -17,6 +17,7 @@ import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentBoardBinding
 import com.ssafy.groute.databinding.FragmentBoardDetailBinding
+import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.dto.Magazine
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.BoardService
@@ -116,9 +117,17 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
         }
 
         boardViewModel.freeBoardPostList.observe(viewLifecycleOwner,  {
-
             binding.boardRvFree.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            boardAdapter = BoardAdapter(it, requireContext(), viewLifecycleOwner)
+            val tmp = mutableListOf<BoardDetail>()
+            boardAdapter = if (it.size >= 5) {
+                for (i in 0 until 5) {
+                    tmp.add(it[i])
+                }
+                BoardAdapter(tmp, requireContext(), viewLifecycleOwner)
+
+            } else {
+                BoardAdapter(it, requireContext(), viewLifecycleOwner)
+            }
             boardAdapter.setHasStableIds(true)
             binding.boardRvFree.adapter = boardAdapter
 
@@ -143,8 +152,19 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
         }
 
         boardViewModel.qnaBoardPostList.observe(viewLifecycleOwner, {
+
             binding.boardRvQuestion.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            boardAdapter = BoardAdapter(it, requireContext(),viewLifecycleOwner)
+            val tmp = mutableListOf<BoardDetail>()
+            boardAdapter = if (it.size >= 5) {
+                for (i in 0 until 5) {
+                    tmp.add(it[i])
+                }
+                BoardAdapter(tmp, requireContext(), viewLifecycleOwner)
+
+            } else {
+                BoardAdapter(it, requireContext(), viewLifecycleOwner)
+            }
+//            boardAdapter = BoardAdapter(it, requireContext(),viewLifecycleOwner)
             boardAdapter.setHasStableIds(true)
             binding.boardRvQuestion.adapter = boardAdapter
 

@@ -22,4 +22,8 @@ interface CommentApi {
     // 게시판 댓글 조회
     @GET("/boardDetail/comment/detail")
     fun selectBoardComment(@Query("id") id: Int) : Call<Comment>
+
+    // 게시판 댓글 조회 - coroutine ver.
+    @GET("/boardDetail/comment/detail")
+    suspend fun getBoardCommentList(@Query("id") id: Int) : Call<Comment>
 }

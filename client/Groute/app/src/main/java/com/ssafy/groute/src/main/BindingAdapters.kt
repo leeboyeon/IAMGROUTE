@@ -43,10 +43,17 @@ fun bindImageUser(imgView: ImageView, imgUrl: String?) {
             .circleCrop()
             .into(imgView)
     } else {
-        Glide.with(imgView.context)
-            .load("${ApplicationClass.IMGS_URL_USER}${imgUrl}")
-            .circleCrop()
-            .into(imgView)
+        if(imgUrl.contains("https://")) {
+            Glide.with(imgView.context)
+                .load(imgUrl)
+                .circleCrop()
+                .into(imgView)
+        } else {
+            Glide.with(imgView.context)
+                .load("${ApplicationClass.IMGS_URL_USER}${imgUrl}")
+                .circleCrop()
+                .into(imgView)
+        }
     }
 }
 
@@ -218,21 +225,23 @@ fun bindBoardPostListRecyclerView(recyclerView: RecyclerView, data: List<BoardDe
 @BindingAdapter("listCommentData")
 fun bindCommentRecyclerView(recyclerView: RecyclerView, data: List<Comment>?) {
     val adapter = recyclerView.adapter as CommentAdapter
-    adapter.setCommentList(data)
-    adapter.notifyDataSetChanged()
+    adapter.submitList(data)
+//    adapter.setCommentList(data)
+//    adapter.notifyDataSetChanged()
 }
 
 @BindingAdapter("listCommentNestedData")
 fun bindCommentNestedRecyclerView(recyclerView: RecyclerView, data: List<Comment>?) {
     val adapter = recyclerView.adapter as CommentNestedAdapter
-    adapter.setCommentNestedList(data)
-    adapter.notifyDataSetChanged()
+    adapter.submitList(data)
+//    adapter.setCommentNestedList(data)
+//    adapter.notifyDataSetChanged()
 }
 
 
-@BindingAdapter("listNestedData")
-fun bindtNestedRecyclerView(recyclerView: RecyclerView, data: List<Comment>?) {
-    val adapter = recyclerView.adapter as CommentNestedAdapter
-    adapter.setCommentNestedList(data)
-    adapter.notifyDataSetChanged()
-}
+//@BindingAdapter("listNestedData")
+//fun bindtNestedRecyclerView(recyclerView: RecyclerView, data: List<Comment>?) {
+//    val adapter = recyclerView.adapter as CommentNestedAdapter
+//    adapter.setCommentNestedList(data)
+//    adapter.notifyDataSetChanged()
+//}

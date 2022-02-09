@@ -63,14 +63,13 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
             binding.boardDetailBoardNameTv.text = "질문게시판"
             initRecyclerAdapter(boardId)
         }
+
         //그냥 글쓰기
         binding.boardDetailBtnWrite.setOnClickListener {
-            Log.d(TAG, "onViewCreated: ${boardId}")
             mainActivity.moveFragment(8,"boardId",boardId)
         }
 
         binding.backBtn.setOnClickListener {
-            Log.d(TAG, "onViewCreated: CLICK")
             mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
             mainActivity.supportFragmentManager.popBackStack()
         }
@@ -92,8 +91,9 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
                 boardRecyclerAdapter.setHasStableIds(true)
                 binding.boardDetailRvListitem.adapter = boardRecyclerAdapter
 
+                // 게시글 상세보기 클릭 이벤트 -> BoardPostDetailFragment
                 boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
-                    override fun onClick(view: View, position: Int) { // BoardPostDetailFragment
+                    override fun onClick(view: View, position: Int) {
                         mainActivity.moveFragment(6,"boardDetailId", it[position].id)
                     }
 
@@ -101,11 +101,11 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
 //                        boardLike(id, userId)
 //                    }
                 })
-                boardRecyclerAdapter.setModifyClickListener(object : BoardRecyclerviewAdapter.ItemModifyListener{   // BoardWriteFragment
+                // 게시글 수정하기 클릭 이벤트 -> BoardWriteFragment
+                boardRecyclerAdapter.setModifyClickListener(object : BoardRecyclerviewAdapter.ItemModifyListener {
                     override fun onClick(position: Int) {
                         mainActivity.moveFragment(8,"boardDetailId", it[position].id)
                     }
-
                 })
             })
         } else if(id == 2){
@@ -133,7 +133,6 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
                 })
             })
         }
-
     }
 
     private fun refreshFragment(){
@@ -163,7 +162,6 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
                     runBlocking {
                         boardViewModel.getBoardPostList(boardId)
                     }
-
 //                    boardViewModel.getBoardQuestionList(viewLifecycleOwner)
 //                    boardRecyclerAdapter.setBoardList(boardViewModel.boardQuestionList.value)
 //                    boardRecyclerAdapter.notifyDataSetChanged()

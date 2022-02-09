@@ -1,12 +1,18 @@
 package com.ssafy.groute.src.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.src.dto.Comment
 import com.ssafy.groute.src.response.UserInfoResponse
+import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.UserService
+import kotlinx.coroutines.launch
 
+private const val TAG = "MainViewModel_Groute"
 open class MainViewModel : ViewModel() {
     val userInfo = UserService().getUserInfo(ApplicationClass.sharedPreferencesUtil.getUser().id)
     private val _bannerItemList: MutableLiveData<List<Int>> = MutableLiveData()
@@ -40,5 +46,30 @@ open class MainViewModel : ViewModel() {
 
 
     fun getcurrentPosition() = currentPosition.value
+
+
+    private val _userInfo = MutableLiveData<UserInfoResponse>()
+
+    val userInformation : LiveData<UserInfoResponse>
+        get() = _userInfo
+
+    fun setUserInfo(userInfo: UserInfoResponse) = viewModelScope.launch {
+        _userInfo.value = userInfo
+    }
+
+    suspend fun getUserInformation(userId: String) {
+        val response = UserService().getUser(userId)
+        viewModelScope.launch {
+            val res = response.body()
+            if(response.code() == 200) {
+                if(res != null) {
+                    setUserInfo(res)
+                    Log.d(TAG, "getUserInfoSuccess: ${response.message()}")
+                } else {
+                    Log.d(TAG, "getUserInfoError: ${response.message()}")
+                }
+            }
+        }
+    }
 
 }

@@ -88,6 +88,14 @@ class UserService {
     }
 
     /**
+     * 사용자 아이디에 해당하는 사용자 정보를 불러온다. - Coroutine ver.
+     * @param userId
+     */
+    suspend fun getUser(userId: String) : Response<UserInfoResponse> {
+        return RetrofitUtil.userService.getUser(userId)
+    }
+
+    /**
      * #S06P12D109-24 회원가입
      * 사용자로 부터 입력받은 사용자 데이터를 서버로 전송한다.
      * @param user
