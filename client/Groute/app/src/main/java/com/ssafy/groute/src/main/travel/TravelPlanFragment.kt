@@ -2,6 +2,7 @@ package com.ssafy.groute.src.main.travel
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.app.Dialog
@@ -56,6 +57,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.datepicker.*
 import com.google.android.material.tabs.TabLayout
+import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.ActivityCommentNestedBinding.bind
 import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.dto.Route
@@ -133,6 +135,15 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
             mainActivity.supportFragmentManager.popBackStack()
         }
+        binding.travelplanShareBtn.setOnClickListener {
+            val share = binding.travelplanShareIv
+            val animator = ValueAnimator.ofFloat(0f,0.5f).setDuration(500)
+            animator.addUpdateListener { animation ->
+                share.progress = animation.animatedValue as Float
+            }
+            animator.start()
+            mainActivity.moveFragment(18,"planId",planId)
+        }
         binding.travelplanCalcBtn.setOnClickListener {
             val money = binding.travelplanCalcIv
             val animator = ValueAnimator.ofFloat(0f,0.5f).setDuration(500)
@@ -149,42 +160,21 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 member.progress = animation.animatedValue as Float
             }
             animator.start()
-            mainActivity.moveFragment(17,"planId",planId)
+            if(planViewModel.planList.value!!.userId == ApplicationClass.sharedPreferencesUtil.getUser().id){
+                mainActivity.moveFragment(17,"planId",planId)
+            }else{
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("일정에 대한 생성자만 공유하실 수 있습니다.")
+                    .setNeutralButton("확인",null)
+                builder.show()
+            }
         }
         binding.travelPlanIbtnMemo.setOnClickListener {
             initMemo()
         }
-        binding.travelPlanIbtnMagic.setOnClickListener {
-//            setPriority()
-        }
+
     }
-//    fun setPriority(){
-//        var routeDetail = RouteDetail()
-//        planViewModel.routeList.observe(viewLifecycleOwner,{
-//            var details = it[curPos].routeDetailList
-//            for(i in details.indices){
-//                routeDetail = RouteDetail(
-//                    placeId = details[i].placeId,
-//                    priority = travelPlanListRecyclerviewAdapter.routeDetailList.,
-//                    routeId = details[i].routeId,
-//                )
-//            }
-//        })
-//        RouteDetailService().updateRouteDetail(routeDetail,object : RetrofitCallback<Boolean> {
-//            override fun onError(t: Throwable) {
-//                Log.d(TAG, "onError: ")
-//            }
-//
-//            override fun onSuccess(code: Int, responseData: Boolean) {
-//                Log.d(TAG, "onSuccess: priority Set Complete")
-//            }
-//
-//            override fun onFailure(code: Int) {
-//                Log.d(TAG, "onFailure: ")
-//            }
-//
-//        })
-//    }
+
     fun initMemo(){
             planViewModel.routeList.observe(viewLifecycleOwner, {
                 if(it[curPos].memo != null){

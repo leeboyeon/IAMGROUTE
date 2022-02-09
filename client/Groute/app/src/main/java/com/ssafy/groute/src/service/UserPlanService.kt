@@ -216,4 +216,25 @@ class UserPlanService {
 
         })
     }
+
+    fun updateUserPlan(userPlan:UserPlan, callback:RetrofitCallback<Boolean>){
+        RetrofitUtil.userPlanService.updateUserPlan(userPlan).enqueue(object: Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if (response.code() == 200) {
+                    if (res == true) {
+                        callback.onSuccess(response.code(), res)
+                        Log.d(TAG, "onResponse: ")
+                    } else {
+                        Log.d(TAG, "onResponse: ")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                Log.d(TAG, "onFailure: ")
+            }
+
+        })
+    }
 }

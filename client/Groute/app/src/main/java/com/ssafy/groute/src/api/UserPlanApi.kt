@@ -57,4 +57,6 @@ interface UserPlanApi {
     @PUT("/plan/place/priority")
     fun updatePriority(@Body routeDetailList:List<RouteDetail>) : Call<Boolean>
 
+    @PUT("/plan/update")
+    fun updateUserPlan(@Body userPlan:UserPlan) : Call<Boolean>
 }
