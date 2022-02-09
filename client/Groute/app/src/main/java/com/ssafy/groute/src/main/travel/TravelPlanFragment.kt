@@ -424,8 +424,8 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     fun showRouteSelectDialog(){
         routeRecomDialogAdapter = RouteRecomDialogAdapter(requireContext())
         routeSelectList.apply {
-            add(RouteRecom(lottie="oneday.json",typeName="당일일정",typeDescript="하루의 일정만 \n 추천받으시고 싶으신가요?"))
-            add(RouteRecom(lottie="allday.json",typeName="전체일정",typeDescript="모든 일정을 \n 추천받으시고 싶으신가요?"))
+            add(RouteRecom(lottie="oneday.json",typeName="장소 필터링",typeDescript="추가하신 장소를 포함한 일정을 추천해드립니다."))
+            add(RouteRecom(lottie="allday.json",typeName="전체일정 추천",typeDescript="모든 일정을 \n 추천받으시고 싶으신가요?"))
 
             routeRecomDialogAdapter.list = routeSelectList
             routeRecomDialogAdapter.notifyDataSetChanged()
@@ -452,17 +452,17 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         }
         dialogView.findViewById<Button>(R.id.routeRecom_btn_ok).setOnClickListener {
             if(selectPosition == 0){
-                //당일
-                mainActivity.moveFragment(16,"days",1)
+                //장소필터링
+                mainActivity.moveFragment(16,"planId",planId,"flag",0)
                 dialog.dismiss()
             }
             if(selectPosition == 1){
-                //전체
+                //일정추천
                     var total = 0
                      planViewModel.planList.observe(viewLifecycleOwner, Observer {
                         total = it.totalDate
                     })
-                mainActivity.moveFragment(16,"days",total)
+                mainActivity.moveFragment(16,"planId",planId,"flag",1)
                 dialog.dismiss()
             }
         }
