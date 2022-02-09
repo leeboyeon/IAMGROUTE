@@ -155,14 +155,30 @@
                 android:text="DAY1" />
         </com.google.android.material.tabs.TabLayout>
 
+<!--        <com.airbnb.lottie.LottieAnimationView-->
+<!--            android:id="@+id/travelplan_lottie_prioriyMagic"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:layout_marginBottom="10dp"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/travelplan_list_rv"-->
+<!--            app:layout_constraintEnd_toStartOf="@+id/travelPlan_ibtn_memo"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/travelplan_tab_layout"-->
+<!--            app:lottie_autoPlay="true"-->
+<!--            app:lottie_fileName="magic.json"-->
+<!--            app:lottie_loop="false" />-->
+
         <ImageButton
             android:id="@+id/travelPlan_ibtn_memo"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
+            app:layout_constraintBottom_toTopOf="@+id/travelplan_list_rv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/travelplan_tab_layout"
             app:srcCompat="@drawable/note" />

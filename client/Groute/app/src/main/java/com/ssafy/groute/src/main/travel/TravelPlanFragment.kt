@@ -154,8 +154,37 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         binding.travelPlanIbtnMemo.setOnClickListener {
             initMemo()
         }
-
+        binding.travelPlanIbtnMagic.setOnClickListener {
+//            setPriority()
+        }
     }
+//    fun setPriority(){
+//        var routeDetail = RouteDetail()
+//        planViewModel.routeList.observe(viewLifecycleOwner,{
+//            var details = it[curPos].routeDetailList
+//            for(i in details.indices){
+//                routeDetail = RouteDetail(
+//                    placeId = details[i].placeId,
+//                    priority = travelPlanListRecyclerviewAdapter.routeDetailList.,
+//                    routeId = details[i].routeId,
+//                )
+//            }
+//        })
+//        RouteDetailService().updateRouteDetail(routeDetail,object : RetrofitCallback<Boolean> {
+//            override fun onError(t: Throwable) {
+//                Log.d(TAG, "onError: ")
+//            }
+//
+//            override fun onSuccess(code: Int, responseData: Boolean) {
+//                Log.d(TAG, "onSuccess: priority Set Complete")
+//            }
+//
+//            override fun onFailure(code: Int) {
+//                Log.d(TAG, "onFailure: ")
+//            }
+//
+//        })
+//    }
     fun initMemo(){
             planViewModel.routeList.observe(viewLifecycleOwner, {
                 if(it[curPos].memo != null){

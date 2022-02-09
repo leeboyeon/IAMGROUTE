@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.src.dto.Route
 import com.ssafy.groute.src.dto.RouteDetail
+import com.ssafy.groute.src.service.RouteDetailService
+import com.ssafy.groute.src.service.UserPlanService
+import com.ssafy.groute.util.RetrofitCallback
 import java.lang.NullPointerException
 import java.util.*
 import kotlin.collections.ArrayList
@@ -20,7 +23,7 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
     Filterable {
     private var dayFilterList = list
     private var route:Route = Route()
-    private var routeDetailList = mutableListOf<RouteDetail>()
+    var routeDetailList = mutableListOf<RouteDetail>()
     inner class TravelPlanListHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val numTv = itemView.findViewById<TextView>(R.id.item_travelplan_num_tv)
         val placeTv = itemView.findViewById<TextView>(R.id.item_travelplan_day_list_place_tv)
@@ -56,6 +59,7 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
             memoTv.setOnClickListener {
                 memoClickListener.onClick(it,position,routeDetailList[position].placeId)
             }
+
         }
     }
 
@@ -88,9 +92,36 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
         notifyItemRemoved(position)
     }
 
+    @SuppressLint("LongLogTag")
     fun swapData(fromPos: Int, toPos: Int) {
+        Log.d(TAG, "swapData_before: ${fromPos} || ${toPos}")
         Collections.swap(routeDetailList, fromPos, toPos)
         notifyItemMoved(fromPos, toPos)
+        Log.d(TAG, "swapData_after: ${fromPos} || ${toPos}")
+
+
+        var detailList = arrayListOf<RouteDetail>()
+        for(i in 0..routeDetailList.size-1){
+            var details = RouteDetail(
+                routeDetailList[i].id,
+                i+1
+            )
+            detailList.add(details)
+        }
+        UserPlanService().updatePriority(detailList, object : RetrofitCallback<Boolean> {
+            override fun onError(t: Throwable) {
+                Log.d(TAG, "onError: ")
+            }
+
+            override fun onSuccess(code: Int, responseData: Boolean) {
+                Log.d(TAG, "onSuccess: Update Success")
+            }
+
+            override fun onFailure(code: Int) {
+                Log.d(TAG, "onFailure: ")
+            }
+
+        })
     }
 
     override fun getFilter(): Filter {
