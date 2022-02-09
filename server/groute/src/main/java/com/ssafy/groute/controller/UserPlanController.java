@@ -42,10 +42,10 @@ public class UserPlanController {
 
     @ApiOperation(value = "userPlan 반환",notes = "해당 place 포함한 경로 찾기")
     @GetMapping(value = "/filter")
-    public ResponseEntity<?> filterUserPlan(@RequestParam("placeIds") List<Integer> placeIds,int day) throws Exception{
+    public ResponseEntity<?> filterUserPlan(@RequestParam("placeIds") List<Integer> placeIds) throws Exception{
         List<UserPlan> userPlans = new ArrayList<>();
         try {
-            userPlans = userPlanService.selectAllByPlaceId(placeIds,day);
+            userPlans = userPlanService.selectAllByPlaceId(placeIds);
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);

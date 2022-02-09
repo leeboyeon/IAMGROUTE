@@ -82,13 +82,14 @@ public class UserPlanServiceImpl implements UserPlanService {
 
     @Transactional
     @Override
-    public List<UserPlan> selectAllByPlaceId(List<Integer> placeIds, int day) throws Exception {
-        List<Integer> planIdList = userPlanMapper.selectAllUserPlanByTotalDate(day);
+    public List<UserPlan> selectAllByPlaceId(List<Integer> placeIds) throws Exception {
+//        List<Integer> planIdList = userPlanMapper.selectAllUserPlanByTotalDate(day);
+        List<UserPlan> planList = selectTUserPlan();
         List<UserPlan> userPlans = new ArrayList<>();
-        for(int planId: planIdList){
-            List<Integer> placeList = userPlanMapper.selectPlaceListByPlanId(planId);
+        for(UserPlan userPlan: planList){
+            List<Integer> placeList = userPlanMapper.selectPlaceListByPlanId(userPlan.getId());
             if(placeList.containsAll(placeIds)){
-                userPlans.add(userPlanMapper.selectUserPlan(planId));
+                userPlans.add(userPlan);
             }
         }
         return userPlans;
