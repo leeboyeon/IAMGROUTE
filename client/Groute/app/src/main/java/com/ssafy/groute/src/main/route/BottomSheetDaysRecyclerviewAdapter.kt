@@ -67,8 +67,17 @@ class BottomSheetDaysRecyclerviewAdapter( val planViewModel: PlanViewModel, val 
             var totalDate = planViewModel.planList.value!!.totalDate // 현재 내 일정에 담으려는 루트의 totalDate
             itemView.setOnClickListener{
                 if(selectCheck[position] == 0) {
-                    if(position + totalDate > list.size) {
-
+                    if(position + totalDate > list.size) { // 만약에 현재 day를 선택했을때 일정 기간을 초과하면 day끝까지 선택
+                        for(i in 0 until list.size) {
+                            if(selectCheck[i] == 1) {
+                                selectCheck[i] = 0
+                            }
+                        }
+                        for(i in position until list.size) {
+                            selectCheck[i] = 1
+                            Log.d(TAG, "onBindViewHolder: $i")
+                        }
+                        itemClickListener.onClick(position, list[position])
                     } else {
                         for(i in 0 until list.size) {
                             if(selectCheck[i] == 1) {
