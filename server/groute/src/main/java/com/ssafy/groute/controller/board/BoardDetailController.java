@@ -51,14 +51,14 @@ public class BoardDetailController {
     @Autowired
     private ObjectMapper mapper;
 
-//    @Value("${spring.servlet.multipart.location}")
+    //    @Value("${spring.servlet.multipart.location}")
     @Value("${spring.http.multipart.location}")
     private String uploadPath;
 
 //    public BoardDetailController() {
 //    }
 
-    @ApiOperation(value = "boardDetail 추가",notes = "boardDetail 추가")
+    @ApiOperation(value = "boardDetail 추가", notes = "boardDetail 추가")
     @PostMapping(value = "/insert")
     public ResponseEntity<?> insertBoardDetail(@RequestPart(value = "board") String board, @RequestPart(value = "img", required = false) MultipartFile img) throws Exception {
         try {
@@ -70,7 +70,7 @@ public class BoardDetailController {
                 String filePath = "";
                 if (req.getBoardId() == 1) {
                     filePath = "board/freeBoard";
-                } else if(req.getBoardId() == 2) {
+                } else if (req.getBoardId() == 2) {
                     filePath = "board/qnaBoard";
                 }
                 String fileName = storageService.store(img, uploadPath + filePath);
@@ -80,65 +80,65 @@ public class BoardDetailController {
             }
             boardDetailService.insertBoardDetail(req);
             return new ResponseEntity<Integer>(req.getBoardId(), HttpStatus.OK);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<Integer>(0, HttpStatus.NOT_ACCEPTABLE);
         }
 
     }
 
-    @ApiOperation(value = "boardDetail 검색",notes = "이름으로 boardDetail 하나 검색")
+    @ApiOperation(value = "boardDetail 검색", notes = "이름으로 boardDetail 하나 검색")
     @GetMapping(value = "/detail")
-    public ResponseEntity<?> detailBoardDetail(@RequestParam("id") int id) throws Exception{
-        Map<String,Object> res = new HashMap<>();
+    public ResponseEntity<?> detailBoardDetail(@RequestParam("id") int id) throws Exception {
+        Map<String, Object> res = new HashMap<>();
         BoardDetail board = boardDetailService.selectBoardDetail(id);
         List<Comment> comments = commentService.selectAllByBoardDetailId(id);
-        res.put("boardDetail",board);
-        res.put("comments",comments);
-        if(res==null){
+        res.put("boardDetail", board);
+        res.put("comments", comments);
+        if (res == null) {
             return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<Map<String,Object>>(res,HttpStatus.OK);
+        return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "list boardDetail",notes = "모든 boardDetail 반환")
+    @ApiOperation(value = "list boardDetail", notes = "모든 boardDetail 반환")
     @GetMapping(value = "/list")
-    public ResponseEntity<?> listBoardDetail() throws Exception{
+    public ResponseEntity<?> listBoardDetail() throws Exception {
 
         List<BoardDetail> res = boardDetailService.selectAllBoardDetail();
-        if(res==null){
+        if (res == null) {
             return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<List<BoardDetail>>(res,HttpStatus.OK);
+        return new ResponseEntity<List<BoardDetail>>(res, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "list boardDetail division",notes = "boardDetail를 구분하여 반환")
+    @ApiOperation(value = "list boardDetail division", notes = "boardDetail를 구분하여 반환")
     @GetMapping(value = "/list/division")
-    public ResponseEntity<?> listBoardDetailDivision(@RequestParam("boardId") int boardId) throws Exception{
+    public ResponseEntity<?> listBoardDetailDivision(@RequestParam("boardId") int boardId) throws Exception {
         List<BoardDetail> res = boardDetailService.selectBoardDetailSeparetedByTag(boardId);
-        if(res==null){
+        if (res == null) {
             return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<List<BoardDetail>>(res,HttpStatus.OK);
+        return new ResponseEntity<List<BoardDetail>>(res, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "delete boardDetail",notes = "boardDetail 삭제")
+    @ApiOperation(value = "delete boardDetail", notes = "boardDetail 삭제")
     @DeleteMapping(value = "/del")
-    public ResponseEntity<?> deleteBoardDetail(@RequestParam("id") int id) throws Exception{
+    public ResponseEntity<?> deleteBoardDetail(@RequestParam("id") int id) throws Exception {
         try {
             boardDetailService.deleteBoardDetail(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "updateBoardDetail",notes = "boardDetail 수정")
+    @ApiOperation(value = "updateBoardDetail", notes = "boardDetail 수정")
     @PutMapping(value = "/update")
 //    public ResponseEntity<?> updateBoardDetail(@RequestBody BoardDetail boardDetail) throws Exception{
     public ResponseEntity<?> updateBoardDetail(@RequestPart(value = "board") String board, @RequestPart(value = "img", required = false) MultipartFile img) throws Exception {
@@ -154,14 +154,14 @@ public class BoardDetailController {
                 String filePath = "";
                 if (boardDetail.getBoardId() == 1) {
                     filePath = "board/freeBoard";
-                } else if(boardDetail.getBoardId() == 2) {
+                } else if (boardDetail.getBoardId() == 2) {
                     filePath = "board/qnaBoard";
                 }
                 String fileName = storageService.store(img, uploadPath + filePath);
                 boardDetail.setImg(filePath + "/" + fileName);
             } else {    // img == null
                 logger.debug("img null {} {}", beforeImg, img);
-                if(beforeImg.isEmpty() || beforeImg.equals("null")){
+                if (beforeImg.isEmpty() || beforeImg.equals("null")) {
                     boardDetail.setImg(null);
                 } else {
                     boardDetail.setImg(beforeImg);
@@ -170,16 +170,16 @@ public class BoardDetailController {
 
             boardDetailService.updateBoardDetail(boardDetail);
             return new ResponseEntity<Integer>(boardDetail.getBoardId(), HttpStatus.OK);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<Integer>(0, HttpStatus.NOT_ACCEPTABLE);
         }
 
     }
 
-    @ApiOperation(value = "boardDetail like 확인",notes = "boardDetail like 확인")
+    @ApiOperation(value = "boardDetail like 확인", notes = "boardDetail like 확인")
     @PostMapping(value = "/isLike")
-    public boolean boardDetailIsLike(@RequestParam("userId") String userId, @RequestParam("boardDetailId") int boardDetailId) throws Exception{
+    public boolean boardDetailIsLike(@RequestParam("userId") String userId, @RequestParam("boardDetailId") int boardDetailId) throws Exception {
         BoardDetailLike boardDetailLike = boardDetailLikeService.findBoardLikeByUIdBDId(userId, boardDetailId);
         if (boardDetailLike != null) {
             return true;
@@ -187,9 +187,9 @@ public class BoardDetailController {
         return false;
     }
 
-        @ApiOperation(value = "boardDetail like",notes = "boardDetail like")
+    @ApiOperation(value = "boardDetail like", notes = "boardDetail like")
     @PostMapping(value = "/like")
-    public ResponseEntity<?> boardDetailLike(@RequestParam("userId") String userId, @RequestParam("boardDetailId") int boardDetailId) throws Exception{
+    public ResponseEntity<?> boardDetailLike(@RequestParam("userId") String userId, @RequestParam("boardDetailId") int boardDetailId) throws Exception {
         try {
             BoardDetailLike boardDetailLike = boardDetailLikeService.findBoardLikeByUIdBDId(userId, boardDetailId);
             if (boardDetailLike != null) {
@@ -199,28 +199,28 @@ public class BoardDetailController {
                 // 좋아요가 존재하지 않으면 추가
                 boardDetailLikeService.insertBoardDetailLike(userId, boardDetailId);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
-        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "comment 추가",notes = "comment 추가")
+    @ApiOperation(value = "comment 추가", notes = "comment 추가")
     @PostMapping(value = "/comment/insert")
-    public ResponseEntity<?> insertComment(@RequestBody Comment req){
+    public ResponseEntity<?> insertComment(@RequestBody Comment req) {
 
         try {
             commentService.insertComment(req);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "comment 검색",notes = "이름으로 comment 하나 검색")
+    @ApiOperation(value = "comment 검색", notes = "이름으로 comment 하나 검색")
     @GetMapping(value = "/comment/detail")
     public ResponseEntity<?> detailComment(@RequestParam("id") int id) throws Exception {
 
@@ -234,44 +234,53 @@ public class BoardDetailController {
     }
 
 
-
-    @ApiOperation(value = "list comment",notes = "모든 comment 반환")
+    @ApiOperation(value = "list comment", notes = "모든 comment 반환")
     @GetMapping(value = "/comment/list")
-    public ResponseEntity<?> listComment() throws Exception{
+    public ResponseEntity<?> listComment() throws Exception {
 
         List<Comment> res = commentService.selectAllComment();
-        if(res==null){
+        if (res == null) {
             return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<List<Comment>>(res,HttpStatus.OK);
+        return new ResponseEntity<List<Comment>>(res, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "delete comment",notes = "comment 삭제")
+    @ApiOperation(value = "delete comment", notes = "comment 삭제")
     @DeleteMapping(value = "/comment/del")
-    public ResponseEntity<?> deleteComment(@RequestParam("id") int id) throws Exception{
+    public ResponseEntity<?> deleteComment(@RequestParam("id") int id) throws Exception {
 
         try {
             commentService.deleteComment(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
     }
 
-    @ApiOperation(value = "updateComment",notes = "comment 수정")
+    @ApiOperation(value = "updateComment", notes = "comment 수정")
     @PutMapping(value = "/comment/update")
-    public ResponseEntity<?> updateComment(@RequestBody Comment comment) throws Exception{
+    public ResponseEntity<?> updateComment(@RequestBody Comment comment) throws Exception {
 
         try {
             commentService.updateComment(comment);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>("FAIL", HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+        return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "selectCommentList by boardDetailId", notes = "게시글Id에 해당하는 comment 리스트 조회")
+    @GetMapping(value = "/comment/postcommentlist")
+    public ResponseEntity<?> postCommentList(@RequestParam("boardDetailId") int boardDetailId) throws Exception {
+        List<Comment> res = commentService.selectAllByBoardDetailId(boardDetailId);
+        if (res == null) {
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<List<Comment>>(res, HttpStatus.OK);
     }
 }
