@@ -211,7 +211,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .addToBackStack(null)
             }
             16 ->{
-                transaction.replace(R.id.frame_main_layout, RouteFragment.newInstance(key1,value1))
+                transaction.replace(R.id.frame_main_layout, RouteFragment.newInstance(key1,value1, key2, value2))
                     .addToBackStack(null)
             }
             17 -> {

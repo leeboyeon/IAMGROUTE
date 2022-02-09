@@ -67,7 +67,8 @@ class RouteFragment :
         super.onAttach(context)
         mainActivity = context as MainActivity
         arguments?.let {
-            days = it.getInt("days", -1)
+            planId = it.getInt("planId", -1)
+            flag = it.getInt("flag", -1)
             Log.d(TAG, "onAttach: ${days}")
         }
     }
@@ -77,25 +78,22 @@ class RouteFragment :
         super.onViewCreated(view, savedInstanceState)
         userId = ApplicationClass.sharedPreferencesUtil.getUser().id
         binding.viewModel = planViewModel
-        runBlocking {
-            planViewModel.getUserPlanList()
-            planViewModel.getThemeList()
-            homeViewModel.getAreaLists()
-            planViewModel.getPlanLikeList(userId)
-        }
-        planId = 50
-        flag = 1
         if(planId == -1) { // 그냥 루트 페이지
-
+            runBlocking {
+                planViewModel.getUserPlanList()
+                planViewModel.getThemeList()
+                homeViewModel.getAreaLists()
+                planViewModel.getPlanLikeList(userId)
+            }
         } else {
-            if(flag == 1) { // 장소별루트추천
+            if(flag == 0) { // 장소별루트추천
                 runBlocking {
                     planViewModel.getPlanByPlace(planId)
                     planViewModel.getThemeList()
                     homeViewModel.getAreaLists()
                     planViewModel.getPlanLikeList(userId)
                 }
-            } else if(flag == 2) { // 전체루트추천
+            } else if(flag == 1) { // 전체루트추천
 
             }
         }
@@ -241,10 +239,11 @@ class RouteFragment :
 
     companion object {
         @JvmStatic
-        fun newInstance(key1: String, value1: Int) =
+        fun newInstance(key1:String, value1:Int, key2:String, value2:Int) =
             RouteFragment().apply {
                 arguments = Bundle().apply {
                     putInt(key1, value1)
+                    putInt(key2,value2)
                 }
             }
     }
