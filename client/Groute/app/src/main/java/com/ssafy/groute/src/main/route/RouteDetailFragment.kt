@@ -1,10 +1,16 @@
 package com.ssafy.groute.src.main.route
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -73,7 +79,7 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         }
 
         binding.RouteDetailAddPlanBtn.setOnClickListener {
-            
+            showRouteAddBottomSheet()
         }
 
 
@@ -90,6 +96,17 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
                 adapter = routeDetailThemeAdapter
             }
         })
+    }
+
+    fun showRouteAddBottomSheet() {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.plan_add_bottom_sheet)
+        dialog.show()
+        dialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
+        dialog.window!!.setGravity(Gravity.BOTTOM)
     }
 
     companion object {
