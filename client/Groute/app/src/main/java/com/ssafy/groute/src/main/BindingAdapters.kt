@@ -1,6 +1,7 @@
 package com.ssafy.groute.src.main
 
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
@@ -10,7 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.src.dto.*
-import com.ssafy.groute.src.main.board.SearchAdapter
+import com.ssafy.groute.src.main.board.*
 import com.ssafy.groute.src.main.home.PlaceFilterAdapter
 import com.ssafy.groute.src.main.home.ReviewAdapter
 import com.ssafy.groute.src.main.my.MyTravel
@@ -51,9 +52,15 @@ fun bindImageUser(imgView: ImageView, imgUrl: String?) {
 
 @BindingAdapter("imageUrlBoardPost")    // + PlaceReview
 fun bindImageBoardPost(imgView: ImageView, imgUrl: String?) {
-    Glide.with(imgView.context)
-        .load("${ApplicationClass.IMGS_URL}${imgUrl}")
-        .into(imgView)
+
+    if (imgUrl == "null" || imgUrl == null) {
+        imgView.visibility = View.GONE
+    } else {
+        imgView.visibility = View.VISIBLE
+        Glide.with(imgView.context)
+            .load("${ApplicationClass.IMGS_URL}${imgUrl}")
+            .into(imgView)
+    }
 }
 
 //@BindingAdapter("placeListData")  -> recycler view Adapter 사용할 때 쓰는 databinding
@@ -190,3 +197,42 @@ fun bindShareMemberRecyclerView(recyclerView: RecyclerView, data:List<User>?){
     adapter.notifyDataSetChanged()
 }
 
+
+/**
+ * board 관련 bindingAdapter
+ */
+@BindingAdapter("listData") // BoardFragment + BoardAdapter
+fun bindBoardRecyclerView(recyclerView: RecyclerView, data: List<BoardDetail>?) {
+    val adapter = recyclerView.adapter as BoardAdapter
+    adapter.submitList(data)
+//            adapter.setList(data)
+//            adapter.notifyDataSetChanged()
+}
+
+@BindingAdapter("boardPostListData")
+fun bindBoardPostListRecyclerView(recyclerView: RecyclerView, data: List<BoardDetail>?) {
+    val adapter = recyclerView.adapter as BoardRecyclerviewAdapter
+    adapter.submitList(data)
+}
+
+@BindingAdapter("listCommentData")
+fun bindCommentRecyclerView(recyclerView: RecyclerView, data: List<Comment>?) {
+    val adapter = recyclerView.adapter as CommentAdapter
+    adapter.setCommentList(data)
+    adapter.notifyDataSetChanged()
+}
+
+@BindingAdapter("listCommentNestedData")
+fun bindCommentNestedRecyclerView(recyclerView: RecyclerView, data: List<Comment>?) {
+    val adapter = recyclerView.adapter as CommentNestedAdapter
+    adapter.setCommentNestedList(data)
+    adapter.notifyDataSetChanged()
+}
+
+
+@BindingAdapter("listNestedData")
+fun bindtNestedRecyclerView(recyclerView: RecyclerView, data: List<Comment>?) {
+    val adapter = recyclerView.adapter as CommentNestedAdapter
+    adapter.setCommentNestedList(data)
+    adapter.notifyDataSetChanged()
+}

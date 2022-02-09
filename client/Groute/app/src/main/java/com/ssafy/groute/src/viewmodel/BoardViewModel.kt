@@ -29,6 +29,7 @@ class BoardViewModel : ViewModel(){
 
     val commentCount : LiveData<Int>
         get() = _commentCount
+
     val commentList: LiveData<List<Comment>>
         get() = _commentList
 
@@ -185,7 +186,7 @@ class BoardViewModel : ViewModel(){
                     } else if (boardId == 2) {
                         setQnABoardPostList(res as MutableList<BoardDetail>)
                     }
-                    Log.d(TAG, "getBoardPostList: $res")
+                    Log.d(TAG, "getBoardPostList: ${response.message()}")
                 } else {
                     Log.d(TAG, "getBoardPostError: ${response.message()}")
                 }

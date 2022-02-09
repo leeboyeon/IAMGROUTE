@@ -20,27 +20,27 @@ class BoardService {
     /**
      * @GET("/boardDetail/list")
      */
-    fun getBoardList(): LiveData<List<BoardDetail>> {
-        val responseLiveData: MutableLiveData<List<BoardDetail>> = MutableLiveData()
-        val boardListRequest: Call<MutableList<BoardDetail>> = RetrofitUtil.boardService.listBoard()
-        boardListRequest.enqueue(object : Callback<MutableList<BoardDetail>> {
-            override fun onResponse(call: Call<MutableList<BoardDetail>>, response: Response<MutableList<BoardDetail>>) {
-                val res = response.body()
-                if(response.code() == 200){
-                    if (res != null) {
-                        responseLiveData.value = res
-                        Log.d(TAG, "onResponse: $res")
-                    }
-                } else {
-                    Log.d(TAG, "onResponse: Error Code ${response.code()}")
-                }
-            }
-            override fun onFailure(call: Call<MutableList<BoardDetail>>, t: Throwable) {
-                Log.d(TAG, t.message ?: "통신오류")
-            }
-        })
-        return responseLiveData
-    }
+//    fun getBoardList(): LiveData<List<BoardDetail>> {
+//        val responseLiveData: MutableLiveData<List<BoardDetail>> = MutableLiveData()
+//        val boardListRequest: Call<MutableList<BoardDetail>> = RetrofitUtil.boardService.listBoard()
+//        boardListRequest.enqueue(object : Callback<MutableList<BoardDetail>> {
+//            override fun onResponse(call: Call<MutableList<BoardDetail>>, response: Response<MutableList<BoardDetail>>) {
+//                val res = response.body()
+//                if(response.code() == 200){
+//                    if (res != null) {
+//                        responseLiveData.value = res
+//                        Log.d(TAG, "onResponse: $res")
+//                    }
+//                } else {
+//                    Log.d(TAG, "onResponse: Error Code ${response.code()}")
+//                }
+//            }
+//            override fun onFailure(call: Call<MutableList<BoardDetail>>, t: Throwable) {
+//                Log.d(TAG, t.message ?: "통신오류")
+//            }
+//        })
+//        return responseLiveData
+//    }
 
 
 //    fun getBoardDetailList(boardId: Int): MutableLiveData<MutableList<BoardDetail>> {

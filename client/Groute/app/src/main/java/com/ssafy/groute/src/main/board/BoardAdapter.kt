@@ -10,6 +10,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
@@ -55,7 +56,7 @@ class BoardAdapter(var boardList : MutableList<BoardDetail>, val context: Contex
         fun bindInfo(data : BoardDetail){
             val userInfo = UserService().getUserInfo(data.userId)
             userInfo.observe(lifecycleOwner, {
-                var tmpUser = User(it.id, it.nickname, it.img.toString())
+                val tmpUser = User(it.id, it.nickname, it.img.toString())
                 binding.user = tmpUser
 //                    Glide.with(itemView)
 //                        .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
@@ -95,7 +96,7 @@ class BoardAdapter(var boardList : MutableList<BoardDetail>, val context: Contex
 
                 override fun onSuccess(code: Int, responseData: Boolean) {
                     if(responseData) {
-                        goodBtn.setColorFilter(context.resources.getColor(R.color.blue_500))
+                        goodBtn.setColorFilter(context.resources.getColor(R.color.red))
                     } else {
                         goodBtn.setColorFilter(context.resources.getColor(R.color.black))
                     }
@@ -105,18 +106,18 @@ class BoardAdapter(var boardList : MutableList<BoardDetail>, val context: Contex
                 }
             })
 
-            itemView.findViewById<TextView>(R.id.board_tv_writeTitle).setOnClickListener {
+            itemView.findViewById<ConstraintLayout>(R.id.boardItem_cL).setOnClickListener {
                 itemClickListener.onClick(it, position, data.id)
             }
+//
+//            itemView.findViewById<TextView>(R.id.board_tv_writeContent).setOnClickListener {
+//                itemClickListener.onClick(it, position, data.id)
+//            }
 
-            itemView.findViewById<TextView>(R.id.board_tv_writeContent).setOnClickListener {
-                itemClickListener.onClick(it, layoutPosition, data.id)
-            }
-
-            goodBtn.setOnClickListener {
-                goodBtnClickListener.onClick(it, layoutPosition, data.id)
-
-            }
+//            goodBtn.setOnClickListener {
+//                goodBtnClickListener.onClick(it, position, data.id)
+//
+//            }
         }
     }
 
@@ -132,15 +133,15 @@ class BoardAdapter(var boardList : MutableList<BoardDetail>, val context: Contex
         fun onClick(view: View, position: Int, id:Int)
     }
     private lateinit var itemClickListener : ItemClickListener
-    private lateinit var goodBtnClickListener: ItemClickListener
+//    private lateinit var goodBtnClickListener: ItemClickListener
 
     fun setItemClickListener(itemClickListener: ItemClickListener){
         this.itemClickListener = itemClickListener
     }
 
-    fun setLikeBtnClickListener(itemClickListener: ItemClickListener) {
-        this.goodBtnClickListener = itemClickListener
-    }
+//    fun setLikeBtnClickListener(itemClickListener: ItemClickListener) {
+//        this.goodBtnClickListener = itemClickListener
+//    }
 
 
     object DiffCallback : DiffUtil.ItemCallback<BoardDetail>() {

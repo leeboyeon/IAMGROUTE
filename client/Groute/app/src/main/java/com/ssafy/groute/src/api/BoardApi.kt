@@ -14,13 +14,17 @@ interface BoardApi {
     @GET("/boardDetail/list")
     fun listBoard() : Call<MutableList<BoardDetail>>
 
-    // 게시판 타입에 따른 게시글 리스트 조회 - coroutine ver.
-    @GET("/boardDetail/list/division")
-    fun listBoardDetail(@Query("boardId") boardId : Int) : Call<MutableList<BoardDetail>>
+//    // 게시판 타입에 따른 게시글 리스트 조회
+//    @GET("/boardDetail/list/division")
+//    fun listBoardDetail(@Query("boardId") boardId : Int) : Call<MutableList<BoardDetail>>
 
     // 게시판 타입에 따른 게시글 리스트 조회 - coroutine ver.
     @GET("/boardDetail/list/division")
     suspend fun getBoardPostList(@Query("boardId") boardId : Int) : Response<List<BoardDetail>>
+
+    // id에 해당하는 게시글과 댓글 조회 - coroutine ver.
+    @GET("/boardDetail/detail")
+    suspend fun getBoardDetailWithCmtByCor(@Query("id") id: Int) : Response<BoardDetailWithCommentResponse>
 
     /**
      * #S06P12D109-189
@@ -57,8 +61,9 @@ interface BoardApi {
     @GET("/boardDetail/detail")
     fun getListBoardDetail(@Query("id") id:Int) : Call<Map<String,Any>>
 
-    // id에 해당하는 게시글과 댓글 조회 - coroutine ver.
-    @GET("/boardDetail/detail")
-    suspend fun getBoardDetailWithCmtByCor(@Query("id") id: Int) : Response<BoardDetailWithCommentResponse>
+
+    // 로그인한 user가 해당 게시글에 좋아요 눌렀는지 체크
+    @POST("/boardDetail/isLike")
+    suspend fun isLikeBoardPost(@Query("boardDetailId") boardDetailId: Int, @Query("userId") userId: String) : Response<Boolean>
 
 }

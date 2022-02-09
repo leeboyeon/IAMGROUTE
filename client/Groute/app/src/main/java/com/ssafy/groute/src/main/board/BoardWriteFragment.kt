@@ -465,6 +465,9 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
             if(responseData > 0) {
                 mainActivity.moveFragment(5,"boardId", responseData)
                 showCustomToast("게시글 작성 성공")
+                runBlocking {
+                    boardViewModel.getBoardPostList(responseData)
+                }
             }
         }
 
@@ -485,6 +488,9 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
             if(responseData > 0) {
                 mainActivity.moveFragment(5,"boardId", responseData)
                 showCustomToast("게시글 수정 성공")
+                runBlocking {
+                    boardViewModel.getBoardPostList(responseData)
+                }
             }
         }
 

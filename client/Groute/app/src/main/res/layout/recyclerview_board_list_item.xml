@@ -14,6 +14,7 @@
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/boardItem_cL"
         android:layout_width="match_parent"
         android:layout_height="110dp">
 
@@ -56,12 +57,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
-            android:text="@{boardDetail.content}"
             android:textColor="@color/black"
             android:textSize="11sp"
+            android:text="@{boardDetail.content.length() > 15 ? boardDetail.content.substring(0, 15) : boardDetail.content}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/board_tv_writeTitle" />
-<!--            android:text="@{boardDetail.content.substring(0,15)}"-->
 
         <TextView
             android:id="@+id/board_tv_writeDate"
@@ -113,14 +113,14 @@
                 android:layout_height="15dp"
                 android:background="@android:color/transparent"
                 android:scaleType="centerCrop"
-                app:srcCompat="@drawable/boardhitcnt" />
+                app:srcCompat="@drawable/boardcommentcnt" />
 
             <TextView
                 android:id="@+id/board_tv_chatCnt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="@{String.valueOf(boardDetail.hitCnt)}"
+                android:text="@{String.valueOf(boardDetail.commentCnt)}"
                 android:textColor="@color/black"
                 android:textSize="11sp"
                 android:textStyle="bold" />
