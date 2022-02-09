@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:paddingHorizontal="20dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -46,21 +47,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
-                android:background="@color/red"
                 android:layout_weight="1"
-               />
+               >
+
+            </LinearLayout>
+            <!--                android:background="@color/red"-->
+            <TextView
+                android:id="@+id/item_swipe_memo_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="메모"
+                android:gravity="end|center_vertical"
+                android:textSize="16sp"
+                android:paddingRight="20dp"
+                android:background="@color/grey"
+                android:includeFontPadding="false"
+                android:layout_weight="2"/>
             <TextView
                 android:id="@+id/item_swipe_delete_tv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingRight="30dp"
+                android:paddingRight="20dp"
                 android:text="삭제"
                 android:textColor="@color/white"
                 android:background="@drawable/corner_radius"
                 android:textSize="16sp"
                 android:gravity="end|center_vertical"
                 android:includeFontPadding="false"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 />
 
 
@@ -113,32 +127,66 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
                 android:text="협재 해수욕장"
-                app:layout_constraintLeft_toRightOf="@id/item_travelplan_num_layout"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/item_travelplan_num_layout"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView10"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                app:layout_constraintStart_toEndOf="@+id/item_travelplan_num_layout"
+                app:layout_constraintTop_toBottomOf="@+id/item_travelplan_day_list_place_tv"
+                app:srcCompat="@drawable/loc" />
 
             <TextView
                 android:id="@+id/item_travelplan_day_list_loc_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="애월 한림"
-                android:textSize="16sp"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="20dp"
+                android:ellipsize="end"
                 android:includeFontPadding="false"
-                android:layout_marginStart="20dp"
-                android:layout_marginBottom="20dp"
+                android:maxLines="1"
+                android:text="애월 한림"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/item_travelplan_day_list_place_tv"
-                app:layout_constraintStart_toEndOf="@id/item_travelplan_num_layout"
+                app:layout_constraintStart_toEndOf="@+id/imageView10"
+                app:layout_constraintTop_toBottomOf="@id/item_travelplan_day_list_place_tv" />
+
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                app:layout_constraintBottom_toBottomOf="@+id/item_travel_memo"
+                app:layout_constraintStart_toEndOf="@+id/item_travelplan_num_layout"
+                app:layout_constraintTop_toBottomOf="@+id/item_travelplan_day_list_loc_tv"
+                app:srcCompat="@drawable/pin" />
+
+            <TextView
+                android:id="@+id/item_travel_memo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:text="memo"
                 app:layout_constraintBottom_toBottomOf="parent"
-                />
+                app:layout_constraintStart_toEndOf="@+id/imageView9"
+                app:layout_constraintTop_toBottomOf="@+id/item_travelplan_day_list_loc_tv" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
