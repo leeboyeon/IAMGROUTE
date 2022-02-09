@@ -28,13 +28,14 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
         val dottedLine1 = itemView.findViewById<RelativeLayout>(R.id.item_travelplan_dotted_line1)
         val dottedLine2 = itemView.findViewById<RelativeLayout>(R.id.item_travelplan_dotted_line2)
         val removeTv = itemView.findViewById<TextView>(R.id.item_swipe_delete_tv)
-
+        val memoTv = itemView.findViewById<TextView>(R.id.item_swipe_memo_tv)
+        val memo = itemView.findViewById<TextView>(R.id.item_travel_memo)
         @SuppressLint("LongLogTag", "SetTextI18n")
         fun bindInfo(data: RouteDetail, position: Int, flag: Int) {
             numTv.text = "${this.layoutPosition+1}"
             placeTv.text = data.place.name
             locTv.text = data.place.address
-
+            memo.text = data.memo
             // item의 위치에 따라 점선 보이거나 안보이거나 처리
             if(flag == 0) {
                 dottedLine1.visibility = View.GONE
@@ -51,6 +52,9 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
                 removeData(this.layoutPosition)
                 Toast.makeText(context, "삭제했습니다.", Toast.LENGTH_SHORT).show()
                 Log.d(TAG, "bindInfo: 리싸이클러뷰 아이템이 삭제되었습니다.")
+            }
+            memoTv.setOnClickListener {
+                memoClickListener.onClick(it,position,routeDetailList[position].placeId)
             }
         }
     }
@@ -69,6 +73,8 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
             } else {
                 bindInfo(routeDetailList[position], position, 2)
             }
+
+
         }
     }
 
@@ -122,5 +128,12 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
             }
 
         }
+    }
+    interface MemoClickListener{
+        fun onClick(view:View, position: Int,placeId:Int)
+    }
+    private lateinit var memoClickListener : MemoClickListener
+    fun setMemoClickListener(memoClickListener: MemoClickListener){
+        this.memoClickListener = memoClickListener
     }
 }
