@@ -40,12 +40,12 @@ public class UserPlanController {
         return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
-    @ApiOperation(value = "userPlan 반환",notes = "해당 place 포함한 경로 찾기")
+    @ApiOperation(value = "userPlan 반환",notes = "해당 place 포함한(flag=1) or 포함하지 않는(flag=2) 경로 찾기")
     @GetMapping(value = "/filter")
-    public ResponseEntity<?> filterUserPlan(@RequestParam("placeIds") List<Integer> placeIds) throws Exception{
+    public ResponseEntity<?> filterUserPlan(@RequestParam("placeIds") List<Integer> placeIds, @RequestParam("flag")int flag) throws Exception{
         List<UserPlan> userPlans = new ArrayList<>();
         try {
-            userPlans = userPlanService.selectAllByPlaceId(placeIds);
+            userPlans = userPlanService.selectAllByPlaceId(placeIds,flag);
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);

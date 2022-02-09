@@ -19,7 +19,7 @@ public interface UserPlanService {
     void likePlan(PlanLike planLike) throws Exception;
     PlanLike isLike(PlanLike planLike) throws Exception;
     void copyPlan(UserPlan userPlan, int planId, int day) throws Exception;
-    List<UserPlan> selectAllByPlaceId(List<Integer> placeIds) throws Exception;
+    List<UserPlan> selectAllByPlaceId(List<Integer> placeIds, int flag) throws Exception;
     List<UserPlan> bestPlanList() throws Exception;
     List<UserPlan> findEndPlanById(String userId) throws Exception;
     List<UserPlan> findNotEndPlanById(String userId) throws Exception;
