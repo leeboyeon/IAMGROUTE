@@ -96,7 +96,12 @@ class RouteFragment :
                     planViewModel.getPlanLikeList(userId)
                 }
             } else if(flag == 1) { // 전체루트추천
-
+                runBlocking {
+                    planViewModel.getUserPlanList()
+                    planViewModel.getThemeList()
+                    homeViewModel.getAreaLists()
+                    planViewModel.getPlanLikeList(userId)
+                }
             }
         }
 
@@ -164,11 +169,12 @@ class RouteFragment :
                     if(planId == -1) {
                         mainActivity.moveFragment(12, "planIdDetail", id, "planIdUser", planId)
                     } else {
-                        if(planViewModel.planList.value!!.totalDate < totalDate) {
-                            showTotalDateOverDialog()
-                        } else {
+//                        여행기간보다 일정이 초과되는 루트를 선택하면 경고 다이얼로그
+//                        if(planViewModel.planList.value!!.totalDate < totalDate) {
+//                            showTotalDateOverDialog()
+//                        } else {
                             mainActivity.moveFragment(12, "planIdDetail", id, "planIdUser", planId)
-                        }
+//                        }
                     }
 
                 }
@@ -203,6 +209,17 @@ class RouteFragment :
         binding.routeTabLayout.addTab(binding.routeTabLayout.newTab().setText("3박4일"))
         binding.routeTabLayout.addTab(binding.routeTabLayout.newTab().setText("4박5일"))
 
+        if(flag == 1) {
+            runBlocking {
+                planViewModel.getPlanById(planId, true)
+            }
+            var totalDate = planViewModel.currentUserPlan.value!!.totalDate
+            binding.routeTabLayout.getTabAt(totalDate)!!.select()
+            tabPosition = totalDate
+            planViewModel.getRoutebyDay(totalDate, selectedTheme)
+        }
+
+
         binding.routeTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.position) {
@@ -234,6 +251,7 @@ class RouteFragment :
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
+
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
