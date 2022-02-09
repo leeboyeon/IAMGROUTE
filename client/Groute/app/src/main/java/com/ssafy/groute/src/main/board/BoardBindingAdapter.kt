@@ -12,14 +12,15 @@ import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.dto.Comment
 
 private const val TAG = "BindingAdapter_groute"
-class BoardBindingAdatper {
+class BoardBindingAdapter {
     companion object {
         @JvmStatic
         @BindingAdapter("listData")
         fun bindRecyclerView(recyclerView: RecyclerView, data: List<BoardDetail>?) {
             val adapter = recyclerView.adapter as BoardAdapter
-            adapter.setList(data)
-            adapter.notifyDataSetChanged()
+            adapter.submitList(data)
+//            adapter.setList(data)
+//            adapter.notifyDataSetChanged()
         }
 
         @JvmStatic

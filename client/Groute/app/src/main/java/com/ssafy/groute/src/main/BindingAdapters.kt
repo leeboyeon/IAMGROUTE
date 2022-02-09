@@ -34,6 +34,28 @@ fun bindImagePlace(imgView: ImageView, imgUrl: String?) {
         .into(imgView)
 }
 
+@BindingAdapter("imageUrlUser")
+fun bindImageUser(imgView: ImageView, imgUrl: String?) {
+    if (imgUrl == "null" || imgUrl == null) {
+        Glide.with(imgView.context)
+            .load(R.drawable.user)
+            .circleCrop()
+            .into(imgView)
+    } else {
+        Glide.with(imgView.context)
+            .load("${ApplicationClass.IMGS_URL_USER}${imgUrl}")
+            .circleCrop()
+            .into(imgView)
+    }
+}
+
+@BindingAdapter("imageUrlBoardPost")    // + PlaceReview
+fun bindImageBoardPost(imgView: ImageView, imgUrl: String?) {
+    Glide.with(imgView.context)
+        .load("${ApplicationClass.IMGS_URL}${imgUrl}")
+        .into(imgView)
+}
+
 //@BindingAdapter("placeListData")  -> recycler view Adapter 사용할 때 쓰는 databinding
 //fun bindRecyclerView(recyclerView: RecyclerView, place: List<Place>?) {
 //    var adapter = recyclerView.adapter as AreaFilterAdapter

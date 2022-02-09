@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.groute.R
@@ -19,14 +20,15 @@ import com.ssafy.groute.src.main.board.BoardFragment.Companion.BOARD_QUESTION_TY
 import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.viewmodel.BoardViewModel
 import com.ssafy.groute.util.RetrofitCallback
+import kotlinx.coroutines.runBlocking
 
 private const val TAG = "BoardDetailF_Groute"
 class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoardDetailBinding::bind, R.layout.fragment_board_detail) {
 //    private lateinit var binding: FragmentBoardDetailBinding
     private lateinit var mainActivity: MainActivity
-    private lateinit var boardRecyclerAdapter:BoardRecyclerviewAdapter
+    private lateinit var boardRecyclerAdapter: BoardRecyclerviewAdapter
     private var boardDetailList = mutableListOf<BoardDetail>()
-    var boardViewModel: BoardViewModel = BoardViewModel()
+    val boardViewModel: BoardViewModel by activityViewModels()
     lateinit var userId: String
     private var boardId = -1
     private var boardDetailId = -1
@@ -71,52 +73,51 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
 
     }
     fun initViewModel(id : Int){
-        boardViewModel = ViewModelProvider(this).get(BoardViewModel::class.java)
+//        boardViewModel = ViewModelProvider(this).get(BoardViewModel::class.java)
 
         if(id == 1){
-            boardViewModel.boardFreeList.observe(viewLifecycleOwner, Observer {
+            boardViewModel.freeBoardPostList.observe(viewLifecycleOwner, Observer {
                 if(it != null){
                     boardRecyclerAdapter.setBoardList(it)
                     boardRecyclerAdapter.notifyDataSetChanged()
                 }
-            })
-            boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
-                override fun onClick(view: View, position: Int, name: String) { // BoardPostDetailFragment
-                    mainActivity.moveFragment(6,"boardDetailId", boardViewModel.boardFreeList.value!!.get(position).id)
-                }
+                boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
+                    override fun onClick(view: View, position: Int, name: String) { // BoardPostDetailFragment
+                        mainActivity.moveFragment(6,"boardDetailId", it[position].id)
+                    }
 
-                override fun isLIke(view: View, position: Int, id: Int) {
-                    boardLike(id, userId)
-                }
-            })
-            boardRecyclerAdapter.setModifyClickListener(object : BoardRecyclerviewAdapter.ItemModifyListener{   // BoardWriteFragment
-                override fun onClick(position: Int) {
-                    mainActivity.moveFragment(8,"boardDetailId",boardViewModel.boardFreeList.value!!.get(position).id)
-                }
+                    override fun isLIke(view: View, position: Int, id: Int) {
+                        boardLike(id, userId)
+                    }
+                })
+                boardRecyclerAdapter.setModifyClickListener(object : BoardRecyclerviewAdapter.ItemModifyListener{   // BoardWriteFragment
+                    override fun onClick(position: Int) {
+                        mainActivity.moveFragment(8,"boardDetailId", it[position].id)
+                    }
 
+                })
             })
-
-        }else if(id == 2){
-            boardViewModel.boardQuestionList.observe(viewLifecycleOwner, Observer {
+        } else if(id == 2){
+            boardViewModel.qnaBoardPostList.observe(viewLifecycleOwner, Observer {
                 if(it != null){
                     boardRecyclerAdapter.setBoardList(it)
                     boardRecyclerAdapter.notifyDataSetChanged()
                 }
-            })
-            boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
-                override fun onClick(view: View, position: Int, name: String) {
-                    mainActivity.moveFragment(6,"boardDetailId", boardViewModel.boardQuestionList.value!!.get(position).id)
-                }
 
-                override fun isLIke(view: View, position: Int, id: Int) {
-                    boardLike(id, userId)
-                }
-            })
-            boardRecyclerAdapter.setModifyClickListener(object : BoardRecyclerviewAdapter.ItemModifyListener{
-                override fun onClick(position: Int) {
-                    mainActivity.moveFragment(8,"boardDetailId",boardViewModel.boardQuestionList.value!!.get(position).id)
-                }
+                boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
+                    override fun onClick(view: View, position: Int, name: String) {
+                        mainActivity.moveFragment(6,"boardDetailId", it[position].id)
+                    }
+                    override fun isLIke(view: View, position: Int, id: Int) {
+                        boardLike(id, userId)
+                    }
+                })
 
+                boardRecyclerAdapter.setModifyClickListener(object : BoardRecyclerviewAdapter.ItemModifyListener{
+                    override fun onClick(position: Int) {
+                        mainActivity.moveFragment(8,"boardDetailId",it[position].id)
+                    }
+                })
             })
         }
 
@@ -147,15 +148,24 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
                 Log.d(TAG, "onSuccess: BoardDetail 찜하기 성공")
 
                 if(boardId == BOARD_FREE_TYPE) {
-                    boardViewModel.getBoardFreeList(viewLifecycleOwner)
-                    boardRecyclerAdapter.setBoardList(boardViewModel.boardFreeList.value)
-                    boardRecyclerAdapter.notifyDataSetChanged()
+                    runBlocking {
+                        boardViewModel.getBoardPostList(boardId)
+                    }
+                    boardRecyclerAdapter.setBoardList(boardViewModel.freeBoardPostList.value)
+//                    boardViewModel.getBoardFreeList(viewLifecycleOwner)
+//                    boardRecyclerAdapter.setBoardList(boardViewModel.boardFreeList.value)
+//                    boardRecyclerAdapter.notifyDataSetChanged()
                             //Log.d(TAG, "onSuccess: ${it}")
 
                 } else if(boardId == BOARD_QUESTION_TYPE) {
-                    boardViewModel.getBoardQuestionList(viewLifecycleOwner)
-                    boardRecyclerAdapter.setBoardList(boardViewModel.boardQuestionList.value)
-                    boardRecyclerAdapter.notifyDataSetChanged()
+                    runBlocking {
+                        boardViewModel.getBoardPostList(boardId)
+                    }
+                    boardRecyclerAdapter.setBoardList(boardViewModel.qnaBoardPostList.value)
+
+//                    boardViewModel.getBoardQuestionList(viewLifecycleOwner)
+//                    boardRecyclerAdapter.setBoardList(boardViewModel.boardQuestionList.value)
+//                    boardRecyclerAdapter.notifyDataSetChanged()
                 }
             }
 

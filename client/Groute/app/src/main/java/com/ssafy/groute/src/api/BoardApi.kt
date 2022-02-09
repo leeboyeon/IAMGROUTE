@@ -10,13 +10,17 @@ import retrofit2.http.*
 
 interface BoardApi {
 
-    // 자유게시판, 질문게시판 게시글 리스트 조회
+    // 자유게시판, 질문게시판 게시글 리스트 조회 -> 사용 X
     @GET("/boardDetail/list")
     fun listBoard() : Call<MutableList<BoardDetail>>
 
-    // 게시판 타입에 따른 리스트 조회
+    // 게시판 타입에 따른 게시글 리스트 조회 - coroutine ver.
     @GET("/boardDetail/list/division")
     fun listBoardDetail(@Query("boardId") boardId : Int) : Call<MutableList<BoardDetail>>
+
+    // 게시판 타입에 따른 게시글 리스트 조회 - coroutine ver.
+    @GET("/boardDetail/list/division")
+    suspend fun getBoardPostList(@Query("boardId") boardId : Int) : Response<List<BoardDetail>>
 
     /**
      * #S06P12D109-189

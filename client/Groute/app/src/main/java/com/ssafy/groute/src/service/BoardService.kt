@@ -17,6 +17,9 @@ import retrofit2.Response
 private const val TAG = "BoardService_groute"
 class BoardService {
 
+    /**
+     * @GET("/boardDetail/list")
+     */
     fun getBoardList(): LiveData<List<BoardDetail>> {
         val responseLiveData: MutableLiveData<List<BoardDetail>> = MutableLiveData()
         val boardListRequest: Call<MutableList<BoardDetail>> = RetrofitUtil.boardService.listBoard()
@@ -32,7 +35,6 @@ class BoardService {
                     Log.d(TAG, "onResponse: Error Code ${response.code()}")
                 }
             }
-
             override fun onFailure(call: Call<MutableList<BoardDetail>>, t: Throwable) {
                 Log.d(TAG, t.message ?: "통신오류")
             }
@@ -40,30 +42,32 @@ class BoardService {
         return responseLiveData
     }
 
-    fun getBoardDetailList(boardId: Int): MutableLiveData<MutableList<BoardDetail>> {
-        var responseLiveData: MutableLiveData<MutableList<BoardDetail>> = MutableLiveData()
-        val boardDetailListRequest: Call<MutableList<BoardDetail>> = RetrofitUtil.boardService.listBoardDetail(boardId)
-        boardDetailListRequest.enqueue(object : Callback<MutableList<BoardDetail>> {
-            override fun onResponse(call: Call<MutableList<BoardDetail>>, response: Response<MutableList<BoardDetail>>) {
-                var res = response.body()
-                if(response.code() == 200){
-                    if (res != null) {
-                        responseLiveData.postValue(res)
-                        //responseLiveData.value = res
-                        Log.d(TAG, "onResponse: $res")
-                    }
-                } else {
-                    Log.d(TAG, "onResponse: Error Code ${response.code()}")
-                }
-            }
 
-            override fun onFailure(call: Call<MutableList<BoardDetail>>, t: Throwable) {
-                responseLiveData.postValue(null)
-                Log.d(TAG, t.message ?: "통신오류")
-            }
-        })
-        return responseLiveData
-    }
+//    fun getBoardDetailList(boardId: Int): MutableLiveData<MutableList<BoardDetail>> {
+//        var responseLiveData: MutableLiveData<MutableList<BoardDetail>> = MutableLiveData()
+//        val boardDetailListRequest: Call<MutableList<BoardDetail>> = RetrofitUtil.boardService.listBoardDetail(boardId)
+//        boardDetailListRequest.enqueue(object : Callback<MutableList<BoardDetail>> {
+//            override fun onResponse(call: Call<MutableList<BoardDetail>>, response: Response<MutableList<BoardDetail>>) {
+//                var res = response.body()
+//                if(response.code() == 200){
+//                    if (res != null) {
+//                        responseLiveData.postValue(res)
+//                        //responseLiveData.value = res
+//                        Log.d(TAG, "onResponse: $res")
+//                    }
+//                } else {
+//                    Log.d(TAG, "onResponse: Error Code ${response.code()}")
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<MutableList<BoardDetail>>, t: Throwable) {
+//                responseLiveData.postValue(null)
+//                Log.d(TAG, t.message ?: "통신오류")
+//            }
+//        })
+//        return responseLiveData
+//    }
+
 //    suspend fun getBoardDetailList(boardId: Int): MutableList<BoardDetail> {
 //        var list = mutableListOf<BoardDetail>()
 //        val boardDetailListRequest: Call<MutableList<BoardDetail>> = RetrofitUtil.boardService.listBoardDetail(boardId)
@@ -238,6 +242,16 @@ class BoardService {
             }
         })
         return responseLiveData
+    }
+
+
+    /**
+     * 게시판 id에 해당하는 게시글 리스트 조회 - coroutine ver.
+     * @param boardId
+     * @return Response<List<BoardDetail>>
+     */
+    suspend fun getBoardPostList(boardId : Int) : Response<List<BoardDetail>> {
+        return RetrofitUtil.boardService.getBoardPostList(boardId)
     }
 
 

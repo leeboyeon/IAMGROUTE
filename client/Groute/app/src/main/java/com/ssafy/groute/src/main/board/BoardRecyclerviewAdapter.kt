@@ -20,10 +20,14 @@ import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
+import androidx.recyclerview.widget.ListAdapter
 import retrofit2.Retrofit
 
 private const val TAG = "BoardRecyclerviewAdapte"
-class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: MutableList<BoardDetail>, var boardType: Int, var context:Context) : RecyclerView.Adapter<BoardRecyclerviewAdapter.BoardHolder>(){
+//class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: MutableList<BoardDetail>, var boardType: Int, var context:Context) : RecyclerView.Adapter<BoardRecyclerviewAdapter.BoardHolder>(){
+class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: MutableList<BoardDetail>, var boardType: Int, var context:Context)
+    : ListAdapter<BoardDetail, BoardRecyclerviewAdapter.BoardHolder>(BoardAdapter.DiffCallback) {
+
     lateinit var ThemeAdapter: RouteThemeRecyclerviewAdapter
 
     var isEdit = false

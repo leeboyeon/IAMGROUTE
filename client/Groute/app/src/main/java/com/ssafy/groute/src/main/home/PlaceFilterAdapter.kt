@@ -157,6 +157,7 @@ class PlaceFilterAdapter(var placeList : MutableList<Place>, var likeList: LiveD
     fun setHeartClickListener(heartClickListener: HeartClickListener){
         this.heartClickListener = heartClickListener
     }
+
     object DiffCallback : DiffUtil.ItemCallback<Place>() {
         override fun areItemsTheSame(oldItem: Place, newItem: Place): Boolean {
             return oldItem === newItem

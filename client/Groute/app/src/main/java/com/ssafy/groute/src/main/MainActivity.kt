@@ -179,10 +179,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 transaction.replace(R.id.frame_main_layout,BoardWriteFragment.newInstance(key1, value1))
                     .addToBackStack(null)
             }
-            9->{    // 장소 검색 화면
-                transaction.replace(R.id.frame_main_layout, SearchFragment.newInstance(key1, value1))
-                    .addToBackStack(null)
-            }
+//            9->{    // 장소 검색 화면
+//                transaction.replace(R.id.frame_main_layout, SearchFragment.newInstance(key1, value1))
+//                    .addToBackStack(null)
+//            }
             10 ->{
                 logout()
             }
