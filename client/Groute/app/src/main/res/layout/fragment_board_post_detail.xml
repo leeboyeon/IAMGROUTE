@@ -5,6 +5,12 @@
 
     <data>
         <variable
+            name="loginUser"
+            type="com.ssafy.groute.src.dto.User" />
+        <variable
+            name="writeUser"
+            type="com.ssafy.groute.src.dto.User" />
+        <variable
             name="boardDetail"
             type="com.ssafy.groute.src.dto.BoardDetail" />
         <variable
@@ -73,14 +79,15 @@
                     android:id="@+id/boardDetail_iv_userImg"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:src="@drawable/circle_back" />
+                    android:src="@drawable/circle_back"
+                    app:imageUrlUser="@{writeUser.img}"/>
 
                 <TextView
                     android:id="@+id/boardDetail_tv_userName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="김싸피"
+                    android:text="@{writeUser.nickname}"
                     android:textColor="@color/black" />
 
             </LinearLayout>
@@ -106,6 +113,7 @@
                 android:layout_marginEnd="30dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/jejuplace4"
+                app:imageUrlBoardPost="@{boardDetail.img}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
@@ -140,33 +148,47 @@
                 app:layout_constraintTop_toBottomOf="@+id/boardDetail_tv_content">
 
                 <ImageView
-                    android:id="@+id/boardDdetail_like_iv"
+                    android:id="@+id/boardDetail_iv_heart"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginRight="15dp"
-                    android:src="@drawable/like"
-                    android:scaleType="centerInside"
-                    />
+                    android:src="@drawable/boardheartcnt"
+                    android:scaleType="centerInside"/>
 
                 <TextView
-                    android:id="@+id/boardDdetail_tv_heartCnt"
+                    android:id="@+id/boardDetail_tv_heartCnt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
-                    android:text="@{Integer.toString(boardDetail.heartCnt)}" />
+                    android:text="@{String.valueOf(boardDetail.heartCnt)}" />
 
                 <ImageView
-                    android:id="@+id/imageView3"
+                    android:id="@+id/boardDetail_iv_commentCnt"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginRight="15dp"
-                    app:srcCompat="@drawable/chat" />
+                    app:srcCompat="@drawable/boardcommentcnt" />
 
                 <TextView
-                    android:id="@+id/boardDdetail_tv_chatCnt"
+                    android:id="@+id/boardDetail_tv_commentCnt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{Integer.toString(boardViewModels.commentCount)}" />
+                    android:layout_marginRight="15dp"
+                    android:text="@{String.valueOf(boardDetail.commentCnt)}" />
+
+                <ImageView
+                    android:id="@+id/BoardDtail_iv_hitCnt"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="15dp"
+                    app:srcCompat="@drawable/boardhitcnt" />
+
+                <TextView
+                    android:id="@+id/boardDdetail_tv_hinCnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:text="@{String.valueOf(boardDetail.hitCnt)}" />
             </LinearLayout>
 
             <View
@@ -238,6 +260,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:src="@drawable/circle_back"
+                    app:imageUrlUser="@{loginUser.img}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/view" />

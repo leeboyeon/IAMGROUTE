@@ -1,6 +1,7 @@
 package com.ssafy.groute.src.api
 
 import com.ssafy.groute.src.dto.BoardDetail
+import com.ssafy.groute.src.dto.Comment
 import com.ssafy.groute.src.response.BoardDetailWithCommentResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -10,13 +11,21 @@ import retrofit2.http.*
 
 interface BoardApi {
 
-    // 자유게시판, 질문게시판 게시글 리스트 조회
+    // 자유게시판, 질문게시판 게시글 리스트 조회 -> 사용 X
     @GET("/boardDetail/list")
     fun listBoard() : Call<MutableList<BoardDetail>>
 
-    // 게시판 타입에 따른 리스트 조회
+//    // 게시판 타입에 따른 게시글 리스트 조회
+//    @GET("/boardDetail/list/division")
+//    fun listBoardDetail(@Query("boardId") boardId : Int) : Call<MutableList<BoardDetail>>
+
+    // 게시판 타입에 따른 게시글 리스트 조회 - coroutine ver.
     @GET("/boardDetail/list/division")
-    fun listBoardDetail(@Query("boardId") boardId : Int) : Call<MutableList<BoardDetail>>
+    suspend fun getBoardPostList(@Query("boardId") boardId : Int) : Response<List<BoardDetail>>
+
+    // id에 해당하는 게시글과 댓글 조회 - coroutine ver.
+    @GET("/boardDetail/detail")
+    suspend fun getBoardDetailWithCmtByCor(@Query("id") id: Int) : Response<BoardDetailWithCommentResponse>
 
     /**
      * #S06P12D109-189
@@ -42,7 +51,7 @@ interface BoardApi {
     @GET("/boardDetail/detail")
     fun getBoardDetailWithComment(@Query("id") id: Int) : Call<BoardDetailWithCommentResponse>
 
-    // 게시판 글 찜하기
+    // 게시판 글 찜하기 -> 좋아요 존재하면 삭제, 없으면 추가
     @POST("/boardDetail/like")
     fun likeBoard(@Query("boardDetailId") boardDetailId: Int, @Query("userId") userId: String) : Call<Any>
 
@@ -53,8 +62,12 @@ interface BoardApi {
     @GET("/boardDetail/detail")
     fun getListBoardDetail(@Query("id") id:Int) : Call<Map<String,Any>>
 
-    // id에 해당하는 게시글과 댓글 조회 - coroutine ver.
-    @GET("/boardDetail/detail")
-    suspend fun getBoardDetailWithCmtByCor(@Query("id") id: Int) : Response<BoardDetailWithCommentResponse>
 
+    // userId에 해당하는 user가 해당 게시글에 좋아요 눌렀는지 체크
+    @POST("/boardDetail/isLike")
+    suspend fun isLikeBoardPost(@Query("boardDetailId") boardDetailId: Int, @Query("userId") userId: String) : Response<Boolean>
+
+    // 게시글 id에 해당하는 comment List 조회
+    @GET("boardDetail/comment/postcommentlist")
+    suspend fun getPostCommentList(@Query("boardDetailId") boardDetailId: Int) : Response<MutableList<Comment>>
 }

@@ -1,54 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/comment_nested_iv_userImg"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="20dp"
-        android:scaleType="centerInside"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/circle_back" />
+    <data>
+        <variable
+            name="user"
+            type="com.ssafy.groute.src.dto.User" />
+        <variable
+            name="comment"
+            type="com.ssafy.groute.src.dto.Comment" />
+    </data>
 
-    <TextView
-        android:id="@+id/comment_nested_tv_userNick"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:text="최지우"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toEndOf="@+id/comment_nested_iv_userImg"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/comment_nested_tv_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="10dp"
-        android:text="최지우진짜진짜 자닌해....자닌해진쨔..."
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comment_nested_tv_userNick" />
+        <ImageView
+            android:id="@+id/comment_nested_iv_userImg"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="20dp"
+            android:scaleType="centerInside"
+            app:imageUrlUser="@{user.img}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/circle_back" />
 
-    <ImageView
-        android:id="@+id/comment_nested_more_iv"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="20dp"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/comment_nested_tv_userNick"
-        app:layout_constraintBottom_toBottomOf="@id/comment_nested_tv_userNick"
-        android:src="@drawable/more_horiz"/>
+        <TextView
+            android:id="@+id/comment_nested_tv_userNick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:text="@{user.nickname}"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toEndOf="@+id/comment_nested_iv_userImg"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/comment_nested_tv_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:text="@{comment.content}"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/comment_nested_tv_userNick" />
+<!--            android:text="최지우진짜진짜 자닌해....자닌해진쨔..."-->
+
+        <ImageView
+            android:id="@+id/comment_nested_more_iv"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="20dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/comment_nested_tv_userNick"
+            app:layout_constraintBottom_toBottomOf="@id/comment_nested_tv_userNick"
+            android:src="@drawable/more_horiz"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

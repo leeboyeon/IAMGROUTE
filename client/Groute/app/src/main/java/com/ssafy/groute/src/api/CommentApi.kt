@@ -3,6 +3,7 @@ package com.ssafy.groute.src.api
 import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.dto.Comment
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 interface CommentApi {
@@ -22,4 +23,8 @@ interface CommentApi {
     // 게시판 댓글 조회
     @GET("/boardDetail/comment/detail")
     fun selectBoardComment(@Query("id") id: Int) : Call<Comment>
+
+    // 게시글에 해당하는 댓글 조회 - coroutine ver.
+    @GET("/boardDetail/comment/postcommentlist")
+    suspend fun getBoardCommentList(@Query("boardDetailId") boardDetailId: Int) : Response<MutableList<Comment>>
 }

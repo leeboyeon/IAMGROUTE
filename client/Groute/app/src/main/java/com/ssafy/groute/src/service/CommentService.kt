@@ -95,4 +95,8 @@ class CommentService {
         })
         return responseLiveData
     }
+
+    suspend fun getCmtListByBoardDetailId(boardDetailId : Int) : Response<MutableList<Comment>>{
+        return RetrofitUtil.commentService.getBoardCommentList(boardDetailId)
+    }
 }

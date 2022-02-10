@@ -28,6 +28,7 @@ import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseActivity
 import com.ssafy.groute.databinding.ActivityMainBinding
+import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.login.LoginActivity
 import com.ssafy.groute.src.main.board.*
 import com.ssafy.groute.src.main.home.HomeFragment
@@ -51,6 +52,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.runBlocking
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
@@ -72,6 +74,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        initProfileBar()
+
         // Naver Logout init
         mOAuthLoginInstance = OAuthLogin.getInstance()
         mOAuthLoginInstance.init(this, getString(R.string.naver_client_id), getString(R.string.naver_client_secret), getString(R.string.naver_client_name))
@@ -123,7 +128,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             }
         }
 
-        initProfileBar()
+
 
         // kakao map api key hash
 //        getHashKey()
@@ -141,7 +146,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
 
         binding.lifecycleOwner = this
-        binding.viewModeluser = viewModel
+//        binding.viewModeluser = viewModel
     }
     fun openFragment(index:Int, key1:String, value1:Int, key2:String, value2:Int){
         val transaction = supportFragmentManager.beginTransaction()
@@ -180,10 +185,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 transaction.replace(R.id.frame_main_layout,BoardWriteFragment.newInstance(key1, value1))
                     .addToBackStack(null)
             }
-            9->{    // 장소 검색 화면
-                transaction.replace(R.id.frame_main_layout, SearchFragment.newInstance(key1, value1))
-                    .addToBackStack(null)
-            }
+//            9->{    // 장소 검색 화면
+//                transaction.replace(R.id.frame_main_layout, SearchFragment.newInstance(key1, value1))
+//                    .addToBackStack(null)
+//            }
             10 ->{
                 logout()
             }
@@ -238,24 +243,31 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     // 프로필바 사용자 정보 갱신
     fun initProfileBar() {
-        var user = ApplicationClass.sharedPreferencesUtil.getUser()
+        val userId = ApplicationClass.sharedPreferencesUtil.getUser().id
 
-        viewModel.getUser().observe(this, Observer {
-            binding.mainTvUsername.text = it.nickname
-            if(it.type.equals("sns")){
-                Log.d(TAG, "initProfileBar_SNS: ${it.img}")
-                Glide.with(this)
-                    .load(it.img)
-                    .circleCrop()
-                    .into(binding.mainIvUserimg)
-            } else {
-                Log.d(TAG, "initProfileBar: ${it.img}")
-                Glide.with(this)
-                    .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
-                    .circleCrop()
-                    .into(binding.mainIvUserimg)
-            }
+        runBlocking {
+            viewModel.getUserInformation(userId, true)
+        }
+        viewModel.loginUserInfo.observe(this, {
+            val user = User(it.id, it.nickname, it.img.toString())
+            binding.user = user
         })
+//        viewModel.getUser().observe(this, Observer {
+//            binding.mainTvUsername.text = it.nickname
+//            if(it.type.equals("sns")){
+//                Log.d(TAG, "initProfileBar_SNS: ${it.img}")
+//                Glide.with(this)
+//                    .load(it.img)
+//                    .circleCrop()
+//                    .into(binding.mainIvUserimg)
+//            } else {
+//                Log.d(TAG, "initProfileBar: ${it.img}")
+//                Glide.with(this)
+//                    .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
+//                    .circleCrop()
+//                    .into(binding.mainIvUserimg)
+//            }
+//        })
 
 
     }

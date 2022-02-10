@@ -1,6 +1,7 @@
 package com.ssafy.groute.src.main
 
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
@@ -10,7 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.src.dto.*
-import com.ssafy.groute.src.main.board.SearchAdapter
+import com.ssafy.groute.src.main.board.*
 import com.ssafy.groute.src.main.home.PlaceFilterAdapter
 import com.ssafy.groute.src.main.home.ReviewAdapter
 import com.ssafy.groute.src.main.my.MyTravel
@@ -32,6 +33,41 @@ fun bindImagePlace(imgView: ImageView, imgUrl: String?) {
     Glide.with(imgView.context)
         .load("${ApplicationClass.IMGS_URL_PLACE}${imgUrl}")
         .into(imgView)
+}
+
+@BindingAdapter("imageUrlUser")
+fun bindImageUser(imgView: ImageView, imgUrl: String?) {
+    if (imgUrl == "null" || imgUrl == null) {
+        Glide.with(imgView.context)
+            .load(R.drawable.user)
+            .circleCrop()
+            .into(imgView)
+    } else {
+        if(imgUrl.contains("https://")) {
+            Glide.with(imgView.context)
+                .load(imgUrl)
+                .circleCrop()
+                .into(imgView)
+        } else {
+            Glide.with(imgView.context)
+                .load("${ApplicationClass.IMGS_URL_USER}${imgUrl}")
+                .circleCrop()
+                .into(imgView)
+        }
+    }
+}
+
+@BindingAdapter("imageUrlBoardPost")    // + PlaceReview
+fun bindImageBoardPost(imgView: ImageView, imgUrl: String?) {
+
+    if (imgUrl == "null" || imgUrl == null) {
+        imgView.visibility = View.GONE
+    } else {
+        imgView.visibility = View.VISIBLE
+        Glide.with(imgView.context)
+            .load("${ApplicationClass.IMGS_URL}${imgUrl}")
+            .into(imgView)
+    }
 }
 
 //@BindingAdapter("placeListData")  -> recycler view Adapter 사용할 때 쓰는 databinding
@@ -175,3 +211,76 @@ fun bindbottomSheetRecyclerView(recyclerView: RecyclerView, data: List<UserPlan>
     adapter.notifyDataSetChanged()
 }
 
+
+/**
+ * board 관련 bindingAdapter
+ */
+@BindingAdapter("listData") // BoardFragment + BoardAdapter
+fun bindBoardRecyclerView(recyclerView: RecyclerView, data: List<BoardDetail>?) {
+    var adapter = recyclerView.adapter as BoardAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as BoardAdapter
+    }
+    adapter.boardList = data as MutableList<BoardDetail>
+    adapter.notifyDataSetChanged()
+//    adapter.submitList(data)
+//            adapter.setList(data)
+//            adapter.notifyDataSetChanged()
+}
+
+@BindingAdapter("boardPostListData")
+fun bindBoardPostListRecyclerView(recyclerView: RecyclerView, data: List<BoardDetail>?) {
+    var adapter = recyclerView.adapter as BoardRecyclerviewAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as BoardRecyclerviewAdapter
+    }
+    adapter.boardList = data as MutableList<BoardDetail>
+    adapter.notifyDataSetChanged()
+//    adapter.submitList(data)
+}
+
+@BindingAdapter("listCommentData")
+fun bindCommentRecyclerView(recyclerView: RecyclerView, data: List<Comment>?) {
+    var adapter = recyclerView.adapter as CommentAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as CommentAdapter
+    }
+    adapter.commentList = data as MutableList<Comment>
+    adapter.notifyDataSetChanged()
+//    adapter.submitList(data)
+//    adapter.setCommentList(data)
+//    adapter.notifyDataSetChanged()
+}
+
+@BindingAdapter("listCommentNestedData")
+fun bindCommentNestedRecyclerView(recyclerView: RecyclerView, data: List<Comment>?) {
+    var adapter = recyclerView.adapter as CommentNestedAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as CommentNestedAdapter
+    }
+    adapter.commentList = data as MutableList<Comment>
+    adapter.notifyDataSetChanged()
+//    adapter.submitList(data)
+//    adapter.setCommentNestedList(data)
+//    adapter.notifyDataSetChanged()
+}
+
+
+//@BindingAdapter("listNestedData")
+//fun bindtNestedRecyclerView(recyclerView: RecyclerView, data: List<Comment>?) {
+//    val adapter = recyclerView.adapter as CommentNestedAdapter
+//    adapter.setCommentNestedList(data)
+//    adapter.notifyDataSetChanged()
+//}

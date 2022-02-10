@@ -11,102 +11,131 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.databinding.RecyclerviewCommentListItemBinding
+import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.dto.Comment
+import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.CommentService
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.src.viewmodel.BoardViewModel
+import com.ssafy.groute.src.viewmodel.MainViewModel
 import com.ssafy.groute.util.RetrofitCallback
+import kotlinx.coroutines.runBlocking
 
 private const val TAG = "CommentAdapter_groute"
-class CommentAdapter(val context: Context, val lifecycleOwner: LifecycleOwner, val boardViewModel: BoardViewModel) : RecyclerView.Adapter<CommentAdapter.CommentHolder>(){
-    var list = mutableListOf<Comment>()
+class CommentAdapter(var commentList : MutableList<Comment>, val context: Context, val lifecycleOwner: LifecycleOwner, val boardViewModel: BoardViewModel, val mainViewModel: MainViewModel) : RecyclerView.Adapter<CommentAdapter.CommentHolder>(){
+//class CommentAdapter(val commentList : MutableList<Comment>, val context: Context, val lifecycleOwner: LifecycleOwner, val boardViewModel: BoardViewModel, val mainViewModel: MainViewModel)
+//    : ListAdapter<Comment, CommentAdapter.CommentHolder>(DiffCallback){
+//    var list = mutableListOf<Comment>()
 
     // 현재 로그인한 유저의 아이디
     val userId = ApplicationClass.sharedPreferencesUtil.getUser().id
 
-    fun setCommentList(list: List<Comment>?) {
-        if(list == null) {
-            this.list = ArrayList()
-        } else {
-            this.list = list.toMutableList()!!
-            notifyDataSetChanged()
-        }
-    }
+//    fun setCommentList(list: List<Comment>?) {
+//        if(list == null) {
+//            this.list = ArrayList()
+//        } else {
+//            this.list = list.toMutableList()!!
+//            notifyDataSetChanged()
+//        }
+//    }
 
-    inner class CommentHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    inner class CommentHolder(private val binding: RecyclerviewCommentListItemBinding) : RecyclerView.ViewHolder(binding.root){
         val more = itemView.findViewById<ImageView>(R.id.comment_more_iv)
         val commentNestedTv = itemView.findViewById<TextView>(R.id.comment_nested_btn)
         val commentNestedRv = itemView.findViewById<RecyclerView>(R.id.comment_nested_rv)
         fun bindInfo(data : Comment){
-            val userInfo = UserService().getUserInfo(data.userId)
-            userInfo.observe(
-                lifecycleOwner, {
-                    Glide.with(itemView)
-                        .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
-                        .circleCrop()
-                        .into(itemView.findViewById(R.id.comment_detail_iv_userImg))
-                    itemView.findViewById<TextView>(R.id.comment_detail_tv_userNick).text = it.nickname
-                }
-            )
-            itemView.findViewById<TextView>(R.id.comment_detail_tv_comment).text = data.content
-
             if(userId != data.userId) { // 로그인한 유저 댓글이 아닐 때
                 more.visibility = View.GONE
             }
 
-            // 답글 달기 버튼을 눌렀을 때
-            commentNestedTv.setOnClickListener {
-                itemClickListener.onCommentNestedClick(layoutPosition, data)
+            runBlocking {
+                mainViewModel.getUserInformation(data.userId, false)
+                val user = mainViewModel.userInformation.value!!
+                val writeUser = User(user.id, user.nickname, user.img.toString())
+                binding.writeUser = writeUser
             }
 
-            var commentNestedAdapter = CommentNestedAdapter(context, lifecycleOwner, true)
-            BoardService().getBoardDetailWithComment(data.boardDetailId).observe(
-                lifecycleOwner,
-                {
-                    var list = mutableListOf<Comment>()
-                    for(i in 0 until it.commentList.size) {
-                        if(it.commentList.get(i).groupNum == data.groupNum) {
-                            if(it.commentList.get(i).level == 1) {
-                                list.add(it.commentList.get(i))
-                            }
-                        }
-                    }
-                    Log.d(TAG, "bindInfo CommentAdapter: ${list}")
-                    commentNestedAdapter.setCommentNestedList(list)
-                    commentNestedRv.apply{
-                        layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-                        adapter = commentNestedAdapter
-                        adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-                    }
-                    commentNestedAdapter.setItemClickListener(object: CommentNestedAdapter.ItemClickListener {
-                        override fun onEditClick(position: Int, comment: Comment) {
-                        }
+            binding.comment = data
+//            binding.boardViewModels = boardViewModel
+            binding.executePendingBindings()
 
-                    })
+
+            boardViewModel.commentAllList.observe(lifecycleOwner, {
+                val list = mutableListOf<Comment>()
+                for(i in 0 until it.size) {
+                    if(it[i].groupNum == data.groupNum) {
+                        if(it[i].level == 1) {
+                            list.add(it[i])
+                            Log.d(TAG, "bindInfo: ${it[i]}, $list")
+                        }
+                    }
                 }
-            )
+                Log.d(TAG, "bindInfo CommentAdapter: ${list}")
+//                    commentNestedAdapter.setCommentNestedList(list)
+                // 같은 그룹인 comment list
+                val commentNestedAdapter = CommentNestedAdapter(list, context, lifecycleOwner, true, mainViewModel)
+//                commentNestedAdapter.submitList(list)
+                commentNestedRv.apply{
+                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+                    adapter = commentNestedAdapter
+                    adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+                }
+                commentNestedAdapter.setItemClickListener(object: CommentNestedAdapter.ItemClickListener {
+                    override fun onEditClick(position: Int, comment: Comment) {
+                    }
+                })
+            })
+
+
+
+//            val userInfo = UserService().getUserInfo(data.userId)
+//            userInfo.observe(
+//                lifecycleOwner, {
+//                    Glide.with(itemView)
+//                        .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
+//                        .circleCrop()
+//                        .into(itemView.findViewById(R.id.comment_detail_iv_userImg))
+//                    itemView.findViewById<TextView>(R.id.comment_detail_tv_userNick).text = it.nickname
+//                }
+//            )
+//            itemView.findViewById<TextView>(R.id.comment_detail_tv_comment).text = data.content
+
+
+
+
+
 
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentHolder{
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_comment_list_item,parent,false)
-        return CommentHolder(view)
+//        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_comment_list_item,parent,false)
+//        return CommentHolder(view)
+        return CommentHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.recyclerview_comment_list_item, parent, false))
     }
 
     override fun onBindViewHolder(holder: CommentHolder, position: Int) {
         holder.apply {
-            bindInfo(list[position])
+            bindInfo(commentList[position])
 
+            // 답글 달기 버튼을 눌렀을 때
+            commentNestedTv.setOnClickListener {
+                itemClickListener.onCommentNestedClick(position, commentList[position])
+            }
 
+            // 더보기 버튼 클릭
             more.setOnClickListener {
                 val popup: PopupMenu = PopupMenu(context,more)
                 MenuInflater(context).inflate(R.menu.board_menu_item, popup.menu)
@@ -115,15 +144,15 @@ class CommentAdapter(val context: Context, val lifecycleOwner: LifecycleOwner, v
                 popup.setOnMenuItemClickListener {
                     when(it.itemId){
                         R.id.menu_edit -> {
-                            itemClickListener.onEditClick(position, list[position])
+                            itemClickListener.onEditClick(position, commentList[position])
                             return@setOnMenuItemClickListener true
                         }
                         R.id.menu_delete ->{
-                            CommentService().deleteBoardComment(list[position].id, DeleteCallback(position))
+                            CommentService().deleteBoardComment(commentList[position].id, DeleteCallback(position))
                             return@setOnMenuItemClickListener true
-                        }else->{
-                        return@setOnMenuItemClickListener false
-                    }
+                        } else -> {
+                            return@setOnMenuItemClickListener false
+                        }
                     }
                 }
             }
@@ -131,7 +160,7 @@ class CommentAdapter(val context: Context, val lifecycleOwner: LifecycleOwner, v
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return commentList.size
     }
 
     interface ItemClickListener{
@@ -151,13 +180,24 @@ class CommentAdapter(val context: Context, val lifecycleOwner: LifecycleOwner, v
         override fun onSuccess(code: Int, responseData: Any) {
             if(responseData == "SUCCESS"){
                 Toast.makeText(context,"삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                list.removeAt(position)
+                commentList.removeAt(position)
                 notifyDataSetChanged()
             }
         }
 
         override fun onFailure(code: Int) {
             Log.d(TAG, "onFailure: ${code}")
+        }
+    }
+
+
+    object DiffCallback : DiffUtil.ItemCallback<Comment>() {
+        override fun areItemsTheSame(oldItem: Comment, newItem: Comment): Boolean {
+            return oldItem === newItem
+        }
+
+        override fun areContentsTheSame(oldItem: Comment, newItem: Comment): Boolean {
+            return oldItem.id == newItem.id
         }
     }
 }

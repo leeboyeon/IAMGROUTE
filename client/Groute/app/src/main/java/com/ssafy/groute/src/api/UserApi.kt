@@ -25,6 +25,10 @@ interface UserApi {
     @GET("/user/{userId}")
     fun getUserInfo(@Path("userId") userId: String): Call<UserInfoResponse>
 
+    // 사용자의 아이디에 해당하는 사용자 정보를 반환 - coroutine ver.
+    @GET("/user/{userId}")
+    suspend fun getUser(@Path("userId") userId: String): Response<UserInfoResponse>
+
     // 회원가입
     @POST("/user/signup")
     fun signUp(@Body user:User) : Call<Boolean>

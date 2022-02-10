@@ -4,12 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="boardDetail"
             type="com.ssafy.groute.src.dto.BoardDetail" />
+        <variable
+            name="user"
+            type="com.ssafy.groute.src.dto.User" />
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/boardItem_cL"
         android:layout_width="match_parent"
         android:layout_height="110dp">
 
@@ -21,7 +26,8 @@
             android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/circle_back" />
+            app:srcCompat="@drawable/circle_back"
+            app:imageUrlUser="@{user.img}"/>
 
         <TextView
             android:id="@+id/board_tv_write_userNick"
@@ -29,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:text="김싸피"
+            android:text="@{user.nickname}"
             android:textColor="@color/black"
             app:layout_constraintStart_toEndOf="@+id/board_iv_userImg"
             app:layout_constraintTop_toTopOf="parent" />
@@ -51,9 +57,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
-            android:text="@{boardDetail.content.substring(0,15)}"
             android:textColor="@color/black"
             android:textSize="11sp"
+            android:text="@{boardDetail.content.length() > 15 ? boardDetail.content.substring(0, 15) : boardDetail.content}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/board_tv_writeTitle" />
 
@@ -64,7 +70,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="@{boardDetail.updateDate}"
+            android:text="@{boardDetail.createDate}"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +93,7 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/good2"
+                android:src="@drawable/boardheartcnt"
                 app:tint="@color/black" />
 
             <TextView
@@ -96,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="10dp"
-                android:text="50"
+                android:text="@{String.valueOf(boardDetail.heartCnt)}"
                 android:textColor="@color/black"
                 android:textSize="11sp"
                 android:textStyle="bold" />
@@ -107,14 +113,14 @@
                 android:layout_height="15dp"
                 android:background="@android:color/transparent"
                 android:scaleType="centerCrop"
-                app:srcCompat="@drawable/chat" />
+                app:srcCompat="@drawable/boardcommentcnt" />
 
             <TextView
                 android:id="@+id/board_tv_chatCnt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:text="11"
+                android:text="@{String.valueOf(boardDetail.commentCnt)}"
                 android:textColor="@color/black"
                 android:textSize="11sp"
                 android:textStyle="bold" />
