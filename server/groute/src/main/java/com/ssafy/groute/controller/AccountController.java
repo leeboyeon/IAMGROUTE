@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = { "*" }, methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT,
@@ -107,10 +108,18 @@ public class AccountController {
     public ResponseEntity<?> selectAllCategory() throws Exception{
 
         List<AccountCategory> res = accountCategoryService.selectAllAccountCategory();
+        return new ResponseEntity<List<AccountCategory>>(res,HttpStatus.OK);
+    }
+
+
+    @ApiOperation(value = "category별 총금액",notes = "planId로 검색")
+    @GetMapping(value = "/priceByCategory")
+    public ResponseEntity<?> totalPriceByCategory(@RequestParam("planId") int planId) throws Exception{
+
+        Map res = accountService.totalCategoryPriceByPlanId(planId);
         if(res==null){
             return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
-
-        return new ResponseEntity<List<AccountCategory>>(res,HttpStatus.OK);
+        return new ResponseEntity<Map>(res,HttpStatus.OK);
     }
 }

@@ -15,4 +15,5 @@ public interface AccountMapper {
     void deleteAllAccountByRId(int routesId) throws Exception;
     List<Account> selectByUserPlanId(int userPlanId) throws Exception;
     void deleteByUserPlanId(int userPlanId) throws Exception;
+    Integer totalCategoryPriceByPlanId(int userPlanId, int categoryId) throws Exception;
 }
