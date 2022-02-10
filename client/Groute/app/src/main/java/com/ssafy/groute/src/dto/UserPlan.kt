@@ -21,4 +21,6 @@ data class UserPlan(
 
     constructor(id: Int,userId: String,title: String,description: String,startDate: String,endDate: String,totalDate: Int,isPublic: String,rate: Double,heartCnt: Int,areaId: Int, themeIdList: List<Int>, reviewCnt: Int)
         :this(areaId, description, endDate, heartCnt, id, isPublic, rate, startDate, themeIdList, title, totalDate, userId, reviewCnt)
+
+    constructor() : this(0, null, "", 0, 0, "", 0.0, "", listOf(), "", 0, "", 0)
 }

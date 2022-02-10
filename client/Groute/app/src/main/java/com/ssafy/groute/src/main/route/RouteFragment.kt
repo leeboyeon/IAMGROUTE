@@ -52,7 +52,7 @@ class RouteFragment :
     var selectedTheme = mutableListOf<Int>()
     var tabPosition = 0
     private var planId = -1 // TravelPlanFragment에서 넘어오는 사용자의 일정 아이디
-    private var flag = -1  // 장소별루트추천인지, 전체루트추천인지 판별
+    private var flag = -1  // 장소별루트추천, 장소제외루트추천, 전체루트추천 판별
     lateinit var userId: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

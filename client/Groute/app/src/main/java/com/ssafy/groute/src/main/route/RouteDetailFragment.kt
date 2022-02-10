@@ -40,7 +40,8 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
     private var planIdUser = -1
     private val planViewModel: PlanViewModel by activityViewModels()
     private lateinit var bottomSheetRecyclerviewAdapter: BottomSheetRecyclerviewAdapter
-    private var addDay = -1 // 선택한 day에 일정 추가
+    private var addDay = -1 // 선택한 day에 루트 추가
+    private var selectUserPlan = UserPlan() // 선택한 userPlan에 루트 추가
     private var isAddPlan = false
 
     @SuppressLint("LongLogTag")
@@ -158,9 +159,16 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
             }
 
             bottomSheetRecyclerviewAdapter.setItemClickListener(object : BottomSheetRecyclerviewAdapter.ItemClickListener {
-                override fun onClick(position: Int, day: Int) {
+                override fun onClickDay(position: Int, day: Int) {
                     Log.d(TAG, "onClick day: $day")
                     addDay = day
+                }
+
+                override fun onClickPlan(position: Int, userPlan: UserPlan) {
+                    bottomSheetRecyclerviewAdapter.notifyDataSetChanged()
+                    Log.d(TAG, "onClickPlan: $id")
+                    selectUserPlan = userPlan
+
                 }
 
             })
@@ -171,8 +179,8 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         dialog.setContentView(dialogView)
         dialogView.findViewById<RelativeLayout>(R.id.bottom_sheet_route_add_btn)
             .setOnClickListener {
-                if(addDay != -1) {
-                    UserPlanService().insertPlanToUserPlan(addDay, planViewModel.planList.value!!.id, planViewModel.currentUserPlan.value!!, object : RetrofitCallback<Boolean> {
+                if(addDay != -1 && selectUserPlan.id != 0) {
+                    UserPlanService().insertPlanToUserPlan(addDay, planViewModel.planList.value!!.id, selectUserPlan, object : RetrofitCallback<Boolean> {
                         override fun onError(t: Throwable) {
                             Log.d(TAG, "onError: 루트 반자동 추가 에러")
                         }
@@ -189,8 +197,12 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
 
                     })
                     dialog.dismiss()
-                } else {
+                } else if(addDay == -1 && selectUserPlan.id != 0){
                     showCustomToast("day를 선택해주세요.")
+                } else if(selectUserPlan.id == 0 && addDay != -1) {
+                    showCustomToast("일정을 선택해주세요.")
+                } else{
+                    showCustomToast("일정과 day를 선택해주세요.")
                 }
 
             }
