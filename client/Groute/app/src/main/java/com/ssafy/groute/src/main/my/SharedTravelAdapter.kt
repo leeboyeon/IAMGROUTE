@@ -25,7 +25,7 @@ class SharedTravelAdapter()  : RecyclerView.Adapter<SharedTravelAdapter.SharedHo
     }
     inner class SharedHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bindInfo(data : UserPlan){
-            itemView.findViewById<TextView>(R.id.home_best_title).text = data.title
+            itemView.findViewById<TextView>(R.id.home_best_title).text = "[제주도] ${data.title}"
         }
 
     }
@@ -39,7 +39,7 @@ class SharedTravelAdapter()  : RecyclerView.Adapter<SharedTravelAdapter.SharedHo
         holder.apply {
             bindInfo(list[position])
             itemView.setOnClickListener {
-                itemClickListener.onClick(it, position, list[position].title)
+                itemClickListener.onClick(it, position, list[position].id)
             }
         }
     }
@@ -49,7 +49,7 @@ class SharedTravelAdapter()  : RecyclerView.Adapter<SharedTravelAdapter.SharedHo
     }
 
     interface ItemClickListener{
-        fun onClick(view: View, position: Int, name: String)
+        fun onClick(view: View, position: Int, id: Int)
     }
     private lateinit var itemClickListener : ItemClickListener
     fun setItemClickListener(itemClickListener: ItemClickListener){

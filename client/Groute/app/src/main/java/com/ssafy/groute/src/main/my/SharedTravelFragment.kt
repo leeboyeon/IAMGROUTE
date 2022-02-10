@@ -55,6 +55,12 @@ class SharedTravelFragment : BaseFragment<FragmentSharedTravelBinding>(FragmentS
                 adapter = sharedAdapter
                 adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
+            sharedAdapter.setItemClickListener(object : SharedTravelAdapter.ItemClickListener{
+                override fun onClick(view: View, position: Int, id: Int) {
+                    mainActivity.moveFragment(12, "planIdDetail", id, "planIdUser", -1)
+                }
+
+            })
         })
 
     }
