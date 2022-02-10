@@ -52,7 +52,7 @@ class RouteFragment :
     var selectedTheme = mutableListOf<Int>()
     var tabPosition = 0
     private var planId = -1 // TravelPlanFragment에서 넘어오는 사용자의 일정 아이디
-    private var flag = -1  // 장소별루트추천인지, 전체루트추천인지 판별
+    private var flag = -1  // 장소별루트추천, 장소제외루트추천, 전체루트추천 판별
     lateinit var userId: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +63,7 @@ class RouteFragment :
     override fun onResume() {
         super.onResume()
         mainActivity.hideBottomNav(false)
+        binding.routeListNoneTxt.visibility = View.GONE
     }
 
     override fun onAttach(context: Context) {
@@ -80,28 +81,15 @@ class RouteFragment :
         userId = ApplicationClass.sharedPreferencesUtil.getUser().id
         binding.viewModel = planViewModel
         if(planId == -1) { // 그냥 루트 페이지
-            runBlocking {
-                planViewModel.getUserPlanList()
-                planViewModel.getThemeList()
-                homeViewModel.getAreaLists()
-                planViewModel.getPlanLikeList(userId)
-            }
+            getListInit()
         } else {
             if(flag == 0) { // 장소별루트추천
-                runBlocking {
-                    planViewModel.getUserPlanList()
-                    planViewModel.getPlanByPlace(planId)
-                    planViewModel.getThemeList()
-                    homeViewModel.getAreaLists()
-                    planViewModel.getPlanLikeList(userId)
-                }
-            } else if(flag == 1) { // 전체루트추천
-                runBlocking {
-                    planViewModel.getUserPlanList()
-                    planViewModel.getThemeList()
-                    homeViewModel.getAreaLists()
-                    planViewModel.getPlanLikeList(userId)
-                }
+                getListInitByPlace(1)
+            } else if(flag == 1) { // 장소제외루트추천
+                getListInitByPlace(2)
+            }
+            else if(flag == 2) { // 전체루트추천
+                getListInit()
             }
         }
 
@@ -111,6 +99,32 @@ class RouteFragment :
             mainActivity.moveFragment(1)
         }
 
+        // Loading Dialog
+        planViewModel.isLoading.observe(viewLifecycleOwner, Observer {
+            if(it) {
+                mainActivity.showLoadingDialog(requireContext())
+            } else {
+                mainActivity.dismissLoadingDialog()
+            }
+        })
+    }
+    fun getListInit() {
+        runBlocking {
+            planViewModel.getUserPlanList()
+            planViewModel.getThemeList()
+            homeViewModel.getAreaLists()
+            planViewModel.getPlanLikeList(userId)
+        }
+    }
+
+    fun getListInitByPlace(serverFlag: Int) {
+        runBlocking {
+            planViewModel.getUserPlanList()
+            planViewModel.getPlanByPlace(planId, serverFlag)
+            planViewModel.getThemeList()
+            homeViewModel.getAreaLists()
+            planViewModel.getPlanLikeList(userId)
+        }
 
     }
 
@@ -154,6 +168,13 @@ class RouteFragment :
         })
 
         planViewModel.userPlanByDayList.observe(viewLifecycleOwner, Observer {
+            if(it.isEmpty()) {
+                binding.routeListRv.visibility = View.GONE
+                binding.routeListNoneTxt.visibility = View.VISIBLE
+            } else {
+                binding.routeListNoneTxt.visibility = View.GONE
+                binding.routeListRv.visibility = View.VISIBLE
+            }
             RouteListAdapter = RouteListRecyclerviewAdapter(planViewModel, viewLifecycleOwner)
             RouteListAdapter.setRouteList(it)
             RouteListAdapter.setHasStableIds(true)
@@ -209,7 +230,7 @@ class RouteFragment :
         binding.routeTabLayout.addTab(binding.routeTabLayout.newTab().setText("3박4일"))
         binding.routeTabLayout.addTab(binding.routeTabLayout.newTab().setText("4박5일"))
 
-        if(flag == 1) {
+        if(flag == 2) { // 전체루트추천
             runBlocking {
                 planViewModel.getPlanById(planId, true)
             }

@@ -47,11 +47,9 @@ import net.daum.mf.map.api.MapView
 
 private const val TAG = "TravelPlanFragment"
 class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTravelPlanBinding::bind, R.layout.fragment_travel_plan) {
-// class TravelPlanFragment: Fragment(){
 
-//    private lateinit var binding:FragmentTravelPlanBinding
     private lateinit var mainActivity: MainActivity
-//    lateinit var con : ViewGroup
+
     lateinit var addButton: FloatingActionButton
     lateinit var memoAddButton: FloatingActionButton
     lateinit var routeRecomButton: FloatingActionButton
@@ -121,6 +119,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 money.progress = animation.animatedValue as Float
             }
             animator.start()
+            mainActivity.moveFragment(19,"planId",planId)
         }
 
         binding.travelplanMemberBtn.setOnClickListener {
@@ -498,6 +497,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         routeRecomDialogAdapter = RouteRecomDialogAdapter(requireContext())
         routeSelectList.apply {
             add(RouteRecom(lottie="oneday.json",typeName="장소 필터링",typeDescript="추가하신 장소를 포함한 일정을 추천해드립니다."))
+            add(RouteRecom(lottie="oneday.json",typeName="장소 제외 필터링",typeDescript="추가하신 장소를 제외한 일정을 추천해드립니다."))
             add(RouteRecom(lottie="allday.json",typeName="전체일정 추천",typeDescript="모든 일정을 \n 추천받으시고 싶으신가요?"))
 
             routeRecomDialogAdapter.list = routeSelectList
@@ -530,12 +530,17 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 dialog.dismiss()
             }
             if(selectPosition == 1){
-                //일정추천
-                    var total = 0
-                     planViewModel.planList.observe(viewLifecycleOwner, Observer {
-                        total = it.totalDate
-                    })
+                //장소제외필터링
                 mainActivity.moveFragment(16,"planId",planId,"flag",1)
+                dialog.dismiss()
+            }
+            if(selectPosition == 2) {
+                //일정추천
+                var total = 0
+                planViewModel.planList.observe(viewLifecycleOwner, Observer {
+                    total = it.totalDate
+                })
+                mainActivity.moveFragment(16,"planId",planId,"flag",2)
                 dialog.dismiss()
             }
         }

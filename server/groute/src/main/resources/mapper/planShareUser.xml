@@ -52,4 +52,9 @@
         delete from planshareuser
         where user_id = #{userId}
     </delete>
+
+    <select id="selectByUserIdPlanId" parameterType="PlanShareUser" resultType="int">
+        select count(*) from planshareuser
+        where user_id = #{userId} and plan_id = #{planId}
+    </select>
 </mapper>

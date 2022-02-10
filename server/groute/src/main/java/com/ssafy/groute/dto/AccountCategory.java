@@ -9,15 +9,8 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Account {
+public class AccountCategory {
     private int id;
-    private int spentMoney;
-    private String description;
-    private int categoryId;
-    private int userPlanId;
-    private String type;
-    private int day;
-    private String categoryName;
+    private String name;
     private String img;
-
 }

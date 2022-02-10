@@ -70,6 +70,13 @@ fun bindImageBoardPost(imgView: ImageView, imgUrl: String?) {
     }
 }
 
+@BindingAdapter("imageUrlAccount")
+fun bindImageAccount(imgView:ImageView, imgUrl:String?){
+    Glide.with(imgView.context)
+        .load("${ApplicationClass.IMGS_URL}${imgUrl}")
+        .into(imgView)
+}
+
 //@BindingAdapter("placeListData")  -> recycler view Adapter 사용할 때 쓰는 databinding
 //fun bindRecyclerView(recyclerView: RecyclerView, place: List<Place>?) {
 //    var adapter = recyclerView.adapter as AreaFilterAdapter

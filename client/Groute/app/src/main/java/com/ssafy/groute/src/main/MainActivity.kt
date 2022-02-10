@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -40,12 +41,10 @@ import com.ssafy.groute.src.main.route.RouteCreateFragment
 import com.ssafy.groute.src.main.route.RouteDetailFragment
 import com.ssafy.groute.src.main.route.RouteFragment
 import com.ssafy.groute.src.main.route.RouteReviewWriteFragment
-import com.ssafy.groute.src.main.travel.PlaceTmpFragment
-import com.ssafy.groute.src.main.travel.SharePlanWriteFragment
-import com.ssafy.groute.src.main.travel.SharedMemberFragment
-import com.ssafy.groute.src.main.travel.TravelPlanFragment
+import com.ssafy.groute.src.main.travel.*
 import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
+import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.LocationPermissionManager
 import com.ssafy.groute.util.LocationServiceManager
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -72,6 +71,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     // Naver Logout 인증 변수
     lateinit var mOAuthLoginInstance : OAuthLogin
 
+    //viewModel
+    private val planViewModel: PlanViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -90,29 +91,24 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.Home -> {
-//                    binding.mainProfileBar.visibility = true
-                    binding.mainProfileBar.isVisible = true
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.frame_main_layout, HomeFragment())
                         .commit()
                     true
                 }
                 R.id.Route -> {
-                    binding.mainProfileBar.isVisible = true
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.frame_main_layout, RouteFragment())
                         .commit()
                     true
                 }
                 R.id.Board -> {
-                    binding.mainProfileBar.isVisible = false
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.frame_main_layout, BoardFragment())
                         .commit()
                     true
                 }
                 R.id.My -> {
-                    binding.mainProfileBar.isVisible = false
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.frame_main_layout, MyFragment())
                         .commit()
@@ -150,6 +146,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
     fun openFragment(index:Int, key1:String, value1:Int, key2:String, value2:Int){
         val transaction = supportFragmentManager.beginTransaction()
+        val fm = supportFragmentManager
         when(index){
             1 -> {
                 //루트생성화면
@@ -217,14 +214,25 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .addToBackStack(null)
             }
             16 ->{
-                transaction.replace(R.id.frame_main_layout, RouteFragment.newInstance(key1,value1, key2, value2))
-                    .addToBackStack(null)
+                fm.popBackStack()
+                bottomNavigation.selectedItemId = R.id.Route
+                binding.mainProfileBar.isVisible = false
+                supportFragmentManager.beginTransaction().replace(R.id.frame_main_layout, RouteFragment.newInstance(key1,value1, key2, value2))
+                    .commit()
+
             }
             17 -> {
                 transaction.replace(R.id.frame_main_layout, SharedMemberFragment.newInstance(key1,value1))
             }
             18 -> {
                 transaction.replace(R.id.frame_main_layout, SharePlanWriteFragment.newInstance(key1,value1))
+            }
+            19 -> {
+                transaction.replace(R.id.frame_main_layout, AccountFragment.newInstance(key1,value1))
+            }
+            20->{
+                transaction.replace(R.id.frame_main_layout, AccountWriteFragment.newInstance(key1,value1))
+                    .addToBackStack(null)
             }
 
         }

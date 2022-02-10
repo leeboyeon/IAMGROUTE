@@ -14,7 +14,9 @@ public class PlanShareUserServiceImpl implements PlanShareUserService {
 
     @Override
     public void insertPlanShareUser(PlanShareUser planShareUser) throws Exception {
-        planShareUserMapper.insertPlanShareUser(planShareUser);
+        if(planShareUserMapper.selectByUserIdPlanId(planShareUser)==0) {
+            planShareUserMapper.insertPlanShareUser(planShareUser);
+        }
     }
 
     @Override

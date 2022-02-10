@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,7 +25,7 @@ import kotlinx.coroutines.runBlocking
 private const val TAG = "BottomSheetRecyclerviewAdapter"
 class BottomSheetRecyclerviewAdapter(val viewLifecycleOwner: LifecycleOwner, val planViewModel: PlanViewModel, val context: Context) : RecyclerView.Adapter<BottomSheetRecyclerviewAdapter.BottomSheetRecyclerviewHolder>(){
     var list = mutableListOf<UserPlan>()
-
+    var selectCheck: ArrayList<Int> = arrayListOf()
     @SuppressLint("LongLogTag")
     fun setUserPlanList(list: List<UserPlan>?) {
         if(list == null) {
@@ -31,6 +33,9 @@ class BottomSheetRecyclerviewAdapter(val viewLifecycleOwner: LifecycleOwner, val
         } else {
             Log.d(TAG, "setUserPlanList: $list")
             this.list = list.toMutableList()!!
+            for(i in 0 until list.size) {
+                selectCheck.add(0)
+            }
             notifyDataSetChanged()
         }
     }
@@ -39,8 +44,10 @@ class BottomSheetRecyclerviewAdapter(val viewLifecycleOwner: LifecycleOwner, val
         val planTitle = itemView.findViewById<TextView>(R.id.recycler_bottom_sheet_plan_title)
         val planPeriod = itemView.findViewById<TextView>(R.id.recycler_bottom_sheet_plan_period)
         val planDaysRecyclerview = itemView.findViewById<RecyclerView>(R.id.recycler_bottom_sheet_plan_recyclerview)
+        val itemLayout = itemView.findViewById<ConstraintLayout>(R.id.item_layout)
+        var checkIcon: ImageView = itemView.findViewById<ImageView>(R.id.recycler_bottom_sheet_plan_check_img)
         @SuppressLint("LongLogTag")
-        fun bindInfo(data : UserPlan) {
+        fun bindInfo(data : UserPlan, position: Int) {
             Glide.with(itemView)
                 .load(R.drawable.jeju)
                 .circleCrop()
@@ -64,10 +71,17 @@ class BottomSheetRecyclerviewAdapter(val viewLifecycleOwner: LifecycleOwner, val
                 override fun onClick(position: Int, day: Int) {
                     Log.d(TAG, "onClick: $day")
                     bottomSheetDaysRecyclerviewAdapter.notifyDataSetChanged()
-                    itemClickListener.onClick(layoutPosition, day)
+                    itemClickListener.onClickDay(layoutPosition, day)
                 }
 
             })
+            if(selectCheck[position] == 1) {
+                itemLayout.background.setTint(ContextCompat.getColor(context, R.color.blue_500))
+                checkIcon.visibility = View.VISIBLE
+            } else {
+                itemLayout.background.setTint(ContextCompat.getColor(context, R.color.light_grey))
+                checkIcon.visibility = View.INVISIBLE
+            }
         }
     }
 
@@ -82,7 +96,27 @@ class BottomSheetRecyclerviewAdapter(val viewLifecycleOwner: LifecycleOwner, val
 
     override fun onBindViewHolder(holder: BottomSheetRecyclerviewHolder, position: Int) {
         holder.apply {
-            bindInfo(list[position])
+            bindInfo(list[position], position)
+
+            itemLayout.setOnClickListener{
+                if(selectCheck[position] == 0) {
+                    for(i in 0 until list.size) {
+                        if(selectCheck[i] == 1) {
+                            selectCheck[i] = 0
+                        }
+                    }
+                    selectCheck[position] = 1
+                    itemClickListener.onClickPlan(position, list[position])
+                } else if(selectCheck[position] == 1) {
+                    for(i in 0 until list.size) {
+                        if(selectCheck[i] == 1) {
+                            selectCheck[i] = 0
+                        }
+                    }
+                    itemClickListener.onClickPlan(position, list[position])
+                }
+            }
+
         }
     }
 
@@ -91,7 +125,8 @@ class BottomSheetRecyclerviewAdapter(val viewLifecycleOwner: LifecycleOwner, val
     }
 
     interface ItemClickListener{
-        fun onClick(position: Int, day: Int)
+        fun onClickDay(position: Int, day: Int)
+        fun onClickPlan(position: Int, userPlan: UserPlan)
     }
     private lateinit var itemClickListener : ItemClickListener
     fun setItemClickListener(itemClickListener: ItemClickListener){

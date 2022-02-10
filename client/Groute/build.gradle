@@ -4,6 +4,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.2.1"
@@ -20,6 +21,7 @@ allprojects {
         mavenCentral()
         jcenter() // Warning: this repository is going to shut down soon
         maven{url 'https://devrepo.kakao.com/nexus/content/groups/public/'}
+        maven { url 'https://jitpack.io' }
     }
 }
 task clean(type: Delete) {

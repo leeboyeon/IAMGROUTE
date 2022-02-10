@@ -1,19 +1,28 @@
 package com.ssafy.groute.src.viewmodel
 
+import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.groute.src.dto.*
+import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.service.ThemeService
 import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.service.UserService
+import com.ssafy.groute.src.service.*
 import com.ssafy.groute.util.RetrofitUtil
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 private const val TAG = "PlanViewModel_Groute"
 
@@ -35,7 +44,10 @@ class PlanViewModel : ViewModel() {
     private val _planLikeListResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _userPlanResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _currentUserPlanResponse = MutableLiveData<UserPlan>()
+    private val _isLoading = MutableLiveData<Boolean>()
 
+    private val _accountListResponse = MutableLiveData<MutableList<AccountOut>>()
+    private val  _accountCategoryListResponse = MutableLiveData<MutableList<AccountCategory>>()
     //    private val _routeResponse = MutableLiveData<MutableList<>>
 //    private val _routeDetailResponse = MutableLiveData<MutableList<>>
     val planBestList: LiveData<MutableList<UserPlan>>
@@ -70,6 +82,13 @@ class PlanViewModel : ViewModel() {
         get() = _userPlanResponse
     val currentUserPlan:LiveData<UserPlan>
         get() = _currentUserPlanResponse
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
+    val accountList : LiveData<MutableList<AccountOut>>
+        get() = _accountListResponse
+    val accountCategoryList :LiveData<MutableList<AccountCategory>>
+        get() =  _accountCategoryListResponse
 
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planBestResponse.value = plan
@@ -156,6 +175,15 @@ class PlanViewModel : ViewModel() {
     }
     fun setUserNotPlanList() = viewModelScope.launch {
         _userPlanResponse.value = planNotEndList.value
+    }
+
+    fun setIsLoading(loading: Boolean) = viewModelScope.launch {
+        _isLoading.value = loading
+    fun setAccountList(account: MutableList<AccountOut>) = viewModelScope.launch {
+        _accountListResponse.value = account
+    }
+    fun setAccountCategory(category: MutableList<AccountCategory>) = viewModelScope.launch {
+        _accountCategoryListResponse.value = category
     }
 
 
@@ -517,8 +545,9 @@ class PlanViewModel : ViewModel() {
         }
     }
 
-    fun getPlanByPlace(planId: Int) {
+    fun getPlanByPlace(planId: Int, flag: Int) {
         viewModelScope.launch {
+            setIsLoading(true)
             setUserPlanList(mutableListOf())
             setUserPlanByDayList(mutableListOf())
             var placeIds = mutableListOf<Int>()
@@ -529,12 +558,13 @@ class PlanViewModel : ViewModel() {
                     placeIds.add(detailList.get(j).placeId)
                 }
             }
-            val response = UserPlanService().getPlanIncludePlace(1, placeIds)
+            val response = UserPlanService().getPlanIncludePlace(flag, placeIds)
             var res = response.body()
             if (response.code() == 200) {
                 if (res != null) {
                     setUserPlanList(res)
                     setUserPlanByDayList(res)
+                    setIsLoading(false)
                     Log.d(TAG, "getPlanByPlace: ${res}")
                 } else {
                     Log.d(TAG, "getPlanByPlace: ISNULL")
@@ -544,5 +574,52 @@ class PlanViewModel : ViewModel() {
             }
         }
     }
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getAccountList(planId:Int){
+        val response = AccountService().getListByPlanId(planId)
+        viewModelScope.launch { 
+            var res = response.body()
+            if(response.code() == 200 ){
+                var sDate = planList.value!!.startDate
+                var totalDate = planList.value!!.totalDate
 
+                var date = LocalDate.parse(sDate, DateTimeFormatter.ISO_DATE)
+                var outlist = arrayListOf<AccountOut>()
+                var accountlist = arrayListOf<Account>()
+
+                if(res!=null){
+                    for(i in 0 until totalDate){
+                        for(j in 0..res.size-1){
+                            if(res[j].day == i+1){
+                                Log.d(TAG, "getAccountList: ${res[j].day} || ${i+1}")
+                                accountlist.add(res[j])
+                            }
+                        }
+                        var accounts = AccountOut(date.plusDays(i.toLong()).toString(), accountlist)
+                        accountlist = arrayListOf()
+                        outlist.add(accounts)
+                    }
+
+                }
+
+                Log.d(TAG, "getAccountList: ${outlist}")
+                setAccountList(outlist)
+
+            }else{
+                Log.d(TAG, "getAccountList: ${response.code()}")
+            }
+        }
+    }
+
+    suspend fun getCategory(){
+        val response = AccountService().getCategoryList()
+        viewModelScope.launch {
+            var res = response.body()
+            if(response.code() == 200){
+                if(res!=null){
+                    setAccountCategory(res)
+                }
+            }
+        }
+    }
 }

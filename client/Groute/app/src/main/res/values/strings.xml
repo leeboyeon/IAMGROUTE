@@ -118,4 +118,5 @@
     <string name="plan_totalDate_one_day">당일치기</string>
     <string name="covert_plan_totalDate">%s박 %s일</string>
     <string name="convert_shareUser_title">함께하는 여행친구 총 %d명</string>
+
 </resources>

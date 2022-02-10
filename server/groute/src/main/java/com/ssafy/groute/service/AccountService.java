@@ -4,6 +4,7 @@ import com.ssafy.groute.dto.Account;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public interface AccountService {
@@ -13,4 +14,5 @@ public interface AccountService {
     void deleteAccount(int id) throws Exception;
     void updateAccount(Account account) throws Exception;
     List<Account> selectByUserPlanId(int userPlanId) throws Exception;
+    Map<Integer, Integer> totalCategoryPriceByPlanId(int planId) throws Exception;
 }
