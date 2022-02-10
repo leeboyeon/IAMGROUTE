@@ -7,17 +7,20 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
 import android.os.AsyncTask
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -50,8 +53,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.runBlocking
+import java.lang.Long.min
+import java.lang.Math.abs
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 private const val TAG = "MainActivity_Groute"
@@ -71,6 +81,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     //viewModel
     private val planViewModel: PlanViewModel by viewModels()
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Naver Logout init
@@ -245,6 +256,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     // 프로필바 사용자 정보 갱신
+    @RequiresApi(Build.VERSION_CODES.O)
     fun initProfileBar() {
         var user = ApplicationClass.sharedPreferencesUtil.getUser()
 
@@ -264,8 +276,25 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .into(binding.mainIvUserimg)
             }
         })
+        runBlocking {
+            planViewModel.getMyNotendPlan(ApplicationClass.sharedPreferencesUtil.getUser().id)
+        }
+        planViewModel.planNotEndList.observe(this, Observer {
+            var format = SimpleDateFormat("yyyy-MM-dd")
 
+            var date = format.parse(it[0].startDate).time
 
+            val today = Calendar.getInstance().time.time
+            Log.d(TAG, "initProfileBar: ${today}")
+            var calcur = (date-today) / (24*60*60*1000)
+
+            Log.d(TAG, "initProfileBar: ${calcur}")
+            binding.mainTvDday.text = "여행까지 D-${calcur}"
+            binding.progressBar.max = 30
+            var myprogress = kotlin.math.abs(30 - calcur)
+            Log.d(TAG, "initProfileBar: ${myprogress}")
+            binding.progressBar.progress = myprogress.toInt()
+        })
     }
 
     // 메인에 상단 프로필 바를 숨기고 싶은 경우

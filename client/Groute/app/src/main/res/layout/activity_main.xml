@@ -50,34 +50,35 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/main_tv_dday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:text="여행까지 D-30"
-                    android:textSize="10sp" />
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
 
                 <FrameLayout
+                    android:id="@+id/frameLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center">
+                    android:layout_height="match_parent">
 
                     <ProgressBar
                         android:id="@+id/progressBar"
                         style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center" />
+                        android:layout_width="230dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:max="30" />
 
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/airplaneLottie"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="right"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="right|end"
                         app:lottie_autoPlay="true"
                         app:lottie_fileName="airplane.json"
                         app:lottie_loop="true" />
-
                 </FrameLayout>
 
             </LinearLayout>
