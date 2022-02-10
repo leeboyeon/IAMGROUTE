@@ -118,16 +118,8 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
 
         boardViewModel.freeBoardPostList.observe(viewLifecycleOwner,  {
             binding.boardRvFree.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            val tmp = mutableListOf<BoardDetail>()
-            boardAdapter = if (it.size >= 5) {
-                for (i in 0 until 5) {
-                    tmp.add(it[i])
-                }
-                BoardAdapter(tmp, requireContext(), viewLifecycleOwner)
+            boardAdapter = BoardAdapter(it, requireContext(), viewLifecycleOwner)
 
-            } else {
-                BoardAdapter(it, requireContext(), viewLifecycleOwner)
-            }
             boardAdapter.setHasStableIds(true)
             binding.boardRvFree.adapter = boardAdapter
 
@@ -154,17 +146,7 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
         boardViewModel.qnaBoardPostList.observe(viewLifecycleOwner, {
 
             binding.boardRvQuestion.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            val tmp = mutableListOf<BoardDetail>()
-            boardAdapter = if (it.size >= 5) {
-                for (i in 0 until 5) {
-                    tmp.add(it[i])
-                }
-                BoardAdapter(tmp, requireContext(), viewLifecycleOwner)
-
-            } else {
-                BoardAdapter(it, requireContext(), viewLifecycleOwner)
-            }
-//            boardAdapter = BoardAdapter(it, requireContext(),viewLifecycleOwner)
+            boardAdapter = BoardAdapter(it, requireContext(),viewLifecycleOwner)
             boardAdapter.setHasStableIds(true)
             binding.boardRvQuestion.adapter = boardAdapter
 

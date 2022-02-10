@@ -179,6 +179,8 @@ class PlanViewModel : ViewModel() {
 
     fun setIsLoading(loading: Boolean) = viewModelScope.launch {
         _isLoading.value = loading
+    }
+
     fun setAccountList(account: MutableList<AccountOut>) = viewModelScope.launch {
         _accountListResponse.value = account
     }
