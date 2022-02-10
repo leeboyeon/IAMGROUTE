@@ -517,7 +517,7 @@ class PlanViewModel : ViewModel() {
         }
     }
 
-    fun getPlanByPlace(planId: Int) {
+    fun getPlanByPlace(planId: Int, flag: Int) {
         viewModelScope.launch {
             setUserPlanList(mutableListOf())
             setUserPlanByDayList(mutableListOf())
@@ -529,7 +529,7 @@ class PlanViewModel : ViewModel() {
                     placeIds.add(detailList.get(j).placeId)
                 }
             }
-            val response = UserPlanService().getPlanIncludePlace(1, placeIds)
+            val response = UserPlanService().getPlanIncludePlace(flag, placeIds)
             var res = response.body()
             if (response.code() == 200) {
                 if (res != null) {
