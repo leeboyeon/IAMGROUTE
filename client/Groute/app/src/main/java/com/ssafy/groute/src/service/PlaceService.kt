@@ -9,6 +9,8 @@ import com.ssafy.groute.src.response.PlaceLikeResponse
 //import com.ssafy.groute.src.main.home.Place
 import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -162,43 +164,59 @@ class PlaceService {
         return RetrofitUtil.placeService.getPlaceReviewListbyId(placeId)
     }
 
-    fun insertPlaceReview(review:PlaceReview, callback:RetrofitCallback<Boolean>){
-        RetrofitUtil.placeService.insertPlaceReview(review).enqueue(object : Callback<Boolean> {
+    /**
+     * insert PlaceReview
+     * @param review
+     * @param img
+     * @return callback
+     */
+    fun insertPlaceReview(review: RequestBody, img: MultipartBody.Part?, callback:RetrofitCallback<Boolean>) {
+        RetrofitUtil.placeService.insertPlaceReview(review, img).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 val res = response.body()
-                if(response.code()==200){
-                    if(res==true){
-                        callback.onSuccess(response.code(),res)
-                        Log.d(TAG, "onResponse: insert Success!")
-                    }else{
-                        Log.d(TAG, "onResponse: insert fail")
+                if(response.code() == 200){
+                    if(res == true){
+                        callback.onSuccess(response.code(), res)
+                        Log.d(TAG, "onResponse: placeReview insert Success!")
+                    } else {
+                        Log.d(TAG, "onResponse: placeReview insert fail")
                     }
+                } else {
+                    callback.onFailure(response.code())
                 }
             }
-
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callback.onError(t)
                 Log.d(TAG, "onFailure: $t")
             }
 
         })
     }
 
-    fun updatePlaceReview(review:PlaceReview, callback : RetrofitCallback<Boolean>) {
-        RetrofitUtil.placeService.updatePlaceReview(review).enqueue(object : Callback<Boolean> {
+    /**
+     * update PlaceReview
+     * @param review
+     * @param img
+     * @return callback
+     */
+    fun updatePlaceReview(review: RequestBody, img: MultipartBody.Part?, callback : RetrofitCallback<Boolean>) {
+        RetrofitUtil.placeService.updatePlaceReview(review, img).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 val res = response.body()
-                if(response.code()==200){
-                    if(res==true){
+                if(response.code() == 200) {
+                    if(res == true){
                         callback.onSuccess(response.code(),res)
-                        Log.d(TAG, "onResponse: update Success!")
-                    }else{
-                        Log.d(TAG, "onResponse: update fail")
+                        Log.d(TAG, "onResponse: placeReview update Success!")
+                    } else {
+                        Log.d(TAG, "onResponse: placeReview update fail")
                     }
+                } else {
+                    callback.onFailure(response.code())
                 }
             }
 
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                Log.d(TAG, "onFailure: $t")
+                callback.onError(t)
             }
 
         })
