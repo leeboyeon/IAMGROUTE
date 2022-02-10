@@ -47,4 +47,10 @@
         delete from account
         where userplan_id = #{userPlanId}
     </delete>
+    
+    <select id="totalCategoryPriceByPlanId" parameterType="int" resultType="int">
+        select sum(spentmoney)
+        from account
+        where userplan_id = #{userPlanId} and category_id = #{categoryId}
+    </select>
 </mapper>
