@@ -39,7 +39,7 @@ class HomeFragment : Fragment() {
     private lateinit var homeAreaAdapter:HomeAreaAdapter
     private lateinit var bestPlaceAdapter:BestPlaceAdapter
     private var categoryAdapter:CategoryAdapter = CategoryAdapter()
-    private var bestrouteAdatper:BestRouteAdapter = BestRouteAdapter()
+    private lateinit var bestrouteAdatper: BestRouteAdapter
 
 
     private lateinit var mainActivity : MainActivity
@@ -78,6 +78,7 @@ class HomeFragment : Fragment() {
         runBlocking {
             homeViewModel.getAreaLists()
             placeViewModel.getPlaceBestList()
+            planViewModel.getPlanBestList()
         }
         homeViewModel.areaList.observe(viewLifecycleOwner, Observer {
             homeAreaAdapter = HomeAreaAdapter(it)
@@ -135,13 +136,14 @@ class HomeFragment : Fragment() {
      * */
     private fun initBestPlanAdapter(){
         planViewModel.planBestList.observe(viewLifecycleOwner, Observer {
-            bestrouteAdatper = BestRouteAdapter()
+            bestrouteAdatper = BestRouteAdapter(it)
             //        bestrouteAdatper.setItemClickListener(object : BestRouteAdapter.ItemClickListener{
 //            override fun onClick(view: View, position: Int, name: String) {
 ////
 //            }
 //
 //          })
+
             bestrouteAdatper.notifyDataSetChanged()
             binding.homeRvBestRoute.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)

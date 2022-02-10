@@ -7,18 +7,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
+import com.ssafy.groute.src.dto.UserPlan
 
-class BestRouteAdapter : RecyclerView.Adapter<BestRouteAdapter.BestRouteHolder>(){
+class BestRouteAdapter(var list: MutableList<UserPlan>) : RecyclerView.Adapter<BestRouteAdapter.BestRouteHolder>(){
 
-    var list = mutableListOf<BestRoute>()
     inner class BestRouteHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun bindInfo(data : BestRoute){
-            Glide.with(itemView)
-                .load(data.img)
-                .into(itemView.findViewById(R.id.home_best_img))
-
-            itemView.findViewById<TextView>(R.id.home_best_title).text = data.title
-
+        fun bindInfo(data : UserPlan){
+            itemView.findViewById<TextView>(R.id.home_best_title).text = "[제주도] ${data.title}"
         }
 
     }
