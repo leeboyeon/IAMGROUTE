@@ -1,19 +1,15 @@
 package com.ssafy.groute.src.main.home
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LiveData
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.ssafy.groute.R
-import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.RecyclerviewCategoryItemBinding
 import com.ssafy.groute.src.dto.Area
-import retrofit2.Call
 
 class HomeAreaAdapter(private val areaList: MutableList<Area>) : RecyclerView.Adapter<HomeAreaAdapter.HomeAreaViewHolder>(){
 
@@ -25,7 +21,7 @@ class HomeAreaAdapter(private val areaList: MutableList<Area>) : RecyclerView.Ad
     override fun onBindViewHolder(holder: HomeAreaViewHolder, position: Int) {
         val dto = areaList[position]
         holder.apply {
-            itemView.setOnClickListener {
+            itemView.findViewById<ConstraintLayout>(R.id.rvItem_main_cL_areaAll).setOnClickListener {
                 itemClickListener.onClick(it, position, dto.name, dto.id)
             }
             bind(dto)
