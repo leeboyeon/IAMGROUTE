@@ -126,6 +126,9 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         })
     }
 
+    /**
+     * 내 일정에 추가하기 클릭 후 BottomSheet show
+     */
     fun showRouteAddBottomSheet() {
         var dialogView: View =
             LayoutInflater.from(requireContext()).inflate(R.layout.plan_add_bottom_sheet, null)
@@ -173,10 +176,15 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
 
             })
 
-
         })
         var dialog = Dialog(requireContext())
         dialog.setContentView(dialogView)
+
+        // 일정 등록 버튼을 눌렀을때
+        dialogView.findViewById<RelativeLayout>(R.id.bottom_sheet_userplan_create_btn).setOnClickListener {
+            dialog.dismiss()
+            mainActivity.moveFragment(1)
+        }
         dialogView.findViewById<RelativeLayout>(R.id.bottom_sheet_route_add_btn)
             .setOnClickListener {
                 if(addDay != -1 && selectUserPlan.id != 0) {
