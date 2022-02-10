@@ -165,8 +165,10 @@ class PlaceService {
     fun insertPlaceReview(review:PlaceReview, callback:RetrofitCallback<Boolean>){
         RetrofitUtil.placeService.insertPlaceReview(review).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                Log.d(TAG, "onResponse: insertPlaceReview")
                 val res = response.body()
                 if(response.code()==200){
+                    Log.d(TAG, "onResponse: insertPlaceReview_${response.code()}")
                     if(res==true){
                         callback.onSuccess(response.code(),res)
                         Log.d(TAG, "onResponse: insert Success!")

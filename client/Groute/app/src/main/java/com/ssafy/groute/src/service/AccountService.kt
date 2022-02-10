@@ -36,4 +36,8 @@ class AccountService {
     }
 
     suspend fun getCategoryList() = RetrofitUtil.accountService.getCategoryList()
+
+    suspend fun getCategoryChart(planId:Int) : Response<Map<Int,Int>>{
+        return RetrofitUtil.accountService.getCategoryChart(planId)
+    }
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.JsonParser
 import com.ssafy.groute.src.dto.*
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.PlaceService
@@ -45,7 +46,7 @@ class PlanViewModel : ViewModel() {
     private val _userPlanResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _currentUserPlanResponse = MutableLiveData<UserPlan>()
     private val _isLoading = MutableLiveData<Boolean>()
-
+    private val _accountPricceListResponse = MutableLiveData<MutableList<Int>>()
     private val _accountListResponse = MutableLiveData<MutableList<AccountOut>>()
     private val  _accountCategoryListResponse = MutableLiveData<MutableList<AccountCategory>>()
     private val _sharedTravelListResponse = MutableLiveData<MutableList<UserPlan>>()
@@ -92,6 +93,8 @@ class PlanViewModel : ViewModel() {
         get() =  _accountCategoryListResponse
     val sharedTravelList: LiveData<MutableList<UserPlan>>
         get() = _sharedTravelListResponse
+    val accountPriceList : LiveData<MutableList<Int>>
+        get() = _accountPricceListResponse
 
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planBestResponse.value = plan
@@ -193,6 +196,9 @@ class PlanViewModel : ViewModel() {
         _sharedTravelListResponse.value = sharedTravelList
     }
 
+    fun setAccountPrice(price:MutableList<Int>) = viewModelScope.launch {
+        _accountPricceListResponse.value = price
+    }
 
     suspend fun getPlanBestList() {
         val response = UserPlanService().getBestUserPlan()
@@ -640,6 +646,23 @@ class PlanViewModel : ViewModel() {
             }
             Log.d(TAG, "getSharedPlanList: $list")
             setSharedTravelList(list)
+        }
+    }
+    suspend fun getCategoryChart(planId:Int){
+        val response = AccountService().getCategoryChart(planId)
+        viewModelScope.launch {
+            var res = response.body()
+            if(response.code() == 200){
+                if(res!=null){
+                    Log.d(TAG, "getCategoryChart: ${res}")
+                    var list = arrayListOf<Int>()
+                    for(i in 0..res.values.size){
+                        Log.d(TAG, "getCategoryChart: ${res[i]}")
+                        res[i]?.let { list.add(it) }
+                    }
+                    setAccountPrice(list)
+                }
+            }
         }
     }
 }
