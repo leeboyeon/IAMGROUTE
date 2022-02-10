@@ -181,12 +181,7 @@ public class UserPlanServiceImpl implements UserPlanService {
     @Transactional
     @Override
     public List<UserPlan> selectAllUserPlanById(String id) throws Exception {
-        List<PlanShareUser> planShareUsers = planShareUserMapper.selectByUserId(id);
-        List<UserPlan> userPlans = new ArrayList<>();
-        for(PlanShareUser p: planShareUsers){
-            userPlans.add(userPlanMapper.selectUserPlan(p.getPlanId()));
-        }
-        return userPlans;
+        return userPlanMapper.selectAllUserPlanByUserId(id);
     }
 
     @Transactional
