@@ -73,6 +73,9 @@ public class UserPlanServiceImpl implements UserPlanService {
     @Override
     public List<UserPlan> selectAllByPlaceId(List<Integer> placeIds,int flag) throws Exception {
         List<UserPlan> planList = selectTUserPlan();
+        if(placeIds == null || placeIds.size()==0) {
+            return planList;
+        }
         List<UserPlan> userPlans = new ArrayList<>();
         if(flag==1) {
             for (UserPlan userPlan : planList) {
