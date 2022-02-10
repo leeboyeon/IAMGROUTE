@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.groute.src.dto.BoardDetail
+import com.ssafy.groute.src.dto.Comment
 import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.response.BoardDetailWithCommentResponse
 import com.ssafy.groute.util.RetrofitCallback
@@ -264,5 +265,28 @@ class BoardService {
     suspend fun getBoardDetailWithCmt(id: Int): Response<BoardDetailWithCommentResponse> {
         return RetrofitUtil.boardService.getBoardDetailWithCmtByCor(id)
     }
+
+    /**
+     * 게시글 id에 해당하는 comment List 조회
+     * @param boardDetailId
+     * @return Response<MutableList<Comment>>
+     */
+    suspend fun getPostCommentList(boardDetailId: Int) : Response<MutableList<Comment>> {
+        return RetrofitUtil.boardService.getPostCommentList(boardDetailId)
+    }
+
+
+    /**
+     * id에 해당하는 게시글과 댓글 조회 - coroutine ver.
+     * getBoardPostIsLike
+     * @param boardDetailId
+     * @param userId
+     * @return response
+     */
+    suspend fun getBoardPostIsLike(boardDetailId: Int, userId: String): Response<Boolean> {
+        return RetrofitUtil.boardService.isLikeBoardPost(boardDetailId, userId)
+    }
+
+
 
 }

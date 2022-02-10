@@ -4,8 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="viewModeluser"
-            type="com.ssafy.groute.src.viewmodel.MainViewModel" />
+            name="user"
+            type="com.ssafy.groute.src.dto.User" />
+<!--        <variable-->
+<!--            name="viewModeluser"-->
+<!--            type="com.ssafy.groute.src.viewmodel.MainViewModel" />-->
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -45,7 +48,7 @@
                     android:id="@+id/main_tv_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModeluser.user.nickname}"
+                    android:text="@{user.nickname}"
                    android:textColor="@color/black"
                     android:textSize="20sp" />
 
@@ -88,7 +91,8 @@
                 android:layout_height="100dp"
                 android:layout_margin="10dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/busan" />
+                android:src="@drawable/user"
+                app:imageUrlUser="@{user.img}"/>
         </LinearLayout>
 
         <FrameLayout

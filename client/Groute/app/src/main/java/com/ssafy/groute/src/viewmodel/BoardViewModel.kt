@@ -249,18 +249,43 @@ class BoardViewModel : ViewModel(){
         }
     }
 
-    suspend fun getPostCmtList(boardDetailId: Int) {
-        val response = BoardService().getBoardPostList(boardDetailId)
+//    suspend fun getPostCmtList(boardDetailId: Int) {
+//        val response = BoardService().getPostCommentList(boardDetailId)
+//        viewModelScope.launch {
+//            val res = response.body()
+//            if(response.code() == 200) {
+//                if(res != null) {
+////                    setBoardDetail(res.boardDetail)
+//                    setCommentAllList(res as MutableList<Comment>)
+//                    setCommentList(res as MutableList<Comment>)
+//                    Log.d(TAG, "getPostCmtListSuccess: ${response.message()}")
+//                } else {
+//                    Log.d(TAG, "getPostCmtListError: ${response.message()}")
+//                }
+//            }
+//        }
+//    }
+
+    private val _isBoardPostLike = MutableLiveData<Boolean>()
+
+    val isBoardPostLike : LiveData<Boolean>
+        get() = _isBoardPostLike
+
+    fun setIsBoardPostLike(res : Boolean) = viewModelScope.launch {
+        _isBoardPostLike.value = res
+    }
+
+
+    suspend fun getBoardPostIsLike(boardDetailId: Int, userId : String) {
+        val response = BoardService().getBoardPostIsLike(boardDetailId, userId)
         viewModelScope.launch {
             val res = response.body()
             if(response.code() == 200) {
                 if(res != null) {
-//                    setBoardDetail(res.boardDetail)
-//                    setCommentAllList(res.commentList as MutableList<Comment>)
-                    setCommentList(res as MutableList<Comment>)
-                    Log.d(TAG, "getPostCmtListSuccess: ${response.message()}")
+                    setIsBoardPostLike(res)
+                    Log.d(TAG, "getBoardPostIsLikeSuccess: ${response.message()}")
                 } else {
-                    Log.d(TAG, "getPostCmtListError: ${response.message()}")
+                    Log.d(TAG, "getBoardPostIsLikeError: ${response.message()}")
                 }
             }
         }

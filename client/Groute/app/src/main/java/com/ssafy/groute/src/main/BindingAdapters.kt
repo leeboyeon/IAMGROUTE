@@ -240,16 +240,32 @@ fun bindBoardPostListRecyclerView(recyclerView: RecyclerView, data: List<BoardDe
 
 @BindingAdapter("listCommentData")
 fun bindCommentRecyclerView(recyclerView: RecyclerView, data: List<Comment>?) {
-    val adapter = recyclerView.adapter as CommentAdapter
-    adapter.submitList(data)
+    var adapter = recyclerView.adapter as CommentAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as CommentAdapter
+    }
+    adapter.commentList = data as MutableList<Comment>
+    adapter.notifyDataSetChanged()
+//    adapter.submitList(data)
 //    adapter.setCommentList(data)
 //    adapter.notifyDataSetChanged()
 }
 
 @BindingAdapter("listCommentNestedData")
 fun bindCommentNestedRecyclerView(recyclerView: RecyclerView, data: List<Comment>?) {
-    val adapter = recyclerView.adapter as CommentNestedAdapter
-    adapter.submitList(data)
+    var adapter = recyclerView.adapter as CommentNestedAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as CommentNestedAdapter
+    }
+    adapter.commentList = data as MutableList<Comment>
+    adapter.notifyDataSetChanged()
+//    adapter.submitList(data)
 //    adapter.setCommentNestedList(data)
 //    adapter.notifyDataSetChanged()
 }

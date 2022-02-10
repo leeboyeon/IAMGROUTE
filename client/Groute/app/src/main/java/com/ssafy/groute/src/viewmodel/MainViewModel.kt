@@ -48,6 +48,17 @@ open class MainViewModel : ViewModel() {
     fun getcurrentPosition() = currentPosition.value
 
 
+
+    // set user
+    private val _loginUserInfo = MutableLiveData<UserInfoResponse>()
+
+    val loginUserInfo : LiveData<UserInfoResponse>
+        get() = _loginUserInfo
+
+    fun setLoginUserInfo(user : UserInfoResponse) = viewModelScope.launch {
+        _loginUserInfo.value = user
+    }
+
     private val _userInfo = MutableLiveData<UserInfoResponse>()
 
     val userInformation : LiveData<UserInfoResponse>
@@ -57,13 +68,17 @@ open class MainViewModel : ViewModel() {
         _userInfo.value = userInfo
     }
 
-    suspend fun getUserInformation(userId: String) {
+    suspend fun getUserInformation(userId: String, loginChk : Boolean) {
         val response = UserService().getUser(userId)
         viewModelScope.launch {
             val res = response.body()
             if(response.code() == 200) {
                 if(res != null) {
-                    setUserInfo(res)
+                    if(loginChk == true) {    // 로그인 user이면
+                        setLoginUserInfo(res)
+                    } else {
+                        setUserInfo(res)
+                    }
                     Log.d(TAG, "getUserInfoSuccess: ${response.message()}")
                 } else {
                     Log.d(TAG, "getUserInfoError: ${response.message()}")

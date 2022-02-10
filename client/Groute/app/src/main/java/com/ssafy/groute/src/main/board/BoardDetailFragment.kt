@@ -79,6 +79,9 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
     // init BoardRecyclerviewAdapter
     private fun initRecyclerAdapter(id : Int){
 //        boardViewModel = ViewModelProvider(this).get(BoardViewModel::class.java)
+        runBlocking {
+            boardViewModel.getBoardPostList(boardId)
+        }
         binding.boardDetailRvListitem.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         if(id == 1){
@@ -87,7 +90,7 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
 //                    boardRecyclerAdapter.setBoardList(it)
 //                    boardRecyclerAdapter.notifyDataSetChanged()
 //                }
-                boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, it, boardId, requireContext())
+                boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, it, boardId, requireContext(), boardViewModel)
                 boardRecyclerAdapter.setHasStableIds(true)
                 binding.boardDetailRvListitem.adapter = boardRecyclerAdapter
 
@@ -114,7 +117,7 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
 //                    boardRecyclerAdapter.setBoardList(it)
 //                    boardRecyclerAdapter.notifyDataSetChanged()
 //                }
-                boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, it, boardId, requireContext())
+                boardRecyclerAdapter = BoardRecyclerviewAdapter(viewLifecycleOwner, it, boardId, requireContext(), boardViewModel)
                 boardRecyclerAdapter.setHasStableIds(true)
                 binding.boardDetailRvListitem.adapter = boardRecyclerAdapter
                 boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{

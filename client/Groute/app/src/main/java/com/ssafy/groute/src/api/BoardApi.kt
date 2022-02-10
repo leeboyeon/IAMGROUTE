@@ -1,6 +1,7 @@
 package com.ssafy.groute.src.api
 
 import com.ssafy.groute.src.dto.BoardDetail
+import com.ssafy.groute.src.dto.Comment
 import com.ssafy.groute.src.response.BoardDetailWithCommentResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -50,7 +51,7 @@ interface BoardApi {
     @GET("/boardDetail/detail")
     fun getBoardDetailWithComment(@Query("id") id: Int) : Call<BoardDetailWithCommentResponse>
 
-    // 게시판 글 찜하기
+    // 게시판 글 찜하기 -> 좋아요 존재하면 삭제, 없으면 추가
     @POST("/boardDetail/like")
     fun likeBoard(@Query("boardDetailId") boardDetailId: Int, @Query("userId") userId: String) : Call<Any>
 
@@ -62,8 +63,11 @@ interface BoardApi {
     fun getListBoardDetail(@Query("id") id:Int) : Call<Map<String,Any>>
 
 
-    // 로그인한 user가 해당 게시글에 좋아요 눌렀는지 체크
+    // userId에 해당하는 user가 해당 게시글에 좋아요 눌렀는지 체크
     @POST("/boardDetail/isLike")
     suspend fun isLikeBoardPost(@Query("boardDetailId") boardDetailId: Int, @Query("userId") userId: String) : Response<Boolean>
 
+    // 게시글 id에 해당하는 comment List 조회
+    @GET("boardDetail/comment/postcommentlist")
+    suspend fun getPostCommentList(@Query("boardDetailId") boardDetailId: Int) : Response<MutableList<Comment>>
 }

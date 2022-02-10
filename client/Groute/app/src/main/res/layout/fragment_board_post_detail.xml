@@ -153,15 +153,14 @@
                     android:layout_height="20dp"
                     android:layout_marginRight="15dp"
                     android:src="@drawable/boardheartcnt"
-                    android:scaleType="centerInside"
-                    />
+                    android:scaleType="centerInside"/>
 
                 <TextView
                     android:id="@+id/boardDetail_tv_heartCnt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
-                    android:text="@{Integer.toString(boardDetail.heartCnt)}" />
+                    android:text="@{String.valueOf(boardDetail.heartCnt)}" />
 
                 <ImageView
                     android:id="@+id/boardDetail_iv_commentCnt"
@@ -175,7 +174,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
-                    android:text="@{Integer.toString(boardDetail.commentCnt)}" />
+                    android:text="@{String.valueOf(boardDetail.commentCnt)}" />
 
                 <ImageView
                     android:id="@+id/BoardDtail_iv_hitCnt"
@@ -189,7 +188,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
-                    android:text="@{Integer.toString(boardDetail.hitCnt)}" />
+                    android:text="@{String.valueOf(boardDetail.hitCnt)}" />
             </LinearLayout>
 
             <View

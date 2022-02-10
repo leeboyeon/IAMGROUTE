@@ -193,7 +193,7 @@
                     android:id="@+id/item_tv_boardHitCnt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(board.heartCnt)}"
+                    android:text="@{String.valueOf(board.hitCnt)}"
                     android:includeFontPadding="false"
                     android:layout_marginStart="10dp"
                     app:layout_constraintTop_toTopOf="@id/item_iv_boardHitCnt"

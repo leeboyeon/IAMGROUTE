@@ -58,7 +58,7 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
 
     override fun onResume() {
         super.onResume()
-        initCommentAdapter()
+//        initCommentAdapter()
     }
 
     override fun onAttach(context: Context) {
@@ -89,7 +89,7 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
 
         boardViewModel.boardDetail.observe(viewLifecycleOwner,{
             runBlocking {
-                mainViewModel.getUserInformation(it.userId)
+                mainViewModel.getUserInformation(it.userId, false)
             }
             val writeUserInfo = mainViewModel.userInformation.value!!
             val writeUser = User(writeUserInfo.id, writeUserInfo.nickname, writeUserInfo.img.toString())
@@ -98,12 +98,10 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
             binding.boardDetail = it
         })
 
-        runBlocking {
-            mainViewModel.getUserInformation(loginUserId)
-        }
-        val loginUserInfo = mainViewModel.userInformation.value!!
-        val loginUser = User(loginUserInfo.id, loginUserInfo.nickname, loginUserInfo.img.toString())
-        binding.loginUser = loginUser
+        mainViewModel.loginUserInfo.observe(viewLifecycleOwner, {
+            val loginUser = User(it.id, it.nickname, it.img.toString())
+            binding.loginUser = loginUser
+        })
 
         binding.boardViewModels = boardViewModel
     }
@@ -123,11 +121,23 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
     }
 
     private fun initData(){
-        getListBoardDetail(boardDetailId)
+//        getListBoardDetail(boardDetailId)
+        runBlocking {
+            boardViewModel.getBoardPostIsLike(boardDetailId, loginUserId)
+        }
+        Log.d(TAG, "initData: ${boardViewModel.isBoardPostLike.value}")
+        if(boardViewModel.isBoardPostLike.value == true) {
+            binding.boardDetailIvHeart.setColorFilter(requireContext().resources.getColor(R.color.red))
+        } else {
+            binding.boardDetailIvHeart.setColorFilter(requireContext().resources.getColor(R.color.black))
+        }
         commentWrite(boardDetailId)
     }
 
     private fun initCommentAdapter(){
+//        runBlocking {
+//            boardViewModel.getBoardDetail(boardDetailId)
+//        }
         boardViewModel.commentList.observe(viewLifecycleOwner, {
             Log.d(TAG, "initCommentAdapter: $it")
             commentAdapter = CommentAdapter(it, requireContext(), viewLifecycleOwner, boardViewModel, mainViewModel)
@@ -144,6 +154,7 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
                 }
 
                 override fun onCommentNestedClick(position: Int, comment: Comment) {
+                    Log.d(TAG, "onCommentNestedClick: $comment")
                     intent.putExtra("commentData", comment)
                     startActivity(intent)
                 }
@@ -164,6 +175,13 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
 //                getListBoardDetail(boardDetailId)
                 runBlocking {
                     boardViewModel.getBoardDetail(boardDetailId)
+                    boardViewModel.getBoardPostIsLike(boardDetailId, loginUserId)
+                }
+                Log.d(TAG, "onSuccess: ${boardViewModel.isBoardPostLike.value}")
+                if(boardViewModel.isBoardPostLike.value == true) {
+                    binding.boardDetailIvHeart.setColorFilter(requireContext().resources.getColor(R.color.red))
+                } else {
+                    binding.boardDetailIvHeart.setColorFilter(requireContext().resources.getColor(R.color.black))
                 }
             }
 
@@ -233,12 +251,17 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
 
     // login User가 해당 게시글에 좋아요 눌렀는지 체크
     private fun getListBoardDetail(id:Int){
+
         BoardService().isBoardLike(id, loginUserId, object : RetrofitCallback<Boolean> {
             override fun onError(t: Throwable) {
                 Log.d(TAG, "onError: 찜하기 여부 에러")
             }
 
             override fun onSuccess(code: Int, responseData: Boolean) {
+//                runBlocking {
+//                    boardViewModel.getBoardDetail(boardDetailId)
+//                }
+                Log.d(TAG, "onSuccess: $responseData")
                 if(responseData) {
                     binding.boardDetailIvHeart.setColorFilter(requireContext().resources.getColor(R.color.red))
                 } else {

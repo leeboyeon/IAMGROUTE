@@ -34,9 +34,9 @@ import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
 
 private const val TAG = "CommentAdapter_groute"
-//class CommentAdapter(val commentList : MutableList<Comment>, val context: Context, val lifecycleOwner: LifecycleOwner, val boardViewModel: BoardViewModel) : RecyclerView.Adapter<CommentAdapter.CommentHolder>(){
-class CommentAdapter(val commentList : MutableList<Comment>, val context: Context, val lifecycleOwner: LifecycleOwner, val boardViewModel: BoardViewModel, val mainViewModel: MainViewModel)
-    : ListAdapter<Comment, CommentAdapter.CommentHolder>(DiffCallback){
+class CommentAdapter(var commentList : MutableList<Comment>, val context: Context, val lifecycleOwner: LifecycleOwner, val boardViewModel: BoardViewModel, val mainViewModel: MainViewModel) : RecyclerView.Adapter<CommentAdapter.CommentHolder>(){
+//class CommentAdapter(val commentList : MutableList<Comment>, val context: Context, val lifecycleOwner: LifecycleOwner, val boardViewModel: BoardViewModel, val mainViewModel: MainViewModel)
+//    : ListAdapter<Comment, CommentAdapter.CommentHolder>(DiffCallback){
 //    var list = mutableListOf<Comment>()
 
     // 현재 로그인한 유저의 아이디
@@ -61,23 +61,18 @@ class CommentAdapter(val commentList : MutableList<Comment>, val context: Contex
             }
 
             runBlocking {
-                mainViewModel.getUserInformation(data.userId)
-            }
-            mainViewModel.userInformation.observe(lifecycleOwner, {
-                val writeUser = User(it.id, it.nickname, it.img.toString())
+                mainViewModel.getUserInformation(data.userId, false)
+                val user = mainViewModel.userInformation.value!!
+                val writeUser = User(user.id, user.nickname, user.img.toString())
                 binding.writeUser = writeUser
-            })
+            }
 
             binding.comment = data
 //            binding.boardViewModels = boardViewModel
             binding.executePendingBindings()
 
-//            runBlocking {
-//                boardViewModel.getPostCmtList(data.boardDetailId)
-//            }
 
             boardViewModel.commentAllList.observe(lifecycleOwner, {
-                Log.d(TAG, "bindInfo: $it")
                 val list = mutableListOf<Comment>()
                 for(i in 0 until it.size) {
                     if(it[i].groupNum == data.groupNum) {
@@ -89,6 +84,7 @@ class CommentAdapter(val commentList : MutableList<Comment>, val context: Contex
                 }
                 Log.d(TAG, "bindInfo CommentAdapter: ${list}")
 //                    commentNestedAdapter.setCommentNestedList(list)
+                // 같은 그룹인 comment list
                 val commentNestedAdapter = CommentNestedAdapter(list, context, lifecycleOwner, true, mainViewModel)
 //                commentNestedAdapter.submitList(list)
                 commentNestedRv.apply{

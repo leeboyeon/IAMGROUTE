@@ -29,9 +29,9 @@ import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
 
 private const val TAG = "CommentNestedAdt_groute"
-//class CommentNestedAdapter(val context: Context, val lifecycleOwner: LifecycleOwner, var flag: Boolean) : RecyclerView.Adapter<CommentNestedAdapter.CommentNestedHolder>(){
-class CommentNestedAdapter(val commentList : MutableList<Comment>, val context: Context, val lifecycleOwner: LifecycleOwner, var flag: Boolean, val mainViewModel: MainViewModel)
-    : ListAdapter<Comment, CommentNestedAdapter.CommentNestedHolder>(CommentAdapter.DiffCallback){
+class CommentNestedAdapter(var commentList : MutableList<Comment>, val context: Context, val lifecycleOwner: LifecycleOwner, var flag: Boolean, val mainViewModel: MainViewModel) : RecyclerView.Adapter<CommentNestedAdapter.CommentNestedHolder>(){
+//class CommentNestedAdapter(val commentList : MutableList<Comment>, val context: Context, val lifecycleOwner: LifecycleOwner, var flag: Boolean, val mainViewModel: MainViewModel)
+//    : ListAdapter<Comment, CommentNestedAdapter.CommentNestedHolder>(CommentAdapter.DiffCallback){
 //    var list = mutableListOf<Comment>()
 
     // 현재 로그인한 유저의 아이디
@@ -49,14 +49,17 @@ class CommentNestedAdapter(val commentList : MutableList<Comment>, val context: 
     inner class CommentNestedHolder(private val binding:RecyclerviewNestedCommentListItemBinding) : RecyclerView.ViewHolder(binding.root){
         val more = itemView.findViewById<ImageView>(R.id.comment_nested_more_iv)
         fun bindInfo(data : Comment){
+            // 댓글 작성자 정보 불러오기
             runBlocking {
-                mainViewModel.getUserInformation(data.userId)
+                mainViewModel.getUserInformation(data.userId, false)
+                Log.d(TAG, "bindInfo: ${data.userId}")
+                val user = mainViewModel.userInformation.value!!
+                val wrtieUser = User(user.id, user.nickname, user.img.toString())
+                Log.d(TAG, "bindInfo: $wrtieUser")
+                binding.user = wrtieUser
+
+                binding.comment = data
             }
-            mainViewModel.userInformation.observe(lifecycleOwner, {
-                val user = User(it.id, it.nickname, it.img.toString())
-                binding.user = user
-            })
-            binding.comment = data
             binding.executePendingBindings()
 //            val userInfo = UserService().getUserInfo(data.userId)
 //            userInfo.observe(

@@ -37,13 +37,19 @@ class CommentNestedActivity : BaseActivity<ActivityCommentNestedBinding>(Activit
     lateinit var comment: Comment
     private lateinit var commentNestedAdapter:CommentNestedAdapter
 
+    override fun onResume() {
+        super.onResume()
+        initAdapter()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         comment = intent.getSerializableExtra("commentData") as Comment
+        Log.d(TAG, "onCreate: $comment")
 
         // comment 작성자
         runBlocking {
-            mainViewModel.getUserInformation(comment.userId)
+            mainViewModel.getUserInformation(comment.userId, false)
         }
         val writeUserInfo = mainViewModel.userInformation.value!!
         val writeUser = User(writeUserInfo.id, writeUserInfo.nickname, writeUserInfo.img.toString())
@@ -51,11 +57,15 @@ class CommentNestedActivity : BaseActivity<ActivityCommentNestedBinding>(Activit
 
         // login user
         runBlocking {
-            mainViewModel.getUserInformation(ApplicationClass.sharedPreferencesUtil.getUser().id)
+            mainViewModel.getUserInformation(ApplicationClass.sharedPreferencesUtil.getUser().id, true)
         }
-        val loginUserInfo = mainViewModel.userInformation.value!!
-        val loginUser = User(loginUserInfo.id, loginUserInfo.nickname, loginUserInfo.img.toString())
-        binding.loginUser = loginUser
+        Log.d(TAG, "onCreate: ${mainViewModel.loginUserInfo.value}")
+        // login user
+        mainViewModel.loginUserInfo.observe(this, {
+            Log.d(TAG, "onCreate: ${it}")
+            val loginUser = User(it.id, it.nickname, it.img.toString())
+            binding.loginUser = loginUser
+        })
 
         binding.comment = comment
         binding.boardViewModels = boardViewModel
@@ -66,6 +76,10 @@ class CommentNestedActivity : BaseActivity<ActivityCommentNestedBinding>(Activit
         commentWrite()
 
         binding.boardDetailCommentNestedIbtnBack.setOnClickListener{
+            runBlocking {
+                boardViewModel.getBoardDetail(comment.boardDetailId)
+                boardViewModel.setCommentNestedList(boardViewModel.commentAllList.value!!, comment.groupNum)
+            }
             finish()
         }
 
@@ -77,12 +91,13 @@ class CommentNestedActivity : BaseActivity<ActivityCommentNestedBinding>(Activit
 //
 //    }
 
-    fun initAdapter() {
+    private fun initAdapter() {
         runBlocking {
             boardViewModel.getBoardDetail(comment.boardDetailId)
         }
         boardViewModel.setCommentNestedList(boardViewModel.commentAllList.value!!, comment.groupNum)
         boardViewModel.commentNestedList.observe(this, Observer {
+            Log.d(TAG, "initAdapter: $it")
             commentNestedAdapter = CommentNestedAdapter(it,this, this, false, mainViewModel)
             binding.commentNestedDetailRv.apply{
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)

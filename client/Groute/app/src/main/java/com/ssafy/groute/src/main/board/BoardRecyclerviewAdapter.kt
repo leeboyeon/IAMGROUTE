@@ -25,11 +25,12 @@ import com.ssafy.groute.util.RetrofitCallback
 import androidx.recyclerview.widget.ListAdapter
 import com.ssafy.groute.databinding.ListItemBoardBinding
 import com.ssafy.groute.src.dto.User
+import com.ssafy.groute.src.viewmodel.BoardViewModel
 import kotlinx.coroutines.runBlocking
 import retrofit2.Retrofit
 
 private const val TAG = "BoardRecyclerviewAdapte"
-class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: MutableList<BoardDetail>, var boardType: Int, var context:Context) : RecyclerView.Adapter<BoardRecyclerviewAdapter.BoardRecyclerHolder>(){
+class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: MutableList<BoardDetail>, var boardType: Int, var context:Context, val boardViewModel: BoardViewModel) : RecyclerView.Adapter<BoardRecyclerviewAdapter.BoardRecyclerHolder>(){
 //class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList: MutableList<BoardDetail>, var boardType: Int, var context:Context)
 //    : ListAdapter<BoardDetail, BoardRecyclerviewAdapter.BoardRecyclerHolder>(DiffCallback) {
 
@@ -62,7 +63,6 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
         fun bindInfo(data: BoardDetail) {
             more.isVisible = data.userId == ApplicationClass.sharedPreferencesUtil.getUser().id
             if(boardType == 2 && data.placeId > 0) {
-
                 Log.d(TAG, "bindInfo_Place: ${data.placeId}")
                 val placeInfo = PlaceService().getPlace(data.placeId)
                 placeInfo.observe(lifecycleOwner, {
@@ -119,23 +119,32 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
 //                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 //                adapter = ThemeAdapter
 //            }
-
-            BoardService().isBoardLike(data.id, userId, object : RetrofitCallback<Boolean> {
-                override fun onError(t: Throwable) {
-                    Log.d(TAG, "onError: 찜하기 여부 에러")
-                }
-
-                override fun onSuccess(code: Int, responseData: Boolean) {
-                    if(responseData) {
-                        likeBtn.setColorFilter(context.resources.getColor(R.color.red))
-                    } else {
-                        likeBtn.setColorFilter(context.resources.getColor(R.color.black))
-                    }
-                }
-                override fun onFailure(code: Int) {
-                    Log.d(TAG, "onFailure: ")
-                }
-            })
+            runBlocking {
+                boardViewModel.getBoardPostIsLike(data.id, userId)
+            }
+            val res = boardViewModel.isBoardPostLike.value
+            Log.d(TAG, "bindInfo: $res")
+            if(res == true) {
+                likeBtn.setColorFilter(context.resources.getColor(R.color.red))
+            } else {
+                likeBtn.setColorFilter(context.resources.getColor(R.color.black))
+            }
+//            BoardService().isBoardLike(data.id, userId, object : RetrofitCallback<Boolean> {
+//                override fun onError(t: Throwable) {
+//                    Log.d(TAG, "onError: 찜하기 여부 에러")
+//                }
+//
+//                override fun onSuccess(code: Int, responseData: Boolean) {
+//                    if(responseData) {
+//                        likeBtn.setColorFilter(context.resources.getColor(R.color.red))
+//                    } else {
+//                        likeBtn.setColorFilter(context.resources.getColor(R.color.black))
+//                    }
+//                }
+//                override fun onFailure(code: Int) {
+//                    Log.d(TAG, "onFailure: ")
+//                }
+//            })
 
 //            likeBtn.setOnClickListener{
 //                itemClickListener.isLIke(it, layoutPosition, data.id)
@@ -146,7 +155,13 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardRecyclerHolder {
 //        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_board, parent, false)
 //        return BoardHolder(view)
-        return BoardRecyclerHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.list_item_board, parent, false))
+        return BoardRecyclerHolder(
+            DataBindingUtil.inflate(
+                LayoutInflater.from(
+                    parent.context
+                ), R.layout.list_item_board, parent, false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: BoardRecyclerviewAdapter.BoardRecyclerHolder, position: Int) {
@@ -209,7 +224,7 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
                 Toast.makeText(context,"삭제되었습니다.",Toast.LENGTH_SHORT).show()
                 boardList.removeAt(position)
                 runBlocking {
-
+                    boardViewModel.getBoardDetail(boardList[position].id)
                 }
             }
         }
