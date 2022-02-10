@@ -30,7 +30,9 @@ public class UserPlanServiceImpl implements UserPlanService {
     public void insertUserPlan(UserPlan userPlan, List<String> userIds, int planId) throws Exception {
         userPlanMapper.insertUserPlan(userPlan);
         for(String userId: userIds){
-            planShareUserMapper.insertPlanShareUser(new PlanShareUser(userId, userPlan.getId()));
+            if(planShareUserMapper.selectByUserIdPlanId(new PlanShareUser(userId,userPlan.getId()))==0) {
+                planShareUserMapper.insertPlanShareUser(new PlanShareUser(userId, userPlan.getId()));
+            }
         }
         for(int i=1;i<=userPlan.getTotalDate();i++) {
             Route route = new Route("Day" + i, i, "", "Y");
