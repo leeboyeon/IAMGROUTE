@@ -85,29 +85,24 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.Home -> {
-//                    binding.mainProfileBar.visibility = true
-                    binding.mainProfileBar.isVisible = true
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.frame_main_layout, HomeFragment())
                         .commit()
                     true
                 }
                 R.id.Route -> {
-                    binding.mainProfileBar.isVisible = true
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.frame_main_layout, RouteFragment())
                         .commit()
                     true
                 }
                 R.id.Board -> {
-                    binding.mainProfileBar.isVisible = false
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.frame_main_layout, BoardFragment())
                         .commit()
                     true
                 }
                 R.id.My -> {
-                    binding.mainProfileBar.isVisible = false
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.frame_main_layout, MyFragment())
                         .commit()
@@ -145,6 +140,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
     fun openFragment(index:Int, key1:String, value1:Int, key2:String, value2:Int){
         val transaction = supportFragmentManager.beginTransaction()
+        val fm = supportFragmentManager
         when(index){
             1 -> {
                 //루트생성화면
@@ -212,8 +208,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .addToBackStack(null)
             }
             16 ->{
-                transaction.replace(R.id.frame_main_layout, RouteFragment.newInstance(key1,value1, key2, value2))
-                    .addToBackStack(null)
+                fm.popBackStack()
+                bottomNavigation.selectedItemId = R.id.Route
+                binding.mainProfileBar.isVisible = false
+                supportFragmentManager.beginTransaction().replace(R.id.frame_main_layout, RouteFragment.newInstance(key1,value1, key2, value2))
+                    .commit()
+
             }
             17 -> {
                 transaction.replace(R.id.frame_main_layout, SharedMemberFragment.newInstance(key1,value1))
