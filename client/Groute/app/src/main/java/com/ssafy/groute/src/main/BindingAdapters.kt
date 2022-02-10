@@ -225,6 +225,7 @@ fun bindbottomSheetRecyclerView(recyclerView: RecyclerView, data: List<UserPlan>
  */
 @BindingAdapter("listData") // BoardFragment + BoardAdapter
 fun bindBoardRecyclerView(recyclerView: RecyclerView, data: List<BoardDetail>?) {
+
     var adapter = recyclerView.adapter as BoardAdapter
     if(recyclerView.adapter == null){
         adapter.setHasStableIds(true)
@@ -232,7 +233,18 @@ fun bindBoardRecyclerView(recyclerView: RecyclerView, data: List<BoardDetail>?) 
     }else{
         adapter = recyclerView.adapter as BoardAdapter
     }
-    adapter.boardList = data as MutableList<BoardDetail>
+
+    val tmp = mutableListOf<BoardDetail>()
+    if(data != null) {
+        if (data.size >= 5) {
+            for (i in 0 until 5) {
+                tmp.add(data[i])
+            }
+            adapter.boardList = tmp as MutableList<BoardDetail>
+        } else {
+            adapter.boardList = data as MutableList<BoardDetail>
+        }
+    }
     adapter.notifyDataSetChanged()
 //    adapter.submitList(data)
 //            adapter.setList(data)

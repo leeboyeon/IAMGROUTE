@@ -183,7 +183,6 @@ class PlanViewModel : ViewModel() {
     fun setIsLoading(loading: Boolean) = viewModelScope.launch {
         _isLoading.value = loading
     }
-
     fun setAccountList(account: MutableList<AccountOut>) = viewModelScope.launch {
         _accountListResponse.value = account
     }
@@ -583,11 +582,11 @@ class PlanViewModel : ViewModel() {
         }
     }
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun getAccountList(planId:Int){
+    suspend fun getAccountList(planId:Int) {
         val response = AccountService().getListByPlanId(planId)
-        viewModelScope.launch { 
+        viewModelScope.launch {
             var res = response.body()
-            if(response.code() == 200 ){
+            if (response.code() == 200) {
                 var sDate = planList.value!!.startDate
                 var totalDate = planList.value!!.totalDate
 
@@ -595,11 +594,11 @@ class PlanViewModel : ViewModel() {
                 var outlist = arrayListOf<AccountOut>()
                 var accountlist = arrayListOf<Account>()
 
-                if(res!=null){
-                    for(i in 0 until totalDate){
-                        for(j in 0..res.size-1){
-                            if(res[j].day == i+1){
-                                Log.d(TAG, "getAccountList: ${res[j].day} || ${i+1}")
+                if (res != null) {
+                    for (i in 0 until totalDate) {
+                        for (j in 0..res.size - 1) {
+                            if (res[j].day == i + 1) {
+                                Log.d(TAG, "getAccountList: ${res[j].day} || ${i + 1}")
                                 accountlist.add(res[j])
                             }
                         }
@@ -613,7 +612,7 @@ class PlanViewModel : ViewModel() {
                 Log.d(TAG, "getAccountList: ${outlist}")
                 setAccountList(outlist)
 
-            }else{
+            } else {
                 Log.d(TAG, "getAccountList: ${response.code()}")
             }
         }

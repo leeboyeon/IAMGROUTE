@@ -67,7 +67,6 @@ class BoardAdapter(var boardList : MutableList<BoardDetail>, val context: Contex
             )
 
             binding.boardDetail = data
-            Log.d(TAG, "bindInfo: $data")
             binding.executePendingBindings()
 //            itemView.findViewById<TextView>(R.id.board_tv_writeTitle).text = data.title
 //            itemView.findViewById<TextView>(R.id.board_tv_writeContent).text = data.content
