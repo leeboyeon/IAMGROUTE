@@ -47,11 +47,9 @@ import net.daum.mf.map.api.MapView
 
 private const val TAG = "TravelPlanFragment"
 class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTravelPlanBinding::bind, R.layout.fragment_travel_plan) {
-// class TravelPlanFragment: Fragment(){
 
-//    private lateinit var binding:FragmentTravelPlanBinding
     private lateinit var mainActivity: MainActivity
-//    lateinit var con : ViewGroup
+
     lateinit var addButton: FloatingActionButton
     lateinit var memoAddButton: FloatingActionButton
     lateinit var routeRecomButton: FloatingActionButton
@@ -121,6 +119,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 money.progress = animation.animatedValue as Float
             }
             animator.start()
+            mainActivity.moveFragment(19,"planId",planId)
         }
 
         binding.travelplanMemberBtn.setOnClickListener {

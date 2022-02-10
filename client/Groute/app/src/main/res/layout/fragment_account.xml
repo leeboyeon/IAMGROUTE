@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".src.main.travel.AccountFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/account_ibtn_back"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/left"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView35"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:text="여행 가계부"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/account_btn_div"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@android:color/transparent"
+                android:includeFontPadding="false"
+                android:text="정산"
+                android:textColor="@color/blue_700"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/toggleLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/drawable_toggle_background"
+            android:orientation="horizontal"
+            android:paddingStart="5dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="3dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+
+            <TextView
+                android:id="@+id/account_toggle_cate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/drawable_toggle_item_background"
+                android:paddingStart="30dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="30dp"
+                android:paddingBottom="5dp"
+                android:text="분류별"
+                android:textColor="#353434" />
+
+            <TextView
+                android:id="@+id/account_toggle_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingStart="30dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="30dp"
+                android:paddingBottom="5dp"
+                android:text="일자별"
+                android:textColor="#353434" />
+        </LinearLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/accountvp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toggleLayout" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/account_fab_write"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="30dp"
+            android:clickable="true"
+            android:src="@drawable/add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

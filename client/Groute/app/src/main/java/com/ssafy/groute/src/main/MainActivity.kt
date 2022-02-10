@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -39,12 +40,10 @@ import com.ssafy.groute.src.main.route.RouteCreateFragment
 import com.ssafy.groute.src.main.route.RouteDetailFragment
 import com.ssafy.groute.src.main.route.RouteFragment
 import com.ssafy.groute.src.main.route.RouteReviewWriteFragment
-import com.ssafy.groute.src.main.travel.PlaceTmpFragment
-import com.ssafy.groute.src.main.travel.SharePlanWriteFragment
-import com.ssafy.groute.src.main.travel.SharedMemberFragment
-import com.ssafy.groute.src.main.travel.TravelPlanFragment
+import com.ssafy.groute.src.main.travel.*
 import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
+import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.LocationPermissionManager
 import com.ssafy.groute.util.LocationServiceManager
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -70,6 +69,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     // Naver Logout 인증 변수
     lateinit var mOAuthLoginInstance : OAuthLogin
 
+    //viewModel
+    private val planViewModel: PlanViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Naver Logout init
@@ -220,6 +221,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             }
             18 -> {
                 transaction.replace(R.id.frame_main_layout, SharePlanWriteFragment.newInstance(key1,value1))
+            }
+            19 -> {
+                transaction.replace(R.id.frame_main_layout, AccountFragment.newInstance(key1,value1))
+            }
+            20->{
+                transaction.replace(R.id.frame_main_layout, AccountWriteFragment.newInstance(key1,value1))
+                    .addToBackStack(null)
             }
 
         }
