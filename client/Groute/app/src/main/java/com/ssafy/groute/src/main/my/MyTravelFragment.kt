@@ -21,7 +21,7 @@ import kotlinx.coroutines.runBlocking
 
 class MyTravelFragment : BaseFragment<FragmentMyTravelBinding>(FragmentMyTravelBinding::bind, R.layout.fragment_my_travel) {
 //    private lateinit var binding: FragmentMyTravelBinding
-    private var mytravelAdapter:MyTravelAdapter = MyTravelAdapter()
+    private lateinit var mytravelAdapter: MyTravelAdapter
     private lateinit var mainActivity:MainActivity
     private val planViewModel:PlanViewModel by activityViewModels()
     val ing = mutableListOf<MyTravel>()
@@ -47,7 +47,7 @@ class MyTravelFragment : BaseFragment<FragmentMyTravelBinding>(FragmentMyTravelB
     }
     fun planedAdapter(){
         planViewModel.planNotEndList.observe(viewLifecycleOwner, Observer {
-            mytravelAdapter = MyTravelAdapter()
+            mytravelAdapter = MyTravelAdapter(planViewModel)
             mytravelAdapter.list = it
             mytravelAdapter.setItemClickListener(object: MyTravelAdapter.ItemClickListener{
                 override fun onClick(view: View, position: Int, id:Int) {
@@ -65,7 +65,7 @@ class MyTravelFragment : BaseFragment<FragmentMyTravelBinding>(FragmentMyTravelB
 
     fun endAdapter(){
         planViewModel.planEndList.observe(viewLifecycleOwner, Observer {
-            mytravelAdapter = MyTravelAdapter()
+            mytravelAdapter = MyTravelAdapter(planViewModel)
             mytravelAdapter.list = it
             mytravelAdapter.setItemClickListener(object: MyTravelAdapter.ItemClickListener{
                 override fun onClick(view: View, position: Int, id:Int) {

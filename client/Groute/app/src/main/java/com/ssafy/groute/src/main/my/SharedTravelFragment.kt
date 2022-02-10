@@ -46,7 +46,7 @@ class SharedTravelFragment : BaseFragment<FragmentSharedTravelBinding>(FragmentS
         initAdapter()
     }
     fun initAdapter(){
-        sharedAdapter = SharedTravelAdapter()
+        sharedAdapter = SharedTravelAdapter(planViewModel)
         planViewModel.sharedTravelList.observe(viewLifecycleOwner, Observer {
             sharedAdapter.setShareTravelList(it)
             sharedAdapter.notifyDataSetChanged()

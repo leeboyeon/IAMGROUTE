@@ -21,6 +21,7 @@ import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
+import com.bumptech.glide.Glide
 import com.ssafy.groute.src.dto.*
 import com.ssafy.groute.src.main.home.PlaceFilterAdapter
 
@@ -53,6 +54,26 @@ class RouteListRecyclerviewAdapter(val planViewModel: PlanViewModel, val viewLif
 
         @SuppressLint("LongLogTag")
         fun bindInfo(data: UserPlan, position: Int) {
+            runBlocking {
+                planViewModel.getPlanById(data.id, false)
+            }
+            var imgUrl = ""
+            for(i in 0 until planViewModel.routeList.value!!.size) {
+                for(j in 0 until planViewModel.routeList.value!!.get(i).routeDetailList.size) {
+                    var type = planViewModel.routeList.value!!.get(i).routeDetailList.get(j).place.type
+                    if(type == "관광지" || type == "레포츠" || type == "문화시설") {
+                        imgUrl = planViewModel.routeList.value!!.get(i).routeDetailList.get(j).place.img
+                        break
+                    }
+                }
+            }
+            if(imgUrl == "") {
+                routeImg.setImageResource(R.drawable.defaultimg)
+            } else {
+                Glide.with(itemView)
+                    .load("${ApplicationClass.IMGS_URL_PLACE}${imgUrl}")
+                    .into(routeImg)
+            }
             routeDate.text = "12 March, 20"
             if(data.totalDate == 1) {
                 routeDate.text = "당일치기"

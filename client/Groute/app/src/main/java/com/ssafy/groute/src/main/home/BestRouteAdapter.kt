@@ -3,16 +3,42 @@ package com.ssafy.groute.src.main.home
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
+import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.src.dto.UserPlan
+import com.ssafy.groute.src.viewmodel.PlanViewModel
+import kotlinx.coroutines.runBlocking
 
-class BestRouteAdapter(var list: MutableList<UserPlan>) : RecyclerView.Adapter<BestRouteAdapter.BestRouteHolder>(){
+class BestRouteAdapter(var list: MutableList<UserPlan>, val planViewModel: PlanViewModel) : RecyclerView.Adapter<BestRouteAdapter.BestRouteHolder>(){
 
     inner class BestRouteHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        val routeImg = itemView.findViewById<ImageView>(R.id.home_best_img)
         fun bindInfo(data : UserPlan){
+            runBlocking {
+                planViewModel.getPlanById(data.id, false)
+            }
+            var imgUrl = ""
+            for(i in 0 until planViewModel.routeList.value!!.size) {
+                for(j in 0 until planViewModel.routeList.value!!.get(i).routeDetailList.size) {
+                    var type = planViewModel.routeList.value!!.get(i).routeDetailList.get(j).place.type
+                    if(type == "관광지" || type == "레포츠" || type == "문화시설") {
+                        imgUrl = planViewModel.routeList.value!!.get(i).routeDetailList.get(j).place.img
+                        break
+                    }
+                }
+            }
+            if(imgUrl == "") {
+                routeImg.setImageResource(R.drawable.defaultimg)
+            } else {
+                Glide.with(itemView)
+                    .load("${ApplicationClass.IMGS_URL_PLACE}${imgUrl}")
+                    .circleCrop()
+                    .into(routeImg)
+            }
             itemView.findViewById<TextView>(R.id.home_best_title).text = "[제주도] ${data.title}"
         }
 
@@ -27,7 +53,7 @@ class BestRouteAdapter(var list: MutableList<UserPlan>) : RecyclerView.Adapter<B
         holder.apply {
             bindInfo(list[position])
             itemView.setOnClickListener {
-                itemClickListener.onClick(it, position, list[position].title)
+                itemClickListener.onClick(it, position, list[position].id)
             }
         }
     }
@@ -37,7 +63,7 @@ class BestRouteAdapter(var list: MutableList<UserPlan>) : RecyclerView.Adapter<B
     }
 
     interface ItemClickListener{
-        fun onClick(view: View, position: Int, name: String)
+        fun onClick(view: View, position: Int, id: Int)
     }
     private lateinit var itemClickListener : ItemClickListener
     fun setItemClickListener(itemClickListener: ItemClickListener){

@@ -136,20 +136,19 @@ class HomeFragment : Fragment() {
      * */
     private fun initBestPlanAdapter(){
         planViewModel.planBestList.observe(viewLifecycleOwner, Observer {
-            bestrouteAdatper = BestRouteAdapter(it)
-            //        bestrouteAdatper.setItemClickListener(object : BestRouteAdapter.ItemClickListener{
-//            override fun onClick(view: View, position: Int, name: String) {
-////
-//            }
-//
-//          })
-
+            bestrouteAdatper = BestRouteAdapter(it, planViewModel)
             bestrouteAdatper.notifyDataSetChanged()
             binding.homeRvBestRoute.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
                 adapter = bestrouteAdatper
                 adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
+            bestrouteAdatper.setItemClickListener(object : BestRouteAdapter.ItemClickListener{
+                override fun onClick(view: View, position: Int, id: Int) {
+                    mainActivity.moveFragment(12, "planIdDetail", id, "planIdUser", -1)
+                }
+
+            })
         })
     }
 
