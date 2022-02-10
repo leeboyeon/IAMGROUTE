@@ -1,16 +1,19 @@
 package com.ssafy.groute.src.viewmodel
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ssafy.groute.src.dto.*
+import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.service.ThemeService
 import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitUtil
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import retrofit2.Response
@@ -35,6 +38,7 @@ class PlanViewModel : ViewModel() {
     private val _planLikeListResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _userPlanResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _currentUserPlanResponse = MutableLiveData<UserPlan>()
+    private val _isLoading = MutableLiveData<Boolean>()
 
     //    private val _routeResponse = MutableLiveData<MutableList<>>
 //    private val _routeDetailResponse = MutableLiveData<MutableList<>>
@@ -70,6 +74,9 @@ class PlanViewModel : ViewModel() {
         get() = _userPlanResponse
     val currentUserPlan:LiveData<UserPlan>
         get() = _currentUserPlanResponse
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
 
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planBestResponse.value = plan
@@ -156,6 +163,10 @@ class PlanViewModel : ViewModel() {
     }
     fun setUserNotPlanList() = viewModelScope.launch {
         _userPlanResponse.value = planNotEndList.value
+    }
+
+    fun setIsLoading(loading: Boolean) = viewModelScope.launch {
+        _isLoading.value = loading
     }
 
 
@@ -519,6 +530,7 @@ class PlanViewModel : ViewModel() {
 
     fun getPlanByPlace(planId: Int, flag: Int) {
         viewModelScope.launch {
+            setIsLoading(true)
             setUserPlanList(mutableListOf())
             setUserPlanByDayList(mutableListOf())
             var placeIds = mutableListOf<Int>()
@@ -535,6 +547,7 @@ class PlanViewModel : ViewModel() {
                 if (res != null) {
                     setUserPlanList(res)
                     setUserPlanByDayList(res)
+                    setIsLoading(false)
                     Log.d(TAG, "getPlanByPlace: ${res}")
                 } else {
                     Log.d(TAG, "getPlanByPlace: ISNULL")
