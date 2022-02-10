@@ -1,5 +1,6 @@
 package com.ssafy.groute.src.main.my
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,20 +8,24 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
+import com.ssafy.groute.src.dto.UserPlan
 import com.ssafy.groute.src.main.home.BestRoute
 import com.ssafy.groute.src.main.home.BestRouteAdapter
 
-class SharedTravelAdapter  : RecyclerView.Adapter<SharedTravelAdapter.SharedHolder>(){
+class SharedTravelAdapter()  : RecyclerView.Adapter<SharedTravelAdapter.SharedHolder>(){
+    var list = mutableListOf<UserPlan>()
 
-    var list = mutableListOf<BestRoute>()
+    fun setShareTravelList(list: List<UserPlan>?) {
+        if(list == null) {
+            this.list = ArrayList()
+        } else {
+            this.list = list.toMutableList()!!
+            notifyDataSetChanged()
+        }
+    }
     inner class SharedHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun bindInfo(data : BestRoute){
-            Glide.with(itemView)
-                .load(data.img)
-                .into(itemView.findViewById(R.id.home_best_img))
-
+        fun bindInfo(data : UserPlan){
             itemView.findViewById<TextView>(R.id.home_best_title).text = data.title
-
         }
 
     }

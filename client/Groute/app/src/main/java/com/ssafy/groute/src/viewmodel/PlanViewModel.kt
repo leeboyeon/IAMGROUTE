@@ -48,6 +48,7 @@ class PlanViewModel : ViewModel() {
 
     private val _accountListResponse = MutableLiveData<MutableList<AccountOut>>()
     private val  _accountCategoryListResponse = MutableLiveData<MutableList<AccountCategory>>()
+    private val _sharedTravelListResponse = MutableLiveData<MutableList<UserPlan>>()
     //    private val _routeResponse = MutableLiveData<MutableList<>>
 //    private val _routeDetailResponse = MutableLiveData<MutableList<>>
     val planBestList: LiveData<MutableList<UserPlan>>
@@ -89,6 +90,8 @@ class PlanViewModel : ViewModel() {
         get() = _accountListResponse
     val accountCategoryList :LiveData<MutableList<AccountCategory>>
         get() =  _accountCategoryListResponse
+    val sharedTravelList: LiveData<MutableList<UserPlan>>
+        get() = _sharedTravelListResponse
 
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planBestResponse.value = plan
@@ -180,12 +183,15 @@ class PlanViewModel : ViewModel() {
     fun setIsLoading(loading: Boolean) = viewModelScope.launch {
         _isLoading.value = loading
     }
-    
+
     fun setAccountList(account: MutableList<AccountOut>) = viewModelScope.launch {
         _accountListResponse.value = account
     }
     fun setAccountCategory(category: MutableList<AccountCategory>) = viewModelScope.launch {
         _accountCategoryListResponse.value = category
+    }
+    fun setSharedTravelList(sharedTravelList: MutableList<UserPlan>) = viewModelScope.launch {
+        _sharedTravelListResponse.value = sharedTravelList
     }
 
 
@@ -622,6 +628,19 @@ class PlanViewModel : ViewModel() {
                     setAccountCategory(res)
                 }
             }
+        }
+    }
+
+    fun getSharedPlanList() {
+        viewModelScope.launch {
+            var list = mutableListOf<UserPlan>()
+            for(i in 0 until planMyList.value!!.size) {
+                if(planMyList.value!!.get(i).isPublic == "T") {
+                    list.add(planMyList.value!!.get(i))
+                }
+            }
+            Log.d(TAG, "getSharedPlanList: $list")
+            setSharedTravelList(list)
         }
     }
 }

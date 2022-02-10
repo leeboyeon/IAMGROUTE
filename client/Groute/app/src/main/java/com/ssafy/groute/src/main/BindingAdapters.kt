@@ -16,6 +16,7 @@ import com.ssafy.groute.src.main.home.PlaceFilterAdapter
 import com.ssafy.groute.src.main.home.ReviewAdapter
 import com.ssafy.groute.src.main.my.MyTravel
 import com.ssafy.groute.src.main.my.MyTravelAdapter
+import com.ssafy.groute.src.main.my.SharedTravelAdapter
 import com.ssafy.groute.src.main.route.*
 import com.ssafy.groute.src.main.travel.PlaceShopAdapter
 import com.ssafy.groute.src.main.travel.SharedMemberAdapter
@@ -291,3 +292,10 @@ fun bindCommentNestedRecyclerView(recyclerView: RecyclerView, data: List<Comment
 //    adapter.setCommentNestedList(data)
 //    adapter.notifyDataSetChanged()
 //}
+
+@BindingAdapter("sharedPlanListData")
+fun bindSharedPlanListRecyclerView(recyclerView: RecyclerView, data: List<UserPlan>?) {
+    var adapter = recyclerView.adapter as SharedTravelAdapter
+    adapter.setShareTravelList(data)
+    adapter.notifyDataSetChanged()
+}
