@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.RecyclerviewAccountOutBinding
+import com.ssafy.groute.src.dto.Account
 import com.ssafy.groute.src.dto.AccountOut
 import com.ssafy.groute.src.dto.Route
 import com.ssafy.groute.src.dto.UserPlan
@@ -22,6 +24,17 @@ class AccountOutAdapter(val context:Context) : RecyclerView.Adapter<AccountOutAd
         fun bindInfo(data: AccountOut){
             Log.d(TAG, "bindInfo: ${data}")
             binding.dto = data
+            if(data.account.isEmpty()){
+                var nulllist = mutableListOf<Account>()
+                binding.accountInRv.adapter = AccountInAdapter(context, nulllist)
+
+            }else{
+                binding.accountInRv.adapter = AccountInAdapter(context,
+                    data.account as MutableList<Account>
+                )
+                Log.d(TAG, "bindInfo: ${data.account}")
+            }
+            binding.accountInRv.layoutManager = LinearLayoutManager(context)
             binding.executePendingBindings()
         }
     }
@@ -38,6 +51,7 @@ class AccountOutAdapter(val context:Context) : RecyclerView.Adapter<AccountOutAd
     }
 
     override fun getItemCount(): Int {
+        Log.d(TAG, "getItemCount: ${list.size}")
         return list.size
     }
 }

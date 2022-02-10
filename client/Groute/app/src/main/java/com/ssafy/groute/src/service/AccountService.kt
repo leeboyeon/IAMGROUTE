@@ -34,4 +34,6 @@ class AccountService {
 
         })
     }
+
+    suspend fun getCategoryList() = RetrofitUtil.accountService.getCategoryList()
 }

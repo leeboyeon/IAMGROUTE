@@ -49,22 +49,23 @@ class DayByAccountFragment : BaseFragment<FragmentDayByAccountBinding>(FragmentD
         runBlocking {
             planViewModel.getAccountList(planId)
         }
+
         initOutAdapter()
     }
     fun initOutAdapter(){
+        Log.d(TAG, "initOutAdapter: outout")
+        Log.d(TAG, "initOutAdapter: ${planViewModel.accountList.value}")
         planViewModel.accountList.observe(viewLifecycleOwner, Observer {
+            Log.d(TAG, "initOutAdapter: ${it}")
             accountOutAdapter = AccountOutAdapter(requireContext())
             accountOutAdapter.list = it
-            binding.accountRvList.apply {
-                layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
-                adapter = accountOutAdapter
-                adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-            }
+            Log.d(TAG, "initOutAdapter: ${it}")
+            binding.accountRvList.layoutManager = LinearLayoutManager(requireContext())
+            binding.accountRvList.adapter = accountOutAdapter
         })
 
     }
     companion object {
-
         fun newInstance(key: String, value: Int) =
             DayByAccountFragment().apply {
                 arguments = Bundle().apply {

@@ -39,7 +39,7 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
         val pagerAdapter = AccountPagerAdapter(this)
 
         pagerAdapter.addFragment(TypeByAccountFragment())
-        pagerAdapter.addFragment(DayByAccountFragment())
+        pagerAdapter.addFragment(DayByAccountFragment.newInstance("planId",planId))
 
         binding.accountvp.adapter = pagerAdapter
 
@@ -52,7 +52,9 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
             ToggleClick(false)
             binding.accountvp.currentItem = 0
         }
-
+        binding.accountFabWrite.setOnClickListener {
+            mainActivity.moveFragment(20,"planId",planId)
+        }
     }
     fun ToggleClick(clicked:Boolean){
         if(clicked){

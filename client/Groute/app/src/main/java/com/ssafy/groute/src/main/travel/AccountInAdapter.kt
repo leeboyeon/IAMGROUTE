@@ -9,11 +9,12 @@ import com.ssafy.groute.R
 import com.ssafy.groute.databinding.RecyclerviewAccountInBinding
 import com.ssafy.groute.src.dto.Account
 
-class AccountInAdapter(var context: Context) : RecyclerView.Adapter<AccountInAdapter.AccountInHolder>() {
-   var list = mutableListOf<Account>()
-    inner class AccountInHolder(var binding:RecyclerviewAccountInBinding) : RecyclerView.ViewHolder(binding.root){
+class AccountInAdapter(var context: Context, var list:MutableList<Account>) : RecyclerView.Adapter<AccountInAdapter.AccountInHolder>() {
+
+    inner class AccountInHolder(private var binding:RecyclerviewAccountInBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(item: Account){
             binding.account = item
+            binding.executePendingBindings()
         }
     }
 

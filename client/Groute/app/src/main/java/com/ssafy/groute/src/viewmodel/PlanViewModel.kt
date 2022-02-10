@@ -36,7 +36,7 @@ class PlanViewModel : ViewModel() {
     private val _shareUserListResponse = MutableLiveData<MutableList<User>>()
     private val _planLikeListResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _accountListResponse = MutableLiveData<MutableList<AccountOut>>()
-
+    private val  _accountCategoryListResponse = MutableLiveData<MutableList<AccountCategory>>()
     //    private val _routeResponse = MutableLiveData<MutableList<>>
 //    private val _routeDetailResponse = MutableLiveData<MutableList<>>
     val planBestList: LiveData<MutableList<UserPlan>>
@@ -69,7 +69,8 @@ class PlanViewModel : ViewModel() {
         get() = _planLikeListResponse
     val accountList : LiveData<MutableList<AccountOut>>
         get() = _accountListResponse
-
+    val accountCategoryList :LiveData<MutableList<AccountCategory>>
+        get() =  _accountCategoryListResponse
 
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planBestResponse.value = plan
@@ -146,9 +147,11 @@ class PlanViewModel : ViewModel() {
         _planLikeListResponse.value = plan
     }
     fun setAccountList(account: MutableList<AccountOut>) = viewModelScope.launch {
-
+        _accountListResponse.value = account
     }
-
+    fun setAccountCategory(category: MutableList<AccountCategory>) = viewModelScope.launch {
+        _accountCategoryListResponse.value = category
+    }
 
 
     suspend fun getPlanBestList() {
@@ -511,38 +514,46 @@ class PlanViewModel : ViewModel() {
         viewModelScope.launch { 
             var res = response.body()
             if(response.code() == 200 ){
-                if(res!=null){
-                    var sDate = planList.value!!.startDate
-                    var totalDate = planList.value!!.totalDate
-                    var format = SimpleDateFormat("yyyy-MM-dd")
-                    var date = LocalDate.parse(sDate, DateTimeFormatter.ISO_DATE)
-                    var outlist = arrayListOf<AccountOut>()
-                    var accountlist = arrayListOf<Account>()
-                    Log.d(TAG, "getAccountList: ${sDate} && ${totalDate} ")
-                    for(i in 0 until totalDate){
-                        var day = date.plusDays(i.toLong())
-                        Log.d(TAG, "getAccountList: $day")
+                var sDate = planList.value!!.startDate
+                var totalDate = planList.value!!.totalDate
 
+                var date = LocalDate.parse(sDate, DateTimeFormatter.ISO_DATE)
+                var outlist = arrayListOf<AccountOut>()
+                var accountlist = arrayListOf<Account>()
+
+                if(res!=null){
+                    for(i in 0 until totalDate){
                         for(j in 0..res.size-1){
                             if(res[j].day == i+1){
+                                Log.d(TAG, "getAccountList: ${res[j].day} || ${i+1}")
                                 accountlist.add(res[j])
                             }
                         }
-
-                        var accounts = AccountOut(day.toString(),accountlist)
+                        var accounts = AccountOut(date.plusDays(i.toLong()).toString(), accountlist)
+                        accountlist = arrayListOf()
                         outlist.add(accounts)
                     }
-                    Log.d(TAG, "getAccountList: ${outlist}")
-                    setAccountList(outlist)
-                    Log.d(TAG, "getAccountList: ")
-                }else{
-                    Log.d(TAG, "getAccountList: ")
+
                 }
+
+                Log.d(TAG, "getAccountList: ${outlist}")
+                setAccountList(outlist)
+
             }else{
-                Log.d(TAG, "getAccountList: ")
+                Log.d(TAG, "getAccountList: ${response.code()}")
             }
         }
     }
 
-
+    suspend fun getCategory(){
+        val response = AccountService().getCategoryList()
+        viewModelScope.launch {
+            var res = response.body()
+            if(response.code() == 200){
+                if(res!=null){
+                    setAccountCategory(res)
+                }
+            }
+        }
+    }
 }

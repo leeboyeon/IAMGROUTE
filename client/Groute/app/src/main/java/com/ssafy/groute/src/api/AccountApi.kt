@@ -1,6 +1,7 @@
 package com.ssafy.groute.src.api
 
 import com.ssafy.groute.src.dto.Account
+import com.ssafy.groute.src.dto.AccountCategory
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -15,5 +16,8 @@ interface AccountApi {
 
     @POST("/account/insert")
     fun insertAccount(@Body account: Account) : Call<Boolean>
+
+    @GET("/account/category")
+    suspend fun getCategoryList():Response<MutableList<AccountCategory>>
 
 }

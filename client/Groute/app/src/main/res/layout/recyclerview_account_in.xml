@@ -21,7 +21,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/coffee" />
+            app:imageUrlAccount="@{account.img}" />
 
         <TextView
             android:id="@+id/account_tv_money"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:text="@{account.spentMoney}"
+            android:text="@{String.valueOf(account.spentMoney)}"
             android:textColor="@color/main"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="8dp"
-            android:text="@{account.category}"
+            android:text="@{account.categoryName}"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/account_img_cateImg"
@@ -55,7 +55,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp"
-            android:text="@{account.description}"
+            android:text="@{account.type}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/account_img_cateImg"
             app:layout_constraintTop_toBottomOf="@+id/account_tv_cate" />
