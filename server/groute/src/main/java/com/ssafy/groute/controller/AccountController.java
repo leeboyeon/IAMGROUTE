@@ -1,6 +1,8 @@
 package com.ssafy.groute.controller;
 
 import com.ssafy.groute.dto.Account;
+import com.ssafy.groute.dto.AccountCategory;
+import com.ssafy.groute.service.AccountCategoryService;
 import com.ssafy.groute.service.AccountService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ public class AccountController {
 
     @Autowired
     AccountService accountService;
+    @Autowired
+    AccountCategoryService accountCategoryService;
 
     @ApiOperation(value = "account 추가",notes = "account 추가")
     @PostMapping(value = "/insert")
@@ -96,5 +100,17 @@ public class AccountController {
         }
 
         return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "list account category",notes = "account category 전체 반환")
+    @GetMapping(value = "/category")
+    public ResponseEntity<?> selectAllCategory() throws Exception{
+
+        List<AccountCategory> res = accountCategoryService.selectAllAccountCategory();
+        if(res==null){
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<List<AccountCategory>>(res,HttpStatus.OK);
     }
 }

@@ -19,27 +19,47 @@ USE `groute` ;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
---
--- Table structure for table `account`
---
+-- -----------------------------------------------------
+-- Table `groute`.`accountcategory`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `groute`.`accountcategory` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `img` VARCHAR(255) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
 
-DROP TABLE IF EXISTS `account`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `account` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `spentMoney` int NOT NULL,
-  `description` varchar(100) DEFAULT NULL COMMENT '결제 내역',
-  `category` varchar(10) DEFAULT NULL COMMENT '숙소/항공/교통/관광/식비/쇼핑/기타',
-  `cateimg` VARCHAR(255) NULL,
-  `userplan_id` int NOT NULL,
-  `type` VARCHAR(45) NULL,
-  `day` INT NULL,
+LOCK TABLES `accountcategory` WRITE;
+/*!40000 ALTER TABLE `accountcategory` DISABLE KEYS */;
+insert into `accountcategory` values(1,'카페','account/coffee.png'),(2,'식당','account/restaurant.png'),(3,'쇼핑','account/shopping.png'),(4,'항공','account/airplane.png'),(5,'교통','account/bus.png'),(6,'관광','account/tour.png'),(7,'숙소','account/house.png'),(8,'기타','account/etc.png');
+/*!40000 ALTER TABLE `accountcategory` ENABLE KEYS */;
+UNLOCK TABLES;
+
+-- -----------------------------------------------------
+-- Table `groute`.`account`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `groute`.`account` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `spentMoney` INT NOT NULL,
+  `description` VARCHAR(100) NULL DEFAULT NULL COMMENT '결제 내역',
+  `userplan_id` INT NOT NULL,
+  `type` VARCHAR(45) NULL DEFAULT NULL,
+  `day` INT NULL DEFAULT NULL,
+  `category_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_account_userplan1_idx` (`userplan_id`),
-  CONSTRAINT `fk_account_userplan1` FOREIGN KEY (`userplan_id`) REFERENCES `userplan` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  INDEX `fk_account_userplan1_idx` (`userplan_id` ASC) VISIBLE,
+  INDEX `fk_account_accountcategory1_idx` (`category_id` ASC) VISIBLE,
+  CONSTRAINT `fk_account_userplan1`
+    FOREIGN KEY (`userplan_id`)
+    REFERENCES `groute`.`userplan` (`id`),
+  CONSTRAINT `fk_account_accountcategory1`
+    FOREIGN KEY (`category_id`)
+    REFERENCES `groute`.`accountcategory` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 3
+DEFAULT CHARACTER SET = utf8mb3;
 
 --
 -- Dumping data for table `account`
