@@ -123,7 +123,9 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
     }
     fun insertReview(review:PlaceReview){
         Log.d(TAG, "insertReview: 클릭됬니?")
+
         PlaceService().insertPlaceReview(review, object : RetrofitCallback<Boolean> {
+
             override fun onError(t: Throwable) {
                 Log.d(TAG, "onError: ")
             }

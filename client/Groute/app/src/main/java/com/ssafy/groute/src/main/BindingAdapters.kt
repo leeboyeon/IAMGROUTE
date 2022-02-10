@@ -3,6 +3,7 @@ package com.ssafy.groute.src.main
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,8 @@ import com.ssafy.groute.src.main.route.*
 import com.ssafy.groute.src.main.travel.PlaceShopAdapter
 import com.ssafy.groute.src.main.travel.SharedMemberAdapter
 import com.ssafy.groute.src.main.travel.TravelPlanListRecyclerviewAdapter
+import com.ssafy.groute.util.CommonUtils
+import java.text.DecimalFormat
 
 @BindingAdapter("imageUrlArea")
 fun bindImageArea(imgView: ImageView, imgUrl: String?) {
@@ -76,7 +79,10 @@ fun bindImageAccount(imgView:ImageView, imgUrl:String?){
         .load("${ApplicationClass.IMGS_URL}${imgUrl}")
         .into(imgView)
 }
-
+@BindingAdapter("makeComma")
+fun bindMakeComma(textview:TextView, price:Int){
+    textview.text = CommonUtils.makeComma(price)
+}
 //@BindingAdapter("placeListData")  -> recycler view Adapter 사용할 때 쓰는 databinding
 //fun bindRecyclerView(recyclerView: RecyclerView, place: List<Place>?) {
 //    var adapter = recyclerView.adapter as AreaFilterAdapter

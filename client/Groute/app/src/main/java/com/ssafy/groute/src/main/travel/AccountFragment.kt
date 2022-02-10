@@ -38,7 +38,7 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
         super.onViewCreated(view, savedInstanceState)
         val pagerAdapter = AccountPagerAdapter(this)
 
-        pagerAdapter.addFragment(TypeByAccountFragment())
+        pagerAdapter.addFragment(TypeByAccountFragment.newInstance("planId",planId))
         pagerAdapter.addFragment(DayByAccountFragment.newInstance("planId",planId))
 
         binding.accountvp.adapter = pagerAdapter
