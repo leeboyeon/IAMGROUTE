@@ -180,10 +180,6 @@ class PlanViewModel : ViewModel() {
     fun setIsLoading(loading: Boolean) = viewModelScope.launch {
         _isLoading.value = loading
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> feature/profilebar_dday
     fun setAccountList(account: MutableList<AccountOut>) = viewModelScope.launch {
         _accountListResponse.value = account
     }
