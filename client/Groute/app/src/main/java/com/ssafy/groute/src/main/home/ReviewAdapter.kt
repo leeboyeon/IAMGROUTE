@@ -41,7 +41,7 @@ class ReviewAdapter(var owner: LifecycleOwner, var context:Context) : RecyclerVi
             if(data.img != null){
                 itemView.findViewById<ImageView>(R.id.review_iv_reviewimg).visibility = View.VISIBLE
                 Glide.with(itemView)
-                    .load("${ApplicationClass.IMGS_URL_PLACEREVIEW}${data.img}")
+                    .load("${ApplicationClass.IMGS_URL}${data.img}")
                     .into(itemView.findViewById(R.id.review_iv_reviewimg))
             }
             if(data.img == null || data.img == ""){

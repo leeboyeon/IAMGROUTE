@@ -112,22 +112,23 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
                 Log.d(TAG, "onViewCreated: ${it.toString()}")
                 binding.reviewWriteEtContent.setText(it.content)
                 binding.ratingBar.rating = it.rate.toFloat()
-                beforeImg = it.img.toString()
+                if(!(it.img == "null" || it.img == "" || it.img == null)) {
+                    binding.reviewWriteLLayoutSetImg.visibility = View.VISIBLE
+                    beforeImg = it.img.toString()
+                    // 사진 set
+                    Glide.with(requireContext())
+                        .load("${ApplicationClass.IMGS_URL}${beforeImg}")
+                        .into(binding.reviewWriteIvSelectImg)
+
+                    // 파일 이름 set
+                    binding.reviewWriteTvImgName.text = beforeImg.substring(beforeImg.lastIndexOf("/") + 1, beforeImg.length)
+                } else {
+                    beforeImg = ""
+                    binding.reviewWriteLLayoutSetImg.visibility = View.GONE
+                }
+                initModifyButton(beforeImg)
             })
 
-            if(!(beforeImg == "null" || beforeImg == "" || beforeImg == null)) {
-                binding.reviewWriteLLayoutSetImg.visibility = View.VISIBLE
-                // 사진 set
-                Glide.with(requireContext())
-                    .load("${ApplicationClass.IMGS_URL}${beforeImg}")
-                    .into(binding.reviewWriteIvSelectImg)
-
-                // 파일 이름 set
-                binding.reviewWriteTvImgName.text = beforeImg.substring(beforeImg.lastIndexOf("/") + 1, beforeImg.length)
-            } else {
-                binding.reviewWriteLLayoutSetImg.visibility = View.GONE
-            }
-            initModifyButton(beforeImg)
         } else {
             initButton()
         }
@@ -296,7 +297,7 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
             if(chk) {   // placeReview 작성인 경우
                 PlaceService().insertPlaceReview(rBody_placeReivew, null, InsertPlaceReviewCallback())
             } else {    // placeReview 수정인 경우
-                PlaceService().insertPlaceReview(rBody_placeReivew, null, UpdatePlaceReviewCallback())
+                PlaceService().updatePlaceReview(rBody_placeReivew, null, UpdatePlaceReviewCallback())
             }
         }
         // 게시글 작성 + 사진 선택한 경우
@@ -322,7 +323,7 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
             if(chk) {   // 게시글 작성인 경우
                 PlaceService().insertPlaceReview(rBody_placeReivew, uploadFile, InsertPlaceReviewCallback())
             } else {    // 게시글 수정인 경우
-                PlaceService().insertPlaceReview(rBody_placeReivew, uploadFile, UpdatePlaceReviewCallback())
+                PlaceService().updatePlaceReview(rBody_placeReivew, uploadFile, UpdatePlaceReviewCallback())
             }
         }
     }
