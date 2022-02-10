@@ -63,6 +63,7 @@ class RouteFragment :
     override fun onResume() {
         super.onResume()
         mainActivity.hideBottomNav(false)
+        binding.routeListNoneTxt.visibility = View.GONE
     }
 
     override fun onAttach(context: Context) {
@@ -98,7 +99,14 @@ class RouteFragment :
             mainActivity.moveFragment(1)
         }
 
-
+        // Loading Dialog
+        planViewModel.isLoading.observe(viewLifecycleOwner, Observer {
+            if(it) {
+                mainActivity.showLoadingDialog(requireContext())
+            } else {
+                mainActivity.dismissLoadingDialog()
+            }
+        })
     }
     fun getListInit() {
         runBlocking {
@@ -117,6 +125,7 @@ class RouteFragment :
             homeViewModel.getAreaLists()
             planViewModel.getPlanLikeList(userId)
         }
+
     }
 
     fun initAdapter() {
@@ -159,6 +168,13 @@ class RouteFragment :
         })
 
         planViewModel.userPlanByDayList.observe(viewLifecycleOwner, Observer {
+            if(it.isEmpty()) {
+                binding.routeListRv.visibility = View.GONE
+                binding.routeListNoneTxt.visibility = View.VISIBLE
+            } else {
+                binding.routeListNoneTxt.visibility = View.GONE
+                binding.routeListRv.visibility = View.VISIBLE
+            }
             RouteListAdapter = RouteListRecyclerviewAdapter(planViewModel, viewLifecycleOwner)
             RouteListAdapter.setRouteList(it)
             RouteListAdapter.setHasStableIds(true)
