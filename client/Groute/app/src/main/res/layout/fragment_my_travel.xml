@@ -54,11 +54,18 @@
                         </LinearLayout>
                     </ScrollView>
 
+                    <View
+                        android:id="@+id/view17"
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:layout_marginTop="30dp"
+                        android:background="@color/grey" />
+
                     <TextView
                         android:id="@+id/textView10"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginTop="20dp"
                         android:text="내 여행리스트"
                         android:textColor="@color/black" />
 

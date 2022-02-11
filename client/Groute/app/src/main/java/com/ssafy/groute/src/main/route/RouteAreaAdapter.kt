@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.ActivityCommentNestedBinding.bind
@@ -28,8 +29,19 @@ class RouteAreaAdapter(private val areaList:MutableList<Area>) : RecyclerView.Ad
     override fun onBindViewHolder(holder: RouteAreaHolder, position: Int) {
         val dto = areaList[position]
         holder.apply {
+            var clickFlag = false
+
             itemView.setOnClickListener {
-                itemClickListener.onClick(it, position, dto.id)
+                if(clickFlag == false){
+                    itemClickListener.onClick(it, position, dto.id)
+                    itemView.findViewById<LottieAnimationView>(R.id.checklottie_create).visibility = View.VISIBLE
+                    clickFlag = true
+                }else{
+                    itemView.findViewById<LottieAnimationView>(R.id.checklottie_create).visibility = View.INVISIBLE
+                    clickFlag = false
+
+                }
+
             }
             bind(dto)
         }
