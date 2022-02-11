@@ -280,7 +280,7 @@ fun bindCommentRecyclerView(recyclerView: RecyclerView, data: List<Comment>?) {
     }else{
         adapter = recyclerView.adapter as CommentAdapter
     }
-    adapter.commentList = data as MutableList<Comment>
+    adapter.setCommentListData(data)
     adapter.notifyDataSetChanged()
 //    adapter.submitList(data)
 //    adapter.setCommentList(data)
