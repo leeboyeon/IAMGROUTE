@@ -43,7 +43,7 @@ class RouteFragment :
     private lateinit var mainActivity: MainActivity
     lateinit var pagerAdapter: RouteTabPageAdapter
     private var days = 0
-    lateinit var routeAreaAdapter: HomeAreaAdapter
+    lateinit var routeAreaAdapter: RoutePageAreaAdapter
     private val homeViewModel: HomeViewModel by activityViewModels()
     private val planViewModel: PlanViewModel by activityViewModels()
     private var areaId = 1
@@ -130,10 +130,16 @@ class RouteFragment :
 
     fun initAdapter() {
         homeViewModel.areaList.observe(viewLifecycleOwner, Observer {
-            routeAreaAdapter = HomeAreaAdapter(it)
-            routeAreaAdapter.setItemClickListener(object : HomeAreaAdapter.ItemClickListener {
+            var selectList = arrayListOf<Int>()
+            selectList.add(1) // 제주도에 클릭이 되어있도록
+            for(i in 1 until it.size) {
+                selectList.add(0)
+            }
+            routeAreaAdapter = RoutePageAreaAdapter(it, selectList, requireContext())
+            routeAreaAdapter.setItemClickListener(object : RoutePageAreaAdapter.ItemClickListener {
                 override fun onClick(view: View, position: Int, name: String, id: Int) {
                     Log.d(TAG, "onClick: ${id}")
+                    routeAreaAdapter.notifyDataSetChanged()
                     areaId = id
                 }
             })
