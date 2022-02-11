@@ -68,35 +68,90 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/placeDetail_layout_addPlan"
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/placeDetail_layout_add"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:gravity="right"
-                android:orientation="horizontal"
-                android:paddingRight="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/boardDetail_appbar">
 
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/placeDetail_lottie_addPlan"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="20dp"
-                    app:lottie_autoPlay="false"
-                    app:lottie_fileName="plus.json"
-                    app:lottie_loop="true" />
+                <LinearLayout
+                    android:id="@+id/placeDetail_layout_addPlan"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:visibility="gone"
+                    android:orientation="horizontal"
+                    android:paddingRight="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    >
 
-                <TextView
-                    android:id="@+id/textView14"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="내 여행에 추가하기"
-                    android:textColor="@color/black" />
-            </LinearLayout>
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/placeDetail_lottie_addPlan"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        app:lottie_autoPlay="false"
+                        app:lottie_fileName="plus.json"
+                        app:lottie_loop="true" />
+
+                    <TextView
+                        android:id="@+id/textView14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="내 카트에 담기"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/placeDetail_layout_addPlan_toUserPlanList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:visibility="visible"
+                    android:orientation="horizontal"
+                    android:paddingRight="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    >
+
+                    <RelativeLayout
+                        android:id="@+id/RouteDetail_add_plan_btn"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/circle_back"
+                        android:gravity="center"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/boardDetail_appbar">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/add" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="내 일정에 추가하기"/>
+
+                </LinearLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/pd_tablayout"
@@ -104,7 +159,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/placeDetail_layout_addPlan">
+                app:layout_constraintTop_toBottomOf="@id/placeDetail_layout_add">
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"

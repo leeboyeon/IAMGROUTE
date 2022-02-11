@@ -147,7 +147,7 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         }
         planViewModel.userPlan.observe(viewLifecycleOwner, Observer {
             bottomSheetRecyclerviewAdapter =
-                BottomSheetRecyclerviewAdapter(viewLifecycleOwner, planViewModel, requireContext())
+                BottomSheetRecyclerviewAdapter(viewLifecycleOwner, planViewModel, requireContext(), true)
             bottomSheetRecyclerviewAdapter.setUserPlanList(it)
             Log.d(TAG, "showRouteAddBottomSheet: $it")
 

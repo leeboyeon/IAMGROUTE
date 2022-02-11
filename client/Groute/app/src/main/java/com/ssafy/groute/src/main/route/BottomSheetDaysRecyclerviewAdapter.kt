@@ -19,7 +19,7 @@ import com.ssafy.groute.src.viewmodel.PlanViewModel
 import kotlinx.coroutines.runBlocking
 
 private const val TAG = "BottomSheetDaysRecyclerviewAdapter"
-class BottomSheetDaysRecyclerviewAdapter( val planViewModel: PlanViewModel, val context: Context) : RecyclerView.Adapter<BottomSheetDaysRecyclerviewAdapter.BottomSheetDaysRecyclerviewHolder>(){
+class BottomSheetDaysRecyclerviewAdapter( val planViewModel: PlanViewModel, val context: Context, val flag: Boolean) : RecyclerView.Adapter<BottomSheetDaysRecyclerviewAdapter.BottomSheetDaysRecyclerviewHolder>(){
     var list = mutableListOf<Int>()
     var selectCheck: ArrayList<Int> = arrayListOf()
     fun setDayList(list: List<Int>?) {
@@ -64,43 +64,63 @@ class BottomSheetDaysRecyclerviewAdapter( val planViewModel: PlanViewModel, val 
         holder.apply {
             bindInfo(list[position], position)
 
-            var totalDate = planViewModel.planList.value!!.totalDate // 현재 내 일정에 담으려는 루트의 totalDate
             itemView.setOnClickListener{
-                if(selectCheck[position] == 0) {
-                    if(position + totalDate > list.size) { // 만약에 현재 day를 선택했을때 일정 기간을 초과하면 day끝까지 선택
+                if(flag) { // RouteDetail에서 BottomSheet
+                    var totalDate = planViewModel.planList.value!!.totalDate // 현재 내 일정에 담으려는 루트의 totalDate
+                    if(selectCheck[position] == 0) {
+                        if(position + totalDate > list.size) { // 만약에 현재 day를 선택했을때 일정 기간을 초과하면 day끝까지 선택
+                            for(i in 0 until list.size) {
+                                if(selectCheck[i] == 1) {
+                                    selectCheck[i] = 0
+                                }
+                            }
+                            for(i in position until list.size) {
+                                selectCheck[i] = 1
+                                Log.d(TAG, "onBindViewHolder: $i")
+                            }
+                            itemClickListener.onClick(position, list[position])
+                        } else {
+                            for(i in 0 until list.size) {
+                                if(selectCheck[i] == 1) {
+                                    selectCheck[i] = 0
+                                }
+
+                            }
+                            for(i in position until (position + totalDate)) {
+                                selectCheck[i] = 1
+                                Log.d(TAG, "onBindViewHolder: $i")
+                            }
+                            itemClickListener.onClick(position, list[position])
+                        }
+
+                    } else if(selectCheck[position] == 1){
+                        for(i in 0 until list.size) {
+                            if(selectCheck[i] == 1) {
+                                selectCheck[i] = 0
+                            }
+
+                        }
+                        itemClickListener.onClick(position, 0)
+                    }
+                } else { // PlaceDtail에서 BottomSheet
+                    if(selectCheck[position] == 0) {
                         for(i in 0 until list.size) {
                             if(selectCheck[i] == 1) {
                                 selectCheck[i] = 0
                             }
                         }
-                        for(i in position until list.size) {
-                            selectCheck[i] = 1
-                            Log.d(TAG, "onBindViewHolder: $i")
-                        }
+                        selectCheck[position] = 1
                         itemClickListener.onClick(position, list[position])
-                    } else {
+                    } else if(selectCheck[position] == 1) {
                         for(i in 0 until list.size) {
                             if(selectCheck[i] == 1) {
                                 selectCheck[i] = 0
                             }
-
                         }
-                        for(i in position until (position + totalDate)) {
-                            selectCheck[i] = 1
-                            Log.d(TAG, "onBindViewHolder: $i")
-                        }
-                        itemClickListener.onClick(position, list[position])
+                        itemClickListener.onClick(position, 0)
                     }
-
-                } else if(selectCheck[position] == 1){
-                    for(i in 0 until list.size) {
-                        if(selectCheck[i] == 1) {
-                            selectCheck[i] = 0
-                        }
-
-                    }
-                    itemClickListener.onClick(position, 0)
                 }
+
             }
 
         }

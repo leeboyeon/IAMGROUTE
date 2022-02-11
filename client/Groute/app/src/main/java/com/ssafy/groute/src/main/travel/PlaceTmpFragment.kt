@@ -66,6 +66,7 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
     }
     fun initTabLayout(){
         binding.emptyLayout.isVisible = false
+        binding.placeTmpAddCartBtn.isVisible = false
 
         placeViewModel.placeLikeList.observe(viewLifecycleOwner, Observer {
             initAdapter(it)
@@ -75,6 +76,7 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
                 when(tab?.position){
                     0->{
                         binding.emptyLayout.isVisible = false
+                        binding.placeTmpAddCartBtn.isVisible = false
 
                         placeViewModel.placeLikeList.observe(viewLifecycleOwner, Observer {
                             initAdapter(it)
@@ -84,15 +86,20 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
                         planViewModel.livePlaceshopList.observe(viewLifecycleOwner, Observer {
                             if(it.isEmpty()){
                                 binding.emptyLayout.isVisible = true
+                                binding.placeTmpAddCartBtn.isVisible = false
 //                                binding.emptyLayout.visibility = View.VISIBLE
                                 initAdapter(it)
                                 binding.goShopBtn.setOnClickListener {
-                                    mainActivity.moveFragment(3)
+                                    mainActivity.moveFragment(3, "planId", planId)
                                 }
                             }else{
                                 binding.emptyLayout.isVisible = false
+                                binding.placeTmpAddCartBtn.isVisible = true
 //                                binding.emptyLayout.visibility = View.GONE
                                 initAdapter(it)
+                                binding.placeTmpAddCartBtn.setOnClickListener {
+                                    mainActivity.moveFragment(3, "planId", planId)
+                                }
                             }
                         })
                     }

@@ -23,7 +23,7 @@ import com.ssafy.groute.util.CommonUtils
 import kotlinx.coroutines.runBlocking
 
 private const val TAG = "BottomSheetRecyclerviewAdapter"
-class BottomSheetRecyclerviewAdapter(val viewLifecycleOwner: LifecycleOwner, val planViewModel: PlanViewModel, val context: Context) : RecyclerView.Adapter<BottomSheetRecyclerviewAdapter.BottomSheetRecyclerviewHolder>(){
+class BottomSheetRecyclerviewAdapter(val viewLifecycleOwner: LifecycleOwner, val planViewModel: PlanViewModel, val context: Context, val flag: Boolean) : RecyclerView.Adapter<BottomSheetRecyclerviewAdapter.BottomSheetRecyclerviewHolder>(){
     var list = mutableListOf<UserPlan>()
     var selectCheck: ArrayList<Int> = arrayListOf()
     @SuppressLint("LongLogTag")
@@ -60,7 +60,7 @@ class BottomSheetRecyclerviewAdapter(val viewLifecycleOwner: LifecycleOwner, val
             for(i in 1..data.totalDate) {
                 dayList.add(i)
             }
-            var bottomSheetDaysRecyclerviewAdapter = BottomSheetDaysRecyclerviewAdapter(planViewModel, context)
+            var bottomSheetDaysRecyclerviewAdapter = BottomSheetDaysRecyclerviewAdapter(planViewModel, context, flag)
             bottomSheetDaysRecyclerviewAdapter.setDayList(dayList)
             planDaysRecyclerview.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false)
