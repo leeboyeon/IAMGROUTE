@@ -33,4 +33,16 @@
         from user
         where id in (select user_id from planshareuser where plan_id = #{planId})
     </select>
+
+    <update id="updateTokenByUserId" parameterType="User">
+        update user
+        set token = #{token}
+        where id = #{id}
+    </update>
+
+    <select id="selectUserByToken" parameterType="String" resultType="User">
+        select *
+        from user
+        where token = #{token}
+    </select>
 </mapper>

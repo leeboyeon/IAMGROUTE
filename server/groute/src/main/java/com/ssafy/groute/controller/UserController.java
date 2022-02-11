@@ -173,4 +173,27 @@ public class UserController {
 
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
+
+    @ApiOperation(value = "token 수정", notes = "id와 token만 입력")
+    @PutMapping(value = "/update/token")
+    public Boolean updateUserToken(@RequestBody User user) throws Exception{
+        try {
+            userService.updateTokenByUserId(user);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @ApiOperation(value = "토큰으로 user 조회", notes = "토큰으로 user 조회")
+    @GetMapping(value = "/token/{token}")
+    public ResponseEntity<?> selectUserByToken(@PathVariable String token) throws Exception{
+        User user = userService.selectUserByToken(token);
+        if (user == null) {
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
 }

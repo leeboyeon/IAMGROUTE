@@ -303,7 +303,7 @@ CREATE TABLE `placereview` (
   `place_id` int NOT NULL,
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(45) DEFAULT NULL,
-  `content` varchar(100) NOT NULL,
+  `content` varchar(255) NOT NULL,
   `rate` double NOT NULL,
   `img` varchar(255) DEFAULT NULL,
   `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
