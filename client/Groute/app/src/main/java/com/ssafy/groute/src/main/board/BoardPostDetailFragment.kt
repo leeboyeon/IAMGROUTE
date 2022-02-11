@@ -94,16 +94,17 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
             boardViewModel.getBoardDetail(boardDetailId)
         }
 
-        boardViewModel.boardDetail.observe(viewLifecycleOwner,{
-            runBlocking {
-                mainViewModel.getUserInformation(it.userId, false)
-            }
-            val writeUserInfo = mainViewModel.userInformation.value!!
-            val writeUser = User(writeUserInfo.id, writeUserInfo.nickname, writeUserInfo.img.toString())
-            binding.writeUser = writeUser
 
+        boardViewModel.boardDetail.observe(viewLifecycleOwner,{
             binding.boardDetail = it
         })
+        val writeUserId = boardViewModel.boardDetail.value!!.userId
+        runBlocking {
+            mainViewModel.getUserInformation(writeUserId, false)
+        }
+        val writeUserInfo = mainViewModel.userInformation.value!!
+        val writeUser = User(writeUserInfo.id, writeUserInfo.nickname, writeUserInfo.img.toString())
+        binding.writeUser = writeUser
 
         mainViewModel.loginUserInfo.observe(viewLifecycleOwner, {
             val loginUser = User(it.id, it.nickname, it.img.toString())
@@ -326,20 +327,6 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
 
     // comment insert
     private fun commentWrite(boardDetailId: Int) {
-//        val uId = ApplicationClass.sharedPreferencesUtil.getUser().id
-//        viewModel.getUser().observe(viewLifecycleOwner, Observer {
-//            if(it.type.equals("sns")){
-//                Glide.with(this)
-//                    .load(it.img)
-//                    .circleCrop()
-//                    .into(binding.commentWriteProfileIv)
-//            } else{
-//                Glide.with(this)
-//                    .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
-//                    .circleCrop()
-//                    .into(binding.commentWriteProfileIv)
-//            }
-//        })
 
         binding.commentWriteTv.setOnClickListener {
             if(binding.commentWriteEt.text.toString() == "") {
