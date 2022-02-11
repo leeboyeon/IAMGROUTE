@@ -15,4 +15,7 @@ public interface UserService {
     List<User> selectByPlanId(int planId) throws Exception;
     void updateTokenByUserId(User user) throws Exception;
     User selectUserByToken(String token) throws Exception;
+    User selectUserIdByEmail(String email) throws Exception;
+    User selectUserByIdEmail(String id, String email) throws Exception;
+    void updatePassword(User user) throws Exception;
 }

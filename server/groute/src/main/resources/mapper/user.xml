@@ -45,4 +45,18 @@
         from user
         where token = #{token}
     </select>
+    
+    <select id="selectUserIdByEmail" parameterType="String" resultType="User">
+        select id from user where email = #{email}
+    </select>
+
+    <select id="selectUserByIdEmail" parameterType="User" resultType="User">
+        select * from user where id = #{id} and email = #{email}
+    </select>
+
+    <update id="updatePassword" parameterType="User">
+        update user
+        set password = #{password}
+        where id = #{id}
+    </update>
 </mapper>
