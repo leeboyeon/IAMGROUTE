@@ -3,6 +3,7 @@ package com.ssafy.groute.src.main
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
@@ -75,9 +76,16 @@ fun bindImageAccount(imgView:ImageView, imgUrl:String?){
         .load("${ApplicationClass.IMGS_URL}${imgUrl}")
         .into(imgView)
 }
+
 @BindingAdapter("makeComma")
 fun bindMakeComma(textview:TextView, price:Int){
     textview.text = CommonUtils.makeComma(price)
+}
+
+@BindingAdapter("setRating")
+fun bindRatingBar(ratingView:RatingBar, rating : Double) {
+//    val rate = rating.toFloat()
+    ratingView.rating = rating.toFloat()
 }
 //@BindingAdapter("placeListData")  -> recycler view Adapter 사용할 때 쓰는 databinding
 //fun bindRecyclerView(recyclerView: RecyclerView, place: List<Place>?) {
