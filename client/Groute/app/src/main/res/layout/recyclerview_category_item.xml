@@ -12,32 +12,38 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rvItem_main_cL_areaAll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp">
+<!--        android:layout_margin="5dp"-->
 
-        <ImageButton
+        <ImageView
             android:id="@+id/main_iv_category"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginTop="16dp"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
+            app:imageUrlArea="@{area.img}"
+            app:layout_constraintBottom_toTopOf="@+id/main_tv_category"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/busan"
-            app:imageUrlArea="@{area.img}"/>
+            app:srcCompat="@drawable/busan" />
 
         <TextView
             android:id="@+id/main_tv_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:gravity="center"
             android:text="@{area.name}"
-            android:visibility="visible"
             android:textColor="@color/black"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/main_iv_category" />

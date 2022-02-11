@@ -3,6 +3,8 @@ package com.ssafy.groute.src.api
 import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.dto.PlaceReview
 import com.ssafy.groute.src.response.PlaceLikeResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -53,14 +55,18 @@ interface PlaceApi {
     @GET("/place/review/list/{placeId}")
     suspend fun getPlaceReviewListbyId(@Path("placeId")placeId:Int) : Response<MutableList<PlaceReview>>
 
+    // placeReview insert
+    @Multipart
     @POST("/place/review")
-    fun insertPlaceReview(@Body placeReview: PlaceReview):Call<Boolean>
+    fun insertPlaceReview(@Part("review") review : RequestBody, @Part img : MultipartBody.Part?):Call<Boolean>
 
     @DELETE("/place/review/del")
     fun deletePlaceReview(@Query("id")id:Int):Call<Boolean>
 
+    // placeReview update
+    @Multipart
     @PUT("/place/review/update")
-    fun updatePlaceReview(@Body placeReview: PlaceReview) : Call<Boolean>
+    fun updatePlaceReview(@Part("review") review : RequestBody, @Part img : MultipartBody.Part?) : Call<Boolean>
 
     @GET("/place/review/detail")
     suspend fun getReviewbyId(@Query("id")id:Int): Response<PlaceReview>
