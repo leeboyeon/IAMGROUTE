@@ -41,12 +41,7 @@ fun bindImagePlace(imgView: ImageView, imgUrl: String?) {
 
 @BindingAdapter("imageUrlUser")
 fun bindImageUser(imgView: ImageView, imgUrl: String?) {
-    if (imgUrl == "null" || imgUrl == null) {
-        Glide.with(imgView.context)
-            .load(R.drawable.user)
-            .circleCrop()
-            .into(imgView)
-    } else {
+    if(imgUrl != null) {
         if(imgUrl.contains("https://")) {
             Glide.with(imgView.context)
                 .load(imgUrl)

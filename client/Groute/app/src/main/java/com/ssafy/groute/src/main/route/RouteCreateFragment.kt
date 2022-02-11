@@ -99,7 +99,6 @@ class RouteCreateFragment : BaseFragment<FragmentRouteCreateBinding>(FragmentRou
                     memberAdapter.notifyDataSetChanged()
                 }
                 ids.apply{
-                    add(ApplicationClass.sharedPreferencesUtil.getUser().id)
                     add(userId)
                 }
                 binding.routeRvMember.apply {
@@ -153,6 +152,7 @@ class RouteCreateFragment : BaseFragment<FragmentRouteCreateBinding>(FragmentRou
         val planId = 0
         val title = binding.rcEtTitle.text.toString()
         val userId = ApplicationClass.sharedPreferencesUtil.getUser().id
+        ids.add(ApplicationClass.sharedPreferencesUtil.getUser().id)
         val userplan = UserPlan(
             areaId= areaId,
             description = "",

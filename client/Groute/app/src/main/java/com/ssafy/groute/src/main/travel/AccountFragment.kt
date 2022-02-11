@@ -1,19 +1,28 @@
 package com.ssafy.groute.src.main.travel
 
+import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.PaintDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.R
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentAccountBinding
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.viewmodel.PlanViewModel
+import com.ssafy.groute.util.CommonUtils
+import kotlinx.coroutines.runBlocking
 
 private const val TAG = "AccountFragment"
 class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBinding::bind,R.layout.fragment_account) {
@@ -36,6 +45,11 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        runBlocking {
+            planViewModel.getPlanById(planId,false)
+            planViewModel.getShareUserbyPlanId(planId)
+        }
         val pagerAdapter = AccountPagerAdapter(this)
 
         pagerAdapter.addFragment(TypeByAccountFragment.newInstance("planId",planId))
@@ -59,11 +73,50 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
             showDivDialog()
         }
     }
+    @SuppressLint("SetTextI18n")
     fun showDivDialog(){
 //        shareuser
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_div_account,null)
+        val dialog = BottomSheetDialog(requireContext())
+        if(dialogView.parent != null){
+            (dialogView.parent as ViewGroup).removeView(dialogView)
+        }
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        var param = WindowManager.LayoutParams()
+        param.width = WindowManager.LayoutParams.MATCH_PARENT
+        param.height = WindowManager.LayoutParams.MATCH_PARENT
+        var window = dialog.window
+        window?.attributes = param
+        dialog.setContentView(dialogView)
+        dialogView.findViewById<TextView>(R.id.accountDia_tv_date).text = "${planViewModel.planList.value!!.startDate} ~ ${planViewModel.planList.value!!.endDate}"
+        dialogView.findViewById<TextView>(R.id.accountDia_tv_memberCnt).text = "공유된 사용자는 총 ${planViewModel.shareUserList.value!!.size}명입니다"
+        var total = 0
+        for(i in 0..planViewModel.accountPriceList.value!!.size-1){
+            total += planViewModel.accountPriceList.value!![i]
+        }
 
+        var member = planViewModel.shareUserList.value!!.size
+        dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text = member.toString()
+        var div = total/member
+        dialogView.findViewById<TextView>(R.id.accountDia_tv_total).text = "1인, ${CommonUtils.makeComma(div)}"
+
+        dialogView.findViewById<ImageButton>(R.id.accountDia_ibtn_minus).setOnClickListener {
+            if(member > 0){
+                dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text = member--.toString()
+                var div = total/dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text.toString().toInt()
+                dialogView.findViewById<TextView>(R.id.accountDia_tv_total).text = "1인, ${CommonUtils.makeComma(div)}"
+            }
+        }
+        dialogView.findViewById<ImageButton>(R.id.accountDia_ibtn_plus).setOnClickListener {
+            dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text = member++.toString()
+            var div = total/dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text.toString().toInt()
+            dialogView.findViewById<TextView>(R.id.accountDia_tv_total).text = "1인, ${CommonUtils.makeComma(div)}"
+        }
+        dialog.show()
+        dialogView.findViewById<ImageButton>(R.id.accountDia_ibtn_back).setOnClickListener {
+            dialog.dismiss()
+        }
     }
     fun ToggleClick(clicked:Boolean){
         if(clicked){
