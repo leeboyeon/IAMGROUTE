@@ -12,6 +12,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayoutMediator
@@ -20,6 +21,7 @@ import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentAccountBinding
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.viewmodel.PlanViewModel
+import com.ssafy.groute.util.CommonUtils
 import kotlinx.coroutines.runBlocking
 
 private const val TAG = "AccountFragment"
@@ -43,6 +45,7 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         runBlocking {
             planViewModel.getPlanById(planId,false)
             planViewModel.getShareUserbyPlanId(planId)
@@ -74,9 +77,7 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
     fun showDivDialog(){
 //        shareuser
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_div_account,null)
-
         val dialog = BottomSheetDialog(requireContext())
-
         if(dialogView.parent != null){
             (dialogView.parent as ViewGroup).removeView(dialogView)
         }
@@ -90,17 +91,27 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
         dialog.setContentView(dialogView)
         dialogView.findViewById<TextView>(R.id.accountDia_tv_date).text = "${planViewModel.planList.value!!.startDate} ~ ${planViewModel.planList.value!!.endDate}"
         dialogView.findViewById<TextView>(R.id.accountDia_tv_memberCnt).text = "공유된 사용자는 총 ${planViewModel.shareUserList.value!!.size}명입니다"
-        var member = planViewModel.shareUserList.value!!.size
+        var total = 0
+        for(i in 0..planViewModel.accountPriceList.value!!.size-1){
+            total += planViewModel.accountPriceList.value!![i]
+        }
 
+        var member = planViewModel.shareUserList.value!!.size
         dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text = member.toString()
+        var div = total/member
+        dialogView.findViewById<TextView>(R.id.accountDia_tv_total).text = "1인, ${CommonUtils.makeComma(div)}"
 
         dialogView.findViewById<ImageButton>(R.id.accountDia_ibtn_minus).setOnClickListener {
             if(member > 0){
-                member--
+                dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text = member--.toString()
+                var div = total/dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text.toString().toInt()
+                dialogView.findViewById<TextView>(R.id.accountDia_tv_total).text = "1인, ${CommonUtils.makeComma(div)}"
             }
         }
         dialogView.findViewById<ImageButton>(R.id.accountDia_ibtn_plus).setOnClickListener {
-            member++
+            dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text = member++.toString()
+            var div = total/dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text.toString().toInt()
+            dialogView.findViewById<TextView>(R.id.accountDia_tv_total).text = "1인, ${CommonUtils.makeComma(div)}"
         }
         dialog.show()
         dialogView.findViewById<ImageButton>(R.id.accountDia_ibtn_back).setOnClickListener {
