@@ -7,20 +7,15 @@ import java.util.List;
 
 @Mapper
 public interface UserMapper {
-
     int registerUser(User user);
-
     User findById(String userId);
-
     User findByUidType(String id,String type);
-
     int deleteUser(String userId);
-
     int updateUser(User user);
-
     List<User> selectByPlanId(int planId) throws Exception;
-
     void updateTokenByUserId(User user) throws Exception;
-
     User selectUserByToken(String token) throws Exception;
+    User selectUserIdByEmail(String email) throws Exception;
+    User selectUserByIdEmail(String id, String email) throws Exception;
+    void updatePassword(User user) throws Exception;
 }

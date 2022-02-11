@@ -102,4 +102,19 @@ public class UserServiceImpl implements UserService {
     public User selectUserByToken(String token) throws Exception {
         return userMapper.selectUserByToken(token);
     }
+
+    @Override
+    public User selectUserIdByEmail(String email) throws Exception {
+        return userMapper.selectUserIdByEmail(email);
+    }
+
+    @Override
+    public User selectUserByIdEmail(String id, String email) throws Exception {
+        return userMapper.selectUserByIdEmail(id,email);
+    }
+
+    @Override
+    public void updatePassword(User user) throws Exception {
+        userMapper.updatePassword(user);
+    }
 }
