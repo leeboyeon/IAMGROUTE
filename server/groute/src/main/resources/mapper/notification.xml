@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.groute.mapper.NotificationMapper">
+    <insert id="insertNotification" parameterType="Notification">
+        insert into notification(user_id, category, content, date)
+        values(#{userId}, #{category}, #{content}, #{date})
+    </insert>
+
+    <select id="selectNotification" parameterType="int" resultMap="NotificationDTO">
+        select * from notification
+        where id = #{id}
+    </select>
+
+    <resultMap id="NotificationDTO" type="Notification">
+        <result column="user_id" property="userId"></result>
+    </resultMap>
+
+    <select id="selectNotificationByUserId"  resultMap="NotificationDTO">
+        select * from notification
+        where user_id = #{userId}
+    </select>
+
+    <delete id="deleteNotification" parameterType="int">
+        delete from notification
+        where id = #{id}
+    </delete>
+
+    <update id="updateNotification" parameterType="Notification">
+        update notification
+        set category = #{category}, content = #{content}, date = #{date}
+        where id = #{id}
+    </update>
+</mapper>

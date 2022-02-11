@@ -4,10 +4,6 @@
 -- ------------------------------------------------------
 -- Server version	8.0.27
 
-drop schema if exists groute;
-CREATE SCHEMA IF NOT EXISTS `groute` DEFAULT CHARACTER SET utf8 ;
-USE `groute` ;
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -19,47 +15,28 @@ USE `groute` ;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- -----------------------------------------------------
--- Table `groute`.`accountcategory`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `groute`.`accountcategory` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  `img` VARCHAR(255) NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
+--
+-- Table structure for table `account`
+--
 
-LOCK TABLES `accountcategory` WRITE;
-/*!40000 ALTER TABLE `accountcategory` DISABLE KEYS */;
-insert into `accountcategory` values(1,'카페','account/coffee.png'),(2,'식당','account/restaurant.png'),(3,'쇼핑','account/shopping.png'),(4,'항공','account/airplane.png'),(5,'교통','account/bus.png'),(6,'관광','account/tour.png'),(7,'숙소','account/house.png'),(8,'기타','account/etc.png');
-/*!40000 ALTER TABLE `accountcategory` ENABLE KEYS */;
-UNLOCK TABLES;
-
--- -----------------------------------------------------
--- Table `groute`.`account`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `groute`.`account` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `spentMoney` INT NOT NULL,
-  `description` VARCHAR(100) NULL DEFAULT NULL COMMENT '결제 내역',
-  `userplan_id` INT NOT NULL,
-  `type` VARCHAR(45) NULL DEFAULT NULL,
-  `day` INT NULL DEFAULT NULL,
-  `category_id` INT NOT NULL,
+DROP TABLE IF EXISTS `account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `account` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `spentMoney` int NOT NULL,
+  `description` varchar(100) DEFAULT NULL COMMENT '결제 내역',
+  `userplan_id` int NOT NULL,
+  `type` varchar(45) DEFAULT NULL,
+  `day` int DEFAULT NULL,
+  `category_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_account_userplan1_idx` (`userplan_id` ASC) VISIBLE,
-  INDEX `fk_account_accountcategory1_idx` (`category_id` ASC) VISIBLE,
-  CONSTRAINT `fk_account_userplan1`
-    FOREIGN KEY (`userplan_id`)
-    REFERENCES `groute`.`userplan` (`id`),
-  CONSTRAINT `fk_account_accountcategory1`
-    FOREIGN KEY (`category_id`)
-    REFERENCES `groute`.`accountcategory` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 3
-DEFAULT CHARACTER SET = utf8mb3;
+  KEY `fk_account_userplan1_idx` (`userplan_id`),
+  KEY `fk_account_accountcategory1_idx` (`category_id`),
+  CONSTRAINT `fk_account_accountcategory1` FOREIGN KEY (`category_id`) REFERENCES `accountcategory` (`id`),
+  CONSTRAINT `fk_account_userplan1` FOREIGN KEY (`userplan_id`) REFERENCES `userplan` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `account`
@@ -68,6 +45,31 @@ DEFAULT CHARACTER SET = utf8mb3;
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `accountcategory`
+--
+
+DROP TABLE IF EXISTS `accountcategory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `accountcategory` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `img` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `accountcategory`
+--
+
+LOCK TABLES `accountcategory` WRITE;
+/*!40000 ALTER TABLE `accountcategory` DISABLE KEYS */;
+INSERT INTO `accountcategory` VALUES (1,'카페','account/coffee.png'),(2,'식당','account/restaurant.png'),(3,'쇼핑','account/shopping.png'),(4,'항공','account/airplane.png'),(5,'교통','account/bus.png'),(6,'관광','account/tour.png'),(7,'숙소','account/house.png'),(8,'기타','account/etc.png');
+/*!40000 ALTER TABLE `accountcategory` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -218,6 +220,34 @@ CREATE TABLE `comment` (
 LOCK TABLES `comment` WRITE;
 /*!40000 ALTER TABLE `comment` DISABLE KEYS */;
 /*!40000 ALTER TABLE `comment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notification`
+--
+
+DROP TABLE IF EXISTS `notification`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `notification` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(100) NOT NULL,
+  `category` varchar(20) NOT NULL,
+  `content` varchar(200) NOT NULL,
+  `date` timestamp NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_user_notification_idx` (`user_id`),
+  CONSTRAINT `fk_user_notification` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notification`
+--
+
+LOCK TABLES `notification` WRITE;
+/*!40000 ALTER TABLE `notification` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notification` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -604,4 +634,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-02-08 14:05:47
+-- Dump completed on 2022-02-11 20:54:09
