@@ -4,8 +4,8 @@
 
 <mapper namespace="com.ssafy.groute.mapper.NotificationMapper">
     <insert id="insertNotification" parameterType="Notification">
-        insert into notification(user_id, category, content, date)
-        values(#{userId}, #{category}, #{content}, #{date})
+        insert into notification(user_id, category, content)
+        values(#{userId}, #{category}, #{content})
     </insert>
 
     <select id="selectNotification" parameterType="int" resultMap="NotificationDTO">
