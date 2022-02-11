@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="vm"
-            type="com.ssafy.groute.src.viewmodel.MyViewModel" />
+            name="user"
+            type="com.ssafy.groute.src.dto.User" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -59,7 +59,7 @@
                 android:layout_height="150dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="15dp"
-                imageRes="@{vm.img}"/>
+                app:imageUrlUser="@{user.img}"/>
 
             <TextView
                 android:id="@+id/my_profile_id"
@@ -68,7 +68,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
-                android:text="@{vm.nick}"
+                android:text="@{user.nickname}"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
