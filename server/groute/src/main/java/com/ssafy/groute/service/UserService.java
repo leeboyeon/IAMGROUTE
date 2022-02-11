@@ -13,4 +13,6 @@ public interface UserService {
     void deleteUser(String userId) throws Exception;
     void updateUser(User user);
     List<User> selectByPlanId(int planId) throws Exception;
+    void updateTokenByUserId(User user) throws Exception;
+    User selectUserByToken(String token) throws Exception;
 }
