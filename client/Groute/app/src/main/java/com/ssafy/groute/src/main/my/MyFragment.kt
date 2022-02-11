@@ -14,19 +14,23 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.rx
+import com.nhn.android.naverlogin.OAuthLogin
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentMyBinding
+import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
+import com.ssafy.groute.src.viewmodel.MainViewModel
 import com.ssafy.groute.src.viewmodel.MyViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.runBlocking
 
 private const val TAG = "MyFragment_groute"
 class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.layout.fragment_my) {
@@ -34,7 +38,8 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
     private lateinit var mainActivity:MainActivity
     private lateinit var userInfoResponse: UserInfoResponse
     private lateinit var intent: Intent
-    private val viewModel: MyViewModel by activityViewModels()
+//    private val viewModel: MyViewModel by activityViewModels()
+    private val mainViewModel : MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,21 +54,19 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
     override fun onResume() {
         super.onResume()
         mainActivity.hideBottomNav(false)
-        var user = ApplicationClass.sharedPreferencesUtil.getUser()
-        val userInfo = UserService().getUserInfo(user.id)
-        userInfo.observe(viewLifecycleOwner, {
-                userInfoResponse = it
-            }
-        )
-
+        runBlocking {
+            mainViewModel.getUserInformation(ApplicationClass.sharedPreferencesUtil.getUser().id, true)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // login User Info DataBinding
+        initUserInfo()
+
         val pagerAdapter = MyTravelTabPageAdapter(this)
         val tabList = arrayListOf("My Travel", "Shared Travel", "Save Travel")
-        binding.vm = viewModel
-        binding.lifecycleOwner = this
         pagerAdapter.addFragment(MyTravelFragment())
         pagerAdapter.addFragment(SharedTravelFragment())
         pagerAdapter.addFragment(SaveTravelFragment())
@@ -84,7 +87,8 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
         }
 
     }
-    fun initPopup(){
+
+    private fun initPopup(){
         binding.myIbtnMore.setOnClickListener {
             val popup = PopupMenu(context, binding.myIbtnMore)
             MenuInflater(context).inflate(R.menu.my_menu_user_item, popup.menu)
@@ -96,7 +100,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
                         return@setOnMenuItemClickListener true
                     }
                     R.id.menu_userDelete ->{
-                        showDeleteuserDialog()
+                        showDeleteUserDialog()
                         return@setOnMenuItemClickListener true
                     }
                     else ->{
@@ -107,12 +111,19 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
         }
     }
 
-    // 마이페이지 사용자 정보 갱신
-    fun initUserInfo() {
-        viewModel.initData(this)
+    // 마이페이지 사용자 정보
+    private fun initUserInfo() {
+        runBlocking {
+            mainViewModel.getUserInformation(ApplicationClass.sharedPreferencesUtil.getUser().id, true)
+        }
+        mainViewModel.loginUserInfo.observe(viewLifecycleOwner, {
+            userInfoResponse = it
+            val user = User(it.id, it.nickname, it.img.toString())
+            binding.user = user
+        })
     }
 
-    fun showDeleteuserDialog(){
+    private fun showDeleteUserDialog(){
         var builder = AlertDialog.Builder(requireContext())
         builder.setTitle("회원 탈퇴")
             .setMessage("정말로 탈퇴하시겠습니까?")

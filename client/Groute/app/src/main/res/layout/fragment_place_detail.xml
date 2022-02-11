@@ -17,141 +17,150 @@
             android:layout_height="match_parent">
 
 
-            <LinearLayout
-                android:id="@+id/boardDetail_appbar"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout6"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingLeft="20dp"
-                android:paddingTop="5dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="5dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageButton
-                    android:id="@+id/placeDatil_ibtn_back"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/backicon" />
-
-                <TextView
-                    android:id="@+id/placeDetail_tv_placeName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@{placeViewModel.place.name}"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/placeDetail_abtn_heart"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="5dp"
-                    app:lottie_autoPlay="false"
-                    app:lottie_fileName="star.json"
-                    app:lottie_loop="true" />
-
-                <TextView
-                    android:id="@+id/placeDetail_tv_review"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(placeViewModel.place.rate)}" />
-
-            </LinearLayout>
-
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/placeDetail_layout_add"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/boardDetail_appbar">
-
-                <LinearLayout
-                    android:id="@+id/placeDetail_layout_addPlan"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/top_bar"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="right"
-                    android:visibility="gone"
-                    android:orientation="horizontal"
-                    android:paddingRight="20dp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    >
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageButton
+                        android:id="@+id/placeDatil_ibtn_back"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@android:color/transparent"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/left"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/placeDetail_tv_placeName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@{placeViewModel.place.name}"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bottombar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/top_bar">
 
                     <com.airbnb.lottie.LottieAnimationView
-                        android:id="@+id/placeDetail_lottie_addPlan"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginEnd="10dp"
+                        android:id="@+id/placeDetail_abtn_star"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:lottie_autoPlay="false"
-                        app:lottie_fileName="plus.json"
+                        app:lottie_fileName="star.json"
                         app:lottie_loop="true" />
-
                     <TextView
-                        android:id="@+id/textView14"
+                        android:id="@+id/placeDetail_tv_review"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="내 카트에 담기"
-                        android:textColor="@color/black" />
-                </LinearLayout>
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="@{String.valueOf(placeViewModel.place.rate)}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/placeDetail_abtn_star"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
-                    android:id="@+id/placeDetail_layout_addPlan_toUserPlanList"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="right"
-                    android:visibility="visible"
-                    android:orientation="horizontal"
-                    android:paddingRight="20dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    >
-
-                    <RelativeLayout
-                        android:id="@+id/RouteDetail_add_plan_btn"
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/placeDetail_abtn_heart"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_marginEnd="10dp"
-                        android:background="@drawable/circle_back"
-                        android:gravity="center"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/boardDetail_appbar">
+                        android:layout_marginStart="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/placeDetail_tv_review"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:lottie_autoPlay="false"
+                        app:lottie_fileName="heart.json"
+                        app:lottie_loop="false"
+                        app:lottie_progress="1" />
 
-                        <ImageView
+                    <TextView
+                        android:id="@+id/placeDetail_tv_heart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="@{String.valueOf(placeViewModel.place.heartCnt)}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/placeDetail_abtn_heart"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/placeDetail_btn_addList"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/placeDetail_lottie_addPlan"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/add" />
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/textView14"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:lottie_autoPlay="false"
+                            app:lottie_fileName="plus.json"
+                            app:lottie_loop="true" />
 
-                    </RelativeLayout>
+                        <TextView
+                            android:id="@+id/textView14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginBottom="10dp"
+                            android:text="내 여행에 추가하기"
+                            android:textColor="@color/black"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="내 일정에 추가하기"/>
-
-                </LinearLayout>
-
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/pd_tablayout"
@@ -159,7 +168,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/placeDetail_layout_add">
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout6">
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"

@@ -30,6 +30,7 @@ class RouteDetailDayPerAdapter(val viewLifecycleOwner: LifecycleOwner, var list:
             runBlocking {
                 planViewModel.getRouteDetailbyDay(day)
             }
+
             var routeDetailDayPlanAdapter = RouteDetailDayPlanAdapter()
             planViewModel.routeDetailList.observe(viewLifecycleOwner, Observer {
                 routeDetailDayPlanAdapter.list = it

@@ -196,4 +196,39 @@ public class UserController {
 
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
+
+    @ApiOperation(value = "email로 id 조회", notes = "email로 id 조회")
+    @GetMapping(value = "/id/{email}")
+    public ResponseEntity<?> findIdByEmail(@PathVariable String email) throws Exception{
+        User user = userService.selectUserIdByEmail(email);
+        if (user == null) {
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "email, id 맞는거 있는지 조회 ", notes = "email, id 맞는거 있는지 조회")
+    @GetMapping(value = "/pwd")
+    public ResponseEntity<?> isCorrectEmailId(@RequestParam("id") String id, @RequestParam("email") String email) throws Exception{
+        User res = userService.selectUserByIdEmail(id, email);
+        if (res == null) {
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "비밀번호 수정", notes = "id와 password만 입력")
+    @PutMapping(value = "/update/password")
+    public Boolean updatePassword(@RequestBody User user) throws Exception{
+        try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userService.updatePassword(user);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }

@@ -236,9 +236,9 @@ class PlanViewModel : ViewModel() {
             var res = response.body()
             if (response.code() == 200) {
                 if (res != null) {
-                    Log.d(TAG, "getPlanById: $res")
+//                    Log.d(TAG, "getPlanById: $res")
                     val userPlantmp = JSONObject(res).getJSONObject("userPlan")
-                    Log.d(TAG, "getPlanById: ${userPlantmp}")
+//                    Log.d(TAG, "getPlanById: ${userPlantmp}")
                     val themeList = userPlantmp.getJSONArray("themeIdList")
                     var themeIdList = mutableListOf<Int>()
                     var k = 0
@@ -347,8 +347,8 @@ class PlanViewModel : ViewModel() {
                         setPlanList(userPlan)
                         setRouteList(routeList)
                         getThemeById(userPlan.themeIdList)
-                        Log.d(TAG, "getPlanById_USERPlan: ${userPlan}")
-                        Log.d(TAG, "getPlanById: ${routeList}")
+//                        Log.d(TAG, "getPlanById_USERPlan: ${userPlan}")
+//                        Log.d(TAG, "getPlanById: ${routeList}")
                     }
 
                 }
@@ -406,7 +406,7 @@ class PlanViewModel : ViewModel() {
             if (response.code() == 200) {
                 if (res != null) {
                     setPlanReviewList(res)
-                    Log.d(TAG, "getPlanReviewListbyId: $res")
+//                    Log.d(TAG, "getPlanReviewListbyId: $res")
                 }
 
             } else {
@@ -460,7 +460,7 @@ class PlanViewModel : ViewModel() {
             if (response.code() == 200) {
                 if (res != null) {
                     setTheme(res)
-                    Log.d(TAG, "onResponse: $res")
+//                    Log.d(TAG, "onResponse: $res")
                 }
 
             } else {
@@ -578,7 +578,7 @@ class PlanViewModel : ViewModel() {
                     setUserPlanList(res)
                     setUserPlanByDayList(res)
                     setIsLoading(false)
-                    Log.d(TAG, "getPlanByPlace: ${res}")
+//                    Log.d(TAG, "getPlanByPlace: ${res}")
                 } else {
                     Log.d(TAG, "getPlanByPlace: ISNULL")
                 }

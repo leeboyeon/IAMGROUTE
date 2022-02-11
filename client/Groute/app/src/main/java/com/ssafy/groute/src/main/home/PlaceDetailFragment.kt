@@ -76,6 +76,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(
             placeViewModel.getPlace(placeId)
             planViewModel.getPlanMyList(ApplicationClass.sharedPreferencesUtil.getUser().id)
         }
+        binding.placeDetailAbtnHeart.progress = 0.5f
         val areaTabPagerAdapter = AreaTabPagerAdapter(this)
         val tabList = arrayListOf("Info", "Review")
 
@@ -92,6 +93,22 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(
             mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
             mainActivity.supportFragmentManager.popBackStack()
         }
+        planViewModel.planMyList.observe(viewLifecycleOwner, Observer {
+            if(it.size > 0){
+                binding.placeDetailBtnAddList.setOnClickListener {
+                    binding.placeDetailLottieAddPlan.playAnimation()
+                    placeViewModel.place.observe(viewLifecycleOwner, Observer {
+                        planViewModel.insertPlaceShopList(it)
+                        Log.d(TAG, "onViewCreated_PlaceSHOP: ${it}")
+                        showCustomToast("추가되었습니다.")
+                    })
+                }
+            }else{
+                binding.placeDetailBtnAddList.setOnClickListener {
+                    showCustomToast("추가하실 일정이 없습니다")
+                }
+            }
+        })
 
         Log.d(TAG, "onViewCreated: $planId")
         if (planId == -1) { // 홈에서 플레이스 디테일 페이지로 왔을 때

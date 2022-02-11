@@ -55,7 +55,7 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(FragmentReviewBinding
     }
     fun initAdapter(){
         placeViewModel.placeReviewList.observe(viewLifecycleOwner, Observer {
-            reviewAdapter = ReviewAdapter(viewLifecycleOwner,requireContext())
+            reviewAdapter = ReviewAdapter(viewLifecycleOwner,requireContext(), placeViewModel)
             reviewAdapter.list = it
             reviewAdapter.setModifyClickListener(object: ReviewAdapter.ModifyClickListener{
                 override fun onClick(position: Int) {

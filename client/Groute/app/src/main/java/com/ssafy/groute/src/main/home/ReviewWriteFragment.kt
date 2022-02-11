@@ -17,6 +17,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,9 +26,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
+import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
@@ -39,6 +43,10 @@ import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.util.RetrofitCallback
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.runBlocking
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -47,6 +55,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
+import java.util.concurrent.TimeUnit
 
 private const val TAG = "ReviewWriteFragment"
 class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentReviewWriteBinding::bind, R.layout.fragment_review_write) {
@@ -54,6 +63,8 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
     private val placeViewModel: PlaceViewModel by activityViewModels()
     private var placeId = -1
     private var reviewId = -1
+
+    private lateinit var editTextSubscription: Disposable
 
     // 사진 선택
     private lateinit var imgUri: Uri    // 파일 uri
@@ -110,7 +121,7 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
             binding.reviewWriteBtnWrite.text = "리뷰 수정"
             placeViewModel.review.observe(viewLifecycleOwner, Observer {
                 Log.d(TAG, "onViewCreated: ${it.toString()}")
-                binding.reviewWriteEtContent.setText(it.content)
+                binding.reviewWriteTietContent.setText(it.content)
                 binding.ratingBar.rating = it.rate.toFloat()
                 if(!(it.img == "null" || it.img == "" || it.img == null)) {
                     binding.reviewWriteLLayoutSetImg.visibility = View.VISIBLE
@@ -133,42 +144,84 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
             initButton()
         }
         selectImgBtnEvent()
+        initTiedListener()
+
+    }
+
+    // init TextInputEditText Listener
+    private fun initTiedListener() {
+        editTextSubscription = binding.reviewWriteTietContent
+            .textChanges()
+            .subscribe {
+                textLengthChk(it.toString())
+            }
+//        binding.reviewWriteTietContent.setQueryDebounce {
+//            Log.d(TAG, "initTiedListener: $it")
+//            textLengthChk(it)
+////            getQueryResult(it)
+//        }
+    }
+
+    private fun textLengthChk(str : String) : Boolean {
+        Log.d(TAG, "textLengthChk: $str")
+        if(str.trim().isEmpty()){
+            binding.reviewWriteTilContent.error = "Required Field"
+            binding.reviewWriteTietContent.requestFocus()
+            return false
+        } else if(str.length <= 30 || str.length >= 255) {
+            binding.reviewWriteTilContent.error = "30자 이상 255자 이하로 작성해주세요."
+            binding.reviewWriteTietContent.requestFocus()
+            return false
+        }
+        else {
+            binding.reviewWriteTilContent.error = null
+            return true
+        }
     }
 
     // 수정하기 버튼 클릭 이벤트 초기화
     private fun initModifyButton(beforeImg : String) {
         binding.reviewWriteBtnWrite.setOnClickListener {
-            val content = binding.reviewWriteEtContent.text.toString()
-            val rate = binding.ratingBar.rating.toDouble()
-            val userId = ApplicationClass.sharedPreferencesUtil.getUser().id
-            val review = PlaceReview(
-                placeId,
-                userId,
-                content,
-                rate,
-                beforeImg,
-                reviewId
-            )
-//            modifyReview(review)
-            setData(review, false)  // false -> review 수정
+            if(textLengthChk(binding.reviewWriteTietContent.text.toString()) == true) {
+
+                val content = binding.reviewWriteTietContent.text.toString()
+                val rate = binding.ratingBar.rating.toDouble()
+                val userId = ApplicationClass.sharedPreferencesUtil.getUser().id
+                val review = PlaceReview(
+                    placeId,
+                    userId,
+                    content,
+                    rate,
+                    beforeImg,
+                    reviewId
+                )
+    //            modifyReview(review)
+                setData(review, false)  // false -> review 수정
+            } else {
+                showCustomToast("글자 수를 확인해주세요")
+            }
         }
     }
 
     // review 등록하기 버튼 클릭 이벤트
     private fun initButton() {
         binding.reviewWriteBtnWrite.setOnClickListener {
-            val content = binding.reviewWriteEtContent.text.toString()
-            val rate = binding.ratingBar.rating.toDouble()
-            val userId = ApplicationClass.sharedPreferencesUtil.getUser().id
-            val review = PlaceReview(
-                placeId,
-                userId,
-                content,
-                rate,
-                ""
-            )
-//            insertReview(review)
-            setData(review, true)
+            if(textLengthChk(binding.reviewWriteTietContent.text.toString()) == true) {
+                val content = binding.reviewWriteTietContent.text.toString()
+                val rate = binding.ratingBar.rating.toDouble()
+                val userId = ApplicationClass.sharedPreferencesUtil.getUser().id
+                val review = PlaceReview(
+                    placeId,
+                    userId,
+                    content,
+                    rate,
+                    ""
+                )
+    //            insertReview(review)
+                setData(review, true)
+            } else {
+                showCustomToast("글자 수를 확인해주세요.")
+            }
         }
     }
 
@@ -372,45 +425,37 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
 
     }
 
-//    private fun insertReview(review:PlaceReview){
-//        Log.d(TAG, "insertReview: 클릭됬니?")
-//        PlaceService().insertPlaceReview(review, object : RetrofitCallback<Boolean> {
-//            override fun onError(t: Throwable) {
-//                Log.d(TAG, "onError: ")
-//            }
-//
-//            override fun onSuccess(code: Int, responseData: Boolean) {
-//                Log.d(TAG, "onSuccess: 성공했니?")
-//                mainActivity.moveFragment(4,"placeId",placeId)
-//                Toast.makeText(requireContext(),"리뷰작성 성공", Toast.LENGTH_SHORT).show()
-//            }
-//
-//            override fun onFailure(code: Int) {
-//                Log.d(TAG, "onFailure: ")
-//            }
-//        })
-//    }
+    // TextInputEditText 에 쿼리 디바운싱 적용
+    fun TextInputEditText.setQueryDebounce(queryFunction: (String) -> Unit): Disposable {
+        val editTextChangeObservable = this.textChanges()
+        val searchEditTextSubscription: Disposable =
+            editTextChangeObservable
+                // 마지막 글자 입력 0.8초 후에 onNext 이벤트로 데이터 발행
+                .debounce(800, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                // 구독을 통해 이벤트 응답 처리
+                .subscribeBy(
+                    onNext = {
+                        queryFunction(it.toString())
+                        Log.d(TAG, "setQueryDebounce: onNext : $it")
+                        textLengthChk(it.toString())
+                    },
+                    onComplete = {
+                        Log.d(TAG, "setQueryDebounce: onComplete :")
+                    },
+                    onError = {
+                        Log.d(TAG, "setQueryDebounce: onNext :")
+                    }
+                )
+        return searchEditTextSubscription  // Disposable 반환
+    }
 
+    override fun onDestroy() {
+        editTextSubscription.dispose()
+        mainActivity.hideBottomNav(false)
+        super.onDestroy()
+    }
 
-//    // review update callback
-//    private fun modifyReview(review:PlaceReview){
-//        PlaceService().updatePlaceReview(review, object : RetrofitCallback<Boolean> {
-//            override fun onError(t: Throwable) {
-//                Log.d(TAG, "onError: ")
-//            }
-//
-//            override fun onSuccess(code: Int, responseData: Boolean) {
-//                Log.d(TAG, "onSuccess: ")
-//                mainActivity.moveFragment(4,"placeId",placeId)
-//                Toast.makeText(requireContext(),"리뷰수정 성공", Toast.LENGTH_SHORT).show()
-//            }
-//
-//            override fun onFailure(code: Int) {
-//                Log.d(TAG, "onFailure: ")
-//            }
-//
-//        })
-//    }
     companion object {
         @JvmStatic
         fun newInstance(key1:String, value1:Int, key2:String, value2:Int) =

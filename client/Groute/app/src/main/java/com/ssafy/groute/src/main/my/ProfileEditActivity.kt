@@ -24,6 +24,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.ssafy.groute.config.ApplicationClass
@@ -31,7 +32,9 @@ import com.ssafy.groute.databinding.ActivityProfileEditBinding
 import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.response.UserInfoResponse
 import com.ssafy.groute.src.service.UserService
+import com.ssafy.groute.src.viewmodel.MainViewModel
 import com.ssafy.groute.util.RetrofitCallback
+import kotlinx.coroutines.runBlocking
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -52,6 +55,8 @@ class ProfileEditActivity : AppCompatActivity() {
     private var fileExtension : String? = ""
     private val OPEN_GALLERY = 1
     private val PERMISSION_GALLERY = 101
+    private val mainViewModel : MainViewModel by viewModels()
+
     @SuppressLint("LongLogTag")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,8 +91,8 @@ class ProfileEditActivity : AppCompatActivity() {
 
         // 프로필 이미지 수정 버튼 클릭
         binding.profileEditChangeImgTv.setOnClickListener {
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.setType("image/*")
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
             filterActivityLauncher.launch(intent)
         }
 
@@ -171,21 +176,21 @@ class ProfileEditActivity : AppCompatActivity() {
     // 사용자 정보 화면에 초기화
     fun initData(user: UserInfoResponse) {
 
-        var img = ""
-        if(user.type.equals("sns")){
-            if(user.img != null) {
-                img = user.img!!
-            }
-        } else{
-            if(user.img != null) {
-                img = "${ApplicationClass.IMGS_URL_USER}${user.img}"
-            }
-        }
+//        var img = ""
+//        if(user.type.equals("sns")){
+//            if(user.img != null) {
+//                img = user.img!!
+//            }
+//        } else{
+//            if(user.img != null) {
+//                img = "${ApplicationClass.IMGS_URL_USER}${user.img}"
+//            }
+//        }
         var id = user.id
         var password = user.password
         var nickname = user.nickname
         var phone = user.phone
-        val u = User(id, password, nickname, phone, img)
+        val u = User(id, password, nickname, phone, user.img.toString())
         binding.user = u
 
         if(user.email != null) {
@@ -279,7 +284,7 @@ class ProfileEditActivity : AppCompatActivity() {
             var json = gson.toJson(user)
             var requestBody_user = RequestBody.create(MediaType.parse("text/plain"), json)
             Log.d(TAG, "updateUser_requestBodyUser: ${requestBody_user.contentType()}, ${json}")
-            UserService().updateUserInfo(requestBody_user, null, userUpdateCallback())
+            UserService().updateUserInfo(requestBody_user, null, UserUpdateCallback(user.id))
         }
         // 사진 선택 + 사용자 정보 수정 시 사용자 정보와 파일 같이 서버로 전송
         else {
@@ -301,18 +306,21 @@ class ProfileEditActivity : AppCompatActivity() {
             val json = gson.toJson(user)
             val requestBody_user = RequestBody.create(MediaType.parse("text/plain"), json)
 
-            UserService().updateUserInfo(requestBody_user, uploadFile, userUpdateCallback())
+            UserService().updateUserInfo(requestBody_user, uploadFile, UserUpdateCallback(user.id))
         }
 
 
     }
 
-    inner class userUpdateCallback: RetrofitCallback<Boolean> {
+    inner class UserUpdateCallback(val userId: String): RetrofitCallback<Boolean> {
         override fun onSuccess(code: Int, responseData: Boolean) {
             if(responseData) {
                 Toast.makeText(this@ProfileEditActivity, "프로필 정보가 수정되었습니다.", Toast.LENGTH_SHORT).show()
                 Log.d(TAG, "onSuccess: 사용자 정보 수정 완료")
                 finish()
+                runBlocking {
+                    mainViewModel.getUserInformation(userId, true)
+                }
             } else {
                 Toast.makeText(this@ProfileEditActivity, "프로필 정보 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
             }
