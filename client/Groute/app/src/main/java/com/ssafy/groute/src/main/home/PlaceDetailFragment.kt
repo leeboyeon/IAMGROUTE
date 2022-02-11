@@ -93,36 +93,18 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(
             mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
             mainActivity.supportFragmentManager.popBackStack()
         }
-        planViewModel.planMyList.observe(viewLifecycleOwner, Observer {
-            if(it.size > 0){
-                binding.placeDetailBtnAddList.setOnClickListener {
-                    binding.placeDetailLottieAddPlan.playAnimation()
-                    placeViewModel.place.observe(viewLifecycleOwner, Observer {
-                        planViewModel.insertPlaceShopList(it)
-                        Log.d(TAG, "onViewCreated_PlaceSHOP: ${it}")
-                        showCustomToast("추가되었습니다.")
-                    })
-                }
-            }else{
-                binding.placeDetailBtnAddList.setOnClickListener {
-                    showCustomToast("추가하실 일정이 없습니다")
-                }
-            }
-        })
 
         Log.d(TAG, "onViewCreated: $planId")
         if (planId == -1) { // 홈에서 플레이스 디테일 페이지로 왔을 때
-            binding.placeDetailLayoutAddPlan.visibility = View.GONE
-            binding.placeDetailLayoutAddPlanToUserPlanList.visibility = View.VISIBLE
-            binding.placeDetailLayoutAddPlanToUserPlanList.setOnClickListener {
+            binding.textView14.text = "내 여행에 추가하기"
+            binding.placeDetailBtnAddList.setOnClickListener {
                 showRouteAddBottomSheet()
             }
         } else { // 계획중인 여행에서 장소추가를 하기위해 플레이스 디테일 페이지로 왔을 때
-            binding.placeDetailLayoutAddPlan.visibility = View.VISIBLE
-            binding.placeDetailLayoutAddPlanToUserPlanList.visibility = View.GONE
+            binding.textView14.text = "내 카트에 담기"
             planViewModel.planMyList.observe(viewLifecycleOwner, Observer {
                 if (it.size > 0) {
-                    binding.placeDetailLayoutAddPlan.setOnClickListener {
+                    binding.placeDetailBtnAddList.setOnClickListener {
                         binding.placeDetailLottieAddPlan.playAnimation()
                         placeViewModel.place.observe(viewLifecycleOwner, Observer {
                             planViewModel.insertPlaceShopList(it)
@@ -131,7 +113,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(
                         })
                     }
                 } else {
-                    binding.placeDetailLayoutAddPlan.setOnClickListener {
+                    binding.placeDetailBtnAddList.setOnClickListener {
                         showCustomToast("추가하실 일정이 없습니다")
                     }
                 }
