@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -177,8 +178,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .addToBackStack(null)
             }
             5->{    // 자유 or 질문 게시판 화면
-                transaction.replace(R.id.frame_main_layout, BoardDetailFragment.newInstance(key1, value1))
-                    .addToBackStack(null)
+                if(fm.findFragmentByTag("BoardWriteFragment") != null) {
+                    fm.popBackStack("TO_BOARDWRITE_TAG", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                } else {
+                    transaction.replace(R.id.frame_main_layout, BoardDetailFragment.newInstance(key1, value1))
+                        .addToBackStack(null)
+                }
+
             }
             6->{    // 게시글 1개에 대한 화면
                 transaction.replace(R.id.frame_main_layout,BoardDetailDetailFragment.newInstance(key1, value1))
@@ -189,8 +195,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .addToBackStack(null)
             }
             8->{    // 게시판 글쓰기 화면
-                transaction.replace(R.id.frame_main_layout,BoardWriteFragment.newInstance(key1, value1))
-                    .addToBackStack(null)
+                transaction.replace(R.id.frame_main_layout,BoardWriteFragment.newInstance(key1, value1), "BoardWriteFragment")
+                    .addToBackStack("TO_BOARDWRITE_TAG")
             }
 //            9->{    // 장소 검색 화면
 //                transaction.replace(R.id.frame_main_layout, SearchFragment.newInstance(key1, value1))
@@ -226,7 +232,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             16 ->{
                 fm.popBackStack()
                 bottomNavigation.selectedItemId = R.id.Route
-                binding.mainProfileBar.isVisible = false
                 supportFragmentManager.beginTransaction().replace(R.id.frame_main_layout, RouteFragment.newInstance(key1,value1, key2, value2))
                     .commit()
 
@@ -243,6 +248,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             20->{
                 transaction.replace(R.id.frame_main_layout, AccountWriteFragment.newInstance(key1,value1))
                     .addToBackStack(null)
+            }
+            21->{
+                fm.popBackStack()
+                bottomNavigation.selectedItemId = R.id.Board
+                supportFragmentManager.beginTransaction().replace(R.id.frame_main_layout, BoardFragment())
+                    .commit()
             }
 
         }

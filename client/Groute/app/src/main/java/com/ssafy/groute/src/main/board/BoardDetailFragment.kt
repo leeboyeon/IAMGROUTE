@@ -70,8 +70,7 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
         }
 
         binding.backBtn.setOnClickListener {
-            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
-            mainActivity.supportFragmentManager.popBackStack()
+            mainActivity.moveFragment(21)
         }
 
     }

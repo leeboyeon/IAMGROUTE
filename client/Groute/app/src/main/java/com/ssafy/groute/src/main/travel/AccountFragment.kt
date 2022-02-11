@@ -62,7 +62,7 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
     fun showDivDialog(){
 //        shareuser
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_div_account,null)
-        val 
+
 
     }
     fun ToggleClick(clicked:Boolean){
