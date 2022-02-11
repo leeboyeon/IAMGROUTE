@@ -35,6 +35,8 @@ spring:
 #      location: file:///C:/SSAFY/iamgroute/imgs/ # jiwoo local
       location: file:///iamgroute/imgs/  # aws ubuntu
 
+  firebase-sdk-path: firebase/firebase_service_key.json
+
 
 
 mybatis:
