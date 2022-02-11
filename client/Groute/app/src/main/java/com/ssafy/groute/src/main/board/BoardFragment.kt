@@ -96,7 +96,7 @@ class BoardFragment : BaseFragment<FragmentBoardBinding>(FragmentBoardBinding::b
         magazineAdapter = MagazineAdapter()
 
         magazines.apply {
-            add(Magazine(img= R.drawable.jejucafe1, title="제주여행 꼭 들려야하는 카페 5곳", content=""))
+            add(Magazine(img= R.drawable.jejucafe3, title="제주여행 꼭 들려야하는 카페 5곳", content=""))
             add(Magazine(img= R.drawable.jejuexcite1, title="제주여행 오늘은 어디갈까!", content=""))
             add(Magazine(img= R.drawable.jejushop2, title="SNS 핫플레이스 제주편", content=""))
             magazineAdapter.list = magazines
