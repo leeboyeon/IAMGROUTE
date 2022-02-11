@@ -277,6 +277,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         runBlocking {
             viewModel.getUserInformation(userId, true)
+            planViewModel.getMyNotendPlan(ApplicationClass.sharedPreferencesUtil.getUser().id)
         }
         viewModel.loginUserInfo.observe(this, {
             val user = User(it.id, it.nickname, it.img.toString())
@@ -298,25 +299,29 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 //                    .into(binding.mainIvUserimg)
 //            }
 //        })
-        runBlocking {
-            planViewModel.getMyNotendPlan(ApplicationClass.sharedPreferencesUtil.getUser().id)
+        if(planViewModel.planNotEndList.value?.isEmpty() == true){
+            binding.mainTvDday.text = "추가하신 일정이 없습니다"
+            binding.progressBar.progress = 0
+        }else{
+            planViewModel.planNotEndList.observe(this, Observer {
+                var format = SimpleDateFormat("yyyy-MM-dd")
+
+                var date = format.parse(it[0].startDate).time
+
+                val today = Calendar.getInstance().time.time
+                Log.d(TAG, "initProfileBar: ${today}")
+                var calcur = (date-today) / (24*60*60*1000)
+
+                Log.d(TAG, "initProfileBar: ${calcur}")
+                binding.mainTvDday.text = "여행까지 D-${calcur}"
+                binding.progressBar.max = 30
+                var myprogress = kotlin.math.abs(30 - calcur)
+                Log.d(TAG, "initProfileBar: ${myprogress}")
+                binding.progressBar.progress = myprogress.toInt()
+            })
         }
-        planViewModel.planNotEndList.observe(this, Observer {
-            var format = SimpleDateFormat("yyyy-MM-dd")
 
-            var date = format.parse(it[0].startDate).time
 
-            val today = Calendar.getInstance().time.time
-            Log.d(TAG, "initProfileBar: ${today}")
-            var calcur = (date-today) / (24*60*60*1000)
-
-            Log.d(TAG, "initProfileBar: ${calcur}")
-            binding.mainTvDday.text = "여행까지 D-${calcur}"
-            binding.progressBar.max = 30
-            var myprogress = kotlin.math.abs(30 - calcur)
-            Log.d(TAG, "initProfileBar: ${myprogress}")
-            binding.progressBar.progress = myprogress.toInt()
-        })
     }
 
     // 메인에 상단 프로필 바를 숨기고 싶은 경우
@@ -355,6 +360,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private fun logout(){
         ApplicationClass.sharedPreferencesUtil.deleteUser()
+        ApplicationClass.sharedPreferencesUtil.deleteUserCookie()
 
         //google Logout
         FirebaseAuth.getInstance().signOut()
