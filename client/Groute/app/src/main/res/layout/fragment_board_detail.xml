@@ -39,9 +39,9 @@
 
                 <ImageView
                     android:id="@+id/backBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/backicon" />
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:srcCompat="@drawable/left" />
 
                 <TextView
                     android:id="@+id/board_detail_board_name_tv"

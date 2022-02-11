@@ -37,9 +37,6 @@ class MagazineAdapter : RecyclerView.Adapter<MagazineAdapter.MagazineHolder>(){
     override fun onBindViewHolder(holder: MagazineHolder, position: Int) {
         holder.apply {
             bindInfo(list[position])
-//            itemView.setOnClickListener {
-//                itemClickListener.onClick(it, position, list[position].title)
-//            }
         }
     }
 
