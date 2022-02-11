@@ -80,9 +80,9 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
                     placeViewModel.place.observe(viewLifecycleOwner, Observer {
                         planViewModel.insertPlaceShopList(it)
                         Log.d(TAG, "onViewCreated_PlaceSHOP: ${it}")
+                        showCustomToast("추가되었습니다.")
                     })
                 }
-                showCustomToast("추가되었습니다!")
             }else{
                 binding.placeDetailLayoutAddPlan.setOnClickListener {
                     showCustomToast("추가하실 일정이 없습니다")
