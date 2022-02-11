@@ -22,13 +22,13 @@
         android:id="@+id/textView36"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
         android:text="정산내역입니다"
         android:textColor="@color/black"
         android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/accountDia_tv_date"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/accountDia_tv_date" />
 
     <LinearLayout
         android:id="@+id/linearLayout12"
@@ -36,12 +36,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView44">
 
         <ImageButton
-            android:id="@+id/imageButton6"
+            android:id="@+id/accountDia_ibtn_minus"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center"
@@ -60,7 +62,7 @@
             android:textSize="16sp" />
 
         <ImageButton
-            android:id="@+id/imageButton5"
+            android:id="@+id/accountDia_ibtn_plus"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center"
@@ -70,7 +72,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView42"
+        android:id="@+id/accountDia_tv_memberCnt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -89,7 +91,7 @@
         android:layout_marginTop="20dp"
         android:text="정산하실 인원을 선택해주세요"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView42" />
+        app:layout_constraintTop_toBottomOf="@+id/accountDia_tv_memberCnt" />
 
     <TextView
         android:id="@+id/textView45"
@@ -97,15 +99,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="33dp"
         android:layout_marginEnd="50dp"
+        android:layout_marginBottom="20dp"
         android:text="1인, 335,000원입니다."
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView44" />
 
     <ImageButton
-        android:id="@+id/imageButton7"
+        android:id="@+id/accountDia_ibtn_back"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="25dp"
