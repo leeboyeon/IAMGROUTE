@@ -43,7 +43,10 @@ dependencies {
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.1'
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools
 	implementation group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.0.4.RELEASE'
-
+	// fcm
+	implementation 'com.google.firebase:firebase-admin:6.8.1'
+	//okhttp3
+	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
 }
 
 test {

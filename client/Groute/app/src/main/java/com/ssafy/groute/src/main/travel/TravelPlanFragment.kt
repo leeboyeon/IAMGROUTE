@@ -98,7 +98,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         }
 
         initPlaceListAdapter()
-//        initKakaoMap()
+        initKakaoMap()
         floatingButtonEvent()
         binding.travelplanBackIv.setOnClickListener {
             mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
@@ -232,7 +232,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         var marker = MapPOIItem()
         planViewModel.routeList.observe(viewLifecycleOwner, Observer {
             var dayByList = it[curPos].routeDetailList
-            for(i in 0..dayByList.size){
+            for(i in dayByList.indices){
                 var lat = dayByList[i].place.lat
                 var lng = dayByList[i].place.lng
                 var mapPoint = MapPoint.mapPointWithGeoCoord(lat.toDouble(),lng.toDouble())
