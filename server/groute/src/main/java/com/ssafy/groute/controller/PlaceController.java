@@ -238,14 +238,14 @@ public class PlaceController {
         try {
 //            logger.debug("PlaceReview : {}", review);
             PlaceReview placeReview = mapper.readValue(review, PlaceReview.class);
-            String beforeImg = placeReviewService.selectPlaceReview(placeReview.getId()).getImg();
+            String beforeImg = placeReview.getImg();
 //            logger.debug("PlaceReview : {}", placeReview.getImg());
 
             if (img != null) {
                 String fileName = storageService.store(img, uploadPath + "/review");
                 placeReview.setImg("review/" + fileName);
             } else {    // img == null
-                if(beforeImg.equals("") || beforeImg.equals("null")){
+                if(beforeImg.isEmpty() || beforeImg.equals("null")){
                     placeReview.setImg(null);
                 } else {
                     placeReview.setImg(beforeImg);
