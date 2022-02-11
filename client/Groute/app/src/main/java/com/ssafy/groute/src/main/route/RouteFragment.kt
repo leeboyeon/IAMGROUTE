@@ -197,14 +197,6 @@ class RouteFragment :
 
             })
 
-            RouteListAdapter.setHeartClickListener(object :
-                RouteListRecyclerviewAdapter.HeartClickListener {
-                override fun onClick(view: View, position: Int, planId: Int) {
-                    Log.d(TAG, "PlanLike onClick: ")
-                    planLike(PlanLike(userId, planId), position)
-                }
-
-            })
         })
 
     }
@@ -227,7 +219,7 @@ class RouteFragment :
 
         if(flag == 2) { // 전체루트추천
             runBlocking {
-                planViewModel.getPlanById(planId, true)
+                planViewModel.getPlanById(planId, 1)
             }
             var totalDate = planViewModel.currentUserPlan.value!!.totalDate
             binding.routeTabLayout.getTabAt(totalDate)!!.select()
@@ -273,23 +265,6 @@ class RouteFragment :
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
 
-        })
-    }
-
-    fun planLike(planLike: PlanLike, position: Int) {
-        UserPlanService().planLike(planLike, object : RetrofitCallback<Boolean> {
-            override fun onError(t: Throwable) {
-                Log.d(TAG, "onError: 루트 좋아요 에러")
-            }
-            override fun onSuccess(code: Int, responseData: Boolean) {
-                //planViewModel.getRoutebyDay(tabPosition, selectedTheme)
-                //RouteListAdapter.notifyDataSetChanged()
-                Log.d(TAG, "onSuccess: 루트 좋아요 성공")
-
-            }
-            override fun onFailure(code: Int) {
-                Log.d(TAG, "onFailure: ")
-            }
         })
     }
 

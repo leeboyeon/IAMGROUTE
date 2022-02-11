@@ -204,7 +204,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(
         //placeId, priority,routeId
         Log.d(TAG, "insertPlace: GOOD ${day}")
         runBlocking {
-            planViewModel.getPlanById(selectUserPlan.id, false)
+            planViewModel.getPlanById(selectUserPlan.id, 2)
         }
         planViewModel.routeList.observe(viewLifecycleOwner, Observer {
             var routeId = 0

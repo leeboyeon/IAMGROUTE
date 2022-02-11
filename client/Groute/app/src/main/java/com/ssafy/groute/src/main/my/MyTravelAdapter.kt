@@ -20,7 +20,7 @@ class MyTravelAdapter(val planViewModel: PlanViewModel) : RecyclerView.Adapter<M
         val routeImg = itemView.findViewById<ImageView>(R.id.mytravel_iv_img)
         fun bindInfo(data:UserPlan){
             runBlocking {
-                planViewModel.getPlanById(data.id, false)
+                planViewModel.getPlanById(data.id, 2)
             }
             var imgUrl = ""
             for(i in 0 until planViewModel.routeList.value!!.size) {

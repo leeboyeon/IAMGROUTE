@@ -1,5 +1,6 @@
 package com.ssafy.groute.src.main.route
 
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
@@ -18,6 +19,7 @@ import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentRouteDetailBinding
+import com.ssafy.groute.src.dto.PlanLike
 import com.ssafy.groute.src.dto.RouteDetail
 import com.ssafy.groute.src.dto.UserPlan
 import com.ssafy.groute.src.main.MainActivity
@@ -43,6 +45,7 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
     private var addDay = -1 // 선택한 day에 루트 추가
     private var selectUserPlan = UserPlan() // 선택한 userPlan에 루트 추가
     private var isAddPlan = false
+    lateinit var userId: String
 
     @SuppressLint("LongLogTag")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,10 +68,12 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = planViewModel
         runBlocking {
-            planViewModel.getPlanById(planIdDetail, false)
+            planViewModel.getPlanById(planIdDetail, 2)
         }
+        userId = ApplicationClass.sharedPreferencesUtil.getUser().id
 
         initAdapter()
+        initData()
 
         val routeDetailTabPagerAdapter = RouteDetailTabPagerAdapter(this)
         val tabList = arrayListOf("Info", "Review")
@@ -105,23 +110,58 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
                 }
             }
         }
+        binding.routeDetailAbtnHeart.setOnClickListener {
+            if(binding.routeDetailAbtnHeart.progress > 0F){
+                Log.d(TAG, "onBindViewHolder: 이미 클릭됨")
+                binding.routeDetailAbtnHeart.pauseAnimation()
+                binding.routeDetailAbtnHeart.progress = 0F
+                planLike(PlanLike(userId, planIdDetail))
+            }else{
+                Log.d(TAG, "onBindViewHolder: 클릭할거얌")
+                val animator = ValueAnimator.ofFloat(0f,0.5f).setDuration(500)
+                animator.addUpdateListener { animation ->
+                    binding.routeDetailAbtnHeart.progress = animation.animatedValue as Float
+                }
+                animator.start()
+                planLike(PlanLike(userId, planIdDetail))
+            }
+        }
 
         binding.RouteDetailAddPlanBtn.setOnClickListener {
             showRouteAddBottomSheet()
         }
-
-
     }
 
     fun initAdapter() {
-        planViewModel.theme.observe(viewLifecycleOwner, Observer {
-            routeDetailThemeAdapter = RouteDetailThemeAdapter(viewLifecycleOwner, planViewModel)
-            routeDetailThemeAdapter.setThemeList(it)
-            routeDetailThemeAdapter.setHasStableIds(true)
-            binding.RouteDetailThemeRv.apply {
-                layoutManager =
-                    LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                adapter = routeDetailThemeAdapter
+            planViewModel.theme.observe(viewLifecycleOwner, Observer {
+                routeDetailThemeAdapter = RouteDetailThemeAdapter(viewLifecycleOwner, planViewModel)
+                Log.d(TAG, "initAdapter Theme: ")
+                routeDetailThemeAdapter.setThemeList(it)
+                routeDetailThemeAdapter.setHasStableIds(true)
+                binding.RouteDetailThemeRv.apply {
+                    layoutManager =
+                        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                    adapter = routeDetailThemeAdapter
+                }
+            })
+
+    }
+
+    fun initData() {
+        UserPlanService().planIsLike(PlanLike(userId, planIdDetail), object : RetrofitCallback<Boolean> {
+            override fun onError(t: Throwable) {
+                Log.d(TAG, "onError: 찜하기 여부 에러")
+            }
+
+            override fun onSuccess(code: Int, responseData: Boolean) {
+                if(responseData) {
+                    binding.routeDetailAbtnHeart.progress = 0.5F
+                } else {
+                    binding.routeDetailAbtnHeart.progress = 0F
+                }
+            }
+            override fun onFailure(code: Int) {
+                Log.d(TAG, "onFailure: ")
             }
         })
     }
@@ -142,7 +182,7 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
 
         } else {
             runBlocking {
-                planViewModel.getPlanById(planIdUser, true)
+                planViewModel.getPlanById(planIdUser, 1)
             }
         }
         planViewModel.userPlan.observe(viewLifecycleOwner, Observer {
@@ -225,6 +265,27 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         dialog.window!!.setGravity(Gravity.BOTTOM)
 
 
+    }
+
+    fun planLike(planLike: PlanLike) {
+        UserPlanService().planLike(planLike, object : RetrofitCallback<Boolean> {
+            override fun onError(t: Throwable) {
+                Log.d(TAG, "onError: 루트 좋아요 에러")
+            }
+            override fun onSuccess(code: Int, responseData: Boolean) {
+                runBlocking {
+                    planViewModel.getPlanById(planIdDetail, 3)
+                }
+                planViewModel.planList.observe(viewLifecycleOwner, Observer {
+                    binding.placeDetailTvHeart.text = "${it.heartCnt}"
+                })
+                Log.d(TAG, "onSuccess: 루트 좋아요 성공")
+
+            }
+            override fun onFailure(code: Int) {
+                Log.d(TAG, "onFailure: ")
+            }
+        })
     }
 
     companion object {

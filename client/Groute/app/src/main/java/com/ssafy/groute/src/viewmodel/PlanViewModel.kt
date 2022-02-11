@@ -230,7 +230,7 @@ class PlanViewModel : ViewModel() {
         }
     }
 
-    suspend fun getPlanById(id: Int, flag: Boolean) {
+    suspend fun getPlanById(id: Int, flag: Int) {
         val response = UserPlanService().getUserPlanById(id)
         viewModelScope.launch {
             var res = response.body()
@@ -341,14 +341,16 @@ class PlanViewModel : ViewModel() {
                         routeList.add(route)
                         i++
                     }
-                    if(flag) { // RouteDetail에서 사용자의 현재 짜고있는 일정 보여줄때
+                    if(flag == 1) { // RouteDetail에서 사용자의 현재 짜고있는 일정 보여줄때
                         setUserPlan(userPlan)
-                    } else {
+                    } else if(flag == 2){ // 기존에 쓰던거
                         setPlanList(userPlan)
                         setRouteList(routeList)
                         getThemeById(userPlan.themeIdList)
 //                        Log.d(TAG, "getPlanById_USERPlan: ${userPlan}")
 //                        Log.d(TAG, "getPlanById: ${routeList}")
+                    } else if(flag == 3) {
+                        setPlanList(userPlan)
                     }
 
                 }
@@ -564,7 +566,7 @@ class PlanViewModel : ViewModel() {
             setUserPlanList(mutableListOf())
             setUserPlanByDayList(mutableListOf())
             var placeIds = mutableListOf<Int>()
-            getPlanById(planId, false)
+            getPlanById(planId, 2)
             for (i in 0 until routeList.value!!.size) {
                 var detailList = routeList.value!!.get(i).routeDetailList
                 for (j in 0 until detailList.size) {

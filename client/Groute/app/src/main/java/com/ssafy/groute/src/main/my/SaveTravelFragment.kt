@@ -63,12 +63,12 @@ class SaveTravelFragment : BaseFragment<FragmentSaveTravelBinding>(FragmentSaveT
                 adapter = RouteListAdapter
                 adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
-            RouteListAdapter.setHeartClickListener(object : RouteListRecyclerviewAdapter.HeartClickListener{
-                override fun onClick(view: View, position: Int, planId: Int) {
-                    planLike(PlanLike(userId, planId), position)
-                }
-
-            })
+//            RouteListAdapter.setHeartClickListener(object : RouteListRecyclerviewAdapter.HeartClickListener{
+//                override fun onClick(view: View, position: Int, planId: Int) {
+//                    planLike(PlanLike(userId, planId), position)
+//                }
+//
+//            })
             RouteListAdapter.setItemClickListener(object : RouteListRecyclerviewAdapter.ItemClickListener {
                 override fun onClick(position: Int, id: Int, totalDate: Int) {
                     mainActivity.moveFragment(12, "planIdDetail", id, "planIdUser", -1)
@@ -79,23 +79,23 @@ class SaveTravelFragment : BaseFragment<FragmentSaveTravelBinding>(FragmentSaveT
 
     }
 
-    fun planLike(planLike: PlanLike, position: Int) {
-        UserPlanService().planLike(planLike, object : RetrofitCallback<Boolean> {
-            override fun onError(t: Throwable) {
-                Log.d(TAG, "onError: 루트 좋아요 에러")
-            }
-            override fun onSuccess(code: Int, responseData: Boolean) {
-                Log.d(TAG, "onSuccess: 루트 좋아요 성공")
-                runBlocking {
-                    planViewModel.getPlanLikeList(userId)
-                }
-
-            }
-            override fun onFailure(code: Int) {
-                Log.d(TAG, "onFailure: ")
-            }
-        })
-    }
+//    fun planLike(planLike: PlanLike, position: Int) {
+//        UserPlanService().planLike(planLike, object : RetrofitCallback<Boolean> {
+//            override fun onError(t: Throwable) {
+//                Log.d(TAG, "onError: 루트 좋아요 에러")
+//            }
+//            override fun onSuccess(code: Int, responseData: Boolean) {
+//                Log.d(TAG, "onSuccess: 루트 좋아요 성공")
+//                runBlocking {
+//                    planViewModel.getPlanLikeList(userId)
+//                }
+//
+//            }
+//            override fun onFailure(code: Int) {
+//                Log.d(TAG, "onFailure: ")
+//            }
+//        })
+//    }
 
     companion object {
         @JvmStatic

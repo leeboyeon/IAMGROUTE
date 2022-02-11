@@ -31,7 +31,7 @@ class SharedTravelAdapter(val planViewModel: PlanViewModel)  : RecyclerView.Adap
         val routeImg = itemView.findViewById<ImageView>(R.id.home_best_img)
         fun bindInfo(data : UserPlan){
             runBlocking {
-                planViewModel.getPlanById(data.id, false)
+                planViewModel.getPlanById(data.id, 2)
             }
             var imgUrl = ""
             for(i in 0 until planViewModel.routeList.value!!.size) {

@@ -47,7 +47,7 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
         super.onViewCreated(view, savedInstanceState)
         binding.planViewModel = planViewModel
         runBlocking {
-            planViewModel.getPlanById(planId, false)
+            planViewModel.getPlanById(planId, 2)
             planViewModel.getPlanReviewById(reviewId)
         }
 

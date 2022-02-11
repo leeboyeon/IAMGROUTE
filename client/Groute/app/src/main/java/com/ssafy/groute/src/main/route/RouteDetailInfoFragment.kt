@@ -45,7 +45,7 @@ class RouteDetailInfoFragment : BaseFragment<FragmentRouteDetailInfoBinding>(Fra
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = planViewModel
         runBlocking {
-            planViewModel.getPlanById(planId, false)
+            planViewModel.getPlanById(planId, 2)
         }
         var list = mutableListOf<Int>()
         for(i in 1..planViewModel.planList.value!!.totalDate) {

@@ -51,7 +51,7 @@ class SharePlanWriteFragment : BaseFragment<FragmentSharePlanWriteBinding>(Fragm
         super.onViewCreated(view, savedInstanceState)
         binding.plan = planViewModel
         runBlocking {
-            planViewModel.getPlanById(planId, false)
+            planViewModel.getPlanById(planId, 2)
         }
 
         binding.planShareBtnComplete.setOnClickListener {

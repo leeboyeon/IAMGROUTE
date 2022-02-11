@@ -59,7 +59,7 @@ class RouteListRecyclerviewAdapter(val planViewModel: PlanViewModel, val viewLif
         @SuppressLint("LongLogTag")
         fun bindInfo(data: UserPlan, position: Int) {
             runBlocking {
-                planViewModel.getPlanById(data.id, false)
+                planViewModel.getPlanById(data.id, 2)
             }
             var imgUrl = ""
             for(i in 0 until planViewModel.routeList.value!!.size) {
@@ -111,25 +111,25 @@ class RouteListRecyclerviewAdapter(val planViewModel: PlanViewModel, val viewLif
             })
 
 
-            heart.setOnClickListener{
-
-                if(heart.progress > 0F){
-                    heartClickListener.onClick(it, position, data.id)
-                    Log.d(TAG, "onBindViewHolder: 이미 클릭됨 ")
-                    heart.pauseAnimation()
-                    heart.progress = 0F
-
-                }else{
-                    heartClickListener.onClick(it, position, data.id)
-                    Log.d(TAG, "onBindViewHolder: 클릭할거얌 ")
-                    val animator = ValueAnimator.ofFloat(0f,0.5f).setDuration(500)
-                    animator.addUpdateListener { animation ->
-                        heart.progress = animation.animatedValue as Float
-                    }
-                    animator.start()
-
-                }
-            }
+//            heart.setOnClickListener{
+//
+//                if(heart.progress > 0F){
+//                    heartClickListener.onClick(it, position, data.id)
+//                    Log.d(TAG, "onBindViewHolder: 이미 클릭됨 ")
+//                    heart.pauseAnimation()
+//                    heart.progress = 0F
+//
+//                }else{
+//                    heartClickListener.onClick(it, position, data.id)
+//                    Log.d(TAG, "onBindViewHolder: 클릭할거얌 ")
+//                    val animator = ValueAnimator.ofFloat(0f,0.5f).setDuration(500)
+//                    animator.addUpdateListener { animation ->
+//                        heart.progress = animation.animatedValue as Float
+//                    }
+//                    animator.start()
+//
+//                }
+//            }
 
 
 
@@ -169,13 +169,13 @@ class RouteListRecyclerviewAdapter(val planViewModel: PlanViewModel, val viewLif
         this.itemClickListener = itemClickListener
     }
 
-    interface HeartClickListener{
-        fun onClick(view:View, position: Int, planId: Int)
-    }
-    private lateinit var heartClickListener : HeartClickListener
-    fun setHeartClickListener(heartClickListener: HeartClickListener){
-        this.heartClickListener = heartClickListener
-    }
+//    interface HeartClickListener{
+//        fun onClick(view:View, position: Int, planId: Int)
+//    }
+//    private lateinit var heartClickListener : HeartClickListener
+//    fun setHeartClickListener(heartClickListener: HeartClickListener){
+//        this.heartClickListener = heartClickListener
+//    }
 
     object DiffCallback : DiffUtil.ItemCallback<UserPlan>() {
         override fun areItemsTheSame(oldItem: UserPlan, newItem: UserPlan): Boolean {

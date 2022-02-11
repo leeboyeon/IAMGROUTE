@@ -22,7 +22,6 @@ class RouteDetailThemeAdapter(val viewLifecycleOwner: LifecycleOwner, val planVi
             this.list = ArrayList()
         } else {
             this.list = list.toMutableList()!!
-            notifyDataSetChanged()
         }
     }
     inner class RouteDetailThemeHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -39,8 +38,8 @@ class RouteDetailThemeAdapter(val viewLifecycleOwner: LifecycleOwner, val planVi
         return RouteDetailThemeHolder(view)
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return position
+    override fun getItemId(position: Int): Long {
+        return list.get(position).id.toLong()
     }
 
     override fun onBindViewHolder(holder: RouteDetailThemeHolder, position: Int) {

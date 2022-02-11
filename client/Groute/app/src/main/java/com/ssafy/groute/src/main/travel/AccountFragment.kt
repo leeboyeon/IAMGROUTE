@@ -47,7 +47,7 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
         super.onViewCreated(view, savedInstanceState)
 
         runBlocking {
-            planViewModel.getPlanById(planId,false)
+            planViewModel.getPlanById(planId,2)
             planViewModel.getShareUserbyPlanId(planId)
         }
         val pagerAdapter = AccountPagerAdapter(this)
