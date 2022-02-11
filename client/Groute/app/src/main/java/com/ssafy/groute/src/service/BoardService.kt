@@ -174,29 +174,31 @@ class BoardService {
         })
     }
 
-    fun getListBoardDetail(id:Int, callback: RetrofitCallback<Map<String,Any>>){
-        RetrofitUtil.boardService.getListBoardDetail(id).enqueue(object : Callback<Map<String,Any>> {
-            override fun onResponse(
-                call: Call<Map<String, Any>>,
-                response: Response<Map<String, Any>>
-            ) {
-                val res = response.body()
-                if(response.code() == 200){
-                    if(res != null){
-                        callback.onSuccess(response.code(), res)
-                    }
-                }else{
-                    callback.onFailure(response.code())
-                }
-            }
+//    fun getListBoardDetail(id:Int, callback: RetrofitCallback<Map<String,Any>>){
+//        RetrofitUtil.boardService.getListBoardDetail(id).enqueue(object : Callback<Map<String,Any>> {
+//            override fun onResponse(
+//                call: Call<Map<String, Any>>,
+//                response: Response<Map<String, Any>>
+//            ) {
+//                val res = response.body()
+//                if(response.code() == 200){
+//                    if(res != null){
+//                        callback.onSuccess(response.code(), res)
+//                    }
+//                }else{
+//                    callback.onFailure(response.code())
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<Map<String, Any>>, t: Throwable) {
+//                callback.onError(t)
+//            }
+//
+//
+//        })
+//    }
 
-            override fun onFailure(call: Call<Map<String, Any>>, t: Throwable) {
-                callback.onError(t)
-            }
 
-
-        })
-    }
 
     /**
      * 게시글 수정, image upload는 선택 사항이다.
@@ -222,28 +224,28 @@ class BoardService {
         })
     }
 
-    fun getBoardDetailWithComment(id: Int): LiveData<BoardDetailWithCommentResponse> {
-        val responseLiveData: MutableLiveData<BoardDetailWithCommentResponse> = MutableLiveData()
-        val boardDetailWithCommentRequest: Call<BoardDetailWithCommentResponse> = RetrofitUtil.boardService.getBoardDetailWithComment(id)
-        Log.d(TAG, "getBoardDetailWithComment: $id")
-        boardDetailWithCommentRequest.enqueue(object : Callback<BoardDetailWithCommentResponse> {
-            override fun onResponse(call: Call<BoardDetailWithCommentResponse>, response: Response<BoardDetailWithCommentResponse>) {
-                val res = response.body()
-                if(response.code() == 200){
-                    if (res != null) {
-                        responseLiveData.postValue(res)
-                        Log.d(TAG, "onResponse: $res")
-                    }
-                } else {
-                    Log.d(TAG, "onResponse: Error Code ${response.code()}")
-                }
-            }
-            override fun onFailure(call: Call<BoardDetailWithCommentResponse>, t: Throwable) {
-                Log.d(TAG, t.message ?: "통신오류")
-            }
-        })
-        return responseLiveData
-    }
+//    fun getBoardDetailWithComment(id: Int): LiveData<BoardDetailWithCommentResponse> {
+//        val responseLiveData: MutableLiveData<BoardDetailWithCommentResponse> = MutableLiveData()
+//        val boardDetailWithCommentRequest: Call<BoardDetailWithCommentResponse> = RetrofitUtil.boardService.getBoardDetailWithComment(id)
+//        Log.d(TAG, "getBoardDetailWithComment: $id")
+//        boardDetailWithCommentRequest.enqueue(object : Callback<BoardDetailWithCommentResponse> {
+//            override fun onResponse(call: Call<BoardDetailWithCommentResponse>, response: Response<BoardDetailWithCommentResponse>) {
+//                val res = response.body()
+//                if(response.code() == 200){
+//                    if (res != null) {
+//                        responseLiveData.postValue(res)
+//                        Log.d(TAG, "onResponse: $res")
+//                    }
+//                } else {
+//                    Log.d(TAG, "onResponse: Error Code ${response.code()}")
+//                }
+//            }
+//            override fun onFailure(call: Call<BoardDetailWithCommentResponse>, t: Throwable) {
+//                Log.d(TAG, t.message ?: "통신오류")
+//            }
+//        })
+//        return responseLiveData
+//    }
 
 
     /**
@@ -285,6 +287,16 @@ class BoardService {
      */
     suspend fun getBoardPostIsLike(boardDetailId: Int, userId: String): Response<Boolean> {
         return RetrofitUtil.boardService.isLikeBoardPost(boardDetailId, userId)
+    }
+
+    /**
+     * id에 해당하는 게시글과 댓글 조회 (조회수 안올라가게) - coroutine ver.
+     * getBoardDetailWithCmtNoHit
+     * @param id
+     * @return response
+     */
+    suspend fun getBoardDetailWithCmtNoHit(id: Int): Response<BoardDetailWithCommentResponse> {
+        return RetrofitUtil.boardService.getBoardDetailWithCmtNoHit(id)
     }
 
 

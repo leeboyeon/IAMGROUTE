@@ -250,6 +250,24 @@ class BoardViewModel : ViewModel(){
         }
     }
 
+    suspend fun getBoardDetailNoHit(boardDetailId : Int) {
+        val response = BoardService().getBoardDetailWithCmtNoHit(boardDetailId)
+        viewModelScope.launch {
+            val res = response.body()
+            if(response.code() == 200) {
+                if(res != null) {
+                    setBoardDetail(res.boardDetail)
+                    setCommentAllList(res.commentList as MutableList<Comment>)
+                    setCommentList(res.commentList as MutableList<Comment>)
+                    Log.d(TAG, "getBoardDetailSuccess: ${response.message()}")
+                    Log.d(TAG, "getBoardDetailSuccess: ${res.commentList}")
+                } else {
+                    Log.d(TAG, "getBoardDetailError: ${response.message()}")
+                }
+            }
+        }
+    }
+
 //    suspend fun getPostCmtList(boardDetailId: Int) {
 //        val response = BoardService().getPostCommentList(boardDetailId)
 //        viewModelScope.launch {

@@ -93,7 +93,7 @@ class CommentNestedActivity : BaseActivity<ActivityCommentNestedBinding>(Activit
 
     private fun initAdapter() {
         runBlocking {
-            boardViewModel.getBoardDetail(comment.boardDetailId)
+            boardViewModel.getBoardDetailNoHit(comment.boardDetailId)
         }
         boardViewModel.setCommentNestedList(boardViewModel.commentAllList.value!!, comment.groupNum)
         boardViewModel.commentNestedList.observe(this, Observer {
@@ -148,7 +148,7 @@ class CommentNestedActivity : BaseActivity<ActivityCommentNestedBinding>(Activit
             override fun onSuccess(code: Int, responseData: Any) {
                 showCustomToast("수정되었습니다.")
                 runBlocking {
-                    boardViewModel.getBoardDetail(comment.boardDetailId)
+                    boardViewModel.getBoardDetailNoHit(comment.boardDetailId)
                 }
                 boardViewModel.setCommentNestedList(boardViewModel.commentAllList.value!!, comment.groupNum)
 //                boardViewModel.getBoardDetailWithNestedComment(this@CommentNestedActivity, comment.boardDetailId, comment.groupNum)
@@ -213,7 +213,7 @@ class CommentNestedActivity : BaseActivity<ActivityCommentNestedBinding>(Activit
                     }
                     override fun onSuccess(code: Int, responseData: Any) {
                         runBlocking {
-                            boardViewModel.getBoardDetail(comment.boardDetailId)
+                            boardViewModel.getBoardDetailNoHit(comment.boardDetailId)
                         }
                         boardViewModel.setCommentNestedList(boardViewModel.commentAllList.value!!, comment.groupNum)
 //                        boardViewModel.getBoardDetailWithNestedComment(this@CommentNestedActivity, comment.boardDetailId, comment.groupNum)

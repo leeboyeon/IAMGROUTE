@@ -60,7 +60,7 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
         super.onResume()
         Log.d(TAG, "onResume: ")
         runBlocking {
-            boardViewModel.getBoardDetail(boardDetailId)
+            boardViewModel.getBoardDetailNoHit(boardDetailId)
         }
         boardViewModel.commentList.observe(viewLifecycleOwner, Observer {
             Log.d(TAG, "onResume: ${it}")
@@ -182,7 +182,7 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
                 Log.d(TAG, "onSuccess: BoardDetail 찜하기 성공")
 //                getListBoardDetail(boardDetailId)
                 runBlocking {
-                    boardViewModel.getBoardDetail(boardDetailId)
+                    boardViewModel.getBoardDetailNoHit(boardDetailId)
                     boardViewModel.getBoardPostIsLike(boardDetailId, loginUserId)
                 }
                 Log.d(TAG, "onSuccess: ${boardViewModel.isBoardPostLike.value}")
@@ -233,7 +233,7 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
             override fun onSuccess(code: Int, responseData: Any) {
                 showCustomToast("수정되었습니다.")
                 runBlocking {
-                    boardViewModel.getBoardDetail(boardDetailId)
+                    boardViewModel.getBoardDetailNoHit(boardDetailId)
                 }
 //                boardViewModel.getBoardDetailWithComment(viewLifecycleOwner, boardDetailId)
             }
@@ -352,7 +352,7 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
                     }
                     override fun onSuccess(code: Int, responseData: Any) {
                         runBlocking {
-                            boardViewModel.getBoardDetail(boardDetailId)
+                            boardViewModel.getBoardDetailNoHit(boardDetailId)
                         }
                         binding.commentWriteEt.setText("")
 //                        boardViewModel.getBoardDetailWithComment(viewLifecycleOwner, boardDetailId)

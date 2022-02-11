@@ -47,10 +47,6 @@ interface BoardApi {
     @DELETE("/boardDetail/del")
     fun deleteBoardDetail(@Query("id") id: Int) : Call<Boolean>
 
-    // id에 해당하는 게시글과 댓글 조회
-    @GET("/boardDetail/detail")
-    fun getBoardDetailWithComment(@Query("id") id: Int) : Call<BoardDetailWithCommentResponse>
-
     // 게시판 글 찜하기 -> 좋아요 존재하면 삭제, 없으면 추가
     @POST("/boardDetail/like")
     fun likeBoard(@Query("boardDetailId") boardDetailId: Int, @Query("userId") userId: String) : Call<Any>
@@ -59,10 +55,6 @@ interface BoardApi {
     @POST("/boardDetail/isLike")
     fun isLikeBoard(@Query("boardDetailId") boardDetailId: Int, @Query("userId") userId: String) : Call<Boolean>
 
-    @GET("/boardDetail/detail")
-    fun getListBoardDetail(@Query("id") id:Int) : Call<Map<String,Any>>
-
-
     // userId에 해당하는 user가 해당 게시글에 좋아요 눌렀는지 체크
     @POST("/boardDetail/isLike")
     suspend fun isLikeBoardPost(@Query("boardDetailId") boardDetailId: Int, @Query("userId") userId: String) : Response<Boolean>
@@ -70,4 +62,8 @@ interface BoardApi {
     // 게시글 id에 해당하는 comment List 조회
     @GET("boardDetail/comment/postcommentlist")
     suspend fun getPostCommentList(@Query("boardDetailId") boardDetailId: Int) : Response<MutableList<Comment>>
+
+    @GET("/boardDetail/detail/nohit")
+    suspend fun getBoardDetailWithCmtNoHit(@Query("id") id: Int) : Response<BoardDetailWithCommentResponse>
+
 }
