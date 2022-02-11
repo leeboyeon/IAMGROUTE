@@ -58,6 +58,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
             placeViewModel.getPlace(placeId)
             planViewModel.getPlanMyList(ApplicationClass.sharedPreferencesUtil.getUser().id)
         }
+        binding.placeDetailAbtnHeart.progress = 0.5f
         val areaTabPagerAdapter = AreaTabPagerAdapter(this)
         val tabList = arrayListOf("Info","Review")
 
@@ -75,7 +76,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
         }
         planViewModel.planMyList.observe(viewLifecycleOwner, Observer {
             if(it.size > 0){
-                binding.placeDetailLayoutAddPlan.setOnClickListener {
+                binding.placeDetailBtnAddList.setOnClickListener {
                     binding.placeDetailLottieAddPlan.playAnimation()
                     placeViewModel.place.observe(viewLifecycleOwner, Observer {
                         planViewModel.insertPlaceShopList(it)
@@ -84,7 +85,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
                     })
                 }
             }else{
-                binding.placeDetailLayoutAddPlan.setOnClickListener {
+                binding.placeDetailBtnAddList.setOnClickListener {
                     showCustomToast("추가하실 일정이 없습니다")
                 }
             }

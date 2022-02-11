@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
 import com.ssafy.groute.R
 import com.ssafy.groute.src.dto.Theme
 
@@ -29,22 +30,22 @@ class RouteThemeRecyclerviewAdapter(val context : Context) : RecyclerView.Adapte
     }
 
     inner class RouteThemeHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val themeTv = itemView.findViewById<TextView>(R.id.themeTxt)
-        val cardView = itemView.findViewById<CardView>(R.id.cardview)
-
+//        val themeTv = itemView.findViewById<TextView>(R.id.themeTxt)
+//        val cardView = itemView.findViewById<CardView>(R.id.cardview)
+        val chip = itemView.findViewById<Chip>(R.id.chiplayout)
         fun bindInfo(theme : Theme, position: Int) {
-            themeTv.text = theme.name
-
+//            themeTv.text = theme.name
+            chip.text = theme.name
             if(selectCheck[position] == 1) {
-                cardView.background.setTint(ContextCompat.getColor(context, R.color.main_500))
+                chip.isChecked = true
             } else {
-                cardView.background.setTint(ContextCompat.getColor(context, R.color.white))
+                chip.isChecked = false
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RouteThemeHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_theme, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_theme_list, parent, false)
         return RouteThemeHolder(view)
     }
 
@@ -52,7 +53,7 @@ class RouteThemeRecyclerviewAdapter(val context : Context) : RecyclerView.Adapte
         holder.apply {
             bindInfo(list[position], position)
 
-            itemView.setOnClickListener{
+            chip.setOnClickListener{
                 if(selectCheck[position] == 0) {
                     selectCheck[position] = 1
                     itemClickListener.onClick(position, list[position].id, selectCheck)
@@ -61,6 +62,9 @@ class RouteThemeRecyclerviewAdapter(val context : Context) : RecyclerView.Adapte
                     itemClickListener.onClick(position, list[position].id, selectCheck)
                 }
             }
+//            itemView.setOnClickListener{
+//                itemClickListener.onClick(position,list[position].id, selectCheck)
+//            }
         }
     }
 
