@@ -41,6 +41,7 @@ import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.viewmodel.HomeViewModel
 import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.util.RetrofitCallback
+import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
@@ -228,6 +229,19 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 }
             })
         })
+        var marker = MapPOIItem()
+        planViewModel.routeList.observe(viewLifecycleOwner, Observer {
+            var dayByList = it[curPos].routeDetailList
+            for(i in 0..dayByList.size){
+                var lat = dayByList[i].place.lat
+                var lng = dayByList[i].place.lng
+                var mapPoint = MapPoint.mapPointWithGeoCoord(lat.toDouble(),lng.toDouble())
+                marker.itemName = (i+1).toString()
+                marker.mapPoint = mapPoint
+                marker.markerType = MapPOIItem.MarkerType.YellowPin
+            }
+        })
+        mapView.addPOIItem(marker)
 
     }
 

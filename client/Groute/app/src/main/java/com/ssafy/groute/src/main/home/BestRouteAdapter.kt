@@ -7,6 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.src.dto.UserPlan
@@ -31,12 +35,13 @@ class BestRouteAdapter(var list: MutableList<UserPlan>, val planViewModel: PlanV
                     }
                 }
             }
+            var option2 = MultiTransformation(CenterCrop(),RoundedCorners(10))
             if(imgUrl == "") {
                 routeImg.setImageResource(R.drawable.defaultimg)
             } else {
                 Glide.with(itemView)
                     .load("${ApplicationClass.IMGS_URL_PLACE}${imgUrl}")
-                    .circleCrop()
+                    .apply(RequestOptions.bitmapTransform(option2))
                     .into(routeImg)
             }
             itemView.findViewById<TextView>(R.id.home_best_title).text = "[제주도] ${data.title}"

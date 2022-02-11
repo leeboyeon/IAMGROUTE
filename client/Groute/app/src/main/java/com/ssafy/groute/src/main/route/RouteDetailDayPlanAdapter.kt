@@ -7,6 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.src.dto.RouteDetail
@@ -20,8 +24,11 @@ class RouteDetailDayPlanAdapter() : RecyclerView.Adapter<RouteDetailDayPlanAdapt
         val placeBtn = itemView.findViewById<ImageView>(R.id.routedetail_recycler_item_item_day_place_iv)
 
         fun bindInfo(data : RouteDetail, position: Int) {
+            var option2 = MultiTransformation(CenterCrop(), RoundedCorners(10))
+
             Glide.with(itemView)
                 .load("${ApplicationClass.IMGS_URL_PLACE}${data.place.img}")
+                .apply(RequestOptions.bitmapTransform(option2))
                 .into(placeImg)
             placeName.text = "${data.place.name}"
             placeType.text = "${data.place.type}"

@@ -43,12 +43,15 @@
                 android:id="@+id/route_theme_rv"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginTop="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/route_tab_layout"
                 app:routeThemeListData="@{viewModel.theme}"
                 tools:itemCount="1"
-                tools:listitem="@layout/list_item_theme"></androidx.recyclerview.widget.RecyclerView>
+                tools:listitem="@layout/recyclerview_theme_list">
+
+            </androidx.recyclerview.widget.RecyclerView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/route_area_rv"

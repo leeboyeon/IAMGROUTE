@@ -20,84 +20,95 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="20dp"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
-            android:src="@drawable/backicon"
+            android:src="@drawable/left"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
-                <RelativeLayout
-                    android:id="@+id/RouteDetail_add_plan_btn"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="35dp"
-                    android:layout_marginEnd="50dp"
-                    android:background="@drawable/circle_back"
-                    android:gravity="center"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/RouteDetail_period_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="25dp"
+            android:includeFontPadding="false"
+            android:text="@{viewModel.planList.totalDate == 1 ? @string/plan_totalDate_one_day : @string/covert_plan_totalDate(viewModel.planList.totalDate - 1, viewModel.planList.totalDate)}"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/RouteDetail_title_tv" />
 
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/add" />
-                </RelativeLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/RouteDetail_period_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
-                    android:includeFontPadding="false"
-                    android:text="@{viewModel.planList.totalDate == 1 ? @string/plan_totalDate_one_day : @string/covert_plan_totalDate(viewModel.planList.totalDate - 1, viewModel.planList.totalDate)}"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="normal"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/RouteDetail_title_tv" />
+            <RelativeLayout
+                android:id="@+id/RouteDetail_add_plan_btn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/circle_back"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/RouteDetail_plan_add_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:includeFontPadding="false"
-                    android:text="내 일정에 추가하기"
-                    android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="@id/RouteDetail_add_plan_btn"
-                    app:layout_constraintStart_toStartOf="@id/RouteDetail_add_plan_btn"
-                    app:layout_constraintTop_toBottomOf="@id/RouteDetail_add_plan_btn" />
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/add" />
+            </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/RouteDetail_title_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="50dp"
-                    android:includeFontPadding="false"
-                    android:text="@{viewModel.planList.title}"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/RouteDetail_plan_add_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:includeFontPadding="false"
+                android:text="내 일정에 추가하기"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/RouteDetail_add_plan_btn" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/RouteDetail_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="22dp"
+            android:includeFontPadding="false"
+            android:text="@{viewModel.planList.title}"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/RouteDetail_ibtn_back"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/RouteDetail_theme_rv"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="20dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/RouteDetail_period_tv"
-                    app:layout_constraintEnd_toStartOf="@id/RouteDetail_add_plan_btn"
-                    tools:itemCount="1"
-                    tools:listitem="@layout/list_item_route_theme" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RouteDetail_theme_rv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/RouteDetail_tablayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/RouteDetail_period_tv"
+            tools:itemCount="1"
+            tools:listitem="@layout/list_item_route_theme" />
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/RouteDetail_vp_layout"
@@ -108,26 +119,26 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/RouteDetail_tablayout" />
 
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/RouteDetail_tablayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/RouteDetail_theme_rv">
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/RouteDetail_tablayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout7">
 
-                    <com.google.android.material.tabs.TabItem
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Info" />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Info" />
 
-                    <com.google.android.material.tabs.TabItem
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Review" />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Review" />
 
-                </com.google.android.material.tabs.TabLayout>
+        </com.google.android.material.tabs.TabLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
