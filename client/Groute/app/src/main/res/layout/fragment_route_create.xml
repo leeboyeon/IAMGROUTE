@@ -89,14 +89,13 @@
                             android:ems="10"
                             android:hint="친구의 ID를 입력해주세요"
                             android:inputType="textPersonName" />
-
-                        <ImageButton
+                        <com.airbnb.lottie.LottieAnimationView
                             android:id="@+id/rc_ibtn_addMember"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@android:color/transparent"
-                            android:src="@android:drawable/ic_menu_add"
-                            app:tint="@color/black" />
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            app:lottie_fileName="plus.json"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="false"/>
 
                     </LinearLayout>
 
@@ -128,9 +127,9 @@
                         android:layout_marginLeft="25dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="25dp"
-                        android:background="@drawable/edittext_background"
                         android:ems="10"
                         android:inputType="textPersonName"
+                        android:maxLength="30"
                         android:padding="10dp" />
 
                     <Button
