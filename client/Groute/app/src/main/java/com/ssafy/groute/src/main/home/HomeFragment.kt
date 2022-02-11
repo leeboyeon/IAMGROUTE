@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.ssafy.groute.R
+import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentHomeBinding
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.viewmodel.HomeViewModel
@@ -23,9 +24,6 @@ import com.ssafy.groute.src.viewmodel.MainViewModel
 import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import kotlinx.coroutines.*
-import retrofit2.*
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 private const val TAG = "HomeFragment"
 //class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind, R.layout.fragment_home) {
@@ -38,7 +36,6 @@ class HomeFragment : Fragment() {
 
     private lateinit var homeAreaAdapter:HomeAreaAdapter
     private lateinit var bestPlaceAdapter:BestPlaceAdapter
-    private var categoryAdapter:CategoryAdapter = CategoryAdapter()
     private lateinit var bestrouteAdatper: BestRouteAdapter
 
 

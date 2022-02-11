@@ -452,6 +452,7 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
 
     override fun onDestroy() {
         editTextSubscription.dispose()
+        mainActivity.hideBottomNav(false)
         super.onDestroy()
     }
 

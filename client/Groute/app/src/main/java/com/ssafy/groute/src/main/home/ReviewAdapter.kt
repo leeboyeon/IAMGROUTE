@@ -8,46 +8,49 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.databinding.RecyclerviewPlacereviewItemBinding
 import com.ssafy.groute.src.dto.PlaceReview
 import com.ssafy.groute.src.dto.Review
+import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.main.board.BoardRecyclerviewAdapter
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.service.UserService
+import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.util.RetrofitCallback
+import kotlinx.coroutines.runBlocking
 
 private const val TAG = "ReviewAdapter"
-class ReviewAdapter(var owner: LifecycleOwner, var context:Context) : RecyclerView.Adapter<ReviewAdapter.ReviewHolder>(){
+class ReviewAdapter(var owner: LifecycleOwner, var context:Context, val placeViewModel: PlaceViewModel) : RecyclerView.Adapter<ReviewAdapter.ReviewHolder>(){
     var list = mutableListOf<PlaceReview>()
-    inner class ReviewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    inner class ReviewHolder(private var binding : RecyclerviewPlacereviewItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val more = itemView.findViewById<ImageButton>(R.id.reviewItem_ib_more)
         fun bindInfo(data : PlaceReview){
             val userInfo = UserService().getUserInfo(data.userId)
             userInfo.observe(
                 owner, {
-                    Glide.with(itemView)
-                        .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
-                        .circleCrop()
-                        .into(itemView.findViewById(R.id.review_iv_userimg))
-                    itemView.findViewById<TextView>(R.id.review_tv_username).text = it.nickname
-                    Log.d(TAG, "bindInfo: ${it.nickname}")
+                    val user = User(it.id, it.nickname, it.img.toString())
+                    binding.user = user
                 }
             )
-            itemView.findViewById<RatingBar>(R.id.review_rb_rating).rating = data.rate.toFloat()
-            if(data.img != null){
-                itemView.findViewById<ImageView>(R.id.review_iv_reviewimg).visibility = View.VISIBLE
-                Glide.with(itemView)
-                    .load("${ApplicationClass.IMGS_URL}${data.img}")
-                    .into(itemView.findViewById(R.id.review_iv_reviewimg))
-            }
-            if(data.img == null || data.img == ""){
-                itemView.findViewById<ImageView>(R.id.review_iv_reviewimg).visibility = View.GONE
-            }
-            itemView.findViewById<TextView>(R.id.review_tv_content).text = data.content
+            binding.placeReview = data
+            binding.executePendingBindings()
+//            itemView.findViewById<RatingBar>(R.id.review_rb_rating).rating = data.rate.toFloat()
+//            if(data.img != null){
+//                itemView.findViewById<ImageView>(R.id.review_iv_reviewimg).visibility = View.VISIBLE
+//                Glide.with(itemView)
+//                    .load("${ApplicationClass.IMGS_URL}${data.img}")
+//                    .into(itemView.findViewById(R.id.review_iv_reviewimg))
+//            }
+//            if(data.img == null || data.img == ""){
+//                itemView.findViewById<ImageView>(R.id.review_iv_reviewimg).visibility = View.GONE
+//            }
+//            itemView.findViewById<TextView>(R.id.review_tv_content).text = data.content
             more.isVisible = data.userId == ApplicationClass.sharedPreferencesUtil.getUser().id
 
         }
@@ -55,8 +58,9 @@ class ReviewAdapter(var owner: LifecycleOwner, var context:Context) : RecyclerVi
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_placereview_item,parent,false)
-        return ReviewHolder(view)
+//        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_placereview_item,parent,false)
+//        return ReviewHolder(view)
+        return ReviewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.recyclerview_placereview_item, parent, false))
     }
 
     override fun onBindViewHolder(holder: ReviewHolder, position: Int) {
@@ -115,6 +119,9 @@ class ReviewAdapter(var owner: LifecycleOwner, var context:Context) : RecyclerVi
 
         override fun onSuccess(code: Int, responseData: Boolean) {
             if(responseData){
+                runBlocking {
+                    placeViewModel.getPlaceReviewListbyId(list[position].placeId)
+                }
                 Toast.makeText(context,"삭제되었습니다.",Toast.LENGTH_SHORT).show()
                 list.removeAt(position)
             }
