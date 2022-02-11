@@ -92,4 +92,14 @@ public class UserServiceImpl implements UserService {
     public List<User> selectByPlanId(int planId) throws Exception {
         return userMapper.selectByPlanId(planId);
     }
+
+    @Override
+    public void updateTokenByUserId(User user) throws Exception {
+        userMapper.updateTokenByUserId(user);
+    }
+
+    @Override
+    public User selectUserByToken(String token) throws Exception {
+        return userMapper.selectUserByToken(token);
+    }
 }

@@ -11,6 +11,7 @@ public interface UserMapper {
     int registerUser(User user);
 
     User findById(String userId);
+
     User findByUidType(String id,String type);
 
     int deleteUser(String userId);
@@ -18,4 +19,8 @@ public interface UserMapper {
     int updateUser(User user);
 
     List<User> selectByPlanId(int planId) throws Exception;
+
+    void updateTokenByUserId(User user) throws Exception;
+
+    User selectUserByToken(String token) throws Exception;
 }
