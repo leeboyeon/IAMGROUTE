@@ -242,6 +242,7 @@ class BoardViewModel : ViewModel(){
                     setCommentAllList(res.commentList as MutableList<Comment>)
                     setCommentList(res.commentList as MutableList<Comment>)
                     Log.d(TAG, "getBoardDetailSuccess: ${response.message()}")
+                    Log.d(TAG, "getBoardDetailSuccess: ${res.commentList}")
                 } else {
                     Log.d(TAG, "getBoardDetailError: ${response.message()}")
                 }

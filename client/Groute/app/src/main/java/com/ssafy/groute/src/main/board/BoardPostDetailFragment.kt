@@ -58,7 +58,14 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
 
     override fun onResume() {
         super.onResume()
-//        initCommentAdapter()
+        Log.d(TAG, "onResume: ")
+        runBlocking {
+            boardViewModel.getBoardDetail(boardDetailId)
+        }
+        boardViewModel.commentList.observe(viewLifecycleOwner, Observer {
+            Log.d(TAG, "onResume: ${it}")
+            commentAdapter.setCommentListData(it)
+        })
     }
 
     override fun onAttach(context: Context) {
@@ -140,7 +147,8 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
 //        }
         boardViewModel.commentList.observe(viewLifecycleOwner, {
             Log.d(TAG, "initCommentAdapter: $it")
-            commentAdapter = CommentAdapter(it, requireContext(), viewLifecycleOwner, boardViewModel, mainViewModel)
+            commentAdapter = CommentAdapter(requireContext(), viewLifecycleOwner, boardViewModel, mainViewModel)
+            commentAdapter.setCommentListData(it)
 
             binding.boardDetailRvComment.apply{
                 layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)

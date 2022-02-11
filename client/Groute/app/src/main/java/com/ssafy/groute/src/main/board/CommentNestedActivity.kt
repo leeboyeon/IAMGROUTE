@@ -76,10 +76,10 @@ class CommentNestedActivity : BaseActivity<ActivityCommentNestedBinding>(Activit
         commentWrite()
 
         binding.boardDetailCommentNestedIbtnBack.setOnClickListener{
-            runBlocking {
-                boardViewModel.getBoardDetail(comment.boardDetailId)
-                boardViewModel.setCommentNestedList(boardViewModel.commentAllList.value!!, comment.groupNum)
-            }
+//            runBlocking {
+//                boardViewModel.getBoardDetail(comment.boardDetailId)
+//                boardViewModel.setCommentNestedList(boardViewModel.commentAllList.value!!, comment.groupNum)
+//            }
             finish()
         }
 

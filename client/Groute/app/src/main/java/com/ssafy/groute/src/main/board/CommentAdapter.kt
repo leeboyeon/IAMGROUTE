@@ -34,22 +34,22 @@ import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
 
 private const val TAG = "CommentAdapter_groute"
-class CommentAdapter(var commentList : MutableList<Comment>, val context: Context, val lifecycleOwner: LifecycleOwner, val boardViewModel: BoardViewModel, val mainViewModel: MainViewModel) : RecyclerView.Adapter<CommentAdapter.CommentHolder>(){
+class CommentAdapter( val context: Context, val lifecycleOwner: LifecycleOwner, val boardViewModel: BoardViewModel, val mainViewModel: MainViewModel) : RecyclerView.Adapter<CommentAdapter.CommentHolder>(){
 //class CommentAdapter(val commentList : MutableList<Comment>, val context: Context, val lifecycleOwner: LifecycleOwner, val boardViewModel: BoardViewModel, val mainViewModel: MainViewModel)
 //    : ListAdapter<Comment, CommentAdapter.CommentHolder>(DiffCallback){
-//    var list = mutableListOf<Comment>()
+    var commentList = mutableListOf<Comment>()
 
     // 현재 로그인한 유저의 아이디
     val userId = ApplicationClass.sharedPreferencesUtil.getUser().id
 
-//    fun setCommentList(list: List<Comment>?) {
-//        if(list == null) {
-//            this.list = ArrayList()
-//        } else {
-//            this.list = list.toMutableList()!!
-//            notifyDataSetChanged()
-//        }
-//    }
+    fun setCommentListData(list: List<Comment>?) {
+        if(list == null) {
+            this.commentList = ArrayList()
+        } else {
+            this.commentList = list.toMutableList()!!
+            notifyDataSetChanged()
+        }
+    }
 
     inner class CommentHolder(private val binding: RecyclerviewCommentListItemBinding) : RecyclerView.ViewHolder(binding.root){
         val more = itemView.findViewById<ImageView>(R.id.comment_more_iv)
@@ -70,19 +70,17 @@ class CommentAdapter(var commentList : MutableList<Comment>, val context: Contex
             binding.comment = data
 //            binding.boardViewModels = boardViewModel
             binding.executePendingBindings()
-
-
-            boardViewModel.commentAllList.observe(lifecycleOwner, {
                 val list = mutableListOf<Comment>()
-                for(i in 0 until it.size) {
-                    if(it[i].groupNum == data.groupNum) {
-                        if(it[i].level == 1) {
-                            list.add(it[i])
-                            Log.d(TAG, "bindInfo: ${it[i]}, $list")
+            Log.d(TAG, "bindInfo: ${boardViewModel.commentAllList.value!!}")
+                for(i in 0 until boardViewModel.commentAllList.value!!.size) {
+                    if(boardViewModel.commentAllList.value!!.get(i).groupNum == data.groupNum) {
+                        if(boardViewModel.commentAllList.value!!.get(i).level == 1) {
+                            list.add(boardViewModel.commentAllList.value!!.get(i))
+                            //Log.d(TAG, "bindInfo: ${boardViewModel.commentAllList.value!!.get(i)}, $list")
                         }
                     }
                 }
-                Log.d(TAG, "bindInfo CommentAdapter: ${list}")
+                //Log.d(TAG, "bindInfo CommentAdapter: ${list}")
 //                    commentNestedAdapter.setCommentNestedList(list)
                 // 같은 그룹인 comment list
                 val commentNestedAdapter = CommentNestedAdapter(list, context, lifecycleOwner, true, mainViewModel)
@@ -96,7 +94,7 @@ class CommentAdapter(var commentList : MutableList<Comment>, val context: Contex
                     override fun onEditClick(position: Int, comment: Comment) {
                     }
                 })
-            })
+
 
 
 
