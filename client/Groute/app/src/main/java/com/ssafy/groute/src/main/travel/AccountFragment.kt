@@ -55,6 +55,15 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
         binding.accountFabWrite.setOnClickListener {
             mainActivity.moveFragment(20,"planId",planId)
         }
+        binding.accountBtnDiv.setOnClickListener {
+            showDivDialog()
+        }
+    }
+    fun showDivDialog(){
+//        shareuser
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_div_account,null)
+        val 
+
     }
     fun ToggleClick(clicked:Boolean){
         if(clicked){
