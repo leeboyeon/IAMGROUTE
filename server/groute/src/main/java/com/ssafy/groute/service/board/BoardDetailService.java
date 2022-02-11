@@ -10,6 +10,7 @@ import java.util.List;
 public interface BoardDetailService {
     void insertBoardDetail(BoardDetail boardDetail) throws Exception;
     BoardDetail selectBoardDetail(int id) throws Exception;
+    BoardDetail selectBoardDetailNoHit(int id) throws Exception;
     List<BoardDetail> selectAllBoardDetail() throws Exception;
     void deleteBoardDetail(int id) throws Exception;
     void updateBoardDetail(BoardDetail boardDetail) throws Exception;

@@ -87,11 +87,26 @@ public class BoardDetailController {
 
     }
 
-    @ApiOperation(value = "boardDetail 검색", notes = "이름으로 boardDetail 하나 검색")
+    @ApiOperation(value = "boardDetail 검색 조회수 O", notes = "이름으로 boardDetail 하나 검색")
     @GetMapping(value = "/detail")
     public ResponseEntity<?> detailBoardDetail(@RequestParam("id") int id) throws Exception {
         Map<String, Object> res = new HashMap<>();
         BoardDetail board = boardDetailService.selectBoardDetail(id);
+        List<Comment> comments = commentService.selectAllByBoardDetailId(id);
+        res.put("boardDetail", board);
+        res.put("comments", comments);
+        if (res == null) {
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<Map<String, Object>>(res, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "boardDetail 검색 조회수 X", notes = "이름으로 boardDetail 하나 검색")
+    @GetMapping(value = "/detail/nohit")
+    public ResponseEntity<?> detailBoardDetailNoHit(@RequestParam("id") int id) throws Exception {
+        Map<String, Object> res = new HashMap<>();
+        BoardDetail board = boardDetailService.selectBoardDetailNoHit(id);
         List<Comment> comments = commentService.selectAllByBoardDetailId(id);
         res.put("boardDetail", board);
         res.put("comments", comments);
