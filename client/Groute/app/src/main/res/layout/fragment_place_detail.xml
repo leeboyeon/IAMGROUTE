@@ -84,6 +84,7 @@
                         app:lottie_autoPlay="false"
                         app:lottie_fileName="star.json"
                         app:lottie_loop="true" />
+
                     <TextView
                         android:id="@+id/placeDetail_tv_review"
                         android:layout_width="wrap_content"
@@ -125,7 +126,9 @@
                         android:id="@+id/placeDetail_btn_addList"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        app:layout_constraintEnd_toEndOf="parent">
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <com.airbnb.lottie.LottieAnimationView
                             android:id="@+id/placeDetail_lottie_addPlan"
@@ -151,7 +154,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="20dp"
                             android:layout_marginBottom="10dp"
-                            android:text="내 여행에 추가하기"
+                            android:text="내 카트에 담기"
                             android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"

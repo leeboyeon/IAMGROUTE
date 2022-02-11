@@ -22,6 +22,10 @@ import kotlinx.coroutines.runBlocking
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.ssafy.groute.src.dto.*
 import com.ssafy.groute.src.main.home.PlaceFilterAdapter
 
@@ -67,11 +71,14 @@ class RouteListRecyclerviewAdapter(val planViewModel: PlanViewModel, val viewLif
                     }
                 }
             }
+            var option2 = MultiTransformation(CenterCrop(), RoundedCorners(10))
+
             if(imgUrl == "") {
                 routeImg.setImageResource(R.drawable.defaultimg)
             } else {
                 Glide.with(itemView)
                     .load("${ApplicationClass.IMGS_URL_PLACE}${imgUrl}")
+                    .apply(RequestOptions.bitmapTransform(option2))
                     .into(routeImg)
             }
             routeDate.text = "12 March, 20"
