@@ -208,12 +208,18 @@ public class UserController {
     @ApiOperation(value = "email, id 맞는거 있는지 조회 ", notes = "email, id 맞는거 있는지 조회")
     @GetMapping(value = "/pwd")
     public ResponseEntity<?> isCorrectEmailId(@RequestParam("id") String id, @RequestParam("email") String email) throws Exception{
-        User res = userService.selectUserByIdEmail(id, email);
-        if (res == null) {
-            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        try {
+            User res = userService.selectUserByIdEmail(id, email);
+            if (res != null) {
+                return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<Boolean>(false, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
     }
 
     @ApiOperation(value = "비밀번호 수정", notes = "id와 password만 입력")

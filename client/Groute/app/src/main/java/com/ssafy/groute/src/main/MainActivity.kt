@@ -458,16 +458,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         const val channel_id = "ssafy_channel"
         fun uploadToken(token:String, userId: String) {
             val storeService = ApplicationClass.retrofit.create(FirebaseTokenService::class.java)
-            storeService.uploadToken(token, userId).enqueue(object : Callback<String> {
-                override fun onResponse(call: Call<String>, response: Response<String>) {
+            storeService.uploadToken(token, userId).enqueue(object : Callback<Boolean> {
+                override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                     if(response.isSuccessful){
                         val res = response.body()
-                        Log.d(TAG, "onResponse: $res")
+                        if(res == true) {
+                            Log.d(TAG, "onResponse: $res")
+                        } else {
+                            Log.d(TAG, "onResponse Fail: $res")
+
+                        }
                     } else {
                         Log.d(TAG, "onResponse: Error Code ${response.code()}")
                     }
                 }
-                override fun onFailure(call: Call<String>, t: Throwable) {
+                override fun onFailure(call: Call<Boolean>, t: Throwable) {
                     Log.d(TAG, t.message ?: "토큰 정보 등록 중 통신오류")
                 }
             })

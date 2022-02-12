@@ -37,11 +37,17 @@ public class FcmController {
 
     }
 
-//    @PostMapping("/broadcast")
-//    public ResponseEntity<?> broadCast(String title, String body, String path) throws IOException {
-//        log.info("broadCast : title:{}, body:{}", title, body);
-//        return fcmService.broadCastMessage(title, body, path);
-//    }
+    @PostMapping("/broadcast")
+    public ResponseEntity<?> broadCast(String title, String body, String path) throws IOException {
+        log.info("broadCast : title:{}, body:{}, path:{}", title, body, path);
+        try {
+            fcmService.broadCastMessage(title, body, path);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+        }
+        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+    }
 
     @PostMapping("/sendMessageTo")
     public ResponseEntity<?> sendMessageTo(String token, String title, String body, String path) throws IOException {

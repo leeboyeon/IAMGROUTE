@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 
 @Service
@@ -135,14 +136,18 @@ public class FirebaseCloudMessageService {
      * @return
      * @throws Exception
      */
-//    public int broadCastMessage(String title, String body, String path) throws Exception {
-//        // path는 application 초기 화면
-//        List<User> users = userService.selectUserList();
-//        for(User user: users) {
-//            log.debug("broadcastmessage : {},{},{}", user.getToken(), title, body);
-//            sendMessageTo(user.getToken(), title, body, path);
-//        }
-//        return users.size();
-//    }
+    public int broadCastMessage(String title, String body, String path) throws Exception {
+        // path는 application 초기 화면
+        List<User> users = userService.selectAllUser();
+        for(int i = 0; i < users.size(); i++) {
+            User user = users.get(i);
+            if(user.getToken() != null) {
+//            if(user != null && !user.getToken().isEmpty() && user.getToken() != null) {
+                log.debug("broadcastmessage : {},{},{}", user.getToken(), title, body);
+                sendMessageTo(user.getToken(), title, body, path);
+            }
+        }
+        return users.size();
+    }
 
 }
