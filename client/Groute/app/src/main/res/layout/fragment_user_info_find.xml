@@ -18,7 +18,7 @@
             android:id="@+id/userinfo_find_appbar_ibtn_back"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
             android:src="@drawable/left"
@@ -60,6 +60,15 @@
             android:text="비밀번호 변경" />
 
     </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/userinfo_find_vp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userinfo_find_tablayout" />
 
 
 

@@ -84,6 +84,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
             login(id.text.toString(), pass.text.toString())
         }
 
+        binding.loginTvInfoFindChangeTv.setOnClickListener {
+            loginActivity.openFragment(4)
+        }
 
         // 구글 계정으로 로그인 버튼 클릭
         binding.loginIbtnGoogle.setOnClickListener {

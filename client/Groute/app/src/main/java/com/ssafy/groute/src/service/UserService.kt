@@ -229,7 +229,7 @@ class UserService {
         })
     }
 
-    fun updateUserPassword(userInfo: UserInfoResponse, id: String, callback:RetrofitCallback<Boolean>){
+    fun updateUserPassword(userInfo: UserInfoResponse, callback:RetrofitCallback<Boolean>){
         RetrofitUtil.userService.updateUserPassword(userInfo).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 val res = response.body()
