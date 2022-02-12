@@ -7,19 +7,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.src.dto.Route
 import com.ssafy.groute.src.dto.RouteDetail
 import com.ssafy.groute.src.service.RouteDetailService
 import com.ssafy.groute.src.service.UserPlanService
+import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.RetrofitCallback
+import kotlinx.coroutines.runBlocking
 import java.lang.NullPointerException
 import java.util.*
 import kotlin.collections.ArrayList
 
 private const val TAG = "TravelPlanListRecyclerviewAdapter_groute"
-class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableList<Route>) : RecyclerView.Adapter<TravelPlanListRecyclerviewAdapter.TravelPlanListHolder>(),
+class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableList<Route>,var planViewModel: PlanViewModel,val owner:LifecycleOwner,var planId:Int) : RecyclerView.Adapter<TravelPlanListRecyclerviewAdapter.TravelPlanListHolder>(),
     Filterable {
     private var dayFilterList = list
     private var route:Route = Route()
@@ -115,6 +118,9 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
 
             override fun onSuccess(code: Int, responseData: Boolean) {
                 Log.d(TAG, "onSuccess: Update Success")
+                runBlocking {
+                    planViewModel.getPlanById(planId, 2)
+                }
             }
 
             override fun onFailure(code: Int) {

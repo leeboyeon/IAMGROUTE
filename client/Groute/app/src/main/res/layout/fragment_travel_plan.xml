@@ -187,6 +187,19 @@
                 android:text="DAY1" />
         </com.google.android.material.tabs.TabLayout>
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/travelPlan_abtn_navi"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/travelplan_list_rv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/travelplan_tab_layout"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="navi.json"
+            app:lottie_loop="false" />
 
         <ImageButton
             android:id="@+id/travelPlan_ibtn_memo"
