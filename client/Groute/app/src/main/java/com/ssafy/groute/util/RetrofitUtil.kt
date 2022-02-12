@@ -15,5 +15,6 @@ class RetrofitUtil {
         val userPlanService = ApplicationClass.retrofit.create(UserPlanApi::class.java)
         val themeService = ApplicationClass.retrofit.create(ThemeApi::class.java)
         val accountService = ApplicationClass.retrofit.create(AccountApi::class.java)
+        val notificationService = ApplicationClass.retrofit.create(NotificationApi::class.java)
     }
 }

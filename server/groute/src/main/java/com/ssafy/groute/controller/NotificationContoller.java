@@ -1,7 +1,6 @@
 package com.ssafy.groute.controller;
 
 import com.ssafy.groute.dto.Notification;
-import com.ssafy.groute.dto.Place;
 import com.ssafy.groute.service.NotificationService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ public class NotificationContoller {
     @Autowired
     NotificationService notificationService;
 
-    @ApiOperation(value = "notificion 추가",notes = "notificion 추가")
+    @ApiOperation(value = "notification 추가",notes = "notification 추가")
     @PostMapping(value = "/insert")
     public ResponseEntity<?> insertNotification(@RequestBody Notification req){
 
@@ -73,7 +72,7 @@ public class NotificationContoller {
         return new ResponseEntity<Boolean>(true,HttpStatus.OK);
     }
 
-    @ApiOperation(value = "updateTheme",notes = "theme 수정")
+    @ApiOperation(value = "update Notification",notes = "notification 수정")
     @PutMapping(value = "/update")
     public ResponseEntity<?> updateNotification(@RequestBody Notification notification) throws Exception{
 
