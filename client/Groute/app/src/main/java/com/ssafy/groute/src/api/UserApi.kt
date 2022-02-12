@@ -46,6 +46,18 @@ interface UserApi {
     @DELETE("/user/{userId}")
     fun deleteUser(@Path("userId") userId:String) : Call<Boolean>
 
+    // 사용자 이메일로 아이디 조회
+    @GET("/user/id/{email}")
+    fun getUserIdByEmail(@Path("email") email: String): Call<UserInfoResponse>
+
+    // 사용자 이메일 아이디로 맞는거 있는지 조회
+    @GET("/user/pwd")
+    fun isUserEmailAndId(@Query("email") email: String, @Query("id") id: String): Call<Boolean>
+
+    // 비밀번호 변경
+    @PUT("/user/update/password")
+    fun updateUserPassword(@Body userInfo: UserInfoResponse) : Call<Boolean>
+
     //SharedUser
 
     @POST("/planShareUser/insert")
