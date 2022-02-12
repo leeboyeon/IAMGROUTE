@@ -1,13 +1,14 @@
 package com.ssafy.groute.src.api
 
 import com.ssafy.groute.src.dto.*
+import com.ssafy.groute.src.response.UserPlanResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
 interface UserPlanApi {
     @GET("/plan/{id}")
-    suspend fun getUserPlanById(@Path("id") id: Int) : Response<Map<String,Any>>
+    suspend fun getUserPlanById(@Path("id") id: Int) : Response<UserPlanResponse>
 
     @GET("/plan/best")
     suspend fun getBestUserPlan() : Response<MutableList<UserPlan>>

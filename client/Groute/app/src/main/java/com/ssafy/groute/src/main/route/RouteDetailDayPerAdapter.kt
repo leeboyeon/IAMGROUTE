@@ -50,8 +50,6 @@ class RouteDetailDayPerAdapter(val viewLifecycleOwner: LifecycleOwner, var list:
 
             })
 
-
-
         }
     }
 
