@@ -24,6 +24,7 @@ import com.ssafy.groute.src.viewmodel.PlanViewModel
 import kotlinx.coroutines.runBlocking
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -44,6 +45,7 @@ import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
+import net.daum.mf.map.api.MapPolyline
 import net.daum.mf.map.api.MapView
 
 
@@ -66,7 +68,8 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     private var placeId = -1
     val routeSelectList = arrayListOf<RouteRecom>()
     private var curPos = 0
-
+    var markerArr = arrayListOf<MapPoint>()
+    private lateinit var mapView:MapView
     private lateinit var routeRecomDialogAdapter:RouteRecomDialogAdapter
     private lateinit var travelPlanListRecyclerviewAdapter: TravelPlanListRecyclerviewAdapter
     private lateinit var memoAdapter: MemoAdapter
@@ -99,7 +102,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         }
 
         initPlaceListAdapter()
-        initKakaoMap()
+        findArea()
         floatingButtonEvent()
         binding.travelplanBackIv.setOnClickListener {
             mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
@@ -211,45 +214,66 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             }
         })
     }
-
-    fun initKakaoMap(){
-        var mapView = MapView(requireContext())
-        binding.travelplanMapview.addView(mapView)
-        Log.d(TAG, "findLatLng: ")
-        homeViewModel.areaList.observe(viewLifecycleOwner, Observer { it1 ->
-            planViewModel.planList.observe(viewLifecycleOwner, Observer { it2 ->
-                for(i in 0 until it1.size){
-                    if(it1[i].id == it2.areaId){
-                        AreaLat = it1[i].lat.toDouble()
-                        AreaLng = it1[i].lng.toDouble()
-                        var mapPoint = MapPoint.mapPointWithGeoCoord(AreaLat, AreaLng)
-                        mapView.setMapCenterPoint(mapPoint,true)
-                        mapView.setZoomLevel(9, true)
-                        Log.d(TAG, "findLatLng: ${AreaLat} || ${AreaLng}")
-                    }
-                }
-            })
-        })
-        var markerArr = arrayListOf<MapPOIItem>()
-        planViewModel.routeList.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "initKakaoMap: ${it}")
-            var dayByList = it[curPos].routeDetailList
-            Log.d(TAG, "initKakaoMap: ${dayByList}")
-            for(i in dayByList.indices){
-                Log.d(TAG, "initKakaoMap_routeDetail:${dayByList[i]} ")
-                var marker = MapPOIItem()
-                var lat = dayByList[i].place.lat
-                var lng = dayByList[i].place.lng
-                var mapPoint = MapPoint.mapPointWithGeoCoord(lat.toDouble(),lng.toDouble())
-                marker.itemName = (i+1).toString()
-                marker.mapPoint = mapPoint
-                marker.markerType = MapPOIItem.MarkerType.YellowPin
-                markerArr.add(marker)
+    fun findArea(){
+        var area = homeViewModel.areaList.value!!
+        var plan = planViewModel.planList.value!!
+        for(i in 0 until area.size){
+            if(area[i].id == plan.areaId){
+                initKakaoMap(area[i].lat.toDouble(), area[i].lng.toDouble())
             }
-            mapView.addPOIItems(markerArr.toArray(arrayOfNulls(markerArr.size)))
+        }
+    }
+    fun initKakaoMap(lat:Double, lng:Double){
+        mapView = MapView(requireContext())
+        if(mapView.parent!=null){
+            (mapView.parent as ViewGroup).removeView(mapView)
+        }
+        binding.travelplanMapview.addView(mapView)
+        var mapPoint = MapPoint.mapPointWithGeoCoord(lat, lng)
+        mapView.setMapCenterPoint(mapPoint,true)
+        mapView.setZoomLevel(9, true)
+    }
+
+    fun addPing(day:Int){
+        markerArr = arrayListOf()
+        planViewModel.routeList.observe(viewLifecycleOwner, {
+            var dayList = it[day].routeDetailList
+            Log.d(TAG, "addPing: ${dayList}")
+            for(i in 0..dayList.size-1){
+                var lat = dayList[i].place.lat.toDouble()
+                var lng = dayList[i].place.lng.toDouble()
+                var mapPoint = MapPoint.mapPointWithGeoCoord(lat,lng)
+                markerArr.add(mapPoint)
+            }
+            setPing(markerArr)
+            addPolyLine(markerArr)
         })
 
+    }
+    fun setPing(markerArr:ArrayList<MapPoint>){
+        removePing()
+        var list = arrayListOf<MapPOIItem>()
+        for(i in 0..markerArr.size-1){
+            var marker = MapPOIItem()
+            marker.itemName = (i+1).toString()
+            marker.mapPoint = markerArr[i]
+            Log.d(TAG, "setPing: ${markerArr[i].mapPointGeoCoord.latitude} || ${markerArr[i].mapPointGeoCoord.longitude}")
+            marker.markerType = MapPOIItem.MarkerType.YellowPin
+            list.add(marker)
+        }
+        mapView.addPOIItems(list.toArray(arrayOfNulls(list.size)))
 
+    }
+    fun removePing(){
+        mapView.removeAllPOIItems()
+        mapView.removeAllPolylines()
+    }
+    fun addPolyLine(markerArr: ArrayList<MapPoint>){
+        var polyLine = MapPolyline()
+        polyLine.tag = 1000
+        polyLine.lineColor = Color.GREEN
+        polyLine.addPoints(markerArr.toArray(arrayOfNulls(markerArr.size)))
+        mapView.addPolyline(polyLine)
     }
 
     // 플로팅 버튼 이벤트 처리
@@ -314,6 +338,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     @RequiresApi(Build.VERSION_CODES.O)
     fun initTabLayout(){
         binding.travelplanTabLayout.removeAllTabs()
+
         for(i in 0 until planViewModel.routeList.value!!.size){
             binding.travelplanTabLayout.addTab(binding.travelplanTabLayout.newTab().setText(planViewModel.routeList.value!!.get(i).name))
         }
@@ -323,6 +348,8 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 travelPlanListRecyclerviewAdapter.filter.filter((tab?.position?.plus(1)).toString())
                 curPos = tab!!.position
+                removePing()
+                addPing(tab!!.position)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
