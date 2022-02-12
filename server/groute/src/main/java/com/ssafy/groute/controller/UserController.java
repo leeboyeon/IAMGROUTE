@@ -14,17 +14,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -103,8 +101,7 @@ public class UserController {
 
     @ApiOperation(value="Id 중복 체크", notes="Id 중복 체크")
     @GetMapping("/isUsedId")
-    public @ResponseBody
-    Boolean isUsedId(String id) throws Exception {
+    public @ResponseBody Boolean isUsedId(String id) throws Exception {
 
         if (userService.findById(id) != null) {
             return true;    // 조회되는 User가 있으면 Id 중복
@@ -230,5 +227,21 @@ public class UserController {
             return false;
         }
         return true;
+    }
+
+    @ApiOperation(value="전체 사용자 정보 조회", notes="모든 사용자의 id와 token을 조회한다.")
+    @GetMapping("/allUser")
+    public ResponseEntity<?> selectAllUser() throws Exception {
+        try {
+            List<User> res = userService.selectAllUser();
+            if(res != null) {
+                return new ResponseEntity<List<User>>(res, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 }
