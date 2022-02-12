@@ -47,6 +47,15 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name="com.ssafy.groute.src.service.FirebaseMessageService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="956742d6721a84ca6d77fd8ea88f59ec" />

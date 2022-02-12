@@ -30,15 +30,18 @@
 
         <TextView
             android:id="@+id/RouteDetail_title_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="22dp"
+            android:layout_marginEnd="10dp"
             android:includeFontPadding="false"
             android:text="@{viewModel.planList.title}"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintEnd_toStartOf="@+id/constraintLayout7"
             app:layout_constraintStart_toEndOf="@+id/RouteDetail_ibtn_back"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -131,7 +134,7 @@
             android:id="@+id/constraintLayout7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="30dp"
             android:layout_marginBottom="30dp"
             app:layout_constraintBottom_toTopOf="@+id/RouteDetail_tablayout"

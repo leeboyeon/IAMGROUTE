@@ -1,6 +1,8 @@
 package com.ssafy.groute.src.main
 
 import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
@@ -8,7 +10,6 @@ import android.content.pm.PackageManager
 import android.content.pm.Signature
 import android.os.AsyncTask
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
@@ -17,15 +18,12 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.rx
 import com.nhn.android.naverlogin.OAuthLogin
@@ -33,6 +31,7 @@ import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseActivity
 import com.ssafy.groute.databinding.ActivityMainBinding
+import com.ssafy.groute.src.api.FirebaseTokenService
 import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.login.LoginActivity
 import com.ssafy.groute.src.main.board.*
@@ -46,8 +45,6 @@ import com.ssafy.groute.src.main.route.RouteDetailFragment
 import com.ssafy.groute.src.main.route.RouteFragment
 import com.ssafy.groute.src.main.route.RouteReviewWriteFragment
 import com.ssafy.groute.src.main.travel.*
-import com.ssafy.groute.src.response.UserInfoResponse
-import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.LocationPermissionManager
 import com.ssafy.groute.util.LocationServiceManager
@@ -56,13 +53,12 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.runBlocking
-import java.lang.Long.min
-import java.lang.Math.abs
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -138,7 +134,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
 
         // kakao map api key hash
-//        getHashKey()
+        getHashKey()
 
         // Location
         locationPermissionManager = LocationPermissionManager(this)
@@ -154,7 +150,23 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         binding.lifecycleOwner = this
 //        binding.viewModeluser = viewModel
+
+
+        // FCM 토큰 수신
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "FCM 토큰 얻기에 실패하였습니다.", task.exception)
+                return@OnCompleteListener
+            }
+            // token log 남기기
+            Log.d(TAG, "token: ${task.result?:"task.result is null"}")
+            uploadToken(task.result!!, ApplicationClass.sharedPreferencesUtil.getUser().id)
+//            viewModel.token = task.result!!
+        })
+        createNotificationChannel(channel_id, "ssafy")
     }
+
+
     fun openFragment(index:Int, key1:String, value1:Int, key2:String, value2:Int){
         val transaction = supportFragmentManager.beginTransaction()
         val fm = supportFragmentManager
@@ -422,6 +434,48 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 Log.d(TAG, "errorDesc:" + mOAuthLoginModule.getLastErrorDesc(mContext))
             }
             return isSuccessDeleteToken
+        }
+    }
+
+
+    /**
+     * Fcm Notification 수신을 위한 채널 추가
+     */
+    @RequiresApi(Build.VERSION_CODES.O)
+    // Notification 수신을 위한 체널 추가
+    private fun createNotificationChannel(id: String, name: String) {
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(id, name, importance)
+
+        val notificationManager: NotificationManager
+                = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
+
+
+    companion object {
+        const val channel_id = "ssafy_channel"
+        fun uploadToken(token:String, userId: String) {
+            val storeService = ApplicationClass.retrofit.create(FirebaseTokenService::class.java)
+            storeService.uploadToken(token, userId).enqueue(object : Callback<Boolean> {
+                override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                    if(response.isSuccessful){
+                        val res = response.body()
+                        if(res == true) {
+                            Log.d(TAG, "onResponse: $res")
+                        } else {
+                            Log.d(TAG, "onResponse Fail: $res")
+
+                        }
+                    } else {
+                        Log.d(TAG, "onResponse: Error Code ${response.code()}")
+                    }
+                }
+                override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                    Log.d(TAG, t.message ?: "토큰 정보 등록 중 통신오류")
+                }
+            })
         }
     }
 }
