@@ -40,6 +40,7 @@ import com.ssafy.groute.src.main.home.PlaceDetailFragment
 import com.ssafy.groute.src.main.home.PlaceFragment
 import com.ssafy.groute.src.main.home.ReviewWriteFragment
 import com.ssafy.groute.src.main.my.MyFragment
+import com.ssafy.groute.src.main.my.NotificationFragment
 import com.ssafy.groute.src.main.route.RouteCreateFragment
 import com.ssafy.groute.src.main.route.RouteDetailFragment
 import com.ssafy.groute.src.main.route.RouteFragment
@@ -256,6 +257,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             }
             19 -> {
                 transaction.replace(R.id.frame_main_layout, AccountFragment.newInstance(key1,value1))
+                    .addToBackStack(null)
             }
             20->{
                 transaction.replace(R.id.frame_main_layout, AccountWriteFragment.newInstance(key1,value1))
@@ -266,6 +268,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 bottomNavigation.selectedItemId = R.id.Board
                 supportFragmentManager.beginTransaction().replace(R.id.frame_main_layout, BoardFragment())
                     .commit()
+            }
+            22 -> {
+                // Notification List
+                transaction.replace(R.id.frame_main_layout, NotificationFragment())
+                    .addToBackStack(null)
             }
 
         }

@@ -64,6 +64,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
 
         // login User Info DataBinding
         initUserInfo()
+        initNotiClickEvent()
 
         val pagerAdapter = MyTravelTabPageAdapter(this)
         val tabList = arrayListOf("My Travel", "Shared Travel", "Save Travel")
@@ -123,8 +124,9 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
         })
     }
 
+    // 회원 탈퇴 dialog
     private fun showDeleteUserDialog(){
-        var builder = AlertDialog.Builder(requireContext())
+        val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("회원 탈퇴")
             .setMessage("정말로 탈퇴하시겠습니까?")
             .setPositiveButton("YES",DialogInterface.OnClickListener{dialogInterface, id ->
@@ -147,6 +149,13 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
             .create()
 
         builder.show()
+    }
+
+    // Notification icon click Event
+    private fun initNotiClickEvent() {
+        binding.myIBtnNotification.setOnClickListener {
+            mainActivity.moveFragment(22)
+        }
     }
 
     inner class DeleteCallback() : RetrofitCallback<Boolean>{

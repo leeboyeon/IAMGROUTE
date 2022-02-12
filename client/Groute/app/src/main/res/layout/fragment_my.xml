@@ -22,16 +22,49 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageButton
-                android:id="@+id/my_ibtn_more"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="left"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:background="@android:color/transparent"
-                android:scaleType="centerInside"
-                app:srcCompat="@drawable/morecion" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp">
+
+                <ImageButton
+                    android:id="@+id/my_ibtn_more"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:layout_marginStart="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/space"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/morecion" />
+
+                <Space
+                    android:id="@+id/space"
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/my_ibtn_more"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/my_iBtn_notification"/>
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/my_iBtn_notification"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/space"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_autoPlay="false"
+                    app:lottie_fileName="noty.json"
+                    app:lottie_loop="false" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <ImageView
                 android:id="@+id/my_profile_img"
@@ -39,6 +72,7 @@
                 android:layout_height="150dp"
                 android:layout_gravity="center"
                 app:imageUrlUser="@{user.img}" />
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
