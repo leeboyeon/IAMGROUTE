@@ -26,14 +26,14 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
 
 //        //로그인 상태 확인. id가 있다면 로그인 된 상태 -> 가장 첫 화면은 홈 화면의 Fragment로 지정
 
-//        if (sharedPreferencesUtil.getUserCookie() != null){
-//            openFragment(1)
-//        } else {
-//
-//            supportFragmentManager.beginTransaction()
-//                .replace(R.id.frame_login_layout, LoginFragment())
-//                .commit()
-//        }
+        if (user.id != ""){
+            openFragment(1)
+        } else {
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_login_layout, LoginFragment())
+                .commit()
+        }
 
 
         // kakao 플랫폼 키 해시 등록
