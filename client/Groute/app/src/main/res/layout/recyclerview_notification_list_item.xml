@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+
+        <variable
+            name="notification"
+            type="com.ssafy.groute.src.dto.Notification" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:background="@drawable/edittext_background"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/ibtn_delete"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_gravity="right"
+            android:background="#00FFFFFF"
+            app:srcCompat="@drawable/close_btn_img_black" />
+
+        <TextView
+            android:id="@+id/tv_notificationContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:text="@{notification.content}"
+            android:textColor="@color/black" />
+<!--            android:text="notiContent"-->
+
+        <TextView
+            android:id="@+id/tv_notificatonDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{notification.date}"/>
+<!--            android:text="2021.11.08 23:06:30" />-->
+    </LinearLayout>
+</layout>
