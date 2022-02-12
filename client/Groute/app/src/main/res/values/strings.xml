@@ -105,6 +105,12 @@
         <item>nate.com</item>
         <item>직접 입력</item>
     </string-array>
+    <string-array name="notiCategory_array">
+        <item>All</item>
+        <item>Notice</item>
+        <item>UserPlan</item>
+        <item>Event</item>
+    </string-array>
 
     <string name="google_login_key">664097318377-l0dhckmh95ghghsphho582oro6bcd8fe.apps.googleusercontent.com</string>
     <string name="naver_client_id">VOpTU0bsRg5ofE5TMfYm</string>
