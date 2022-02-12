@@ -191,6 +191,63 @@ class UserService {
         })
     }
 
+    fun getUserIdByEmail(email: String, callback: RetrofitCallback<UserInfoResponse>) {
+        RetrofitUtil.userService.getUserIdByEmail(email).enqueue(object : Callback<UserInfoResponse> {
+            override fun onResponse(call: Call<UserInfoResponse>, response: Response<UserInfoResponse>) {
+                val res = response.body()
+                if(response.code() == 200){
+                    if (res != null) {
+                        callback.onSuccess(response.code(), res)
+                    }
+                } else {
+                    callback.onFailure(response.code())
+                }
+            }
+
+            override fun onFailure(call: Call<UserInfoResponse>, t: Throwable) {
+                callback.onError(t)
+            }
+        })
+    }
+
+    fun isUserEmailAndId(email: String, id: String, callback:RetrofitCallback<Boolean>){
+        RetrofitUtil.userService.isUserEmailAndId(email, id).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if(response.code() == 200) {
+                    if (res != null) {
+                        callback.onSuccess(response.code(), res)
+                    }
+                } else {
+                    callback.onFailure(response.code())
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callback.onError(t)
+            }
+        })
+    }
+
+    fun updateUserPassword(userInfo: UserInfoResponse, callback:RetrofitCallback<Boolean>){
+        RetrofitUtil.userService.updateUserPassword(userInfo).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if(response.code() == 200) {
+                    if (res != null) {
+                        callback.onSuccess(response.code(), res)
+                    }
+                } else {
+                    callback.onFailure(response.code())
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                callback.onError(t)
+            }
+        })
+    }
+
     /**
      * 사용자의 공유유저의 정보를 추가한다.
      * @param shareUser

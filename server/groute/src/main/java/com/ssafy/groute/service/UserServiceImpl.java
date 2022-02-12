@@ -117,4 +117,9 @@ public class UserServiceImpl implements UserService {
     public void updatePassword(User user) throws Exception {
         userMapper.updatePassword(user);
     }
+
+    @Override
+    public List<User> selectAllUser() throws Exception {
+        return userMapper.selectAllUserList();
+    }
 }

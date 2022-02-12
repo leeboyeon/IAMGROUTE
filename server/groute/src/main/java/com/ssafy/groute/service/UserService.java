@@ -18,4 +18,5 @@ public interface UserService {
     User selectUserIdByEmail(String email) throws Exception;
     User selectUserByIdEmail(String id, String email) throws Exception;
     void updatePassword(User user) throws Exception;
+    List<User> selectAllUser() throws Exception;
 }

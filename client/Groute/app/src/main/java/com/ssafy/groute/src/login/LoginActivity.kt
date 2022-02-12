@@ -55,6 +55,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
 
             3 -> transaction.replace(R.id.frame_login_layout, LoginFragment())
                 .addToBackStack(null)
+
+            4-> transaction.replace(R.id.frame_login_layout, UserInfoFindFragment())
+                .addToBackStack(null)
         }
         transaction.commit()
     }

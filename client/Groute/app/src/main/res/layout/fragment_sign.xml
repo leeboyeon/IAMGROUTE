@@ -117,7 +117,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/join_edit_email"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="55dp"
                             android:background="@drawable/edittext_background"
                             android:hint="EMAIL" />
                     </com.google.android.material.textfield.TextInputLayout>

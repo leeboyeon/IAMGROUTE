@@ -23,3 +23,6 @@ data class UserInfoResponse(
     @SerializedName("accountNonLocked") var accountNonLocked: Boolean,
     @SerializedName("accountNonExpired") var accountNonExpired: Boolean
 ) : Serializable
+{
+    constructor(id: String, password: String): this(id, password, "", "", "", "", "", "", null, null, null, null, null, false, null, false, false, false)
+}

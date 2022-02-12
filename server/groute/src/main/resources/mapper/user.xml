@@ -59,4 +59,8 @@
         set password = #{password}
         where id = #{id}
     </update>
+
+    <select id="selectAllUserList" resultType="User">
+        select id, token from user
+    </select>
 </mapper>
