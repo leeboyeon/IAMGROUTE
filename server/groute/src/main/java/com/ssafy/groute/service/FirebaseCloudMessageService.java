@@ -22,7 +22,7 @@ import java.util.Arrays;
 @Slf4j
 @RequiredArgsConstructor
 public class FirebaseCloudMessageService {
-    private final String API_URL = "https://fcm.googleapis.com/v1/projects/final-coffee-project/messages:send";
+    private final String API_URL = "https://fcm.googleapis.com/v1/projects/iamgroute-a57c7/messages:send";
 
     private final ObjectMapper objectMapper;
 
