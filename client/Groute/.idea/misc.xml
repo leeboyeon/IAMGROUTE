@@ -111,7 +111,10 @@
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/menu/bottomnav_item.xml" value="0.1" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/menu/toolbar_item.xml" value="0.33" />
         <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/fragment_my_travel.xml" value="0.18659420289855072" />
-        <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/fragment_travel_plan.xml" value="0.2" />
+        <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/fragment_route_detail.xml" value="0.4" />
+        <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/fragment_save_travel.xml" value="0.25364583333333335" />
+        <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/fragment_search.xml" value="0.25364583333333335" />
+        <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/fragment_travel_plan.xml" value="0.264" />
         <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/fragment_travel_plan_list.xml" value="0.1" />
         <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/item_travelplan_day_list.xml" value="0.23541666666666666" />
       </map>
