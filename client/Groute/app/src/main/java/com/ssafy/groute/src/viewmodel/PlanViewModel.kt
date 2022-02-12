@@ -229,137 +229,161 @@ class PlanViewModel : ViewModel() {
             }
         }
     }
-
-    suspend fun getPlanById(id: Int, flag: Int) {
+    suspend fun getPlanById(id:Int, flag: Int){
         val response = UserPlanService().getUserPlanById(id)
-        viewModelScope.launch {
-            var res = response.body()
-            if (response.code() == 200) {
-                if (res != null) {
-//                    Log.d(TAG, "getPlanById: $res")
-                    val userPlantmp = JSONObject(res).getJSONObject("userPlan")
-//                    Log.d(TAG, "getPlanById: ${userPlantmp}")
-                    val themeList = userPlantmp.getJSONArray("themeIdList")
-                    var themeIdList = mutableListOf<Int>()
-                    var k = 0
-                    while (k < themeList.length()) {
-                        themeIdList.add(themeList.getInt(k))
-                        k++
-                    }
-                    val userPlan = UserPlan(
-                        id = userPlantmp.getInt("id"),
-                        title = userPlantmp.getString("title"),
-                        userId = userPlantmp.getString("userId"),
-                        description = userPlantmp.getString("description"),
-                        startDate = userPlantmp.getString("startDate"),
-                        endDate = userPlantmp.getString("endDate"),
-                        totalDate = userPlantmp.getInt("totalDate"),
-                        isPublic = userPlantmp.getString("isPublic"),
-                        rate = userPlantmp.getDouble("rate"),
-                        heartCnt = userPlantmp.getInt("heartCnt"),
-                        areaId = userPlantmp.getInt("areaId"),
-                        themeIdList = themeIdList,
-                        reviewCnt = userPlantmp.getInt("reviewCnt")
-                    )
-
-                    val routetmp = JSONObject(res).getJSONArray("routeList")
-                    var i = 0
-
-                    var routeList = mutableListOf<Route>()
-                    while (i < routetmp.length()) {
-                        var routeDetaillist = arrayListOf<RouteDetail>()
-                        val jsonObject = routetmp.getJSONObject(i)
-                        var rid = jsonObject.getInt("id")
-                        var rname = jsonObject.getString("name")
-                        var day = jsonObject.getInt("day")
-                        var rmemo = jsonObject.getString("memo")
-                        var isCustom = jsonObject.getString("isCustom")
-                        var detailtmp = jsonObject.getJSONArray("routeDetailList")
-                        var j = 0
-                        while (j < detailtmp.length()) {
-                            val detailObject = detailtmp.getJSONObject(j)
-                            var routeId = detailObject.getInt("routeId")
-                            var did = detailObject.getInt("id")
-                            var placeId = detailObject.getInt("placeId")
-                            var priority = detailObject.getInt("priority")
-                            var dmemo = detailObject.getString("memo")
-                            var placeObject = detailObject.getJSONObject("place")
-
-                            var pid = placeObject.getInt("id")
-                            var name = placeObject.getString("name")
-                            var type = placeObject.getString("type")
-                            var lat = placeObject.getString("lat")
-                            var lng = placeObject.getString("lng")
-                            var zipCode = placeObject.getString("zipCode")
-                            var contact = placeObject.getString("contact")
-                            var address = placeObject.getString("address")
-                            var description = placeObject.getString("description")
-                            var themeId = placeObject.getInt("themeId")
-                            var areaId = placeObject.getInt("areaId")
-                            var img = placeObject.getString("img")
-                            var userId = placeObject.getString("userId")
-                            var rate = placeObject.getDouble("rate")
-                            var heartCnt = placeObject.getInt("heartCnt")
-
-                            var place = Place(
-                                address = address,
-                                areaId = areaId,
-                                contact = contact,
-                                description = description,
-                                heartCnt = heartCnt,
-                                id = pid,
-                                img = img,
-                                lat = lat,
-                                lng = lng,
-                                name = name,
-                                rate = rate.toFloat(),
-                                themeId = themeId,
-                                type = type,
-                                userId = userId,
-                                zipCode = zipCode
-                            )
-                            var routeDetail = RouteDetail(
-                                id = did,
-                                memo = dmemo,
-                                place = place,
-                                placeId = placeId,
-                                priority = priority,
-                                routeId = routeId
-                            )
-                            routeDetaillist.add(routeDetail)
-                            setRouteDetailList(routeDetaillist)
-                            j++
-                        }
-                        var route = Route(
-                            day = day,
-                            id = rid,
-                            isCustom = isCustom,
-                            memo = rmemo,
-                            name = rname,
-                            routeDetailList = routeDetaillist
-                        )
-                        routeList.add(route)
-                        i++
-                    }
+        viewModelScope.launch { 
+            val res = response.body()
+            if(response.code() == 200){
+                if(res!=null){
+                    Log.d(TAG, "getPlanById: ${res}")
                     if(flag == 1) { // RouteDetail에서 사용자의 현재 짜고있는 일정 보여줄때
-                        setUserPlan(userPlan)
+                        setUserPlan(res.userPlan)
                     } else if(flag == 2){ // 기존에 쓰던거
-                        setPlanList(userPlan)
-                        setRouteList(routeList)
-                        getThemeById(userPlan.themeIdList)
-//                        Log.d(TAG, "getPlanById_USERPlan: ${userPlan}")
-//                        Log.d(TAG, "getPlanById: ${routeList}")
+                        setPlanList(res.userPlan)
+                        setRouteList(res.routeList)
+                        getThemeById(res.userPlan.themeIdList)
+//                        setRouteDetailList(res.routeDetailList as MutableList<RouteDetail>)
                     } else if(flag == 3) {
-                        setPlanList(userPlan)
+                        setPlanList(res.userPlan)
                     }
-
+                }else{
+                    Log.d(TAG, "getPlanById: res is null")
                 }
-            } else {
-                Log.d(TAG, "getPlanById: ")
+            }else{
+                Log.d(TAG, "getPlanById: ${response.code()}")
             }
-
         }
     }
+//    suspend fun getPlanById(id: Int, flag: Int) {
+//        val response = UserPlanService().getUserPlanById(id)
+//        viewModelScope.launch {
+//            var res = response.body()
+//            if (response.code() == 200) {
+//                if (res != null) {
+////                    Log.d(TAG, "getPlanById: $res")
+//                    val userPlantmp = JSONObject(res).getJSONObject("userPlan")
+////                    Log.d(TAG, "getPlanById: ${userPlantmp}")
+//                    val themeList = userPlantmp.getJSONArray("themeIdList")
+//                    var themeIdList = mutableListOf<Int>()
+//                    var k = 0
+//                    while (k < themeList.length()) {
+//                        themeIdList.add(themeList.getInt(k))
+//                        k++
+//                    }
+//                    val userPlan = UserPlan(
+//                        id = userPlantmp.getInt("id"),
+//                        title = userPlantmp.getString("title"),
+//                        userId = userPlantmp.getString("userId"),
+//                        description = userPlantmp.getString("description"),
+//                        startDate = userPlantmp.getString("startDate"),
+//                        endDate = userPlantmp.getString("endDate"),
+//                        totalDate = userPlantmp.getInt("totalDate"),
+//                        isPublic = userPlantmp.getString("isPublic"),
+//                        rate = userPlantmp.getDouble("rate"),
+//                        heartCnt = userPlantmp.getInt("heartCnt"),
+//                        areaId = userPlantmp.getInt("areaId"),
+//                        themeIdList = themeIdList,
+//                        reviewCnt = userPlantmp.getInt("reviewCnt")
+//                    )
+//
+//                    val routetmp = JSONObject(res).getJSONArray("routeList")
+//                    var i = 0
+//
+//                    var routeList = mutableListOf<Route>()
+//                    while (i < routetmp.length()) {
+//                        var routeDetaillist = arrayListOf<RouteDetail>()
+//                        val jsonObject = routetmp.getJSONObject(i)
+//                        var rid = jsonObject.getInt("id")
+//                        var rname = jsonObject.getString("name")
+//                        var day = jsonObject.getInt("day")
+//                        var rmemo = jsonObject.getString("memo")
+//                        var isCustom = jsonObject.getString("isCustom")
+//                        var detailtmp = jsonObject.getJSONArray("routeDetailList")
+//                        var j = 0
+//                        while (j < detailtmp.length()) {
+//                            val detailObject = detailtmp.getJSONObject(j)
+//                            var routeId = detailObject.getInt("routeId")
+//                            var did = detailObject.getInt("id")
+//                            var placeId = detailObject.getInt("placeId")
+//                            var priority = detailObject.getInt("priority")
+//                            var dmemo = detailObject.getString("memo")
+//                            var placeObject = detailObject.getJSONObject("place")
+//
+//                            var pid = placeObject.getInt("id")
+//                            var name = placeObject.getString("name")
+//                            var type = placeObject.getString("type")
+//                            var lat = placeObject.getString("lat")
+//                            var lng = placeObject.getString("lng")
+//                            var zipCode = placeObject.getString("zipCode")
+//                            var contact = placeObject.getString("contact")
+//                            var address = placeObject.getString("address")
+//                            var description = placeObject.getString("description")
+//                            var themeId = placeObject.getInt("themeId")
+//                            var areaId = placeObject.getInt("areaId")
+//                            var img = placeObject.getString("img")
+//                            var userId = placeObject.getString("userId")
+//                            var rate = placeObject.getDouble("rate")
+//                            var heartCnt = placeObject.getInt("heartCnt")
+//
+//                            var place = Place(
+//                                address = address,
+//                                areaId = areaId,
+//                                contact = contact,
+//                                description = description,
+//                                heartCnt = heartCnt,
+//                                id = pid,
+//                                img = img,
+//                                lat = lat,
+//                                lng = lng,
+//                                name = name,
+//                                rate = rate.toFloat(),
+//                                themeId = themeId,
+//                                type = type,
+//                                userId = userId,
+//                                zipCode = zipCode
+//                            )
+//                            var routeDetail = RouteDetail(
+//                                id = did,
+//                                memo = dmemo,
+//                                place = place,
+//                                placeId = placeId,
+//                                priority = priority,
+//                                routeId = routeId
+//                            )
+//                            routeDetaillist.add(routeDetail)
+//                            setRouteDetailList(routeDetaillist)
+//                            j++
+//                        }
+//                        var route = Route(
+//                            day = day,
+//                            id = rid,
+//                            isCustom = isCustom,
+//                            memo = rmemo,
+//                            name = rname,
+//                            routeDetailList = routeDetaillist
+//                        )
+//                        routeList.add(route)
+//                        i++
+//                    }
+//                    if(flag == 1) { // RouteDetail에서 사용자의 현재 짜고있는 일정 보여줄때
+//                        setUserPlan(userPlan)
+//                    } else if(flag == 2){ // 기존에 쓰던거
+//                        setPlanList(userPlan)
+//                        setRouteList(routeList)
+//                        getThemeById(userPlan.themeIdList)
+////                        Log.d(TAG, "getPlanById_USERPlan: ${userPlan}")
+////                        Log.d(TAG, "getPlanById: ${routeList}")
+//                    } else if(flag == 3) {
+//                        setPlanList(userPlan)
+//                    }
+//
+//                }
+//            } else {
+//                Log.d(TAG, "getPlanById: ")
+//            }
+//
+//        }
+//    }
 
     fun getRouteDetailbyDay(day: Int) {
         viewModelScope.launch {

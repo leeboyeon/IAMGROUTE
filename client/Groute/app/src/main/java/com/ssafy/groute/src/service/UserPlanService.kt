@@ -3,6 +3,7 @@ package com.ssafy.groute.src.service
 import android.util.Log
 import com.ssafy.groute.src.dto.*
 import com.ssafy.groute.src.response.PlaceLikeResponse
+import com.ssafy.groute.src.response.UserPlanResponse
 import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil
 import retrofit2.Call
@@ -12,7 +13,7 @@ import retrofit2.Response
 private const val TAG = "UserPlanService_groute"
 
 class UserPlanService {
-    suspend fun getUserPlanById(id: Int): Response<Map<String, Any>> {
+    suspend fun getUserPlanById(id: Int): Response<UserPlanResponse> {
         return RetrofitUtil.userPlanService.getUserPlanById(id)
     }
 
