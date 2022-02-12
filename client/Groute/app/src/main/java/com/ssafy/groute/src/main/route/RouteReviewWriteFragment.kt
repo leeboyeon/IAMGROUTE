@@ -113,7 +113,7 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
 
             override fun onSuccess(code: Int, responseData: Boolean) {
                 Log.d(TAG, "onSuccess: ")
-                mainActivity.moveFragment(12,"planId", planId)
+                mainActivity.moveFragment(12, "planIdDetail", planId, "planIdUser", -1)
                 Toast.makeText(requireContext(),"리뷰수정 성공", Toast.LENGTH_SHORT).show()
             }
 
@@ -132,7 +132,7 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
 
             override fun onSuccess(code: Int, responseData: Boolean) {
                 Log.d(TAG, "onSuccess: ")
-                mainActivity.moveFragment(12,"planId", planId)
+                mainActivity.moveFragment(12, "planIdDetail", planId, "planIdUser", -1)
                 Toast.makeText(requireContext(),"리뷰작성 성공", Toast.LENGTH_SHORT).show()
             }
 

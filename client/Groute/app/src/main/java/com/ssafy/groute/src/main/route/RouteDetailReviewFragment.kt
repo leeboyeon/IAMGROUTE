@@ -1,7 +1,9 @@
 package com.ssafy.groute.src.main.route
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +21,7 @@ import com.ssafy.groute.src.main.home.ReviewAdapter
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import kotlinx.coroutines.runBlocking
 
-
+private const val TAG = "RouteDetailReviewFragment"
 class RouteDetailReviewFragment : BaseFragment<FragmentRouteDetailReviewBinding>(FragmentRouteDetailReviewBinding::bind, R.layout.fragment_route_detail_review) {
     private lateinit var mainActivity: MainActivity
     private lateinit var routeDetailReviewAdapter: RouteDetailReviewAdapter
@@ -39,12 +41,14 @@ class RouteDetailReviewFragment : BaseFragment<FragmentRouteDetailReviewBinding>
         mainActivity = context as MainActivity
     }
 
+    @SuppressLint("LongLogTag")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = planViewModel
         runBlocking {
             planViewModel.getPlanReviewListbyId(planId)
         }
+        Log.d(TAG, "onViewCreated: ")
         initAdapter()
         binding.routedetailReviewIbtnWrite.setOnClickListener{
             mainActivity.moveFragment(14, "planId", planId)
