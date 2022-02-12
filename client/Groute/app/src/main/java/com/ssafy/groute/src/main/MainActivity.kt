@@ -163,7 +163,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             uploadToken(task.result!!, ApplicationClass.sharedPreferencesUtil.getUser().id)
 //            viewModel.token = task.result!!
         })
-        createNotificationChannel(channel_id, "ssafy")
+//        createNotificationChannel(channel_id, "ssafy")
     }
 
 

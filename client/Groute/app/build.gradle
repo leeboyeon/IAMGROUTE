@@ -156,4 +156,9 @@ dependencies {
     //chart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
+    //kakao Navi
+    implementation "com.kakao.sdk:v2-navi:2.8.5"
+//    implementation "com.kakao.sdk:kakaonavi:$kakaolib_version"
+    compile group: 'com.kakao.sdk',name:'kakaonavi',version: '1.6.2'
+
 }

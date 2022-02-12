@@ -59,6 +59,7 @@
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="956742d6721a84ca6d77fd8ea88f59ec" />
+        <meta-data android:name="com.kakao.sdk.kakaonavi.useWebView" android:value="false" />
     </application>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />

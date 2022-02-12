@@ -5,8 +5,10 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -32,6 +34,17 @@ import java.util.*
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.datepicker.*
 import com.google.android.material.tabs.TabLayout
+import com.kakao.kakaonavi.Destination.newBuilder
+import com.kakao.kakaonavi.KakaoNaviParams
+import com.kakao.kakaonavi.KakaoNaviService
+import com.kakao.kakaonavi.Location.newBuilder
+import com.kakao.kakaonavi.NaviOptions
+import com.kakao.kakaonavi.options.CoordType
+import com.kakao.kakaonavi.options.RpOption
+import com.kakao.kakaonavi.options.VehicleType
+
+import com.kakao.sdk.navi.model.Location
+import com.kakao.sdk.navi.model.NaviOption
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.dto.Route
@@ -146,9 +159,10 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         binding.travelPlanIbtnMemo.setOnClickListener {
             initMemo()
         }
-
+        binding.travelPlanAbtnNavi.setOnClickListener {
+            startNavi(markerArr)
+        }
     }
-
     fun initMemo(){
         var routes = planViewModel.routeList.value!!
         if(routes[curPos].memo != null){
@@ -233,12 +247,37 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         mapView.setMapCenterPoint(mapPoint,true)
         mapView.setZoomLevel(9, true)
     }
+    fun startNavi(markerArr: ArrayList<MapPoint>){
+//        if(NaviClient.instance.isKakaoNaviInstalled(requireContext())){
+//            Log.d(TAG, "startNavi: ${markerArr[0].mapPointGeoCoord.latitude} || ${markerArr[0].mapPointGeoCoord.longitude}")
+//            startActivity(
+//                NaviClient.instance.navigateIntent(
+//                    Location("0",markerArr[0].mapPointGeoCoord.latitude.toString(),markerArr[0].mapPointGeoCoord.longitude.toString()),
+//                    NaviOption(coordType = CoordType.WGS84),
+//                )
+//            )
+//        }else {
+//            // 카카오내비 설치 페이지로 이동
+//            startActivity(
+//                Intent(
+//                    Intent.ACTION_VIEW,
+//                    Uri.parse(Constants.WEB_NAVI_INSTALL)
+//                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//            )
+//        }
+        var destination = com.kakao.kakaonavi.Location.newBuilder("시발",markerArr[0].mapPointGeoCoord.latitude,markerArr[0].mapPointGeoCoord.longitude).build()
 
+
+        var options = NaviOptions.newBuilder().setCoordType(CoordType.WGS84).setVehicleType(VehicleType.FIRST).setRpOption(RpOption.SHORTEST).build()
+        var builder = KakaoNaviParams.newBuilder(destination).setNaviOptions(options)
+        var params = builder.build()
+        KakaoNaviService.navigate(requireContext(),builder.build())
+    }
     fun addPing(day:Int){
         markerArr = arrayListOf()
         planViewModel.routeList.observe(viewLifecycleOwner, {
             var dayList = it[day].routeDetailList
-            Log.d(TAG, "addPing: ${dayList}")
+//            Log.d(TAG, "addPing: ${dayList}")
             for(i in 0..dayList.size-1){
                 var lat = dayList[i].place.lat.toDouble()
                 var lng = dayList[i].place.lng.toDouble()
@@ -257,8 +296,10 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             var marker = MapPOIItem()
             marker.itemName = (i+1).toString()
             marker.mapPoint = markerArr[i]
-            Log.d(TAG, "setPing: ${markerArr[i].mapPointGeoCoord.latitude} || ${markerArr[i].mapPointGeoCoord.longitude}")
-            marker.markerType = MapPOIItem.MarkerType.YellowPin
+            marker.markerType = MapPOIItem.MarkerType.CustomImage
+            marker.customImageResourceId = R.drawable.circle
+            marker.isCustomImageAutoscale = false
+            marker.setCustomImageAnchor(0.5f,1.0f)
             list.add(marker)
         }
         mapView.addPOIItems(list.toArray(arrayOfNulls(list.size)))
@@ -271,7 +312,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     fun addPolyLine(markerArr: ArrayList<MapPoint>){
         var polyLine = MapPolyline()
         polyLine.tag = 1000
-        polyLine.lineColor = Color.GREEN
+        polyLine.lineColor = Color.parseColor("#2054B3")
         polyLine.addPoints(markerArr.toArray(arrayOfNulls(markerArr.size)))
         mapView.addPolyline(polyLine)
     }
@@ -365,7 +406,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     @SuppressLint("ClickableViewAccessibility")
     fun initPlaceListAdapter(){
         planViewModel.routeList.observe(viewLifecycleOwner, Observer {
-            travelPlanListRecyclerviewAdapter = TravelPlanListRecyclerviewAdapter(requireContext(),it)
+            travelPlanListRecyclerviewAdapter = TravelPlanListRecyclerviewAdapter(requireContext(),it,planViewModel,viewLifecycleOwner,planId)
             initTabLayout()
             binding.travelplanListRv.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)

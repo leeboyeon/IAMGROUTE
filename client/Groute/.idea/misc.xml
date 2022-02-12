@@ -7,7 +7,6 @@
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/drawable/edittext_background.xml" value="0.15185185185185185" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/activity_comment_nested.xml" value="0.264" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/activity_main.xml" value="0.1296875" />
-        <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/activity_profile_edit.xml" value="0.1" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/dialog_loading.xml" value="0.27239583333333334" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/dialog_select_place.xml" value="0.1953125" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/dialog_select_the_recomroute.xml" value="0.264" />
@@ -110,6 +109,7 @@
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/menu/board_menu_item.xml" value="0.18177083333333333" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/menu/bottomnav_item.xml" value="0.1" />
         <entry key="..\:/Users/LeeBoyeon/Desktop/Ssafy/cpjt_IAMGROUTE/client/Groute/app/src/main/res/menu/toolbar_item.xml" value="0.33" />
+        <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/drawable/drawable_toggle_item_background.xml" value="0.26979166666666665" />
         <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/fragment_my_travel.xml" value="0.18659420289855072" />
         <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/fragment_route_detail.xml" value="0.4" />
         <entry key="..\:/ssafy/workspace/CommonPJT/client/Groute/app/src/main/res/layout/fragment_save_travel.xml" value="0.25364583333333335" />
