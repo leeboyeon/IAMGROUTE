@@ -134,11 +134,9 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
                 }else{
                     var result = Route()
                     val resultList = ArrayList<Route>()
-                    Log.d(TAG, "performFiltering: ${charString}")
-                    Log.d(TAG, "performFiltering: ${list}")
+
                     var size = list.size
                     for(item in 0..size-1){
-                        Log.d(TAG, "performFiltering: ${result.day}")
                         if(list[item].day == charString.toInt()){
 
                             result = list[item]
