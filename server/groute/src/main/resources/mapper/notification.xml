@@ -11,6 +11,7 @@
     <select id="selectNotification" parameterType="int" resultMap="NotificationDTO">
         select * from notification
         where id = #{id}
+        order by date desc
     </select>
 
     <resultMap id="NotificationDTO" type="Notification">
@@ -20,6 +21,7 @@
     <select id="selectNotificationByUserId"  resultMap="NotificationDTO">
         select * from notification
         where user_id = #{userId}
+        order by date desc
     </select>
 
     <delete id="deleteNotification" parameterType="int">
