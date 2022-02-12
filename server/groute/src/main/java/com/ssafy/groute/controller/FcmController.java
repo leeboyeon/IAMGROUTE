@@ -33,7 +33,7 @@ public class FcmController {
             return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
-        return new ResponseEntity<String>(token, HttpStatus.OK);
+        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 
     }
 
@@ -44,12 +44,14 @@ public class FcmController {
 //    }
 
     @PostMapping("/sendMessageTo")
-    public void sendMessageTo(String token, String title, String body, String path) throws IOException {
+    public ResponseEntity<?> sendMessageTo(String token, String title, String body, String path) throws IOException {
         log.info("sendMessageTo : token:{}, title:{}, body:{}, path:{}", token, title, body, path);
         try{
             fcmService.sendMessageTo(token, title, body, path);
         } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
+        return new ResponseEntity<Boolean>(true, HttpStatus.OK);
     }
 }
