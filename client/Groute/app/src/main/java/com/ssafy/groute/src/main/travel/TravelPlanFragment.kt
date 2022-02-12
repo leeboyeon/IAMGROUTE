@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.datepicker.*
 import com.google.android.material.tabs.TabLayout
 import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.dto.Route
 import com.ssafy.groute.src.dto.RouteDetail
 import com.ssafy.groute.src.dto.UserPlan
@@ -229,19 +230,25 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 }
             })
         })
-        var marker = MapPOIItem()
+        var markerArr = arrayListOf<MapPOIItem>()
         planViewModel.routeList.observe(viewLifecycleOwner, Observer {
+            Log.d(TAG, "initKakaoMap: ${it}")
             var dayByList = it[curPos].routeDetailList
+            Log.d(TAG, "initKakaoMap: ${dayByList}")
             for(i in dayByList.indices){
+                Log.d(TAG, "initKakaoMap_routeDetail:${dayByList[i]} ")
+                var marker = MapPOIItem()
                 var lat = dayByList[i].place.lat
                 var lng = dayByList[i].place.lng
                 var mapPoint = MapPoint.mapPointWithGeoCoord(lat.toDouble(),lng.toDouble())
                 marker.itemName = (i+1).toString()
                 marker.mapPoint = mapPoint
                 marker.markerType = MapPOIItem.MarkerType.YellowPin
+                markerArr.add(marker)
             }
+            mapView.addPOIItems(markerArr.toArray(arrayOfNulls(markerArr.size)))
         })
-        mapView.addPOIItem(marker)
+
 
     }
 

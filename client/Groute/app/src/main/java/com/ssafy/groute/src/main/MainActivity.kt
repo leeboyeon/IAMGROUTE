@@ -138,7 +138,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
 
         // kakao map api key hash
-//        getHashKey()
+        getHashKey()
 
         // Location
         locationPermissionManager = LocationPermissionManager(this)
