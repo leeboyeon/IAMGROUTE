@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -60,6 +61,9 @@ import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapPolyline
 import net.daum.mf.map.api.MapView
+import android.widget.Toast
+import com.kakao.kakaonavi.Destination
+import java.lang.Exception
 
 
 private const val TAG = "TravelPlanFragment"
@@ -248,30 +252,40 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         mapView.setZoomLevel(9, true)
     }
     fun startNavi(markerArr: ArrayList<MapPoint>){
-//        if(NaviClient.instance.isKakaoNaviInstalled(requireContext())){
-//            Log.d(TAG, "startNavi: ${markerArr[0].mapPointGeoCoord.latitude} || ${markerArr[0].mapPointGeoCoord.longitude}")
-//            startActivity(
-//                NaviClient.instance.navigateIntent(
-//                    Location("0",markerArr[0].mapPointGeoCoord.latitude.toString(),markerArr[0].mapPointGeoCoord.longitude.toString()),
-//                    NaviOption(coordType = CoordType.WGS84),
-//                )
-//            )
-//        }else {
-//            // 카카오내비 설치 페이지로 이동
-//            startActivity(
-//                Intent(
-//                    Intent.ACTION_VIEW,
-//                    Uri.parse(Constants.WEB_NAVI_INSTALL)
-//                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//            )
-//        }
-        var destination = com.kakao.kakaonavi.Location.newBuilder("시발",markerArr[0].mapPointGeoCoord.latitude,markerArr[0].mapPointGeoCoord.longitude).build()
+        try {
+            if (KakaoNaviService.isKakaoNaviInstalled(requireContext())) {
+
+                val kakao: com.kakao.kakaonavi.Location =
+                    Destination.newBuilder("destination", markerArr[markerArr.size-1].mapPointGeoCoord.longitude, markerArr[markerArr.size-1].mapPointGeoCoord.latitude).build()
+                val stops = LinkedList<com.kakao.kakaonavi.Location>()
+                for(i in 0..2){
+                    val stop = com.kakao.kakaonavi.Location.newBuilder("출발",markerArr[i].mapPointGeoCoord.longitude,markerArr[i].mapPointGeoCoord.latitude).build()
+                    stops.add(stop)
+                }
 
 
-        var options = NaviOptions.newBuilder().setCoordType(CoordType.WGS84).setVehicleType(VehicleType.FIRST).setRpOption(RpOption.SHORTEST).build()
-        var builder = KakaoNaviParams.newBuilder(destination).setNaviOptions(options)
-        var params = builder.build()
-        KakaoNaviService.navigate(requireContext(),builder.build())
+                val params = KakaoNaviParams.newBuilder(kakao)
+                    .setNaviOptions(
+                        NaviOptions.newBuilder()
+                            .setCoordType(CoordType.WGS84) // WGS84로 설정해야 경위도 좌표 사용 가능.
+                            .setRpOption(RpOption.NO_AUTO)
+                            .setStartAngle(200) //시작 앵글 크기 설정.
+                            .setVehicleType(VehicleType.FIRST).build()
+                    ).setViaList(stops).build() //길 안내 차종 타입 설정
+
+                KakaoNaviService.navigate(requireContext(), params)
+
+            } else {
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=com.locnall.KimGiSa")
+                )
+                Log.e(TAG, "showNaviKakao: 네비 설치 안됨")
+                startActivity(intent)
+            }
+        } catch (e: Exception) {
+            Log.e("네비연동 에러", e.toString() + "")
+        }
     }
     fun addPing(day:Int){
         markerArr = arrayListOf()
@@ -291,13 +305,16 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     }
     fun setPing(markerArr:ArrayList<MapPoint>){
         removePing()
+        var res = ""
         var list = arrayListOf<MapPOIItem>()
         for(i in 0..markerArr.size-1){
             var marker = MapPOIItem()
+            res = "number${i+1}"
             marker.itemName = (i+1).toString()
             marker.mapPoint = markerArr[i]
             marker.markerType = MapPOIItem.MarkerType.CustomImage
-            marker.customImageResourceId = R.drawable.circle
+            var resources = requireContext().resources.getIdentifier("@drawable/"+res,"drawable",requireContext().packageName)
+            marker.customImageResourceId = resources
             marker.isCustomImageAutoscale = false
             marker.setCustomImageAnchor(0.5f,1.0f)
             list.add(marker)
