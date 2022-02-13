@@ -89,6 +89,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     private lateinit var mapView:MapView
     private lateinit var routeRecomDialogAdapter:RouteRecomDialogAdapter
     private lateinit var travelPlanListRecyclerviewAdapter: TravelPlanListRecyclerviewAdapter
+    private lateinit var findLocationAdapter: FindLocationAdapter
     private lateinit var memoAdapter: MemoAdapter
 
     private var AreaLat = 0.0
@@ -163,8 +164,140 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         binding.travelPlanIbtnMemo.setOnClickListener {
             initMemo()
         }
-        binding.travelPlanAbtnNavi.setOnClickListener {
-            startNavi(markerArr)
+        binding.findLocationBtn.setOnClickListener {
+            var routeId = planViewModel.routeList.value?.get(curPos)?.id
+            if (routeId != null) {
+                showFindLocation()
+            }
+        }
+    }
+    fun showFindLocation(){
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_location_find, null)
+        val dialog = Dialog(requireContext())
+        if(dialogView.parent != null){
+            (dialogView.parent as ViewGroup).removeView(dialogView)
+        }
+        dialog.setContentView(dialogView)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        var params = dialog.window?.attributes
+        params?.width = WindowManager.LayoutParams.MATCH_PARENT
+        params?.height = WindowManager.LayoutParams.MATCH_PARENT
+        dialog.window?.attributes = params
+
+        val destinationInfo = arrayListOf<Place>()
+        val destinations = arrayListOf<String>()
+        destinations.add("선택안함")
+        var routeDetail = planViewModel.routeList.value?.get(curPos)
+        if (routeDetail != null) {
+            for(i in 0..routeDetail.routeDetailList.size-1){
+                destinationInfo.add(routeDetail.routeDetailList[i].place)
+                destinations.add(routeDetail.routeDetailList[i].place.name)
+            }
+        }
+        var spinnerAdapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,destinations)
+        var viaAdapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,destinations)
+
+        var destSpinner = dialogView.findViewById<Spinner>(R.id.destination_spinner)
+        var viaSpinner = dialogView.findViewById<Spinner>(R.id.via_spinner)
+
+        destSpinner.adapter = spinnerAdapter
+        viaSpinner.adapter = viaAdapter
+
+        var destLat = 0.0
+        var destLng = 0.0
+        var viaList = ArrayList<MapPoint>()
+        var viaInfoList = ArrayList<Place>()
+        destSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                destLat = destinationInfo[position].lat.toDouble()
+                destLng = destinationInfo[position].lng.toDouble()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+        }
+
+        viaSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+//                var viaLat = destinationInfo[position].lat.toDouble()
+//                var viaLng = destinationInfo[position].lng.toDouble()
+//                var mapPoint = MapPoint.mapPointWithGeoCoord(viaLat,viaLng)
+//                viaList.add(mapPoint)
+                planViewModel.insertViaList(destinationInfo[position+1])
+                Log.d(TAG, "onItemSelected: ${destinationInfo[position+1]}")
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+        }
+        planViewModel.liveViaList.observe(viewLifecycleOwner,{
+            Log.d(TAG, "showFindLocation: ${it}")
+            findLocationAdapter = FindLocationAdapter()
+            findLocationAdapter.list = it
+            dialogView.findViewById<RecyclerView>(R.id.viaList_rv).apply {
+                layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+                adapter = findLocationAdapter
+                adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+            }
+        })
+
+        dialog.show()
+        dialogView.findViewById<AppCompatButton>(R.id.findLocation_btn_cancle).setOnClickListener {
+            dialog.dismiss()
+        }
+        dialogView.findViewById<AppCompatButton>(R.id.findLocation_btn_ok).setOnClickListener {
+            goNavi(destLat,destLng)
+        }
+    }
+    fun goNavi(destLat:Double, destLng:Double){
+        try {
+            if (KakaoNaviService.isKakaoNaviInstalled(requireContext())) {
+
+                val kakao: com.kakao.kakaonavi.Location =
+                    Destination.newBuilder("destination", destLng, destLat).build()
+                val stops = LinkedList<com.kakao.kakaonavi.Location>()
+                planViewModel.liveViaList.observe(viewLifecycleOwner,{
+                    for(i in 0..it.size-1){
+                        val stop = com.kakao.kakaonavi.Location.newBuilder("출발",it[i].lng.toDouble(),it[i].lat.toDouble()).build()
+                        stops.add(stop)
+                    }
+                })
+
+
+
+                val params = KakaoNaviParams.newBuilder(kakao)
+                    .setNaviOptions(
+                        NaviOptions.newBuilder()
+                            .setCoordType(CoordType.WGS84) // WGS84로 설정해야 경위도 좌표 사용 가능.
+                            .setRpOption(RpOption.NO_AUTO)
+                            .setStartAngle(200) //시작 앵글 크기 설정.
+                            .setVehicleType(VehicleType.FIRST).build()
+                    ).setViaList(stops).build() //길 안내 차종 타입 설정
+
+                KakaoNaviService.navigate(requireContext(), params)
+
+            } else {
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=com.locnall.KimGiSa")
+                )
+                Log.e(TAG, "showNaviKakao: 네비 설치 안됨")
+                startActivity(intent)
+            }
+        } catch (e: Exception) {
+            Log.e("네비연동 에러", e.toString() + "")
         }
     }
     fun initMemo(){
