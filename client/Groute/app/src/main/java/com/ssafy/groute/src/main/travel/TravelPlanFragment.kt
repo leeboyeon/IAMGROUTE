@@ -402,6 +402,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         }
 
         travelPlanListRecyclerviewAdapter.filter.filter("1")
+        addPing(0)
         binding.travelplanTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 travelPlanListRecyclerviewAdapter.filter.filter((tab?.position?.plus(1)).toString())
