@@ -14,16 +14,21 @@ import com.ssafy.groute.R
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentRouteDetailInfoBinding
 import com.ssafy.groute.src.main.MainActivity
+import com.ssafy.groute.src.viewmodel.HomeViewModel
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import kotlinx.coroutines.runBlocking
+import net.daum.mf.map.api.MapPoint
+import net.daum.mf.map.api.MapView
 
 private const val TAG = "RouteDetailInfoFragment_groute"
 class RouteDetailInfoFragment : BaseFragment<FragmentRouteDetailInfoBinding>(FragmentRouteDetailInfoBinding::bind, R.layout.fragment_route_detail_info) {
     private lateinit var routeDetailDayPerAdapter: RouteDetailDayPerAdapter
     private lateinit var mainActivity: MainActivity
     private val planViewModel: PlanViewModel by activityViewModels()
-    private var planId = -1
+    private val homeViewModel: HomeViewModel by activityViewModels()
 
+    private var planId = -1
+    private lateinit var mapView:MapView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -47,6 +52,7 @@ class RouteDetailInfoFragment : BaseFragment<FragmentRouteDetailInfoBinding>(Fra
         runBlocking {
             planViewModel.getPlanById(planId, 2)
         }
+//        findArea()
         var list = mutableListOf<Int>()
         for(i in 1..planViewModel.planList.value!!.totalDate) {
             Log.d(TAG, "onViewCreated: $i")
@@ -66,7 +72,25 @@ class RouteDetailInfoFragment : BaseFragment<FragmentRouteDetailInfoBinding>(Fra
 
         })
     }
-
+//    fun findArea(){
+//        var area = homeViewModel.areaList.value!!
+//        var plan = planViewModel.planList.value!!
+//        for(i in 0 until area.size){
+//            if(area[i].id == plan.areaId){
+//                initMap(area[i].lat.toDouble(), area[i].lng.toDouble())
+//            }
+//        }
+//    }
+//    fun initMap(lat:Double, lng:Double){
+//        mapView = MapView(requireContext())
+//        if(mapView.parent!=null){
+//            (mapView.parent as ViewGroup).removeView(mapView)
+//        }
+//        binding.RouteDetailMap.addView(mapView)
+//        var mapPoint = MapPoint.mapPointWithGeoCoord(lat, lng)
+//        mapView.setMapCenterPoint(mapPoint,true)
+//        mapView.setZoomLevel(9, true)
+//    }
 
     companion object {
 

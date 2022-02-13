@@ -34,6 +34,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -46,7 +47,7 @@
                     android:scheme="kakao1cfb5d85fba73249197e415cfc745142" />
             </intent-filter>
         </activity>
-
+<!--        여기 이거 뭔 그거죠 위에꺼 -->
         <service
             android:name="com.ssafy.groute.src.service.FirebaseMessageService"
             android:enabled="true"
