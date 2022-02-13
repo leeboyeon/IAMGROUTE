@@ -47,7 +47,7 @@
                     android:scheme="kakao1cfb5d85fba73249197e415cfc745142" />
             </intent-filter>
         </activity>
-<!--        여기 이거 뭔 그거죠 위에꺼 -->
+
         <service
             android:name="com.ssafy.groute.src.service.FirebaseMessageService"
             android:enabled="true"
@@ -62,13 +62,13 @@
             android:value="956742d6721a84ca6d77fd8ea88f59ec" />
         <meta-data android:name="com.kakao.sdk.kakaonavi.useWebView" android:value="false" />
     </application>
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
     <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
