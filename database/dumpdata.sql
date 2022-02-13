@@ -99,7 +99,7 @@ CREATE TABLE `area` (
 
 LOCK TABLES `area` WRITE;
 /*!40000 ALTER TABLE `area` DISABLE KEYS */;
-INSERT INTO `area` VALUES (1,'제주도','jeju.png','33.431441','126.874237'),(2,'부산','busan.png','1','1'),(3,'충북','chungbuk.png','1','1'),(4,'대구','daegu.png','1','1'),(5,'인천','incheon.png','1','1'),(6,'전주','jeonju.png','1','11'),(7,'강원','kangwondo.png','1','1'),(8,'경주','keungju.png','1','1'),(9,'여수','yeosu.png','1','1'),(10,'경기','keongkido.png','1','1');
+INSERT INTO `area` VALUES (1,'제주도','jeju.png','33.390375','126.481075'),(2,'부산','busan.png','1','1'),(3,'충북','chungbuk.png','1','1'),(4,'대구','daegu.png','1','1'),(5,'인천','incheon.png','1','1'),(6,'전주','jeonju.png','1','11'),(7,'강원','kangwondo.png','1','1'),(8,'경주','keungju.png','1','1'),(9,'여수','yeosu.png','1','1'),(10,'경기','keongkido.png','1','1');
 /*!40000 ALTER TABLE `area` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -638,4 +638,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-02-11 20:54:09
+-- Dump completed on 2022-02-13 16:29:26
