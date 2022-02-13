@@ -222,7 +222,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             }
 
         }
-        
+
         viaSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(
                 parent: AdapterView<*>?,
