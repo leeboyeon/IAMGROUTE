@@ -1,6 +1,7 @@
 package com.ssafy.groute.service;
 
 import com.ssafy.groute.dto.PlanLike;
+import com.ssafy.groute.dto.RouteDetail;
 import com.ssafy.groute.dto.User;
 import com.ssafy.groute.dto.UserPlan;
 import org.springframework.stereotype.Service;
@@ -25,4 +26,5 @@ public interface UserPlanService {
     List<UserPlan> findNotEndPlanById(String userId) throws Exception;
     List<UserPlan> selectTUserPlan() throws Exception;
     List<UserPlan> selectAllPlanByUserId(String userId) throws Exception;
+    List<RouteDetail> shortestPath(int start, int end, int routeId) throws Exception;
 }

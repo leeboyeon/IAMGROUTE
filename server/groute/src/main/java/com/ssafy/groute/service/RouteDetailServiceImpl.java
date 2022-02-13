@@ -1,6 +1,7 @@
 package com.ssafy.groute.service;
 
 import com.ssafy.groute.dto.RouteDetail;
+import com.ssafy.groute.mapper.PlaceMapper;
 import com.ssafy.groute.mapper.RouteDetailMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ public class RouteDetailServiceImpl implements RouteDetailService{
 
     @Autowired
     RouteDetailMapper routeDetailMapper;
+    @Autowired
+    PlaceMapper placeMapper;
 
     @Override
     public void insertRouteDetail(RouteDetail routeDetail) throws Exception {
@@ -40,7 +43,12 @@ public class RouteDetailServiceImpl implements RouteDetailService{
 
     @Override
     public List<RouteDetail> selectByRouteId(int routeId) throws Exception {
-        return routeDetailMapper.selectByRouteId(routeId);
+        List<RouteDetail> routeDetailList = routeDetailMapper.selectByRouteId(routeId);
+        for(RouteDetail routeDetail: routeDetailList){
+            routeDetailList.get(routeDetail.getPriority()-1)
+                    .setPlace(placeMapper.selectPlace(routeDetail.getPlaceId()));
+        }
+        return routeDetailList;
     }
 
     @Override

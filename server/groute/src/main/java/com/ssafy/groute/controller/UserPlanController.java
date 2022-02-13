@@ -325,4 +325,16 @@ public class UserPlanController {
 
         return new ResponseEntity<List<UserPlan>>(res,HttpStatus.OK);
     }
+
+    @ApiOperation(value = "최적경로",notes = "최적경로 반환")
+    @GetMapping(value = "/path")
+    public ResponseEntity<?> shortestPath(@RequestParam int start, @RequestParam int end, @RequestParam int routeId) throws Exception{
+        routeDetailService.updatePriority(userPlanService.shortestPath(start, end, routeId));
+        List<RouteDetail> res = routeDetailService.selectByRouteId(routeId);
+        if(res==null){
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<List<RouteDetail>>(res,HttpStatus.OK);
+    }
 }
