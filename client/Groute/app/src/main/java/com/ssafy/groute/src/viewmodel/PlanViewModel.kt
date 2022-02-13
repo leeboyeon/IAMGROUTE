@@ -36,6 +36,7 @@ class PlanViewModel : ViewModel() {
     private val _planNotEndResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _planEndResponse = MutableLiveData<MutableList<UserPlan>>()
     private val placeShopResponse = mutableListOf<Place>()
+    private val viaResponse = arrayListOf<Place>()
     private val _planReviewListResponse = MutableLiveData<MutableList<PlanReview>>()
     private val _reviewResponse = MutableLiveData<PlanReview>()
     private val _themeResponse = MutableLiveData<MutableList<Theme>>()
@@ -132,12 +133,17 @@ class PlanViewModel : ViewModel() {
     val livePlaceshopList = MutableLiveData<MutableList<Place>>().apply {
         value = placeShopResponse
     }
-
+    val liveViaList = MutableLiveData<ArrayList<Place>>().apply {
+        value = viaResponse
+    }
     fun insertPlaceShopList(place: Place) {
         placeShopResponse.add(place)
         livePlaceshopList.value = placeShopResponse
     }
-
+    fun insertViaList(place:Place){
+        viaResponse.add(place)
+        liveViaList.value = viaResponse
+    }
     fun removePlaceShopList(placeId: Int) {
         for (i in 0..placeShopResponse.size - 1) {
             if (placeShopResponse.get(i).id == placeId) {
