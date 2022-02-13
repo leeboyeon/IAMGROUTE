@@ -1,6 +1,5 @@
 package com.ssafy.groute.mapper;
 
-import com.ssafy.groute.dto.PlaceLike;
 import com.ssafy.groute.dto.PlanLike;
 import com.ssafy.groute.dto.UserPlan;
 import org.apache.ibatis.annotations.Mapper;

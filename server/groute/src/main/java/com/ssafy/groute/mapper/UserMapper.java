@@ -19,4 +19,5 @@ public interface UserMapper {
     User selectUserByIdEmail(String id, String email) throws Exception;
     void updatePassword(User user) throws Exception;
     List<User> selectAllUserList() throws Exception;
+    List<User> selectEndedPlanYesterday() throws Exception;
 }
