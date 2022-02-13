@@ -13,7 +13,9 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageButton
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -22,6 +24,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.user.UserApiClient
@@ -57,6 +61,7 @@ import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Math.abs
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.SimpleDateFormat
@@ -85,7 +90,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         super.onCreate(savedInstanceState)
 
         initProfileBar()
-
+        showEventDialog()
         // Naver Logout init
         mOAuthLoginInstance = OAuthLogin.getInstance()
         mOAuthLoginInstance.init(this, getString(R.string.naver_client_id), getString(R.string.naver_client_secret), getString(R.string.naver_client_name))
@@ -166,7 +171,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         })
 //        createNotificationChannel(channel_id, "ssafy")
     }
+    fun showEventDialog(){
+        var dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_event,null)
+        var dialog = BottomSheetDialog(this)
+        dialog.setContentView(dialogView)
+        dialog.show()
 
+        dialogView.findViewById<ImageButton>(R.id.cancleBtn).setOnClickListener {
+            dialog.dismiss()
+        }
+
+    }
 
     fun openFragment(index:Int, key1:String, value1:Int, key2:String, value2:Int){
         val transaction = supportFragmentManager.beginTransaction()
@@ -330,11 +345,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 val today = Calendar.getInstance().time.time
                 Log.d(TAG, "initProfileBar: ${today}")
                 var calcur = (date-today) / (24*60*60*1000)
-
+                var calcurtmp = abs(calcur)
                 Log.d(TAG, "initProfileBar: ${calcur}")
-                binding.mainTvDday.text = "여행까지 D-${calcur}"
+                binding.mainTvDday.text = "여행까지 D-${calcurtmp}"
                 binding.progressBar.max = 30
-                var myprogress = kotlin.math.abs(30 - calcur)
+                var myprogress = kotlin.math.abs(30 - calcurtmp)
                 Log.d(TAG, "initProfileBar: ${myprogress}")
                 binding.progressBar.progress = myprogress.toInt()
             })

@@ -205,8 +205,8 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
 
         var destLat = 0.0
         var destLng = 0.0
-        var viaList = ArrayList<MapPoint>()
-        var viaInfoList = ArrayList<Place>()
+
+        destSpinner.setSelection(0,false)
         destSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -214,15 +214,19 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 position: Int,
                 id: Long
             ) {
-                destLat = destinationInfo[position].lat.toDouble()
-                destLng = destinationInfo[position].lng.toDouble()
+                if(destSpinner.selectedItemPosition > 0){
+                    Log.d(TAG, "onItemSelected: ${destinationInfo[destSpinner.selectedItemPosition-1]}")
+                    destLat = destinationInfo[destSpinner.selectedItemPosition-1].lat.toDouble()
+                    destLng = destinationInfo[destSpinner.selectedItemPosition-1].lng.toDouble()
+                }
+                
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
         }
-
+        viaSpinner.setSelection(0,false)
         viaSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -234,14 +238,18 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
 //                var viaLng = destinationInfo[position].lng.toDouble()
 //                var mapPoint = MapPoint.mapPointWithGeoCoord(viaLat,viaLng)
 //                viaList.add(mapPoint)
-                planViewModel.insertViaList(destinationInfo[position+1])
-                Log.d(TAG, "onItemSelected: ${destinationInfo[position+1]}")
+
+                if(viaSpinner.selectedItemPosition > 0){
+                    planViewModel.insertViaList(destinationInfo[viaSpinner.selectedItemPosition-1])
+                }
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
         }
+
         planViewModel.liveViaList.observe(viewLifecycleOwner,{
             Log.d(TAG, "showFindLocation: ${it}")
             findLocationAdapter = FindLocationAdapter()
