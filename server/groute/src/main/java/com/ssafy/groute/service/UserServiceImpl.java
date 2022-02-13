@@ -122,4 +122,9 @@ public class UserServiceImpl implements UserService {
     public List<User> selectAllUser() throws Exception {
         return userMapper.selectAllUserList();
     }
+
+    @Override
+    public List<User> selectEndedPlanYesterday() throws Exception {
+        return userMapper.selectEndedPlanYesterday();
+    }
 }

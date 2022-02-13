@@ -63,4 +63,12 @@
     <select id="selectAllUserList" resultType="User">
         select id, token from user
     </select>
+
+    <select id="selectEndedPlanYesterday" resultType="User">
+        select id, nickname, token
+        from user
+        where id IN ( select user_id
+        from userplan
+        where date(enddate) = date(subdate(now(), INTERVAL 1 DAY)) and user_id != 'admin')
+    </select>
 </mapper>
