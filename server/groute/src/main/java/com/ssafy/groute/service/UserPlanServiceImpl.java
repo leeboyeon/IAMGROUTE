@@ -213,4 +213,71 @@ public class UserPlanServiceImpl implements UserPlanService {
 
         return userPlans;
     }
+
+
+    private List<RouteDetail> routeDetailList;
+    private List<Place> placeList;
+    private Place startPlace;
+    private Place endPlace;
+    private double min;
+    private int[] minArr;
+    private boolean[] isSelected;
+
+    @Override
+    public List<RouteDetail> shortestPath(int start, int end, int routeId) throws Exception{
+        routeDetailList = routeDetailMapper.selectByRouteId(routeId);
+
+        placeList = new ArrayList<>();
+        placeList.add(placeMapper.selectPlace(routeDetailList.get(start-1).getPlaceId()));
+        for(int i=1;i<=routeDetailList.size();i++){
+            if(i==start || i== end)
+                continue;
+            placeList.add(placeMapper.selectPlace(routeDetailList.get(i-1).getPlaceId()));
+        }
+        placeList.add(placeMapper.selectPlace(routeDetailList.get(end-1).getPlaceId()));
+        isSelected = new boolean[placeList.size()];
+        min = Double.MAX_VALUE;
+        perm(0,0, 0, new int[placeList.size()-2]);
+
+
+        for(int i=0; i<minArr.length; i++){
+            for(int j=0; j<routeDetailList.size();j++){
+                if(routeDetailList.get(j).getPlaceId()==placeList.get(minArr[i]).getId()){
+                    routeDetailList.get(j).setPriority(i+2);
+                }
+            }
+        }
+        routeDetailList.get(start-1).setPriority(1);
+        routeDetailList.get(end-1).setPriority(routeDetailList.size());
+
+        return routeDetailList;
+    }
+
+    private void perm(int cnt, double sum, int cur, int[] arr){
+        if(sum>=min)
+            return;
+        if(cnt == placeList.size()-2){
+
+            sum += calDistance(placeList.get(arr[arr.length-1]),placeList.get(placeList.size()-1));
+            if(sum < min){
+                min = sum;
+                minArr = arr.clone();
+            }
+            return;
+        }
+
+        for(int i=1; i<placeList.size() - 1; i++){
+            if(isSelected[i])
+                continue;
+            isSelected[i] = true;
+            arr[cnt] = i;
+            perm(cnt+1,sum+calDistance(placeList.get(cur),placeList.get(i)),i,arr);
+            isSelected[i] = false;
+        }
+    }
+
+    private double calDistance(Place a, Place b){
+        return Math.pow(Math.abs(Double.parseDouble(a.getLat()) - Double.parseDouble(b.getLat())),2)
+                +Math.pow(Math.abs(Double.parseDouble(a.getLng()) - Double.parseDouble(b.getLng())),2);
+    }
 }
