@@ -66,4 +66,6 @@ interface UserPlanApi {
     @GET("/plan/filter")
     suspend fun getPlanIncludePlace(@Query("flag") flag: Int, @Query("placeIds") placeIds: List<Int>) :Response<MutableList<UserPlan>>
 
+    @GET("/plan/path")
+    suspend fun getBestPriority(@Query("end")end:Int, @Query("routeId")routeId:Int, @Query("start")start:Int) : Response<MutableList<RouteDetail>>
 }

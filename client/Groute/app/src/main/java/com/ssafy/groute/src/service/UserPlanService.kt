@@ -263,4 +263,7 @@ class UserPlanService {
         return RetrofitUtil.userPlanService.getPlanIncludePlace(flag, placeIds)
     }
 
+    suspend fun getBestPriority(end:Int, routeId:Int, start:Int) : Response<MutableList<RouteDetail>>{
+        return RetrofitUtil.userPlanService.getBestPriority(end, routeId, start)
+    }
 }

@@ -62,6 +62,7 @@ import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapPolyline
 import net.daum.mf.map.api.MapView
 import android.widget.Toast
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.kakao.kakaonavi.Destination
 import java.lang.Exception
 
@@ -119,7 +120,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             homeViewModel.getAreaLists()
         }
 
-        initPlaceListAdapter()
+        initPlaceListAdapter(1)
         findArea()
         floatingButtonEvent()
         binding.travelplanBackIv.setOnClickListener {
@@ -169,6 +170,88 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             if (routeId != null) {
                 showFindLocation()
             }
+        }
+        binding.travelPlanBtnBestPriority.setOnClickListener {
+            showBestPriorityDialog()
+//            var routeId = planViewModel.routeList.value?.get(curPos)?.id
+        }
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun showBestPriorityDialog(){
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_best_priority,null)
+        val dialog = BottomSheetDialog(requireContext())
+        if(dialogView.parent != null){
+            (dialogView.parent as ViewGroup).removeView(dialogView)
+        }
+        dialog.setContentView(dialogView)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        var placeInfo = arrayListOf<Place>()
+        var places = arrayListOf<String>()
+        var routeDetailList = planViewModel.routeList.value?.get(curPos)
+        
+        places.add("선택안함")
+        if(routeDetailList!=null){
+            for(i in 0..routeDetailList.routeDetailList.size-1){
+                placeInfo.add(routeDetailList.routeDetailList[i].place)
+                places.add(routeDetailList.routeDetailList[i].place.name)
+            }
+        }
+        var startAdapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,places)
+        var endAdapter =  ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,places)
+        var startSpinner = dialogView.findViewById<Spinner>(R.id.startSpinner)
+        var endSpinner = dialogView.findViewById<Spinner>(R.id.endSpinner)
+
+        startSpinner.adapter = startAdapter
+        endSpinner.adapter = endAdapter
+
+        startSpinner.setSelection(0,false)
+        endSpinner.setSelection(0,false)
+        var startId = 0
+        var endId = 0
+        var routeId = 0
+        startSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if(startSpinner.selectedItemPosition > 0){
+                    startId = placeInfo[startSpinner.selectedItemPosition-1].id
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+        }
+
+        endSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if(endSpinner.selectedItemPosition > 0){
+                    endId = placeInfo[endSpinner.selectedItemPosition-1].id
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+        dialog.show()
+        dialogView.findViewById<AppCompatButton>(R.id.bestPriority_btn_cancle).setOnClickListener {
+            dialog.dismiss()
+        }
+        dialogView.findViewById<AppCompatButton>(R.id.bestPriority_btn_ok).setOnClickListener {
+            routeId = routeDetailList!!.id
+            runBlocking {
+                planViewModel.getBestPriority(endId, startId,routeId)
+            }
+            initPlaceListAdapter(2)
+            dialog.dismiss()
         }
     }
     fun showFindLocation(){
@@ -563,9 +646,17 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     }
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility")
-    fun initPlaceListAdapter(){
+    fun initPlaceListAdapter(flag:Int){
         planViewModel.routeList.observe(viewLifecycleOwner, Observer {
-            travelPlanListRecyclerviewAdapter = TravelPlanListRecyclerviewAdapter(requireContext(),it,planViewModel,viewLifecycleOwner,planId)
+            if(flag== 1){
+                travelPlanListRecyclerviewAdapter = TravelPlanListRecyclerviewAdapter(requireContext(),it,planViewModel,viewLifecycleOwner,planId)
+            }
+            if(flag==2){
+                planViewModel.bestPriorityList.observe(viewLifecycleOwner, Observer { it2 ->
+                    travelPlanListRecyclerviewAdapter = TravelPlanListRecyclerviewAdapter(requireContext(),it,planViewModel,viewLifecycleOwner,planId)
+                    travelPlanListRecyclerviewAdapter.routeDetailList =it2
+                })
+            }
             initTabLayout()
             binding.travelplanListRv.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)

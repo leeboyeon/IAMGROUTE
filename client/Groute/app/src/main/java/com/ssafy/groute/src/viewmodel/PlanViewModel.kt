@@ -51,6 +51,7 @@ class PlanViewModel : ViewModel() {
     private val _accountListResponse = MutableLiveData<MutableList<AccountOut>>()
     private val  _accountCategoryListResponse = MutableLiveData<MutableList<AccountCategory>>()
     private val _sharedTravelListResponse = MutableLiveData<MutableList<UserPlan>>()
+    private val _bestPriorityResponse = MutableLiveData<MutableList<RouteDetail>>()
     //    private val _routeResponse = MutableLiveData<MutableList<>>
 //    private val _routeDetailResponse = MutableLiveData<MutableList<>>
     val planBestList: LiveData<MutableList<UserPlan>>
@@ -87,7 +88,6 @@ class PlanViewModel : ViewModel() {
         get() = _currentUserPlanResponse
     val isLoading: LiveData<Boolean>
         get() = _isLoading
-
     val accountList : LiveData<MutableList<AccountOut>>
         get() = _accountListResponse
     val accountCategoryList :LiveData<MutableList<AccountCategory>>
@@ -96,6 +96,8 @@ class PlanViewModel : ViewModel() {
         get() = _sharedTravelListResponse
     val accountPriceList : LiveData<MutableList<Int>>
         get() = _accountPricceListResponse
+    val bestPriorityList : LiveData<MutableList<RouteDetail>>
+        get() = _bestPriorityResponse
 
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planBestResponse.value = plan
@@ -204,6 +206,9 @@ class PlanViewModel : ViewModel() {
 
     fun setAccountPrice(price:MutableList<Int>) = viewModelScope.launch {
         _accountPricceListResponse.value = price
+    }
+    fun setBestPriority(routeDetail:MutableList<RouteDetail>) = viewModelScope.launch {
+        _bestPriorityResponse.value = routeDetail
     }
 
     suspend fun getPlanBestList() {
@@ -694,6 +699,21 @@ class PlanViewModel : ViewModel() {
                     }
                     setAccountPrice(list)
                 }
+            }
+        }
+    }
+
+    suspend fun getBestPriority(end:Int, start:Int, routeId:Int){
+        val response = UserPlanService().getBestPriority(end, routeId,start)
+        viewModelScope.launch {
+            var res = response.body()
+            if(response.code() == 200){
+                if(res!=null){
+                    Log.d(TAG, "getBestPriority: ${res}")
+                    setBestPriority(res)
+                }
+            }else{
+                Log.d(TAG, "getBestPriority: ${response.code()}")
             }
         }
     }

@@ -232,6 +232,34 @@
             app:layout_constraintTop_toBottomOf="@+id/travelplan_tab_layout"
             app:srcCompat="@drawable/note" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/travelPlan_btn_bestPriority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/travelplan_list_rv"
+            app:layout_constraintStart_toEndOf="@+id/findLocation_btn"
+            app:layout_constraintTop_toBottomOf="@+id/travelplan_tab_layout">
+
+            <ImageButton
+                android:id="@+id/imageButton4"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/magicwand" />
+
+            <TextView
+                android:id="@+id/textView48"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="최적경로"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toEndOf="@+id/imageButton4" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/travelplan_list_rv"
             android:layout_width="match_parent"
