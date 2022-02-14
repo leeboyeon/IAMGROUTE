@@ -269,6 +269,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             }
             17 -> {
                 transaction.replace(R.id.frame_main_layout, SharedMemberFragment.newInstance(key1,value1))
+                    .addToBackStack(null)
             }
             18 -> {
                 transaction.replace(R.id.frame_main_layout, SharePlanWriteFragment.newInstance(key1,value1))
