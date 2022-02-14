@@ -6,6 +6,8 @@ import com.ssafy.groute.src.response.PlaceLikeResponse
 import com.ssafy.groute.src.response.UserPlanResponse
 import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -102,22 +104,30 @@ class UserPlanService {
             })
     }
 
-    fun updatePlanReview(review: PlanReview, callback: RetrofitCallback<Boolean>) {
-        RetrofitUtil.userPlanService.updatePlanReview(review).enqueue(object : Callback<Boolean> {
+    /**
+     * update PlanReview
+     * @param review
+     * @param img
+     * @return callback
+     */
+    fun updatePlanReview(review: RequestBody, img: MultipartBody.Part?, callback: RetrofitCallback<Boolean>) {
+        RetrofitUtil.userPlanService.updatePlanReview(review, img).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 val res = response.body()
                 if (response.code() == 200) {
                     if (res == true) {
                         callback.onSuccess(response.code(), res)
-                        Log.d(TAG, "onResponse: update Success!")
+                        Log.d(TAG, "onResponse: planReview update Success!")
                     } else {
-                        Log.d(TAG, "onResponse: update fail")
+                        Log.d(TAG, "onResponse: planReview update fail")
                     }
+                } else {
+                    callback.onFailure(response.code())
                 }
             }
 
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                Log.d(TAG, "onFailure: $t")
+                callback.onError(t)
             }
 
         })

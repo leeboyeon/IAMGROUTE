@@ -2,6 +2,8 @@ package com.ssafy.groute.src.api
 
 import com.ssafy.groute.src.dto.*
 import com.ssafy.groute.src.response.UserPlanResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
@@ -34,8 +36,9 @@ interface UserPlanApi {
     @DELETE("/plan/review/del")
     fun deletePlanReview(@Query("id")id:Int):Call<Boolean>
 
+    @Multipart
     @PUT("/plan/review/update")
-    fun updatePlanReview(@Body planReview: PlanReview) : Call<Boolean>
+    fun updatePlanReview(@Part("review") review : RequestBody, @Part img : MultipartBody.Part?) : Call<Boolean>
 
     @GET("/plan/review/detail")
     suspend fun getPlanReviewbyId(@Query("id")id:Int): Response<PlanReview>

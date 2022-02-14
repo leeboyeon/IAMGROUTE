@@ -198,7 +198,7 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
     //            modifyReview(review)
                 setData(review, false)  // false -> review 수정
             } else {
-                showCustomToast("글자 수를 확인해주세요")
+                showCustomToast("글자 수를 확인해 주세요")
             }
         }
     }
@@ -403,7 +403,7 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
 
     }
 
-    // update placeReivew Callback
+    // update placeReview Callback
     inner class UpdatePlaceReviewCallback : RetrofitCallback<Boolean> {
         override fun onError(t: Throwable) {
             Log.d(TAG, "onError: ")
