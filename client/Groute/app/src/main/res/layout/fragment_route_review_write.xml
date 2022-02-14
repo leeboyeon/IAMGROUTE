@@ -6,6 +6,10 @@
 
     <data>
         <variable
+            name="planReview"
+            type="com.ssafy.groute.src.dto.PlanReview" />
+
+        <variable
             name="planViewModel"
             type="com.ssafy.groute.src.viewmodel.PlanViewModel" />
 
@@ -71,14 +75,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical" >
 
                 <TextView
                     android:id="@+id/route_reviewWrite_tv_planName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{planViewModel.planList.title}"
+                    android:text="@{planReview.title}"
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     android:textSize="18sp" />
@@ -138,7 +141,8 @@
                     android:layout_marginEnd="20dp"
                     android:isIndicator="false"
                     android:max="5"
-                    android:stepSize="0.5" />
+                    android:stepSize="0.5"
+                    app:setRating="@{planReview.rate}"/>
 
                 <TextView
                     android:id="@+id/textView24"
@@ -150,25 +154,81 @@
                     android:text="리뷰를 작성해주세요"
                     android:textColor="@color/black" />
 
-                <EditText
-                    android:id="@+id/route_reviewWrite_et_content"
+<!--                <EditText-->
+<!--                    android:id="@+id/route_reviewWrite_et_content"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="200dp"-->
+<!--                    android:layout_marginStart="20dp"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_marginEnd="20dp"-->
+<!--                    android:background="@drawable/edittext_background"-->
+<!--                    android:ems="10"-->
+<!--                    android:gravity="start|top"-->
+<!--                    android:inputType="textMultiLine"-->
+<!--                    android:padding="5dp" />-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/planReviewWrite_til_content"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
+                    android:background="@android:color/transparent"
+                    android:maxLength="255"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:errorEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/planReviewWrite_tiet_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/edittext_background"
+                        android:inputType="textMultiLine"
+                        android:lines="8"
+                        android:scrollbars="vertical" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:id="@+id/planReviewWrite_lLayout_setImg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
                     android:background="@drawable/edittext_background"
-                    android:ems="10"
-                    android:gravity="start|top"
-                    android:inputType="textMultiLine"
-                    android:padding="5dp" />
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@+id/reviewWrite_button_addImg"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/reviewWrite_til_content">
+
+                    <ImageView
+                        android:id="@+id/planReviewWrite_iv_selectImg"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:scaleType="centerInside"
+                        app:imageUrlBoardPost="@{planReview.img}"/>
+
+                    <TextView
+                        android:id="@+id/planReviewWrite_tv_imgName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="20dp"
+                        android:layout_weight="1"
+                        android:text="" />
+                </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/route_reviewWrite_button_addImg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/edittext_background"
                     android:drawableLeft="@drawable/button_in_camera"
