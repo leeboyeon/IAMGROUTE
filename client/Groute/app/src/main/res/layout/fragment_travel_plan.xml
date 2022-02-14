@@ -220,10 +220,10 @@
 
         <ImageButton
             android:id="@+id/travelPlan_ibtn_memo"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="5dp"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
@@ -243,8 +243,8 @@
 
             <ImageButton
                 android:id="@+id/imageButton4"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
                 android:background="@android:color/transparent"
                 android:scaleType="centerInside"
                 app:srcCompat="@drawable/magicwand" />
@@ -287,6 +287,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
+                android:padding="3dp"
                 android:text="메모추가"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -324,6 +325,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
+                android:padding="3dp"
                 android:text="루트추천"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -361,6 +363,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
+                android:padding="3dp"
                 android:text="장소추가"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"

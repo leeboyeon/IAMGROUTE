@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ssafy.groute">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".config.ApplicationClass"
         android:allowBackup="true"
@@ -14,6 +22,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Groute"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".src.splash.LoadingActivity"
+            android:exported="false" />
         <activity
             android:name=".src.main.board.CommentNestedActivity"
             android:exported="false" />
@@ -34,7 +45,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -49,26 +59,20 @@
         </activity>
 
         <service
-            android:name="com.ssafy.groute.src.service.FirebaseMessageService"
+            android:name=".src.service.FirebaseMessageService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="956742d6721a84ca6d77fd8ea88f59ec" />
-        <meta-data android:name="com.kakao.sdk.kakaonavi.useWebView" android:value="false" />
+        <meta-data
+            android:name="com.kakao.sdk.kakaonavi.useWebView"
+            android:value="false" />
     </application>
-
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

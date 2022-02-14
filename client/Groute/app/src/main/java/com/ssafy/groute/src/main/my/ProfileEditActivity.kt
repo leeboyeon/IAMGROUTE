@@ -176,16 +176,6 @@ class ProfileEditActivity : AppCompatActivity() {
     // 사용자 정보 화면에 초기화
     fun initData(user: UserInfoResponse) {
 
-//        var img = ""
-//        if(user.type.equals("sns")){
-//            if(user.img != null) {
-//                img = user.img!!
-//            }
-//        } else{
-//            if(user.img != null) {
-//                img = "${ApplicationClass.IMGS_URL_USER}${user.img}"
-//            }
-//        }
         var id = user.id
         var password = user.password
         var nickname = user.nickname
@@ -375,6 +365,7 @@ class ProfileEditActivity : AppCompatActivity() {
      * 사용자의 Birth가 null이 아니면 Spinner에 초기값 표시해줄 Index 반환
      */
     fun getSpinnerIndex(spinner: Spinner, str: String) : Int{
+
         for(i in 0 until spinner.count) {
             if(spinner.getItemAtPosition(i).toString().equals(str)) {
                 return i
@@ -479,6 +470,7 @@ class ProfileEditActivity : AppCompatActivity() {
         val daySpinner = binding.profileEditSpinnerDay
 
         // year
+
         yearSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -501,6 +493,7 @@ class ProfileEditActivity : AppCompatActivity() {
         }
 
         // month
+
         monthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -523,6 +516,7 @@ class ProfileEditActivity : AppCompatActivity() {
         }
 
         // day
+
         daySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -538,6 +532,7 @@ class ProfileEditActivity : AppCompatActivity() {
                         // birth 형식 맞추기
                         if(year != "" && month != "" && day != "") {  // 전부 선택 되어 데이터가 들어있으면
                             userBirth = "$year-$month-$day"
+                            Log.d(TAG, "onItemSelected: ${userBirth}")
                         }
                     }
                 }
