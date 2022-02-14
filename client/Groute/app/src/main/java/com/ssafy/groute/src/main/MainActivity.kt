@@ -3,6 +3,7 @@ package com.ssafy.groute.src.main
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.NotificationManager.IMPORTANCE_HIGH
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
@@ -169,8 +170,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             uploadToken(task.result!!, ApplicationClass.sharedPreferencesUtil.getUser().id)
 //            viewModel.token = task.result!!
         })
-//        createNotificationChannel(channel_id, "ssafy")
+        createNotificationChannel(channel_id, "ssafy")
     }
+
     fun showEventDialog(){
         var dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_event,null)
         var dialog = BottomSheetDialog(this)
@@ -472,7 +474,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     @RequiresApi(Build.VERSION_CODES.O)
     // Notification 수신을 위한 체널 추가
     private fun createNotificationChannel(id: String, name: String) {
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val importance = NotificationManager.IMPORTANCE_DEFAULT // or IMPORTANCE_HIGH
         val channel = NotificationChannel(id, name, importance)
 
         val notificationManager: NotificationManager
