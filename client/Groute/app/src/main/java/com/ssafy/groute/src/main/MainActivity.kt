@@ -243,8 +243,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .addToBackStack(null)
             }
             13 ->{
-                transaction.replace(R.id.frame_main_layout, MyFragment())
-                    .addToBackStack(null)
+                fm.popBackStack()
+                bottomNavigation.selectedItemId = R.id.My
+                supportFragmentManager.beginTransaction().replace(R.id.frame_main_layout, MyFragment())
+                    .commit()
             }
             14 -> {
                 transaction.replace(
