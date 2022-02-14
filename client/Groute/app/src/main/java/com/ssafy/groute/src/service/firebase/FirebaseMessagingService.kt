@@ -1,4 +1,4 @@
-package com.ssafy.groute.src.service
+package com.ssafy.groute.src.service.firebase
 
 import android.app.PendingIntent
 import android.content.Intent
@@ -11,6 +11,11 @@ import com.google.firebase.messaging.RemoteMessage
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.src.main.MainActivity
+import com.firebase.jobdispatcher.GooglePlayDriver
+
+import com.firebase.jobdispatcher.FirebaseJobDispatcher
+import com.firebase.jobdispatcher.Job
+
 
 private const val TAG = "FirebaseMsgSvc_Groute"
 class FirebaseMessageService : FirebaseMessagingService() {
@@ -90,6 +95,4 @@ class FirebaseMessageService : FirebaseMessagingService() {
             Log.d(TAG, "Message Notification Body: ${it.body}")
         }
     }
-
-
 }
