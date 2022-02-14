@@ -392,6 +392,9 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     }
     fun initMemo(){
         var routes = planViewModel.routeList.value!!
+        if(routes[curPos].memo == null || routes[curPos].memo == ""){
+            showCustomToast("메모가 없습니다.")
+        }
         if(routes[curPos].memo != null){
             val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_show_memo,null)
             val dialog = Dialog(requireContext())
