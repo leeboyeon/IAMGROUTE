@@ -11,17 +11,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/cate_img"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+        <FrameLayout
+            android:id="@+id/frame_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:imageUrlAccount="@{category.img}" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/cate_img"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:imageUrlAccount="@{category.img}" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/checklottie_account"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:visibility="invisible"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="check.json"
+                app:lottie_loop="false" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/cate_name"
@@ -34,6 +49,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cate_img" />
+            app:layout_constraintTop_toBottomOf="@+id/frame_account" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

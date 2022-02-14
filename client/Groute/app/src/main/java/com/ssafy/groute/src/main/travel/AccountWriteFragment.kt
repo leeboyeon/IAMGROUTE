@@ -86,8 +86,11 @@ class AccountWriteFragment : BaseFragment<FragmentAccountWriteBinding>(FragmentA
     }
     fun initAdapter(){
         var list = planViewModel.accountCategoryList.value
-
-        accountCategoryAdapter = AccountCategoryAdapter()
+        var selectList = arrayListOf<Int>()
+        for(i in 0 until list!!.size) {
+            selectList.add(0)
+        }
+        accountCategoryAdapter = AccountCategoryAdapter(selectList)
         if (list != null) {
             accountCategoryAdapter.list = list
         }
@@ -97,6 +100,7 @@ class AccountWriteFragment : BaseFragment<FragmentAccountWriteBinding>(FragmentA
         }
         accountCategoryAdapter.setItemClickListener(object :AccountCategoryAdapter.ItemClickListener{
             override fun onClick(view: View, position: Int, id: Int) {
+                accountCategoryAdapter.notifyDataSetChanged()
                 category = id
             }
 

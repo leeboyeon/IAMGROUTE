@@ -6,17 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.RecyclerviewAccountCategoryListItemBinding
 import com.ssafy.groute.src.dto.Account
 import com.ssafy.groute.src.dto.AccountCategory
 
-class AccountCategoryAdapter: RecyclerView.Adapter<AccountCategoryAdapter.ACategoryHolder>(){
+class AccountCategoryAdapter(var selectList: ArrayList<Int>): RecyclerView.Adapter<AccountCategoryAdapter.ACategoryHolder>(){
     var list = mutableListOf<AccountCategory>()
     inner class ACategoryHolder(private var binding:RecyclerviewAccountCategoryListItemBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(item: AccountCategory){
+        fun bind(item: AccountCategory, position: Int){
             binding.category= item
             binding.executePendingBindings()
+
+            if(selectList[position] == 1) {
+                itemView.findViewById<LottieAnimationView>(R.id.checklottie_account).visibility = View.VISIBLE
+            } else {
+                itemView.findViewById<LottieAnimationView>(R.id.checklottie_account).visibility = View.INVISIBLE
+            }
         }
     }
 
@@ -28,9 +35,21 @@ class AccountCategoryAdapter: RecyclerView.Adapter<AccountCategoryAdapter.ACateg
         val item = list[position]
         holder.apply {
             itemView.setOnClickListener {
-                itemClickListener.onClick(it,position,list[position].id)
+                if(selectList[position] == 0){
+                    for(i in 0 until list.size) {
+                        if(selectList[i] == 1) {
+                            selectList[i] = 0
+                        }
+                    }
+                    selectList[position] = 1
+                    itemClickListener.onClick(it,position,list[position].id)
+                }else{
+                    for(i in 0 until list.size) {
+                            selectList[i] = 0
+                    }
+                }
             }
-            bind(item)
+            bind(item, position)
         }
     }
 
