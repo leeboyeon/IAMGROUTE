@@ -1,14 +1,18 @@
 package com.ssafy.groute.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.groute.dto.*;
 import com.ssafy.groute.service.PlanReviewService;
 import com.ssafy.groute.service.RouteDetailService;
+import com.ssafy.groute.service.StorageService;
 import com.ssafy.groute.service.UserPlanService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +29,15 @@ public class UserPlanController {
     RouteDetailService routeDetailService;
     @Autowired
     PlanReviewService planReviewService;
+
+    @Autowired
+    private ObjectMapper mapper;
+
+    @Autowired
+    StorageService storageService;
+
+    @Value("${spring.http.multipart.location}")
+    private String uploadPath;
 
     @ApiOperation(value = "userPlan 추가",notes = "planId가 0이면 빈 일정 생성 0이 아니면 해당 일정 복사해서 생성")
     @PostMapping(value = "/insert")
@@ -239,11 +252,19 @@ public class UserPlanController {
 
     @ApiOperation(value = "planReview 추가",notes = "planReview 추가")
     @PostMapping(value = "/review")
-    public ResponseEntity<?> insertPlanReview(@RequestBody PlanReview req){
+//    public ResponseEntity<?> insertPlanReview(@RequestBody PlanReview req){
+    public ResponseEntity<?> insertPlanReview(@RequestPart(value = "review") String req, @RequestPart(value = "img", required = false) MultipartFile img) throws Exception {
 
         try {
-            planReviewService.insertPlanReview(req);
-        }catch (Exception e){
+            PlanReview planReview = mapper.readValue(req, PlanReview.class);
+            if (img != null) {
+                String fileName = storageService.store(img, uploadPath + "/review/plan");
+                planReview.setImg("review/plan/" + fileName);
+            } else {
+                planReview.setImg(null);
+            }
+            planReviewService.insertPlanReview(planReview);
+        } catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
         }
