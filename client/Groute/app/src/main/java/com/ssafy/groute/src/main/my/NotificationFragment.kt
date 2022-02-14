@@ -17,6 +17,7 @@ import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentNotificationBinding
+import com.ssafy.groute.src.dto.Notification
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.main.board.BoardAdapter
 import com.ssafy.groute.src.service.NotificationService
@@ -60,17 +61,38 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
 
         binding.notiViewModel = notiViewModel
         initSpinner()
-        initAdapter(0)
+
         binding.notiBack.setOnClickListener {
             mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
             mainActivity.supportFragmentManager.popBackStack()
         }
     }
-    fun initAdapter(flag:Int){
+    fun initAdapter(type:Int){
         notiViewModel.notificationList.observe(viewLifecycleOwner, {
             binding.notiRvNotiList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            notiAdapter = NotificationAdapter(it, viewLifecycleOwner, notiViewModel)
-
+            if(type == 1){
+                //event
+                    var eventList = arrayListOf<Notification>()
+                for(i in 0..it.size-1){
+                    if(it[i].category.equals("Event")){
+                        eventList.add(it[i])
+                    }
+                }
+                notiAdapter = NotificationAdapter(eventList,viewLifecycleOwner,notiViewModel)
+            }
+            if(type == 2){
+                //user
+                var UserList = arrayListOf<Notification>()
+                for(i in 0..it.size-1){
+                    if(it[i].category.equals("User")){
+                        UserList.add(it[i])
+                    }
+                }
+                notiAdapter = NotificationAdapter(UserList,viewLifecycleOwner,notiViewModel)
+            }
+            if(type == 0){
+                notiAdapter = NotificationAdapter(it, viewLifecycleOwner, notiViewModel)
+            }
             notiAdapter.setHasStableIds(true)
             binding.notiRvNotiList.adapter = notiAdapter
 
@@ -118,7 +140,9 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
                 position: Int,
                 id: Long
             ) {
+                //0:전체 1:event 2:uer
                 curPos = spinner.selectedItemPosition
+                initAdapter(curPos)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
