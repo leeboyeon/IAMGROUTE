@@ -19,6 +19,7 @@ import com.ssafy.groute.src.service.*
 import com.ssafy.groute.util.RetrofitUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 import retrofit2.Response
 import java.text.SimpleDateFormat
@@ -703,7 +704,7 @@ class PlanViewModel : ViewModel() {
         }
     }
 
-    suspend fun getBestPriority(end:Int, start:Int, routeId:Int){
+    suspend fun getBestPriority(end:Int, start:Int, routeId:Int,day:Int){
         val response = UserPlanService().getBestPriority(end, routeId,start)
         viewModelScope.launch {
             var res = response.body()
@@ -711,6 +712,8 @@ class PlanViewModel : ViewModel() {
                 if(res!=null){
                     Log.d(TAG, "getBestPriority: ${res}")
                     setBestPriority(res)
+                    routeList.value?.get(day)?.routeDetailList = res
+                    routeList.value?.let { setRouteList(it) }
                 }
             }else{
                 Log.d(TAG, "getBestPriority: ${response.code()}")

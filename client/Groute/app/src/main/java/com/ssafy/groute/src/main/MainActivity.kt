@@ -345,13 +345,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 val today = Calendar.getInstance().time.time
                 Log.d(TAG, "initProfileBar: ${today}")
                 var calcur = (date-today) / (24*60*60*1000)
-                var calcurtmp = abs(calcur)
+
                 Log.d(TAG, "initProfileBar: ${calcur}")
-                binding.mainTvDday.text = "여행까지 D-${calcurtmp}"
-                binding.progressBar.max = 30
-                var myprogress = kotlin.math.abs(30 - calcurtmp)
-                Log.d(TAG, "initProfileBar: ${myprogress}")
-                binding.progressBar.progress = myprogress.toInt()
+                if(calcur>= 0){
+                    binding.mainTvDday.text = "여행까지 D-${calcur}"
+                    binding.progressBar.max = 30
+                    var myprogress = kotlin.math.abs(30 - calcur)
+                    Log.d(TAG, "initProfileBar: ${myprogress}")
+                    binding.progressBar.progress = myprogress.toInt()
+                }else{
+                    binding.mainTvDday.text = "현재 여행중입니다"
+                    binding.progressBar.progress = 30
+                }
+
             })
         }
 
