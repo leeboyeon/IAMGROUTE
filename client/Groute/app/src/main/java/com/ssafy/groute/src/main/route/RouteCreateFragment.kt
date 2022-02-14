@@ -18,6 +18,7 @@ import com.ssafy.groute.src.main.MainActivity
 import java.text.SimpleDateFormat
 import java.util.*
 import com.ssafy.groute.src.dto.Member
+import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.dto.UserPlan
 import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.service.UserService
@@ -34,7 +35,7 @@ class RouteCreateFragment : BaseFragment<FragmentRouteCreateBinding>(FragmentRou
     private var memberAdapter:MemberAdapter = MemberAdapter()
     private val homeViewModel: HomeViewModel by activityViewModels()
 //    val area = mutableListOf<Area>()
-    val member = mutableListOf<Member>()
+    val member = mutableListOf<User>()
     val ids = arrayListOf<String>()
     private var areaId = 1
     var startDate = ""
@@ -79,21 +80,23 @@ class RouteCreateFragment : BaseFragment<FragmentRouteCreateBinding>(FragmentRou
             showDataRangePicker()
         }
         binding.rcIbtnAddMember.setOnClickListener {
-            findMemberbyUserId()
+            findMemberByUserId()
         }
     }
-    fun findMemberbyUserId(){
+
+    fun findMemberByUserId(){
         val userId = binding.rcEtMemberId.text.toString()
         memberAdapter = MemberAdapter()
         val userInfo = UserService().getUserInfo(userId)
 
         if(userInfo!=null){
             userInfo.observe(viewLifecycleOwner, {
+                val user = User(it.id, it.nickname, it.img.toString())
                 member.apply {
                     if(it.img != null){
-                        add(Member(img= it.img!!, name=it.nickname))
+                        add(User(it.id, it.nickname, it.img.toString()))
                     }else{
-                        add(Member(img=R.drawable.user.toString(), name=it.nickname))
+                        add(User(it.id, it.nickname, ""))
                     }
                     memberAdapter.list = member
                     memberAdapter.notifyDataSetChanged()
