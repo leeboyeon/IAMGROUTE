@@ -220,7 +220,7 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
     //            insertReview(review)
                 setData(review, true)
             } else {
-                showCustomToast("글자 수를 확인해주세요.")
+                showCustomToast("글자 수를 확인해 주세요.")
             }
         }
     }

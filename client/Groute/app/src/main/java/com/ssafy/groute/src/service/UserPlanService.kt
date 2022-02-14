@@ -63,22 +63,30 @@ class UserPlanService {
         return RetrofitUtil.userPlanService.getPlanReviewListbyId(planId)
     }
 
-    fun insertPlanReview(review: PlanReview, callback: RetrofitCallback<Boolean>) {
-        RetrofitUtil.userPlanService.insertPlanReview(review).enqueue(object : Callback<Boolean> {
+    /**
+     * insert PlanReview
+     * @param review
+     * @param img
+     * @return callback
+     */
+    fun insertPlanReview(review: RequestBody, img: MultipartBody.Part?, callback: RetrofitCallback<Boolean>) {
+        RetrofitUtil.userPlanService.insertPlanReview(review, img).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 val res = response.body()
                 if (response.code() == 200) {
                     if (res == true) {
                         callback.onSuccess(response.code(), res)
-                        Log.d(TAG, "onResponse: insert Success!")
+                        Log.d(TAG, "onResponse: planReview insert Success!")
                     } else {
-                        Log.d(TAG, "onResponse: insert fail")
+                        Log.d(TAG, "onResponse: planReview insert fail")
                     }
+                } else {
+                    callback.onFailure(response.code())
                 }
             }
 
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                Log.d(TAG, "onFailure: $t")
+                callback.onError(t)
             }
         })
     }

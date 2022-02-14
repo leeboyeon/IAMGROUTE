@@ -30,8 +30,10 @@ interface UserPlanApi {
     @GET("/plan/review/list/{planId}")
     suspend fun getPlanReviewListbyId(@Path("planId") planId:Int) : Response<MutableList<PlanReview>>
 
+    //planReview insert
+    @Multipart
     @POST("/plan/review")
-    fun insertPlanReview(@Body planReview: PlanReview):Call<Boolean>
+    fun insertPlanReview(@Part("review") review : RequestBody, @Part img: MultipartBody.Part?):Call<Boolean>
 
     @DELETE("/plan/review/del")
     fun deletePlanReview(@Query("id")id:Int):Call<Boolean>

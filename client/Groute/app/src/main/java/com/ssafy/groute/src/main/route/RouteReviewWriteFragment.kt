@@ -33,10 +33,7 @@ import com.google.gson.Gson
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import com.jakewharton.rxbinding3.widget.textChanges
-import com.ssafy.groute.src.dto.PlaceReview
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.main.home.ReviewWriteFragment
-import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.RetrofitCallback
@@ -110,11 +107,20 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
             planViewModel.review.observe(viewLifecycleOwner, Observer {
                 binding.planReview = it // 화면에 planReview data setting
 
-                beforeImg = it.img
-                binding.planReviewWriteTvImgName.text = beforeImg.substring(beforeImg.lastIndexOf("/") + 1, beforeImg.length)
-                binding.planReviewWriteLLayoutSetImg.visibility = View.VISIBLE
-//                binding.routeReviewWriteEtContent.setText(it.content)
-//                binding.routeReviewWriteRatingBar.rating = it.rate.toFloat()
+                if(!(it.img == "null" || it.img == "" || it.img == null)) {
+                    binding.planReviewWriteLLayoutSetImg.visibility = View.VISIBLE
+                    beforeImg = it.img.toString()
+                    // 사진 set
+                    Glide.with(requireContext())
+                        .load("${ApplicationClass.IMGS_URL}${beforeImg}")
+                        .into(binding.planReviewWriteIvSelectImg)
+
+                    // 파일 이름 set
+                    binding.planReviewWriteTvImgName.text = beforeImg.substring(beforeImg.lastIndexOf("/") + 1, beforeImg.length)
+                } else {
+                    beforeImg = ""
+                    binding.planReviewWriteLLayoutSetImg.visibility = View.GONE
+                }
                 initModifyButton(beforeImg)
             })
         } else {
@@ -180,17 +186,21 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
     // review 등록 버튼 클릭 이벤트
     private fun initInsertButton(){
         binding.routeReviewWriteBtnWrite.setOnClickListener {
-            val content = binding.routeReviewWriteEtContent.text.toString()
-            var rate = binding.routeReviewWriteRatingBar.rating.toDouble()
-            val userId = ApplicationClass.sharedPreferencesUtil.getUser().id
-            val review = PlanReview(
-                planId,
-                userId,
-                content,
-                rate,
-                ""
-            )
-            insertReview(review)
+            if(textLengthChk(binding.planReviewWriteTietContent.text.toString()) == true) {
+                val content = binding.planReviewWriteTietContent.text.toString()
+                val rate = binding.routeReviewWriteRatingBar.rating.toDouble()
+                val userId = ApplicationClass.sharedPreferencesUtil.getUser().id
+                val review = PlanReview(
+                    planId,
+                    userId,
+                    content,
+                    rate,
+                    ""
+                )
+                setData(review, true)
+            } else {
+                showCustomToast("글자 수를 확인해 주세요.")
+            }
         }
     }
     /**
@@ -305,20 +315,20 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
 
 
     /**
-     * insert & update placeReview
+     * insert & update planReview
      * call server
      */
-    private fun setData(placeReview: PlaceReview, chk: Boolean) {
+    private fun setData(planReview: PlanReview, chk: Boolean) {
 
         // 게시글만 작성한 경우
         if(imgUri == Uri.EMPTY) {
             val gson : Gson = Gson()
-            val json = gson.toJson(placeReview)
+            val json = gson.toJson(planReview)
             val rBody_planReivew = RequestBody.create(MediaType.parse("text/plain"), json)
-            if(chk) {   // placeReview 작성인 경우
-//                UserPlanService().insertPlanReview(rBody_planReivew, null, ReviewWriteFragment.InsertPlaceReviewCallback())
-            } else {    // placeReview 수정인 경우
-                UserPlanService().updatePlanReview(rBody_planReivew, null, UpdatePlaceReviewCallback())
+            if(chk) {   // planReview 작성인 경우
+                UserPlanService().insertPlanReview(rBody_planReivew, null, InsertPlanReviewCallback())
+            } else {    // planReview 수정인 경우
+                UserPlanService().updatePlanReview(rBody_planReivew, null, UpdatePlanReviewCallback())
             }
         }
         // 게시글 작성 + 사진 선택한 경우
@@ -339,19 +349,38 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
             val extension = fileExtension!!.substring(fileExtension!!.lastIndexOf("/") + 1, fileExtension!!.length)
             val uploadFile = MultipartBody.Part.createFormData("img", "${file.name}.${extension}", requestBody)
             val gson : Gson = Gson()
-            val json = gson.toJson(placeReview)
+            val json = gson.toJson(planReview)
             val rBody_planReivew = RequestBody.create(MediaType.parse("text/plain"), json)
             if(chk) {   // 게시글 작성인 경우
-//                UserPlan. insertPlaceReview(rBody_placeReivew, uploadFile, InsertPlaceReviewCallback())
+                UserPlanService().insertPlanReview(rBody_planReivew, uploadFile, InsertPlanReviewCallback())
             } else {    // 게시글 수정인 경우
-                UserPlanService().updatePlanReview(rBody_planReivew, uploadFile, UpdatePlaceReviewCallback())
+                UserPlanService().updatePlanReview(rBody_planReivew, uploadFile, UpdatePlanReviewCallback())
             }
         }
     }
 
 
+    // review insert callback
+    inner class InsertPlanReviewCallback : RetrofitCallback<Boolean> {
+        override fun onError(t: Throwable) {
+            Log.d(TAG, "onError: ")
+        }
+
+        override fun onSuccess(code: Int, responseData: Boolean) {
+            if (responseData == true) {
+                mainActivity.moveFragment(12, "planIdDetail", planId, "planIdUser", -1)
+                showCustomToast("리뷰 작성 성공")
+            }
+        }
+
+        override fun onFailure(code: Int) {
+            Log.d(TAG, "onFailure: ")
+        }
+
+    }
+
     // update planReview Callback
-    inner class UpdatePlaceReviewCallback : RetrofitCallback<Boolean> {
+    inner class UpdatePlanReviewCallback : RetrofitCallback<Boolean> {
         override fun onError(t: Throwable) {
             Log.d(TAG, "onError: ")
         }
@@ -369,43 +398,11 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
 
     }
 
-
-//    fun modifyReview(review: PlanReview){
-//        UserPlanService().updatePlanReview(review, object : RetrofitCallback<Boolean> {
-//            override fun onError(t: Throwable) {
-//                Log.d(TAG, "onError: ")
-//            }
-//
-//            override fun onSuccess(code: Int, responseData: Boolean) {
-//                Log.d(TAG, "onSuccess: ")
-//                mainActivity.moveFragment(12, "planIdDetail", planId, "planIdUser", -1)
-//                Toast.makeText(requireContext(),"리뷰수정 성공", Toast.LENGTH_SHORT).show()
-//            }
-//
-//            override fun onFailure(code: Int) {
-//                Log.d(TAG, "onFailure: ")
-//            }
-//
-//        })
-//    }
-//
-//    fun insertReview(review: PlanReview){
-//        UserPlanService().insertPlanReview(review, object : RetrofitCallback<Boolean> {
-//            override fun onError(t: Throwable) {
-//                Log.d(TAG, "onError: ")
-//            }
-//
-//            override fun onSuccess(code: Int, responseData: Boolean) {
-//                Log.d(TAG, "onSuccess: ")
-//                mainActivity.moveFragment(12, "planIdDetail", planId, "planIdUser", -1)
-//                Toast.makeText(requireContext(),"리뷰작성 성공", Toast.LENGTH_SHORT).show()
-//            }
-//
-//            override fun onFailure(code: Int) {
-//                Log.d(TAG, "onFailure: ")
-//            }
-//        })
-//    }
+    override fun onDestroy() {
+        editTextSubscription.dispose()
+        mainActivity.hideBottomNav(false)
+        super.onDestroy()
+    }
 
     companion object {
 

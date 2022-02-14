@@ -173,7 +173,6 @@ class PlaceService {
     fun insertPlaceReview(review: RequestBody, img: MultipartBody.Part?, callback:RetrofitCallback<Boolean>) {
         RetrofitUtil.placeService.insertPlaceReview(review, img).enqueue(object : Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                Log.d(TAG, "onResponse: insertPlaceReview")
                 val res = response.body()
                 if(response.code() == 200){
                     if(res == true){
@@ -188,7 +187,6 @@ class PlaceService {
             }
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
                 callback.onError(t)
-                Log.d(TAG, "onFailure: $t")
             }
 
         })
