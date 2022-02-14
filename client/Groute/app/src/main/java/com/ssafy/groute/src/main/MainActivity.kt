@@ -170,7 +170,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             uploadToken(task.result!!, ApplicationClass.sharedPreferencesUtil.getUser().id)
 //            viewModel.token = task.result!!
         })
-        createNotificationChannel(channel_id, "ssafy")
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel(channel_id, "ssafy")
+        }
     }
 
     fun showEventDialog(){
