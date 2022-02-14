@@ -20,4 +20,6 @@ public interface UserService {
     void updatePassword(User user) throws Exception;
     List<User> selectAllUser() throws Exception;
     List<User> selectEndedPlanYesterday() throws Exception;
+    List<User> selectDayBeforeTravel(int day) throws Exception;
+
 }

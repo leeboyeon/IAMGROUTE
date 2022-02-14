@@ -68,7 +68,25 @@
         select id, nickname, token
         from user
         where id IN ( select user_id
-        from userplan
-        where date(enddate) = date(subdate(now(), INTERVAL 1 DAY)) and user_id != 'admin')
+                        from userplan
+                        where date(enddate) = date(subdate(now(), INTERVAL 1 DAY)) and user_id != 'admin')
     </select>
+
+    <select id="selectOneDayBeforeTravel" parameterType="Integer" resultType="User">
+        select id, nickname, token
+        from user
+        where id IN ( select user_id
+                        from userplan
+        <if test= "day != null and day == 1">
+            where date(now()) = date(subdate(date(startdate), INTERVAL 1 DAY)) and user_id != 'admin')
+        </if>
+        <if test= "day != null and day == 3">
+            where date(now()) = date(subdate(date(startdate), INTERVAL 3 DAY)) and user_id != 'admin')
+        </if>
+        <if test= "day != null and day == 7">
+            where date(now()) = date(subdate(date(startdate), INTERVAL 1 WEEK)) and user_id != 'admin')
+        </if>
+
+    </select>
+
 </mapper>

@@ -127,4 +127,11 @@ public class UserServiceImpl implements UserService {
     public List<User> selectEndedPlanYesterday() throws Exception {
         return userMapper.selectEndedPlanYesterday();
     }
+
+    @Override
+    public List<User> selectDayBeforeTravel(int day) throws Exception {
+        return userMapper.selectDayBeforeTravel(day);
+    }
+
+
 }

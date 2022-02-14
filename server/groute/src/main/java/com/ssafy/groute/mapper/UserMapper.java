@@ -2,6 +2,7 @@ package com.ssafy.groute.mapper;
 
 import com.ssafy.groute.dto.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -20,4 +21,7 @@ public interface UserMapper {
     void updatePassword(User user) throws Exception;
     List<User> selectAllUserList() throws Exception;
     List<User> selectEndedPlanYesterday() throws Exception;
+    List<User> selectDayBeforeTravel(@RequestParam("day") int day) throws Exception;
+
+
 }
