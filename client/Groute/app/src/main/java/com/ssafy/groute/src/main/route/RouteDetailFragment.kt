@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.RelativeLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -225,7 +226,7 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
             dialog.dismiss()
             mainActivity.moveFragment(1)
         }
-        dialogView.findViewById<RelativeLayout>(R.id.bottom_sheet_route_add_btn)
+        dialogView.findViewById<ConstraintLayout>(R.id.bottom_sheet_route_add_btn)
             .setOnClickListener {
                 if(addDay != -1 && selectUserPlan.id != 0) {
                     UserPlanService().insertPlanToUserPlan(addDay, planViewModel.planList.value!!.id, selectUserPlan, object : RetrofitCallback<Boolean> {
