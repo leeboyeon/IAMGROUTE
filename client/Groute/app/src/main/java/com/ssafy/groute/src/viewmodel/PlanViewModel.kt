@@ -147,6 +147,10 @@ class PlanViewModel : ViewModel() {
         viaResponse.add(place)
         liveViaList.value = viaResponse
     }
+    fun removeAllViaList(){
+        viaResponse.clear()
+        liveViaList.value = viaResponse
+    }
     fun removePlaceShopList(placeId: Int) {
         for (i in 0..placeShopResponse.size - 1) {
             if (placeShopResponse.get(i).id == placeId) {

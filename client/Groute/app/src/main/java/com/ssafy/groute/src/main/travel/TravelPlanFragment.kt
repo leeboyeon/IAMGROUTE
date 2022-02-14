@@ -260,6 +260,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         if(dialogView.parent != null){
             (dialogView.parent as ViewGroup).removeView(dialogView)
         }
+        planViewModel.removeAllViaList()
         dialog.setContentView(dialogView)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         var params = dialog.window?.attributes
@@ -318,7 +319,11 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 id: Long
             ) {
                 if(viaSpinner.selectedItemPosition > 0){
-                    planViewModel.insertViaList(destinationInfo[viaSpinner.selectedItemPosition-1])
+                    if(planViewModel.liveViaList.value?.size!! >= 3){
+                        showCustomToast("더이상 추가하실 수 없습니다")
+                    }else{
+                        planViewModel.insertViaList(destinationInfo[viaSpinner.selectedItemPosition-1])
+                    }
                 }
             }
 
