@@ -266,7 +266,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 bottomNavigation.selectedItemId = R.id.Route
                 supportFragmentManager.beginTransaction().replace(R.id.frame_main_layout, RouteFragment.newInstance(key1,value1, key2, value2))
                     .commit()
-
             }
             17 -> {
                 transaction.replace(R.id.frame_main_layout, SharedMemberFragment.newInstance(key1,value1))
@@ -321,22 +320,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             val user = User(it.id, it.nickname, it.img.toString())
             binding.user = user
         })
-//        viewModel.getUser().observe(this, Observer {
-//            binding.mainTvUsername.text = it.nickname
-//            if(it.type.equals("sns")){
-//                Log.d(TAG, "initProfileBar_SNS: ${it.img}")
-//                Glide.with(this)
-//                    .load(it.img)
-//                    .circleCrop()
-//                    .into(binding.mainIvUserimg)
-//            } else {
-//                Log.d(TAG, "initProfileBar: ${it.img}")
-//                Glide.with(this)
-//                    .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
-//                    .circleCrop()
-//                    .into(binding.mainIvUserimg)
-//            }
-//        })
+
         if(planViewModel.planNotEndList.value?.isEmpty() == true){
             binding.mainTvDday.text = "추가하신 일정이 없습니다"
             binding.progressBar.progress = 0
