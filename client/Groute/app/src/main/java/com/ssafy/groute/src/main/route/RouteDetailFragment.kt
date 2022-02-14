@@ -202,17 +202,13 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
             }
 
             bottomSheetRecyclerviewAdapter.setItemClickListener(object : BottomSheetRecyclerviewAdapter.ItemClickListener {
-                override fun onClickDay(position: Int, day: Int) {
+                override fun onClickDay(position: Int, day: Int, userPlan: UserPlan) {
                     Log.d(TAG, "onClick day: $day")
                     addDay = day
-                }
-
-                override fun onClickPlan(position: Int, userPlan: UserPlan) {
-                    bottomSheetRecyclerviewAdapter.notifyDataSetChanged()
-                    Log.d(TAG, "onClickPlan: $id")
                     selectUserPlan = userPlan
 
                 }
+
 
             })
 

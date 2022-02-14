@@ -71,17 +71,10 @@ class BottomSheetRecyclerviewAdapter(val viewLifecycleOwner: LifecycleOwner, val
                 override fun onClick(position: Int, day: Int) {
                     Log.d(TAG, "onClick: $day")
                     bottomSheetDaysRecyclerviewAdapter.notifyDataSetChanged()
-                    itemClickListener.onClickDay(layoutPosition, day)
+                    itemClickListener.onClickDay(layoutPosition, day, data)
                 }
 
             })
-            if(selectCheck[position] == 1) {
-                itemLayout.background.setTint(ContextCompat.getColor(context, R.color.blue_500))
-                checkIcon.visibility = View.VISIBLE
-            } else {
-                itemLayout.background.setTint(ContextCompat.getColor(context, R.color.light_grey))
-                checkIcon.visibility = View.INVISIBLE
-            }
         }
     }
 
@@ -98,24 +91,6 @@ class BottomSheetRecyclerviewAdapter(val viewLifecycleOwner: LifecycleOwner, val
         holder.apply {
             bindInfo(list[position], position)
 
-            itemLayout.setOnClickListener{
-                if(selectCheck[position] == 0) {
-                    for(i in 0 until list.size) {
-                        if(selectCheck[i] == 1) {
-                            selectCheck[i] = 0
-                        }
-                    }
-                    selectCheck[position] = 1
-                    itemClickListener.onClickPlan(position, list[position])
-                } else if(selectCheck[position] == 1) {
-                    for(i in 0 until list.size) {
-                        if(selectCheck[i] == 1) {
-                            selectCheck[i] = 0
-                        }
-                    }
-                    itemClickListener.onClickPlan(position, list[position])
-                }
-            }
 
         }
     }
@@ -125,8 +100,7 @@ class BottomSheetRecyclerviewAdapter(val viewLifecycleOwner: LifecycleOwner, val
     }
 
     interface ItemClickListener{
-        fun onClickDay(position: Int, day: Int)
-        fun onClickPlan(position: Int, userPlan: UserPlan)
+        fun onClickDay(position: Int, day: Int, userPlan: UserPlan)
     }
     private lateinit var itemClickListener : ItemClickListener
     fun setItemClickListener(itemClickListener: ItemClickListener){
