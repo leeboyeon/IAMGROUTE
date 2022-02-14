@@ -120,7 +120,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             homeViewModel.getAreaLists()
         }
 
-        initPlaceListAdapter(1)
+        initPlaceListAdapter()
         findArea()
         floatingButtonEvent()
         binding.travelplanBackIv.setOnClickListener {
@@ -185,14 +185,14 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         }
         dialog.setContentView(dialogView)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        var placeInfo = arrayListOf<Place>()
+        var placeInfo = arrayListOf<RouteDetail>()
         var places = arrayListOf<String>()
         var routeDetailList = planViewModel.routeList.value?.get(curPos)
         
         places.add("선택안함")
         if(routeDetailList!=null){
             for(i in 0..routeDetailList.routeDetailList.size-1){
-                placeInfo.add(routeDetailList.routeDetailList[i].place)
+                placeInfo.add(routeDetailList.routeDetailList[i])
                 places.add(routeDetailList.routeDetailList[i].place.name)
             }
         }
@@ -217,7 +217,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 id: Long
             ) {
                 if(startSpinner.selectedItemPosition > 0){
-                    startId = placeInfo[startSpinner.selectedItemPosition-1].id
+                    startId = placeInfo[startSpinner.selectedItemPosition-1].priority
                 }
             }
 
@@ -234,7 +234,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 id: Long
             ) {
                 if(endSpinner.selectedItemPosition > 0){
-                    endId = placeInfo[endSpinner.selectedItemPosition-1].id
+                    endId = placeInfo[endSpinner.selectedItemPosition-1].priority
                 }
             }
 
@@ -247,10 +247,10 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         }
         dialogView.findViewById<AppCompatButton>(R.id.bestPriority_btn_ok).setOnClickListener {
             routeId = routeDetailList!!.id
+            Log.d(TAG, "showBestPriorityDialog: ${endId},${startId},${routeId}")
             runBlocking {
-                planViewModel.getBestPriority(endId, startId,routeId)
+                planViewModel.getBestPriority(endId, startId,routeId,curPos)
             }
-            initPlaceListAdapter(2)
             dialog.dismiss()
         }
     }
@@ -317,15 +317,9 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 position: Int,
                 id: Long
             ) {
-//                var viaLat = destinationInfo[position].lat.toDouble()
-//                var viaLng = destinationInfo[position].lng.toDouble()
-//                var mapPoint = MapPoint.mapPointWithGeoCoord(viaLat,viaLng)
-//                viaList.add(mapPoint)
-
                 if(viaSpinner.selectedItemPosition > 0){
                     planViewModel.insertViaList(destinationInfo[viaSpinner.selectedItemPosition-1])
                 }
-
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -475,42 +469,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         mapView.setMapCenterPoint(mapPoint,true)
         mapView.setZoomLevel(9, true)
     }
-    fun startNavi(markerArr: ArrayList<MapPoint>){
-        try {
-            if (KakaoNaviService.isKakaoNaviInstalled(requireContext())) {
 
-                val kakao: com.kakao.kakaonavi.Location =
-                    Destination.newBuilder("destination", markerArr[markerArr.size-1].mapPointGeoCoord.longitude, markerArr[markerArr.size-1].mapPointGeoCoord.latitude).build()
-                val stops = LinkedList<com.kakao.kakaonavi.Location>()
-                for(i in 0..2){
-                    val stop = com.kakao.kakaonavi.Location.newBuilder("출발",markerArr[i].mapPointGeoCoord.longitude,markerArr[i].mapPointGeoCoord.latitude).build()
-                    stops.add(stop)
-                }
-
-
-                val params = KakaoNaviParams.newBuilder(kakao)
-                    .setNaviOptions(
-                        NaviOptions.newBuilder()
-                            .setCoordType(CoordType.WGS84) // WGS84로 설정해야 경위도 좌표 사용 가능.
-                            .setRpOption(RpOption.NO_AUTO)
-                            .setStartAngle(200) //시작 앵글 크기 설정.
-                            .setVehicleType(VehicleType.FIRST).build()
-                    ).setViaList(stops).build() //길 안내 차종 타입 설정
-
-                KakaoNaviService.navigate(requireContext(), params)
-
-            } else {
-                val intent = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("https://play.google.com/store/apps/details?id=com.locnall.KimGiSa")
-                )
-                Log.e(TAG, "showNaviKakao: 네비 설치 안됨")
-                startActivity(intent)
-            }
-        } catch (e: Exception) {
-            Log.e("네비연동 에러", e.toString() + "")
-        }
-    }
     fun addPing(day:Int){
         markerArr = arrayListOf()
         planViewModel.routeList.observe(viewLifecycleOwner, {
@@ -646,17 +605,11 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     }
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility")
-    fun initPlaceListAdapter(flag:Int){
+    fun initPlaceListAdapter(){
         planViewModel.routeList.observe(viewLifecycleOwner, Observer {
-            if(flag== 1){
-                travelPlanListRecyclerviewAdapter = TravelPlanListRecyclerviewAdapter(requireContext(),it,planViewModel,viewLifecycleOwner,planId)
-            }
-            if(flag==2){
-                planViewModel.bestPriorityList.observe(viewLifecycleOwner, Observer { it2 ->
-                    travelPlanListRecyclerviewAdapter = TravelPlanListRecyclerviewAdapter(requireContext(),it,planViewModel,viewLifecycleOwner,planId)
-                    travelPlanListRecyclerviewAdapter.routeDetailList =it2
-                })
-            }
+            Log.d(TAG, "initPlaceListAdapter: 실행되니?")
+            travelPlanListRecyclerviewAdapter = TravelPlanListRecyclerviewAdapter(requireContext(),it,planViewModel,viewLifecycleOwner,planId)
+
             initTabLayout()
             binding.travelplanListRv.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
