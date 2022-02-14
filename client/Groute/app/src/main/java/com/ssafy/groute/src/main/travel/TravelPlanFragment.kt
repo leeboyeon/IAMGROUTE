@@ -163,7 +163,12 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             }
         }
         binding.travelPlanIbtnMemo.setOnClickListener {
-            initMemo()
+            var routes = planViewModel.routeList.value!!
+            if(routes[curPos].memo == null || routes[curPos].memo == ""){
+                showCustomToast("메모가 없습니다")
+            }else{
+                initMemo()
+            }
         }
         binding.findLocationBtn.setOnClickListener {
             var routeId = planViewModel.routeList.value?.get(curPos)?.id
@@ -173,7 +178,6 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         }
         binding.travelPlanBtnBestPriority.setOnClickListener {
             showBestPriorityDialog()
-//            var routeId = planViewModel.routeList.value?.get(curPos)?.id
         }
     }
     @RequiresApi(Build.VERSION_CODES.O)
@@ -260,6 +264,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         if(dialogView.parent != null){
             (dialogView.parent as ViewGroup).removeView(dialogView)
         }
+        planViewModel.removeAllViaList()
         dialog.setContentView(dialogView)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         var params = dialog.window?.attributes
@@ -318,7 +323,11 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 id: Long
             ) {
                 if(viaSpinner.selectedItemPosition > 0){
-                    planViewModel.insertViaList(destinationInfo[viaSpinner.selectedItemPosition-1])
+                    if(planViewModel.liveViaList.value?.size!! >= 3){
+                        showCustomToast("더이상 추가하실 수 없습니다")
+                    }else{
+                        planViewModel.insertViaList(destinationInfo[viaSpinner.selectedItemPosition-1])
+                    }
                 }
             }
 
@@ -788,8 +797,8 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     fun showRouteSelectDialog(){
         routeRecomDialogAdapter = RouteRecomDialogAdapter(requireContext())
         routeSelectList.apply {
-            add(RouteRecom(lottie="oneday.json",typeName="장소 필터링",typeDescript="추가하신 장소를 포함한 일정을 추천해드립니다."))
-            add(RouteRecom(lottie="oneday.json",typeName="장소 제외 필터링",typeDescript="추가하신 장소를 제외한 일정을 추천해드립니다."))
+            add(RouteRecom(lottie="location.json",typeName="장소 필터링",typeDescript="추가하신 장소를 포함한 일정을 추천해드립니다."))
+            add(RouteRecom(lottie="semiauto.json",typeName="장소 제외 필터링",typeDescript="추가하신 장소를 제외한 일정을 추천해드립니다."))
             add(RouteRecom(lottie="allday.json",typeName="전체일정 추천",typeDescript="모든 일정을 \n 추천받으시고 싶으신가요?"))
 
             routeRecomDialogAdapter.list = routeSelectList

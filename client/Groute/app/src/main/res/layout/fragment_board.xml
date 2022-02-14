@@ -12,19 +12,6 @@
         android:layout_height="match_parent"
         tools:context=".src.main.board.BoardFragment">
 
-        <SearchView
-            android:id="@+id/searchView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="14dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" >
-
-        </SearchView>
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -33,7 +20,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchView2">
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -154,12 +141,12 @@
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/board_rv_question"
-                            app:listData="@{boardViewModels.qnaBoardPostList}"
                             android:layout_width="match_parent"
                             android:layout_height="120dp"
                             android:layout_marginStart="15dp"
                             android:layout_marginTop="7dp"
                             android:layout_marginEnd="15dp"
+                            app:listData="@{boardViewModels.qnaBoardPostList}"
                             tools:itemCount="5" />
                     </LinearLayout>
 

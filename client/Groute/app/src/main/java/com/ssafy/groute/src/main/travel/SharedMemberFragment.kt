@@ -87,8 +87,8 @@ class SharedMemberFragment: BaseFragment<FragmentSharedMemberBinding>(FragmentSh
                 }
                 binding.memeberLottiePlus.setOnClickListener {
                     checkUser()
+                    binding.sharedMemberEtUserId.setText("")
                 }
-
             }else{
                 binding.shareMemberBtnLayout.isVisible = false
                 checkFlag = false
@@ -117,6 +117,9 @@ class SharedMemberFragment: BaseFragment<FragmentSharedMemberBinding>(FragmentSh
                             showCustomToast("이미 추가된 유저입니다.")
                         }else{
                             insertUser(userId)
+                            runBlocking {
+                                planViewModel.getShareUserbyPlanId(planId)
+                            }
                         }
                     }
                 }else{
