@@ -24,7 +24,13 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".src.splash.LoadingActivity"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".src.main.board.CommentNestedActivity"
             android:exported="false" />
@@ -34,24 +40,18 @@
         <activity
             android:name=".src.main.MainActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".src.login.LoginActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:windowSoftInputMode="adjustPan">
         </activity>
+
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:host="oauth"
                     android:scheme="kakao1cfb5d85fba73249197e415cfc745142" />
@@ -59,7 +59,7 @@
         </activity>
 
         <service
-            android:name=".src.service.FirebaseMessageService"
+            android:name="com.ssafy.groute.src.service.firebase.FirebaseMessageService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
