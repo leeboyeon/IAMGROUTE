@@ -1,93 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="user"
+            type="com.ssafy.groute.src.dto.User" />
+        <variable
+            name="planReview"
+            type="com.ssafy.groute.src.dto.PlanReview" />
+    </data>
 
-    <androidx.cardview.widget.CardView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        android:layout_marginHorizontal="10dp"
-        app:cardUseCompatPadding="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:layout_margin="5dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="10dp"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp">
+
+                    <ImageView
+                        android:id="@+id/routedetail_review_recycler_item_iv_userimg"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginEnd="15dp"
+                        app:imageUrlUser="@{user.img}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/routedetail_review_recycler_item_tv_username"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/routedetail_review_recycler_item_tv_username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{user.nickname}"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/space"
+                        app:layout_constraintStart_toEndOf="@+id/routedetail_review_recycler_item_iv_userimg"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <Space
+                        android:id="@+id/space"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/routedetail_review_recycler_item_rb_rating"
+                        app:layout_constraintStart_toEndOf="@+id/routedetail_review_recycler_item_tv_username"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <RatingBar
+                        android:id="@+id/routedetail_review_recycler_item_rb_rating"
+                        style="@style/Widget.AppCompat.RatingBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:max="5"
+                        android:numStars="5"
+                        android:stepSize="0.5"
+                        app:setRating="@{planReview.rate}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/routeDetail_review_recycler_item_ib_more"
+                        app:layout_constraintStart_toEndOf="@+id/space"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <ImageButton
+                        android:id="@+id/routeDetail_review_recycler_item_ib_more"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="right"
+                        android:background="@android:color/transparent"
+                        android:scaleType="centerInside"
+                        android:layout_marginStart="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/routedetail_review_recycler_item_rb_rating"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/morecion" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <ImageView
-                    android:id="@+id/routedetail_review_recycler_item_iv_userimg"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginRight="15dp"
-                    app:srcCompat="@drawable/chungbuk" />
+                    android:id="@+id/routedetail_review_recycler_item_iv_reviewimg"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    app:imageUrlBoardPost="@{planReview.img}"/>
 
                 <TextView
-                    android:id="@+id/routedetail_review_recycler_item_tv_username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="김싸피"
-                    android:textColor="@color/black" />
-
-                <Space
+                    android:id="@+id/routedetail_review_recycler_item_tv_content"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-
-                <RatingBar
-                    android:id="@+id/routedetail_review_recycler_item_rb_rating"
-                    style="@style/Widget.AppCompat.RatingBar.Small"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:max="5"
-                    android:numStars="5"
-                    android:stepSize="0.5" />
+                    android:padding="5dp"
+                    android:ellipsize="none"
+                    android:text="@{planReview.content}"
+                    android:textColor="@color/black"
+                    android:textSize="11sp"
+                    app:autoSizeTextType="none" />
+
             </LinearLayout>
-
-            <ImageView
-                android:id="@+id/routedetail_review_recycler_item_iv_reviewimg"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/defaultimg" />
-
-            <TextView
-                android:id="@+id/routedetail_review_recycler_item_tv_content"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginHorizontal="5dp"
-                android:ellipsize="none"
-                android:text="가기전부터 너무 가고싶었던 곳인데 별로였어요...왜 이렇게 다들 불친절하고 나는 너무 하기싫은지....진짜 진짜 정말 하기"
-                android:textColor="@color/black"
-                android:textSize="11sp"
-                app:autoSizeTextType="none" />
-
-            <ImageButton
-                android:id="@+id/routedetail_review_recycler_item_ib_more"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="right"
-                android:background="@android:color/transparent"
-                android:scaleType="centerInside"
-                app:srcCompat="@drawable/morecion" />
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
