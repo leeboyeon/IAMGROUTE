@@ -121,7 +121,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         }
 
         initPlaceListAdapter()
-        findArea()
+//        findArea()
         floatingButtonEvent()
         binding.travelplanBackIv.setOnClickListener {
             mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
@@ -594,13 +594,13 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         }
 
         travelPlanListRecyclerviewAdapter.filter.filter("1")
-        addPing(0)
+//        addPing(0)
         binding.travelplanTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 travelPlanListRecyclerviewAdapter.filter.filter((tab?.position?.plus(1)).toString())
                 curPos = tab!!.position
-                removePing()
-                addPing(tab!!.position)
+//                removePing()
+//                addPing(tab!!.position)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {

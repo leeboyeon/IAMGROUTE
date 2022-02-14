@@ -4,14 +4,19 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Description
@@ -26,7 +31,9 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import com.github.mikephil.charting.utils.MPPointF
 import com.github.mikephil.charting.utils.Utils
 import com.github.mikephil.charting.utils.ViewPortHandler
+import com.google.android.material.tabs.TabLayout
 import com.ssafy.groute.R
+import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentTypeByAccountBinding
 import com.ssafy.groute.src.dto.AccountChart
@@ -43,9 +50,11 @@ private const val TAG = "TypeByAccountFragment"
 class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(FragmentTypeByAccountBinding::bind,R.layout.fragment_type_by_account) {
     private lateinit var mainActivity: MainActivity
     private val planViewModel: PlanViewModel by activityViewModels()
+    private lateinit var accountTypeAdapter: AccountTypeAdapter
     private var planId = -1
     var sum = 0
     var cnt = 0
+    var curPos = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -59,13 +68,96 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
         Log.d(TAG, "onAttach: ${planId}")
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         runBlocking {
             planViewModel.getCategoryChart(planId)
+            planViewModel.getAccountList(planId)
         }
-
         initChart()
+        initTab()
+        initAdatper()
+
+
+    }
+    fun initItem(){
+
+    }
+    fun initTab(){
+        binding.accountCategoryTabLayout.addTab(binding.accountCategoryTabLayout.newTab().setText("쇼핑"))
+        binding.accountCategoryTabLayout.addTab(binding.accountCategoryTabLayout.newTab().setText("항공"))
+        binding.accountCategoryTabLayout.addTab(binding.accountCategoryTabLayout.newTab().setText("교통"))
+        binding.accountCategoryTabLayout.addTab(binding.accountCategoryTabLayout.newTab().setText("관광"))
+        binding.accountCategoryTabLayout.addTab(binding.accountCategoryTabLayout.newTab().setText("숙소"))
+        binding.accountCategoryTabLayout.addTab(binding.accountCategoryTabLayout.newTab().setText("기타"))
+
+        binding.accountCategoryTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                curPos = tab?.position!!
+                when(tab?.position){
+                    0->{
+                        accountTypeAdapter.filter.filter("")
+                    }
+                    1->{
+                        accountTypeAdapter.filter.filter("카페")
+                    }
+                    2->{
+                        accountTypeAdapter.filter.filter("식당")
+                    }
+                    3->{
+                        accountTypeAdapter.filter.filter("쇼핑")
+                    }
+                    4->{
+                        accountTypeAdapter.filter.filter("항공")
+                    }
+                    5->{
+                        accountTypeAdapter.filter.filter("교통")
+                    }
+                    6->{
+                        accountTypeAdapter.filter.filter("관광")
+                    }
+                    7->{
+                        accountTypeAdapter.filter.filter("숙소")
+                    }
+                    8->{
+                        accountTypeAdapter.filter.filter("기타")
+                    }
+                }
+
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+
+        })
+    }
+    fun initAdatper(){
+        planViewModel.accountAllList.observe(viewLifecycleOwner,{
+            accountTypeAdapter = AccountTypeAdapter(it)
+            binding.accountTypeRvList.apply {
+                layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+                adapter = accountTypeAdapter
+                adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+            }
+
+//            Glide.with(requireContext())
+//                .load("${ApplicationClass.IMGS_URL_PLACE}${it[curPos].img}")
+//                .circleCrop()
+//                .into(binding.accountTypeIvCate)
+
+            binding.accountTypeTvTotalSize.text = "총 ${accountTypeAdapter.filteredList.size}건"
+            var totalmoney = 0
+            for(i in 0..it.size-1){
+                if(it[i].categoryId == curPos){
+                    totalmoney += it[i].spentMoney
+                }
+            }
+            binding.accountTypeTvTotalMoney.text = totalmoney.toString()
+        })
     }
     fun sumPrice(){
         var price = planViewModel.accountPriceList.value
@@ -82,7 +174,7 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
         planViewModel.accountPriceList.observe(viewLifecycleOwner, Observer {
             with(binding.accountChart) {
                 this.renderer = CustomPieChartRenderer(this, 10f)
-                setExtraOffsets(20f, 30f, 20f, 20f)
+                setExtraOffsets(20f, 20f, 20f, 20f)
 
                 //dataSet
                 val yValues:ArrayList<PieEntry> = ArrayList()
@@ -145,7 +237,7 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
                     isUsingSliceColorAsValueLineColor = true
                     yValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
                     xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
-                    valueTextSize = 16f
+                    valueTextSize = 14f
                     valueTypeface = Typeface.DEFAULT_BOLD
                     selectionShift = 3f
                 }
@@ -155,7 +247,7 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
                 isDrawHoleEnabled = true
                 holeRadius = 50f
                 setDrawCenterText(true)
-                setCenterTextSize(20f)
+                setCenterTextSize(14f)
                 setCenterTextTypeface(Typeface.DEFAULT_BOLD)
                 setCenterTextColor(Color.parseColor("#222222"))
                 centerText = "총금액\n ${CommonUtils.makeComma(sum)}"
@@ -183,7 +275,6 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
 
     }
     companion object {
-
         @JvmStatic
         fun newInstance(key: String, value:Int) =
             TypeByAccountFragment().apply {

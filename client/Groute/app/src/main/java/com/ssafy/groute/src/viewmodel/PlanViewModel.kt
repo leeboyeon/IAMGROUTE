@@ -53,6 +53,7 @@ class PlanViewModel : ViewModel() {
     private val  _accountCategoryListResponse = MutableLiveData<MutableList<AccountCategory>>()
     private val _sharedTravelListResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _bestPriorityResponse = MutableLiveData<MutableList<RouteDetail>>()
+    private val _accountAllListResponse = MutableLiveData<MutableList<Account>>()
     //    private val _routeResponse = MutableLiveData<MutableList<>>
 //    private val _routeDetailResponse = MutableLiveData<MutableList<>>
     val planBestList: LiveData<MutableList<UserPlan>>
@@ -99,6 +100,8 @@ class PlanViewModel : ViewModel() {
         get() = _accountPricceListResponse
     val bestPriorityList : LiveData<MutableList<RouteDetail>>
         get() = _bestPriorityResponse
+    val accountAllList :LiveData<MutableList<Account>>
+        get() = _accountAllListResponse
 
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planBestResponse.value = plan
@@ -131,7 +134,9 @@ class PlanViewModel : ViewModel() {
     fun setShareUserList(users: MutableList<User>) = viewModelScope.launch {
         _shareUserListResponse.value = users
     }
-
+    fun setAccountAllList(account: MutableList<Account>) = viewModelScope.launch {
+        _accountAllListResponse.value = account
+    }
 
     val livePlaceshopList = MutableLiveData<MutableList<Place>>().apply {
         value = placeShopResponse
@@ -643,6 +648,7 @@ class PlanViewModel : ViewModel() {
                 var accountlist = arrayListOf<Account>()
 
                 if (res != null) {
+                    setAccountAllList(res)
                     for (i in 0 until totalDate) {
                         for (j in 0..res.size - 1) {
                             if (res[j].day == i + 1) {
@@ -654,7 +660,6 @@ class PlanViewModel : ViewModel() {
                         accountlist = arrayListOf()
                         outlist.add(accounts)
                     }
-
                 }
 
                 Log.d(TAG, "getAccountList: ${outlist}")
