@@ -29,6 +29,7 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
     private lateinit var mainActivity: MainActivity
     private val planViewModel: PlanViewModel by activityViewModels()
     private var planId = -1
+    private var maxMember = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,20 +104,26 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
 
         var member = planViewModel.shareUserList.value!!.size
         dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text = member.toString()
+        maxMember = member
         var div = total/member
         dialogView.findViewById<TextView>(R.id.accountDia_tv_total).text = "1인, ${CommonUtils.makeComma(div)}"
 
         dialogView.findViewById<ImageButton>(R.id.accountDia_ibtn_minus).setOnClickListener {
-            if(member > 0){
-                dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text = member--.toString()
+            if(member > 1){
+                member -= 1
+                dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text = member.toString()
                 var div = total/dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text.toString().toInt()
                 dialogView.findViewById<TextView>(R.id.accountDia_tv_total).text = "1인, ${CommonUtils.makeComma(div)}"
             }
         }
         dialogView.findViewById<ImageButton>(R.id.accountDia_ibtn_plus).setOnClickListener {
-            dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text = member++.toString()
-            var div = total/dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text.toString().toInt()
-            dialogView.findViewById<TextView>(R.id.accountDia_tv_total).text = "1인, ${CommonUtils.makeComma(div)}"
+            if(member <= maxMember - 1) {
+                member += 1
+                dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text = member.toString()
+                var div = total / dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text.toString()
+                        .toInt()
+                dialogView.findViewById<TextView>(R.id.accountDia_tv_total).text = "1인, ${CommonUtils.makeComma(div)}"
+            }
         }
         dialog.show()
         dialogView.findViewById<ImageButton>(R.id.accountDia_ibtn_back).setOnClickListener {
