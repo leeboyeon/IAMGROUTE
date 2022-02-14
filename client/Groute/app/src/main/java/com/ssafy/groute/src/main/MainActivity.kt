@@ -275,12 +275,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 transaction.replace(R.id.frame_main_layout, SharePlanWriteFragment.newInstance(key1,value1))
             }
             19 -> {
-                transaction.replace(R.id.frame_main_layout, AccountFragment.newInstance(key1,value1))
-                    .addToBackStack(null)
+                if(fm.findFragmentByTag("AccountWriteFragment") != null) {
+                    fm.popBackStack("TO_ACCOUNTWRITE_TAG", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                } else {
+                    transaction.replace(R.id.frame_main_layout, AccountFragment.newInstance(key1, value1))
+                        .addToBackStack(null)
+                }
             }
             20->{
-                transaction.replace(R.id.frame_main_layout, AccountWriteFragment.newInstance(key1,value1))
-                    .addToBackStack(null)
+                transaction.replace(R.id.frame_main_layout, AccountWriteFragment.newInstance(key1,value1), "AccountWriteFragment")
+                    .addToBackStack("TO_ACCOUNTWRITE_TAG")
             }
             21->{
                 fm.popBackStack()
