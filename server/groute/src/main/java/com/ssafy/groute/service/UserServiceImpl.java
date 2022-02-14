@@ -128,9 +128,20 @@ public class UserServiceImpl implements UserService {
         return userMapper.selectEndedPlanYesterday();
     }
 
+
     @Override
-    public List<User> selectDayBeforeTravel(int day) throws Exception {
-        return userMapper.selectDayBeforeTravel(day);
+    public List<User> selectOneDayBeforeTravel() throws Exception {
+        return userMapper.selectOneDayBeforeTravel();
+    }
+
+    @Override
+    public List<User> selectThreeDayBeforeTravel() throws Exception {
+        return userMapper.selectThreeDayBeforeTravel();
+    }
+
+    @Override
+    public List<User> selectWeekBeforeTravel() throws Exception {
+        return userMapper.selectWeekBeforeTravel();
     }
 
 
