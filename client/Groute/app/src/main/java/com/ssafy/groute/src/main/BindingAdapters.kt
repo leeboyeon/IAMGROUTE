@@ -61,7 +61,7 @@ fun bindImageUser(imgView: ImageView, imgUrl: String?) {
 @BindingAdapter("imageUrlBoardPost")    // + PlaceReview
 fun bindImageBoardPost(imgView: ImageView, imgUrl: String?) {
 
-    if (imgUrl == "null" || imgUrl == null) {
+    if (imgUrl == "null" || imgUrl == null || imgUrl.isEmpty()) {
         imgView.visibility = View.GONE
     } else {
         imgView.visibility = View.VISIBLE

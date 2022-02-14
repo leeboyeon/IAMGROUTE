@@ -9,13 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.databinding.RecyclerviewRoutedetailReviewItemBinding
 import com.ssafy.groute.src.dto.PlanReview
 import com.ssafy.groute.src.dto.RouteDetail
+import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.dto.UserPlan
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.service.UserPlanService
@@ -25,44 +28,28 @@ import com.ssafy.groute.util.RetrofitCallback
 private const val TAG = "RouteDetailReviewAdapter"
 class RouteDetailReviewAdapter(var owner: LifecycleOwner, var context: Context) : RecyclerView.Adapter<RouteDetailReviewAdapter.RouteDetailReviewHolder>(){
     var list = mutableListOf<PlanReview>()
-    inner class RouteDetailReviewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val userImg = itemView.findViewById<ImageView>(R.id.routedetail_review_recycler_item_iv_userimg)
-        val userName = itemView.findViewById<TextView>(R.id.routedetail_review_recycler_item_tv_username)
-        val reviewImg = itemView.findViewById<ImageView>(R.id.routedetail_review_recycler_item_iv_reviewimg)
-        val rating = itemView.findViewById<RatingBar>(R.id.routedetail_review_recycler_item_rb_rating)
-        val content = itemView.findViewById<TextView>(R.id.routedetail_review_recycler_item_tv_content)
-        val more = itemView.findViewById<ImageButton>(R.id.routedetail_review_recycler_item_ib_more)
+    inner class RouteDetailReviewHolder(private val binding : RecyclerviewRoutedetailReviewItemBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        val more = binding.routeDetailReviewRecyclerItemIbMore
 
         fun bindInfo(data: PlanReview) {
             val userInfo = UserService().getUserInfo(data.userId)
             userInfo.observe(
                 owner, {
-                    Glide.with(itemView)
-                        .load("${ApplicationClass.IMGS_URL_USER}${it.img}")
-                        .circleCrop()
-                        .into(userImg)
-                    userName.text = it.nickname
+                    val user = User(it.id, it.nickname, it.img.toString())
+                    binding.user = user
                 }
             )
-            rating.rating = data.rate.toFloat()
-            if(data.img != null){
-                reviewImg.visibility = View.VISIBLE
-                Glide.with(itemView)
-                    .load("${ApplicationClass.IMGS_URL_PLACEREVIEW}${data.img}")
-                    .into(reviewImg)
-            }
-            if(data.img == null || data.img == ""){
-                reviewImg.visibility = View.GONE
-            }
-            content.text = data.content
+            binding.planReview = data
+            binding.executePendingBindings()
+
             more.isVisible = data.userId == ApplicationClass.sharedPreferencesUtil.getUser().id
 
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RouteDetailReviewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_routedetail_review_item, parent, false)
-        return RouteDetailReviewHolder(view)
+        return RouteDetailReviewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.recyclerview_routedetail_review_item, parent, false))
     }
 
     override fun onBindViewHolder(holder: RouteDetailReviewHolder, position: Int) {
