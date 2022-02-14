@@ -45,14 +45,13 @@
             android:id="@+id/recycler_bottom_sheet_plan_period"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:includeFontPadding="false"
             android:text="2022.02.09 - 2022.02.12"
             android:textColor="@color/black"
-            android:includeFontPadding="false"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="2dp"
             app:layout_constraintStart_toEndOf="@id/recycler_bottom_sheet_plan_img"
-            app:layout_constraintTop_toBottomOf="@id/recycler_bottom_sheet_plan_title"
-            />
+            app:layout_constraintTop_toBottomOf="@id/recycler_bottom_sheet_plan_title" />
 
         <ImageView
             android:id="@+id/recycler_bottom_sheet_plan_check_img"

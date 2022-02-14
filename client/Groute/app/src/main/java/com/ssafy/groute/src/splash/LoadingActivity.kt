@@ -8,7 +8,7 @@ import android.os.Handler
 import com.ssafy.groute.src.login.LoginActivity
 
 class LoadingActivity : BaseActivity<ActivityLoadingBinding>(ActivityLoadingBinding::inflate) {
-    private val SPLASH_TIME:Long = 6000
+    private val SPLASH_TIME:Long = 4000
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Handler().postDelayed({

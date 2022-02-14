@@ -68,7 +68,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/route_area_rv"
-                app:tabIndicatorColor="@color/main">
+                app:tabGravity="center"
+                app:tabIndicatorAnimationMode="elastic"
+                app:tabIndicatorColor="@color/main"
+                app:tabMode="scrollable">
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"

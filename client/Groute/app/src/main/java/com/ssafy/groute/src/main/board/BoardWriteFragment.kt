@@ -101,8 +101,9 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
         super.onViewCreated(view, savedInstanceState)
 
         // 게시글 작성인 경우(BoardDetailFragment에서 boardId가 넘어옴)
-        if(boardId == 1) {  // 질문 게시판
+        if(boardId == 1) {  // 자유 게시판
             binding.boardWriteLLPlaceSerach.visibility = View.GONE
+            binding.view15.visibility = View.GONE
         } else if(boardId == 2) {    // 질문 게시판
             binding.boardWriteLLPlaceSerach.visibility = View.VISIBLE
         }
