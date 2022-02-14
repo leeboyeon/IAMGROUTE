@@ -797,8 +797,8 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     fun showRouteSelectDialog(){
         routeRecomDialogAdapter = RouteRecomDialogAdapter(requireContext())
         routeSelectList.apply {
-            add(RouteRecom(lottie="oneday.json",typeName="장소 필터링",typeDescript="추가하신 장소를 포함한 일정을 추천해드립니다."))
-            add(RouteRecom(lottie="oneday.json",typeName="장소 제외 필터링",typeDescript="추가하신 장소를 제외한 일정을 추천해드립니다."))
+            add(RouteRecom(lottie="location.json",typeName="장소 필터링",typeDescript="추가하신 장소를 포함한 일정을 추천해드립니다."))
+            add(RouteRecom(lottie="semiauto.json",typeName="장소 제외 필터링",typeDescript="추가하신 장소를 제외한 일정을 추천해드립니다."))
             add(RouteRecom(lottie="allday.json",typeName="전체일정 추천",typeDescript="모든 일정을 \n 추천받으시고 싶으신가요?"))
 
             routeRecomDialogAdapter.list = routeSelectList

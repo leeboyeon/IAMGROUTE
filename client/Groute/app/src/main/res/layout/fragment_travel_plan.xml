@@ -213,7 +213,6 @@
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:text="길찾기"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
