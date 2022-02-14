@@ -180,6 +180,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/travelplan_mapview"
+            app:tabGravity="center"
+            app:tabIndicatorAnimationMode="elastic"
             app:tabMode="scrollable">
 
             <com.google.android.material.tabs.TabItem
