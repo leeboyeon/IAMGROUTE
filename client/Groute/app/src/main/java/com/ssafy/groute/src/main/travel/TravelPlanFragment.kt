@@ -163,7 +163,12 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             }
         }
         binding.travelPlanIbtnMemo.setOnClickListener {
-            initMemo()
+            var routes = planViewModel.routeList.value!!
+            if(routes[curPos].memo == null || routes[curPos].memo == ""){
+                showCustomToast("메모가 없습니다")
+            }else{
+                initMemo()
+            }
         }
         binding.findLocationBtn.setOnClickListener {
             var routeId = planViewModel.routeList.value?.get(curPos)?.id
@@ -173,7 +178,6 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         }
         binding.travelPlanBtnBestPriority.setOnClickListener {
             showBestPriorityDialog()
-//            var routeId = planViewModel.routeList.value?.get(curPos)?.id
         }
     }
     @RequiresApi(Build.VERSION_CODES.O)
@@ -392,9 +396,6 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     }
     fun initMemo(){
         var routes = planViewModel.routeList.value!!
-        if(routes[curPos].memo == null || routes[curPos].memo == ""){
-            showCustomToast("메모가 없습니다.")
-        }
         if(routes[curPos].memo != null){
             val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_show_memo,null)
             val dialog = Dialog(requireContext())
