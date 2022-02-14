@@ -15,4 +15,6 @@ public interface PlanReviewMapper {
     List<PlanReview> selectByUserId(String userId) throws Exception;
     List<PlanReview> selectByPlanId(int planId) throws Exception;
     void deletePlanReviewByUserId(String userId) throws Exception;
+    int selectAvgRateByPlanId(int planId) throws Exception;
+    int selectCntRateByPlanId(int planId) throws Exception;
 }

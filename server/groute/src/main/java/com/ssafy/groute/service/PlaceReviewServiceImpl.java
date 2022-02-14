@@ -6,6 +6,7 @@ import com.ssafy.groute.mapper.PlaceMapper;
 import com.ssafy.groute.mapper.PlaceReviewMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,14 +16,14 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
     PlaceReviewMapper placeReviewMapper;
     @Autowired
     PlaceMapper placeMapper;
+    @Transactional
     @Override
     public void insertPlaceReview(PlaceReview placeReview) throws Exception {
+        placeReviewMapper.insertPlaceReview(placeReview);
         Place place = placeMapper.selectPlace(placeReview.getPlaceId());
-        int cnt = placeReviewMapper.selectByPlaceId(place.getId()).size();
-        double rate = ((place.getRate()*cnt) + placeReview.getRate())/(cnt+1);
+        double rate = placeReviewMapper.selectAvgRateByPlaceId(placeReview.getPlaceId());
         place.setRate(rate);
         placeMapper.updatePlace(place);
-        placeReviewMapper.insertPlaceReview(placeReview);
     }
 
     @Override
@@ -35,18 +36,15 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
         return placeReviewMapper.selectAllPlaceReview();
     }
 
+    @Transactional
     @Override
     public void deletePlaceReview(int id) throws Exception {
         PlaceReview placeReview = selectPlaceReview(id);
         Place place = placeMapper.selectPlace(placeReview.getPlaceId());
-        int cnt = placeReviewMapper.selectByPlaceId(place.getId()).size();
-        double rate = 0;
-        if(cnt>1) {
-            rate = ((place.getRate() * cnt) - placeReview.getRate()) / (cnt - 1);
-        }
+        placeReviewMapper.deletePlaceReview(id);
+        double rate = placeReviewMapper.selectAvgRateByPlaceId(placeReview.getPlaceId());
         place.setRate(rate);
         placeMapper.updatePlace(place);
-        placeReviewMapper.deletePlaceReview(id);
     }
 
     @Override

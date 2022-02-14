@@ -17,12 +17,11 @@ public class PlanReviewServiceImpl implements PlanReviewService {
     UserPlanMapper userPlanMapper;
     @Override
     public void insertPlanReview(PlanReview planReview) throws Exception {
+        planReviewMapper.insertPlanReview(planReview);
         UserPlan userPlan = userPlanMapper.selectUserPlan(planReview.getPlanId());
-        int cnt = planReviewMapper.selectByPlanId(userPlan.getId()).size();
-        double rate = ((userPlan.getRate()*cnt) + planReview.getRate())/(cnt+1);
+        double rate = planReviewMapper.selectAvgRateByPlanId(planReview.getPlanId());
         userPlan.setRate(rate);
         userPlanMapper.updateUserPlan(userPlan);
-        planReviewMapper.insertPlanReview(planReview);
     }
 
     @Override
@@ -39,14 +38,10 @@ public class PlanReviewServiceImpl implements PlanReviewService {
     public void deletePlanReview(int id) throws Exception {
         PlanReview planReview = selectPlanReview(id);
         UserPlan userPlan = userPlanMapper.selectUserPlan(planReview.getPlanId());
-        int cnt = planReviewMapper.selectByPlanId(userPlan.getId()).size();
-        double rate = 0;
-        if(cnt>1) {
-            rate = ((userPlan.getRate() * cnt) - planReview.getRate()) / (cnt - 1);
-        }
+        planReviewMapper.deletePlanReview(id);
+        double rate = planReviewMapper.selectAvgRateByPlanId(planReview.getPlanId());
         userPlan.setRate(rate);
         userPlanMapper.updateUserPlan(userPlan);
-        planReviewMapper.deletePlanReview(id);
     }
 
     @Override
