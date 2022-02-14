@@ -312,9 +312,23 @@ public class UserPlanController {
 
     @ApiOperation(value = "updatePlanReview",notes = "planReview 수정")
     @PutMapping(value = "/review/update")
-    public ResponseEntity<?> updatePlanReview(@RequestBody PlanReview planReview) throws Exception{
+//    public ResponseEntity<?> updatePlanReview(@RequestBody PlanReview planReview) throws Exception{
+    public ResponseEntity<?> updatePlanReview(@RequestPart(value = "review") String req, @RequestPart(value = "img", required = false) MultipartFile img) throws Exception {
 
         try {
+            PlanReview planReview = mapper.readValue(req, PlanReview.class);
+            String beforeImg = planReview.getImg();
+
+            if (img != null) {
+                String fileName = storageService.store(img, uploadPath + "/review/plan");
+                planReview.setImg("review/plan/" + fileName);
+            } else {
+                if(beforeImg.isEmpty() || beforeImg.equals("null")) {
+                    planReview.setImg(null);
+                } else {
+                    planReview.setImg(beforeImg);
+                }
+            }
             planReviewService.updatePlanReview(planReview);
         }catch (Exception e){
             e.printStackTrace();
