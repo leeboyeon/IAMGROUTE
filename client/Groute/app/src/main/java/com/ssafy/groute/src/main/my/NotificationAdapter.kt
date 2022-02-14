@@ -4,10 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.ssafy.groute.R
+import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.RecyclerviewNotificationListItemBinding
 import com.ssafy.groute.src.dto.Notification
 import com.ssafy.groute.src.viewmodel.NotificationViewModel
@@ -17,6 +21,18 @@ class NotificationAdapter(var notificationList : MutableList<Notification>, var 
     inner class NotificationHolder(private val binding: RecyclerviewNotificationListItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindInfo(data : Notification) {
             binding.notification = data
+            if(data.category.equals("User")){
+                Glide.with(itemView)
+                    .load(R.drawable.usernoti)
+                    .circleCrop()
+                    .into(itemView.findViewById<ImageView>(R.id.noti_icon))
+            }
+            else{
+                Glide.with(itemView)
+                    .load(R.drawable.eventnoti)
+                    .circleCrop()
+                    .into(itemView.findViewById<ImageView>(R.id.noti_icon))
+            }
             binding.executePendingBindings()
         }
     }

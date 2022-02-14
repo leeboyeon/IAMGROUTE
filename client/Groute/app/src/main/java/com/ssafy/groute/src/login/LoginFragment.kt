@@ -87,7 +87,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
         binding.loginTvInfoFindChangeTv.setOnClickListener {
             loginActivity.openFragment(4)
         }
-
         // 구글 계정으로 로그인 버튼 클릭
         binding.loginIbtnGoogle.setOnClickListener {
             initAuth()
@@ -153,6 +152,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
                 Toast.makeText(context,"로그인 되었습니다.", Toast.LENGTH_SHORT).show()
                 ApplicationClass.sharedPreferencesUtil.addUser(user)
                 loginActivity.openFragment(1)
+                if(binding.autocheck.isChecked){
+                    Log.d(TAG, "onSuccess: 자동로그인확인")
+                    loginActivity.autoLoginCheck(true)
+                }
             }else{
                 Toast.makeText(context,"ID 또는 패스워드를 확인해 주세요.", Toast.LENGTH_SHORT).show()
             }

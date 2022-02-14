@@ -14,6 +14,7 @@ import com.ssafy.groute.src.main.MainActivity
 
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::inflate) {
+    var auto = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -21,20 +22,18 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
          * #S06P12D109-11
          * Auto Login -> 로그인 했던 상태이면 login 화면 pass
          */
-        //로그인 된 상태인지 확인
-        val user = sharedPreferencesUtil.getUser()
-
-//        //로그인 상태 확인. id가 있다면 로그인 된 상태 -> 가장 첫 화면은 홈 화면의 Fragment로 지정
-
-        if (user.id != ""){
-            openFragment(1)
-        } else {
-
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.frame_login_layout, LoginFragment())
-                .commit()
+        Log.d("Login", "onCreate: ${auto}")
+        if(auto){
+            val user = sharedPreferencesUtil.getUser()
+            //로그인 상태 확인. id가 있다면 로그인 된 상태 -> 가장 첫 화면은 홈 화면의 Fragment로 지정
+            if (user.id != ""){
+                openFragment(1)
+            } else {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frame_login_layout, LoginFragment())
+                    .commit()
+            }
         }
-
 
         // kakao 플랫폼 키 해시 등록
 //        var keyHash = Utility.getKeyHash(this)
@@ -60,5 +59,12 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
                 .addToBackStack(null)
         }
         transaction.commit()
+    }
+    fun autoLoginCheck(flag:Boolean){
+        if(flag){
+            Log.d("LoginActivity", "autoLoginCheck: 체크됨")
+            auto = true
+
+        }
     }
 }

@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,7 +37,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
     private lateinit var mainActivity: MainActivity
     private val notiViewModel : NotificationViewModel by activityViewModels()
     private lateinit var notiAdapter : NotificationAdapter
-
+    var curPos = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -57,7 +59,14 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
         }
 
         binding.notiViewModel = notiViewModel
-
+        initSpinner()
+        initAdapter(0)
+        binding.notiBack.setOnClickListener {
+            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
+            mainActivity.supportFragmentManager.popBackStack()
+        }
+    }
+    fun initAdapter(flag:Int){
         notiViewModel.notificationList.observe(viewLifecycleOwner, {
             binding.notiRvNotiList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             notiAdapter = NotificationAdapter(it, viewLifecycleOwner, notiViewModel)
@@ -71,9 +80,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
                 }
             })
         })
-
     }
-
     inner class NotiDeleteCallback() : RetrofitCallback<Boolean> {
         override fun onError(t: Throwable) {
             Log.d(TAG, "onError: ")
@@ -92,7 +99,34 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
             Log.d(TAG, "onFailure: ")
         }
     }
+    fun initSpinner(){
+        val spinnerArray = arrayListOf<String>()
+        spinnerArray.apply {
+            add("전체")
+            add("이벤트")
+            add("개인")
+        }
+        var spinner = binding.notiSpinnerCategory
+        var spinnerAdapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,spinnerArray)
+        spinner.adapter = spinnerAdapter
 
+        spinner.setSelection(0,false)
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                curPos = spinner.selectedItemPosition
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
+    }
 
 
     companion object {

@@ -43,12 +43,4 @@ class MagazineAdapter : RecyclerView.Adapter<MagazineAdapter.MagazineHolder>(){
     override fun getItemCount(): Int {
         return list.size
     }
-
-    interface ItemClickListener{
-        fun onClick(view: View, position: Int, name: String)
-    }
-    private lateinit var itemClickListener : ItemClickListener
-    fun setItemClickListener(itemClickListener: ItemClickListener){
-        this.itemClickListener = itemClickListener
-    }
 }
