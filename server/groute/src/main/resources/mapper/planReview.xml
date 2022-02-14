@@ -65,4 +65,12 @@
         delete from planreview
         where user_id = #{userId}
     </delete>
+
+    <select id="selectAvgRateByPlanId" parameterType="int" resultType="int">
+        select avg(rate) rate from planreview where userplan_id = #{planId}
+    </select>
+
+    <select id="selectCntRateByPlanId" parameterType="int" resultType="int">
+        select count(rate) count from planreview where userplan_id = #{planId}
+    </select>
 </mapper>

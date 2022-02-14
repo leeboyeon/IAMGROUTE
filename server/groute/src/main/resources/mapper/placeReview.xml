@@ -75,4 +75,12 @@
         delete from placereiview
         where user_id = #{userId}
     </delete>
+
+    <select id="selectAvgRateByPlaceId" parameterType="int" resultType="int">
+        select avg(rate) rate from placereview where place_id = #{placeId}
+    </select>
+
+    <select id="selectCntRateByPlaceId" parameterType="int" resultType="int">
+        select count(rate) count from placereview where place_id = #{placeId}
+    </select>
 </mapper>
