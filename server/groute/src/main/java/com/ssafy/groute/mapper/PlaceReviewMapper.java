@@ -16,6 +16,6 @@ public interface PlaceReviewMapper {
     List<PlaceReview> selectByPlaceId(int planId) throws Exception;
     void deletePlaceReviewByUserId(String userId) throws Exception;
     void deletePlaceReviewByPlaceId(int placeId) throws Exception;
-    int selectAvgRateByPlaceId(int placeId) throws Exception;
+    double selectAvgRateByPlaceId(int placeId) throws Exception;
     int selectCntRateByPlaceId(int placeId) throws Exception;
 }

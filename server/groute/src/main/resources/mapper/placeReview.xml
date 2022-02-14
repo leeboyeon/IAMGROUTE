@@ -76,7 +76,7 @@
         where user_id = #{userId}
     </delete>
 
-    <select id="selectAvgRateByPlaceId" parameterType="int" resultType="int">
+    <select id="selectAvgRateByPlaceId" parameterType="int" resultType="double">
         select avg(rate) rate from placereview where place_id = #{placeId}
     </select>
 
