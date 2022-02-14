@@ -20,4 +20,8 @@ public interface UserMapper {
     void updatePassword(User user) throws Exception;
     List<User> selectAllUserList() throws Exception;
     List<User> selectEndedPlanYesterday() throws Exception;
+    List<User> selectOneDayBeforeTravel() throws Exception;
+    List<User> selectThreeDayBeforeTravel() throws Exception;
+    List<User> selectWeekBeforeTravel() throws Exception;
+
 }
