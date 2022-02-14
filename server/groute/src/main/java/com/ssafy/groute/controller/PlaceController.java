@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.groute.dto.Place;
 import com.ssafy.groute.dto.PlaceLike;
 import com.ssafy.groute.dto.PlaceReview;
-import com.ssafy.groute.dto.board.BoardDetail;
 import com.ssafy.groute.service.PlaceReviewService;
 import com.ssafy.groute.service.PlaceService;
 import com.ssafy.groute.service.StorageService;
@@ -177,8 +176,8 @@ public class PlaceController {
 //            logger.debug("boardDetail : {}", req.getContent());
 
             if (img != null) {
-                String fileName = storageService.store(img, uploadPath + "/review");
-                req.setImg("review/" + fileName);
+                String fileName = storageService.store(img, uploadPath + "/review/place");
+                req.setImg("review/place/" + fileName);
             } else {
                 req.setImg(null);
             }
@@ -242,8 +241,8 @@ public class PlaceController {
 //            logger.debug("PlaceReview : {}", placeReview.getImg());
 
             if (img != null) {
-                String fileName = storageService.store(img, uploadPath + "/review");
-                placeReview.setImg("review/" + fileName);
+                String fileName = storageService.store(img, uploadPath + "/review/place");
+                placeReview.setImg("review/place/" + fileName);
             } else {    // img == null
                 if(beforeImg.isEmpty() || beforeImg.equals("null")){
                     placeReview.setImg(null);
