@@ -56,8 +56,24 @@ class AccountWriteFragment : BaseFragment<FragmentAccountWriteBinding>(FragmentA
         initAdapter()
 
         binding.accountWriteBtnSuccess.setOnClickListener {
-            insertAccount()
+            if(isAvailInsertAccount()) {
+                insertAccount()
+            }
         }
+
+        binding.accountWriteBtnBack.setOnClickListener {
+            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
+            mainActivity.supportFragmentManager.popBackStack()
+        }
+    }
+    fun isAvailInsertAccount() : Boolean{
+        val des = binding.accountWriteEtContent.text.toString()
+        val money = binding.accountWriteEtMoney.text.toString()
+        if(position == -1 || category == -1 || des == "" || money == "") {
+            showCustomToast("모든 정보를 입력해주세요.")
+            return false
+        }
+        return true
     }
     fun insertAccount(){
         var account = Account(

@@ -72,6 +72,11 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
         binding.accountBtnDiv.setOnClickListener {
             showDivDialog()
         }
+
+        binding.accountIbtnBack.setOnClickListener {
+            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
+            mainActivity.supportFragmentManager.popBackStack()
+        }
     }
     @SuppressLint("SetTextI18n")
     fun showDivDialog(){
