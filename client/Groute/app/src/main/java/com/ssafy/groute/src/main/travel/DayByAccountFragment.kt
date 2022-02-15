@@ -3,35 +3,27 @@ package com.ssafy.groute.src.main.travel
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentDayByAccountBinding
-import com.ssafy.groute.src.dto.Account
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import kotlinx.coroutines.runBlocking
 
-private const val TAG = "DayByAccountFragment"
 class DayByAccountFragment : BaseFragment<FragmentDayByAccountBinding>(FragmentDayByAccountBinding::bind, R.layout.fragment_day_by_account) {
     private lateinit var mainActivity: MainActivity
-    private var planId = -1
     private val planViewModel: PlanViewModel by activityViewModels()
-    private lateinit var accountInAdapter:AccountInAdapter
     private lateinit var accountOutAdapter : AccountOutAdapter
+    private var planId = -1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideBottomNav(true)
-
     }
 
     override fun onAttach(context: Context) {
@@ -40,7 +32,6 @@ class DayByAccountFragment : BaseFragment<FragmentDayByAccountBinding>(FragmentD
         arguments?.let {
             planId = it.getInt("planId",-1)
         }
-        Log.d(TAG, "onAttach: ${planId}")
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -52,19 +43,16 @@ class DayByAccountFragment : BaseFragment<FragmentDayByAccountBinding>(FragmentD
 
         initOutAdapter()
     }
-    fun initOutAdapter(){
-        Log.d(TAG, "initOutAdapter: outout")
-        Log.d(TAG, "initOutAdapter: ${planViewModel.accountList.value}")
+
+    private fun initOutAdapter(){
         planViewModel.accountList.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "initOutAdapter: ${it}")
             accountOutAdapter = AccountOutAdapter(requireContext())
             accountOutAdapter.list = it
-            Log.d(TAG, "initOutAdapter: ${it}")
             binding.accountRvList.layoutManager = LinearLayoutManager(requireContext())
             binding.accountRvList.adapter = accountOutAdapter
         })
-
     }
+
     companion object {
         fun newInstance(key: String, value: Int) =
             DayByAccountFragment().apply {

@@ -7,8 +7,11 @@
 
     <data>
         <variable
-            name="viewModel"
-            type="com.ssafy.groute.src.viewmodel.PlanViewModel" />
+            name="userPlan"
+            type="com.ssafy.groute.src.dto.UserPlan" />
+        <variable
+            name="tmp"
+            type="com.ssafy.groute.src.dto.BestRoute" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -36,8 +39,8 @@
             android:id="@+id/item_route_iv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/defaultimg"
             android:scaleType="fitXY"
+            app:imageUrlPlaceRoundCorner="@{tmp.img}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +68,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:textColor="@color/black"
-        android:text="[서울]"
+        android:text="[제주도]"
         android:includeFontPadding="false"
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@+id/item_route_layout_iv"
@@ -80,7 +83,7 @@
         android:layout_marginEnd="10dp"
         android:maxLines="1"
         android:ellipsize="end"
-        android:text="경복궁, 당일치기 겨울여행"
+        android:text="@{userPlan.title}"
         android:textColor="@color/black"
         android:includeFontPadding="false"
         android:textSize="16sp"
@@ -111,7 +114,7 @@
             android:id="@+id/item_route_comment_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
+            android:text="@{String.valueOf(userPlan.reviewCnt)}"
             android:textColor="@color/black"
             android:layout_marginStart="10dp"
             app:layout_constraintLeft_toRightOf="@id/item_route_comment_iv"
@@ -137,7 +140,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
-        android:text="0"
+        android:text="@{String.valueOf(userPlan.heartCnt)}"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="@id/item_route_like_iv"
         app:layout_constraintLeft_toRightOf="@id/item_route_like_iv"

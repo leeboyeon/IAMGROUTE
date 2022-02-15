@@ -27,4 +27,5 @@ public interface UserPlanService {
     List<UserPlan> selectTUserPlan() throws Exception;
     List<UserPlan> selectAllPlanByUserId(String userId) throws Exception;
     List<RouteDetail> shortestPath(int start, int end, int routeId) throws Exception;
+    void deleteRouteDetail(int routeDetailId) throws Exception;
 }

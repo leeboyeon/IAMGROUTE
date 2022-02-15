@@ -1,6 +1,5 @@
 package com.ssafy.groute.src.main.route
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,20 +11,16 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.RecyclerviewRoutedetailReviewItemBinding
 import com.ssafy.groute.src.dto.PlanReview
-import com.ssafy.groute.src.dto.RouteDetail
 import com.ssafy.groute.src.dto.User
-import com.ssafy.groute.src.dto.UserPlan
-import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.util.RetrofitCallback
 
-private const val TAG = "RouteDetailReviewAdapter"
+private const val TAG = "RDReviewAdapter"
 class RouteDetailReviewAdapter(var owner: LifecycleOwner, var context: Context) : RecyclerView.Adapter<RouteDetailReviewAdapter.RouteDetailReviewHolder>(){
     var list = mutableListOf<PlanReview>()
     inner class RouteDetailReviewHolder(private val binding : RecyclerviewRoutedetailReviewItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -99,7 +94,6 @@ class RouteDetailReviewAdapter(var owner: LifecycleOwner, var context: Context) 
         this.modifyClickListener = modifyClickListener
     }
 
-    @SuppressLint("LongLogTag")
     inner class DeleteCallback(var position: Int): RetrofitCallback<Boolean> {
 
         override fun onError(t: Throwable) {

@@ -18,6 +18,7 @@ class AccountTypeAdapter(var list:MutableList<Account>,var planViewModel: PlanVi
     var filteredList = list
     var unfilteredList = list
     var size = -1
+
     inner class AccountTypeHolder(private var binding:RecyclerviewAccountBycategorybyListItemBinding):RecyclerView.ViewHolder(binding.root){
         fun bindInfo(data:Account){
             binding.account = data

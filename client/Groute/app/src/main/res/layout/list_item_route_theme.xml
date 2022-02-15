@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cardview"
-    android:backgroundTint="@color/white"
-    android:paddingStart="2dp"
-    android:paddingEnd="2dp">
+<layout>
+        <data>
+                <variable
+                    name="theme"
+                    type="com.ssafy.groute.src.dto.Theme" />
+        </data>
 
-        <TextView
-            android:id="@+id/routeDetailThemeTxt"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:includeFontPadding="false"
-            android:text="#힐링"/>
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cardview"
+            android:backgroundTint="@color/white"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp">
 
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/routeDetailThemeTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:includeFontPadding="false"
+                    android:text="@{theme.name}"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

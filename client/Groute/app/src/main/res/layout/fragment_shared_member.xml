@@ -43,12 +43,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/shareMember_btn_back" />
 
             <TextView
-                android:id="@+id/textView29"
+                android:id="@+id/sharedMember_tv_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:text="@{@string/convert_shareUser_title(viewModel.shareUserList.size())}"
+                android:text="@{@string/convert_shareUser_title(viewModel.shareUserList.size)}"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -64,7 +64,7 @@
                 android:text="함께 여행할 친구와 가족을 초대해보세요. \n 함께 여행일정을 공유할 수 있습니다"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView29" />
+                app:layout_constraintTop_toBottomOf="@+id/sharedMember_tv_size" />
 
             <LinearLayout
                 android:id="@+id/shareMember_btn_layout"

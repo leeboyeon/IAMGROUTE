@@ -3,9 +3,7 @@ package com.ssafy.groute.src.main.travel
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,16 +11,11 @@ import com.ssafy.groute.R
 import com.ssafy.groute.databinding.RecyclerviewAccountOutBinding
 import com.ssafy.groute.src.dto.Account
 import com.ssafy.groute.src.dto.AccountOut
-import com.ssafy.groute.src.dto.Route
-import com.ssafy.groute.src.dto.UserPlan
-import java.text.SimpleDateFormat
 
-private const val TAG = "AccountOutAdapter"
 class AccountOutAdapter(val context:Context) : RecyclerView.Adapter<AccountOutAdapter.AccountOutHolder>(){
     var list = mutableListOf<AccountOut>()
     inner class AccountOutHolder(private var binding:RecyclerviewAccountOutBinding):RecyclerView.ViewHolder(binding.root){
-        fun bindInfo(data: AccountOut){
-            Log.d(TAG, "bindInfo: ${data}")
+        fun bindInfo(data: AccountOut) {
             binding.dto = data
             if(data.account.isEmpty()){
                 var nulllist = mutableListOf<Account>()
@@ -32,7 +25,6 @@ class AccountOutAdapter(val context:Context) : RecyclerView.Adapter<AccountOutAd
                 binding.accountInRv.adapter = AccountInAdapter(context,
                     data.account as MutableList<Account>
                 )
-                Log.d(TAG, "bindInfo: ${data.account}")
             }
             binding.accountInRv.layoutManager = LinearLayoutManager(context)
             binding.executePendingBindings()
@@ -51,7 +43,6 @@ class AccountOutAdapter(val context:Context) : RecyclerView.Adapter<AccountOutAd
     }
 
     override fun getItemCount(): Int {
-        Log.d(TAG, "getItemCount: ${list.size}")
         return list.size
     }
 }

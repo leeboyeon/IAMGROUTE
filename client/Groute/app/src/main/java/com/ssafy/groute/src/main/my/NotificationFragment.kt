@@ -1,16 +1,11 @@
 package com.ssafy.groute.src.main.my
 
-import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.groute.R
@@ -19,12 +14,9 @@ import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentNotificationBinding
 import com.ssafy.groute.src.dto.Notification
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.main.board.BoardAdapter
 import com.ssafy.groute.src.service.NotificationService
-import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.src.viewmodel.NotificationViewModel
 import com.ssafy.groute.util.RetrofitCallback
-import com.ssafy.groute.util.RetrofitUtil
 import kotlinx.coroutines.runBlocking
 
 private const val TAG = "NotificationF_Groute"
@@ -57,7 +49,8 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
             mainActivity.supportFragmentManager.popBackStack()
         }
     }
-    fun initAdapter(type:Int){
+
+    private fun initAdapter(type:Int){
         notiViewModel.notificationList.observe(viewLifecycleOwner, {
             Log.d(TAG, "initAdapter: ${it}")
             binding.notiRvNotiList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -69,7 +62,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
                         eventList.add(it[i])
                     }
                 }
-                notiAdapter = NotificationAdapter(eventList,viewLifecycleOwner,notiViewModel)
+                notiAdapter = NotificationAdapter(eventList)
             }
             if(type == 2){
                 //user
@@ -79,10 +72,10 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
                         userList.add(it[i])
                     }
                 }
-                notiAdapter = NotificationAdapter(userList,viewLifecycleOwner,notiViewModel)
+                notiAdapter = NotificationAdapter(userList)
             }
             if(type == 0){
-                notiAdapter = NotificationAdapter(it, viewLifecycleOwner, notiViewModel)
+                notiAdapter = NotificationAdapter(it)
             }
             notiAdapter.setHasStableIds(true)
             binding.notiRvNotiList.adapter = notiAdapter
@@ -94,6 +87,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
             })
         })
     }
+
     inner class NotiDeleteCallback() : RetrofitCallback<Boolean> {
         override fun onError(t: Throwable) {
             Log.d(TAG, "onError: ")
@@ -115,11 +109,13 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
 
     private fun initSpinner(){
         val spinnerArray = arrayListOf<String>()
+
         spinnerArray.apply {
             add("전체")
             add("이벤트")
             add("개인")
         }
+
         val spinner = binding.notiSpinnerCategory
         val spinnerAdapter = ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, spinnerArray)
         spinner.adapter = spinnerAdapter

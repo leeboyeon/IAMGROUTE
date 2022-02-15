@@ -4,10 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
@@ -18,14 +15,13 @@ import com.ssafy.groute.R
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentAccountWriteBinding
 import com.ssafy.groute.src.dto.Account
-import com.ssafy.groute.src.dto.AccountCategory
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.AccountService
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
 
-private const val TAG = "AccountWriteFragment"
+private const val TAG = "AccountWriteF_Groute"
 class AccountWriteFragment : BaseFragment<FragmentAccountWriteBinding>(FragmentAccountWriteBinding::bind,R.layout.fragment_account_write) {
     private lateinit var mainActivity: MainActivity
     private val planViewModel: PlanViewModel by activityViewModels()
@@ -34,24 +30,27 @@ class AccountWriteFragment : BaseFragment<FragmentAccountWriteBinding>(FragmentA
     var category = -1
     var type = ""
     lateinit var accountCategoryAdapter: AccountCategoryAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideBottomNav(true)
     }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
         arguments?.let {
             planId = it.getInt("planId",-1)
         }
-        Log.d(TAG, "onAttach: ${planId}")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         runBlocking {
             planViewModel.getCategory()
         }
+
         initItems()
         initAdapter()
 
@@ -66,7 +65,8 @@ class AccountWriteFragment : BaseFragment<FragmentAccountWriteBinding>(FragmentA
             mainActivity.supportFragmentManager.popBackStack()
         }
     }
-    fun isAvailInsertAccount() : Boolean{
+
+    private fun isAvailInsertAccount() : Boolean {
         val des = binding.accountWriteEtContent.text.toString()
         val money = binding.accountWriteEtMoney.text.toString()
         if(position == -1 || category == -1 || des == "" || money == "") {
@@ -75,8 +75,9 @@ class AccountWriteFragment : BaseFragment<FragmentAccountWriteBinding>(FragmentA
         }
         return true
     }
-    fun insertAccount(){
-        var account = Account(
+
+    private fun insertAccount(){
+        val account = Account(
             categoryId = category,
             day = position,
             description = binding.accountWriteEtContent.text.toString(),
@@ -84,6 +85,7 @@ class AccountWriteFragment : BaseFragment<FragmentAccountWriteBinding>(FragmentA
             type = type,
             userPlanId = planId,
         )
+
         AccountService().insertAccount(account, object: RetrofitCallback<Boolean> {
             override fun onError(t: Throwable) {
                 Log.d(TAG, "onError: ")
@@ -100,9 +102,10 @@ class AccountWriteFragment : BaseFragment<FragmentAccountWriteBinding>(FragmentA
 
         })
     }
-    fun initAdapter(){
-        var list = planViewModel.accountCategoryList.value
-        var selectList = arrayListOf<Int>()
+
+    private fun initAdapter(){
+        val list = planViewModel.accountCategoryList.value
+        val selectList = arrayListOf<Int>()
         for(i in 0 until list!!.size) {
             selectList.add(0)
         }
@@ -119,15 +122,13 @@ class AccountWriteFragment : BaseFragment<FragmentAccountWriteBinding>(FragmentA
                 accountCategoryAdapter.notifyDataSetChanged()
                 category = id
             }
-
         })
-
     }
-    fun initItems(){
+
+    private fun initItems(){
         val userplan = planViewModel.planList.value!!
-        Log.d(TAG, "initItems: ${userplan.totalDate}")
         for(i in 1..userplan.totalDate){
-            var chip = Chip(requireContext())
+            val chip = Chip(requireContext())
             chip.text = "DAY ${i}"
             chip.isCheckable = true
             binding.daychipgroup.addView(chip)
@@ -137,8 +138,8 @@ class AccountWriteFragment : BaseFragment<FragmentAccountWriteBinding>(FragmentA
             }
         }
 
-        val cashs = arrayOf("신용카드","현금")
-        var spinnerAdapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,cashs)
+        val cashs = arrayOf("신용카드", "현금")
+        val spinnerAdapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,cashs)
         binding.cashspinner.adapter = spinnerAdapter
         binding.cashspinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(
@@ -159,6 +160,7 @@ class AccountWriteFragment : BaseFragment<FragmentAccountWriteBinding>(FragmentA
 
         }
     }
+
     companion object {
 
         @JvmStatic

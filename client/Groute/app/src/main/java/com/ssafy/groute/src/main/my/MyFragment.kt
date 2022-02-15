@@ -38,7 +38,6 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
     private lateinit var mainActivity:MainActivity
     private lateinit var userInfoResponse: UserInfoResponse
     private lateinit var intent: Intent
-//    private val viewModel: MyViewModel by activityViewModels()
     private val mainViewModel : MainViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -165,7 +164,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
 
         override fun onSuccess(code: Int, responseData: Boolean) {
             if(responseData){
-                Toast.makeText(requireContext(),"탈퇴되었습니다.",Toast.LENGTH_SHORT).show()
+                showCustomToast("탈퇴되었습니다.")
                 mainActivity.moveFragment(10)
             }
         }

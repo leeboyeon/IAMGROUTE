@@ -261,7 +261,6 @@ class PlanViewModel : ViewModel() {
             val res = response.body()
             if(response.code() == 200){
                 if(res!=null){
-                    Log.d(TAG, "getPlanById: ${res}")
                     if(flag == 1) { // RouteDetail에서 사용자의 현재 짜고있는 일정 보여줄때
                         setUserPlan(res.userPlan)
                     } else if(flag == 2){ // 기존에 쓰던거
@@ -500,7 +499,6 @@ class PlanViewModel : ViewModel() {
             }
 
         }
-        Log.d(TAG, "getThemeById: $list")
         setTheme(list)
 
     }
@@ -512,7 +510,6 @@ class PlanViewModel : ViewModel() {
             if (response.code() == 200) {
                 if (res != null) {
                     setTheme(res)
-//                    Log.d(TAG, "onResponse: $res")
                 }
 
             } else {
@@ -530,7 +527,6 @@ class PlanViewModel : ViewModel() {
                 if (res != null) {
                     setUserPlanList(res)
                     setUserPlanByDayList(res)
-                    Log.d(TAG, "onResponse: $res")
                 }
 
             } else {
@@ -600,7 +596,6 @@ class PlanViewModel : ViewModel() {
             if (response.code() == 200) {
                 if (res != null) {
                     setPlanLikeList(res)
-                    Log.d(TAG, "getPlanLikeList: ${res}")
                 } else {
                     Log.d(TAG, "getPlanLikeList: ISNULL")
                 }

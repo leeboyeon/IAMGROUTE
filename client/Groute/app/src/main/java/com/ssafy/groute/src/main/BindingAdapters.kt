@@ -1,14 +1,15 @@
 package com.ssafy.groute.src.main
 
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
@@ -16,7 +17,6 @@ import com.ssafy.groute.src.dto.*
 import com.ssafy.groute.src.main.board.*
 import com.ssafy.groute.src.main.home.PlaceFilterAdapter
 import com.ssafy.groute.src.main.home.ReviewAdapter
-import com.ssafy.groute.src.main.my.MyTravel
 import com.ssafy.groute.src.main.my.MyTravelAdapter
 import com.ssafy.groute.src.main.my.NotificationAdapter
 import com.ssafy.groute.src.main.my.SharedTravelAdapter
@@ -25,7 +25,6 @@ import com.ssafy.groute.src.main.travel.PlaceShopAdapter
 import com.ssafy.groute.src.main.travel.SharedMemberAdapter
 import com.ssafy.groute.src.main.travel.TravelPlanListRecyclerviewAdapter
 import com.ssafy.groute.util.CommonUtils
-import java.text.DecimalFormat
 
 @BindingAdapter("imageUrlArea")
 fun bindImageArea(imgView: ImageView, imgUrl: String?) {
@@ -36,9 +35,30 @@ fun bindImageArea(imgView: ImageView, imgUrl: String?) {
 
 @BindingAdapter("imageUrlPlace")
 fun bindImagePlace(imgView: ImageView, imgUrl: String?) {
-    Glide.with(imgView.context)
-        .load("${ApplicationClass.IMGS_URL_PLACE}${imgUrl}")
-        .into(imgView)
+    if (imgUrl == "null" || imgUrl == null || imgUrl.isEmpty()) {
+        Glide.with(imgView.context)
+            .load(R.drawable.defaultimg)
+            .into(imgView)
+    } else {
+        Glide.with(imgView.context)
+            .load("${ApplicationClass.IMGS_URL_PLACE}${imgUrl}")
+            .into(imgView)
+    }
+}
+
+@BindingAdapter("imageUrlBestPlace")
+fun bindImageBestPlace(imgView: ImageView, imgUrl: String?) {
+    if (imgUrl == "null" || imgUrl == null || imgUrl.isEmpty()) {
+        Glide.with(imgView.context)
+            .load(R.drawable.defaultimg)
+            .circleCrop()
+            .into(imgView)
+    } else {
+        Glide.with(imgView.context)
+            .load("${ApplicationClass.IMGS_URL_PLACE}${imgUrl}")
+            .circleCrop()
+            .into(imgView)
+    }
 }
 
 @BindingAdapter("imageUrlUser")
@@ -76,6 +96,22 @@ fun bindImageAccount(imgView:ImageView, imgUrl:String?){
     Glide.with(imgView.context)
         .load("${ApplicationClass.IMGS_URL}${imgUrl}")
         .into(imgView)
+}
+
+@BindingAdapter("imageUrlPlaceRoundCorner")
+fun bindPlaceImgRoundCorner(imgView: ImageView, imgUrl: String?) {
+    val option2 = MultiTransformation(CenterCrop(), RoundedCorners(10))
+    if (imgUrl == "null" || imgUrl == null || imgUrl.isEmpty()) {
+        Glide.with(imgView.context)
+            .load(R.drawable.defaultimg)
+            .apply(RequestOptions.bitmapTransform(option2))
+            .into(imgView)
+    } else {
+        Glide.with(imgView.context)
+            .load("${ApplicationClass.IMGS_URL_PLACE}${imgUrl}")
+            .apply(RequestOptions.bitmapTransform(option2))
+            .into(imgView)
+    }
 }
 
 @BindingAdapter("makeComma")
@@ -192,14 +228,26 @@ fun bindPlanReviewRecyclerView(recyclerView:RecyclerView, data: List<PlanReview>
 @BindingAdapter("planThemeListData")
 fun bindThemeReviewRecyclerView(recyclerView:RecyclerView, data: List<Theme>?){
     var adapter = recyclerView.adapter as RouteDetailThemeAdapter
-    adapter.setThemeList(data)
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as RouteDetailThemeAdapter
+    }
+    adapter.list = data as MutableList<Theme>
     adapter.notifyDataSetChanged()
 }
 
 @BindingAdapter("routeListData")
 fun bindRouteListRecyclerView(recyclerView: RecyclerView, data: List<UserPlan>?) {
     var adapter = recyclerView.adapter as RouteListRecyclerviewAdapter
-    adapter.setRouteList(data)
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as RouteListRecyclerviewAdapter
+    }
+    adapter.list = data as MutableList<UserPlan>
     adapter.notifyDataSetChanged()
 }
 
@@ -209,6 +257,7 @@ fun bindRouteThemeRecyclerView(recyclerView: RecyclerView, data: List<Theme>?) {
     adapter.setThemeList(data)
     adapter.notifyDataSetChanged()
 }
+
 @BindingAdapter("shareMamberListData")
 fun bindShareMemberRecyclerView(recyclerView: RecyclerView, data:List<User>?){
     var adapter = recyclerView.adapter as SharedMemberAdapter
@@ -302,24 +351,25 @@ fun bindCommentNestedRecyclerView(recyclerView: RecyclerView, data: List<Comment
     }
     adapter.commentList = data as MutableList<Comment>
     adapter.notifyDataSetChanged()
-//    adapter.submitList(data)
-//    adapter.setCommentNestedList(data)
-//    adapter.notifyDataSetChanged()
 }
 
-
-//@BindingAdapter("listNestedData")
-//fun bindtNestedRecyclerView(recyclerView: RecyclerView, data: List<Comment>?) {
-//    val adapter = recyclerView.adapter as CommentNestedAdapter
-//    adapter.setCommentNestedList(data)
-//    adapter.notifyDataSetChanged()
-//}
 
 @BindingAdapter("sharedPlanListData")
 fun bindSharedPlanListRecyclerView(recyclerView: RecyclerView, data: List<UserPlan>?) {
     var adapter = recyclerView.adapter as SharedTravelAdapter
-    adapter.setShareTravelList(data)
+    if (recyclerView.adapter == null) {
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    } else {
+        adapter = recyclerView.adapter as SharedTravelAdapter
+    }
+    adapter.list = data as MutableList<UserPlan>
     adapter.notifyDataSetChanged()
+}
+
+@BindingAdapter("sharedPlanTitle")
+fun bindSharedPlanTitle(view: TextView, title: String?) {
+    view.text = "[제주도] $title"
 }
 
 @BindingAdapter("notificationListData")

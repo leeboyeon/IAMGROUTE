@@ -3,13 +3,10 @@ package com.ssafy.groute.src.main.route
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
-import com.bumptech.glide.Glide
 import com.ssafy.groute.R
-import com.ssafy.groute.databinding.ActivityCommentNestedBinding.bind
 import com.ssafy.groute.databinding.RecyclerviewRouteAreaitemBinding
 import com.ssafy.groute.src.dto.Area
 

@@ -1,8 +1,6 @@
 package com.ssafy.groute.src.main.home
 
 import android.animation.ValueAnimator
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,32 +9,21 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.ListAdapter
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
-import com.bumptech.glide.Glide
 import com.ssafy.groute.R
-import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.RecyclerviewAreaPlaceItemBinding
 import com.ssafy.groute.src.dto.Place
-import com.ssafy.groute.src.response.PlaceLikeResponse
-import com.ssafy.groute.src.service.PlaceService
-import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.util.CommonUtils
-import kotlinx.coroutines.runBlocking
 
-private const val TAG = "AreaFilterAdapter"
 class PlaceFilterAdapter(var placeList : MutableList<Place>, var likeList: LiveData<MutableList<Place>>, var owner: LifecycleOwner) : ListAdapter<Place, PlaceFilterAdapter.PlaceViewHolder>(DiffCallback),
     Filterable {
     private var unFilteredList = placeList
     private var filteredList = placeList
-    private lateinit var placeViewModel:PlaceViewModel
-    private var heartHashMap:HashMap<Int,Boolean> = HashMap()
     override fun getFilter(): Filter {
         return object  : Filter(){
             override fun performFiltering(constraint: CharSequence?): FilterResults {
@@ -80,11 +67,9 @@ class PlaceFilterAdapter(var placeList : MutableList<Place>, var likeList: LiveD
             heart.setOnClickListener {
                 heartClickListener.onClick(it,position,filteredList[position].id)
                 if(heart.progress > 0F){
-                    Log.d(TAG, "onBindViewHolder: 이미 클릭됨")
                     heart.pauseAnimation()
                     heart.progress = 0F
                 }else{
-                    Log.d(TAG, "onBindViewHolder: 클릭할거얌")
                     val animator = ValueAnimator.ofFloat(0f,0.5f).setDuration(500)
                     animator.addUpdateListener { animation ->
                         heart.progress = animation.animatedValue as Float
@@ -105,23 +90,17 @@ class PlaceFilterAdapter(var placeList : MutableList<Place>, var likeList: LiveD
      * 사용할 때 필요
      */
     override fun getItemId(position: Int): Long {
-        return filteredList.get(position).id.toLong()
-    //        return position.toLong()
+        return filteredList[position].id.toLong()
     }
 
     inner class PlaceViewHolder(private var binding:RecyclerviewAreaPlaceItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindInfo(place : Place, position: Int){
             binding.place = place
             binding.executePendingBindings()
-//            Glide.with(itemView)
-//                .load("${ApplicationClass.IMGS_URL_PLACE}${data.img}")
-//                .into(itemView.findViewById(R.id.areaPlace_iv_img))
-//
-            itemView.findViewById<TextView>(R.id.areaPlace_tv_name).text =CommonUtils.getFormattedTitle(place.name)
+
+            itemView.findViewById<TextView>(R.id.areaPlace_tv_name).text = CommonUtils.getFormattedTitle(place.name)
             itemView.findViewById<TextView>(R.id.areaPlace_tv_content).text = CommonUtils.getFormattedDescription(place.description)
             itemView.findViewById<LottieAnimationView>(R.id.area_abtn_heart).progress = 0F
-////            itemView.findViewById<TextView>(R.id.areaPlace_rb_rating) = data.review
-//            itemView.findViewById<TextView>(R.id.areaPlace_tv_info).text = data.type
 
             val itemAtPosition1 = filteredList[position]
             val actualPosition1 = placeList.indexOf(itemAtPosition1)

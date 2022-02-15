@@ -13,17 +13,8 @@ class MemberAdapter : RecyclerView.Adapter<MemberAdapter.MemberHolder>(){
     var list = mutableListOf<User>()
     inner class MemberHolder(private val binding: RecyclerviewRouteAddmemberItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bindInfo(data : User){
-//            val user = User(data.id, data.name, data.img)
             binding.user = data
             binding.executePendingBindings()
-//            val img = itemView.findViewById<ImageView>(R.id.route_iv_memberimg)
-//            img.clipToOutline = true
-//            Glide.with(itemView)
-//                .load(data.img)
-//                .into(img)
-//
-//            itemView.findViewById<TextView>(R.id.route_tv_membername).text = data.name
-
         }
 
     }

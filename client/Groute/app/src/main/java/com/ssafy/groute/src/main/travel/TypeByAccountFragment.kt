@@ -82,7 +82,9 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
             planViewModel.getCategoryChart(planId)
             planViewModel.getAccountList(planId)
             planViewModel.getCategory()
+
         }
+
         initChart()
         initTab()
         initAdatper()
@@ -178,7 +180,7 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
                 adapter = accountTypeAdapter
                 adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
-
+            planViewModel.setCategoryByAccount(it.size)
         })
     }
     fun sumPrice(){

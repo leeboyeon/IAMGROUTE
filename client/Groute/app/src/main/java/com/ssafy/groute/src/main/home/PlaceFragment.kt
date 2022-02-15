@@ -1,6 +1,5 @@
 package com.ssafy.groute.src.main.home
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -14,7 +13,6 @@ import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentAreaBinding
-import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.response.PlaceLikeResponse
 import com.ssafy.groute.src.service.PlaceService
@@ -30,33 +28,33 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
     private lateinit var mainActivity : MainActivity
     private lateinit var areaFilterAdapter : PlaceFilterAdapter
     private var planId = -1
-//    val lists = listOf<Places>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
     }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
         arguments?.let {
             planId = it.getInt("planId",-1)
-            Log.d(TAG, "onAttach: ${planId}")
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.viewModel = placeViewModel
+
         // place List 데이터 서버로부터 받아오기
         runBlocking {
             placeViewModel.getPlaceList()
         }
         runBlocking {
             placeViewModel.getPlaceLikeList(ApplicationClass.sharedPreferencesUtil.getUser().id)
-            Log.d(TAG, "onViewCreated_Id: ${ApplicationClass.sharedPreferencesUtil.getUser().id}")
-            Log.d(TAG, "onViewCreated: ${placeViewModel.placeLikeList.value}")
         }
+
         initTab()
         initAdapter()
     }
@@ -74,8 +72,7 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
             })
             areaFilterAdapter.setHeartClickListener(object :PlaceFilterAdapter.HeartClickListener{
                 override fun onClick(view: View, position: Int, placeId: Int) {
-                    Log.d(TAG, "onClick: CLICKED")
-                    var placeLike = PlaceLikeResponse(
+                    val placeLike = PlaceLikeResponse(
                         0,
                         ApplicationClass.sharedPreferencesUtil.getUser().id,
                         placeId
@@ -90,15 +87,12 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
                 adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
         })
-
-
     }
 
     /**
      * Place TabLayout initialize & filtering
      */
     private fun initTab(){
-//        initAdapter()
         binding.areaTabLayout.addTab(binding.areaTabLayout.newTab().setText("문화"))
         binding.areaTabLayout.addTab(binding.areaTabLayout.newTab().setText("맛집"))
         binding.areaTabLayout.addTab(binding.areaTabLayout.newTab().setText("숙박"))
@@ -135,8 +129,7 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
         })
     }
 
-    fun placeGoLike(placeLike: PlaceLikeResponse){
-        Log.d(TAG, "placeGoLike: $placeLike")
+    private fun placeGoLike(placeLike: PlaceLikeResponse){
         PlaceService().placeLike(placeLike, object :RetrofitCallback<Boolean> {
             override fun onError(t: Throwable) {
                 Log.d(TAG, "onError: ")
@@ -153,7 +146,6 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
             }
 
         })
-
     }
 
 
@@ -163,7 +155,6 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
             PlaceFragment().apply {
                 arguments = Bundle().apply {
                     putInt(key, value)
-//                    putInt(key1,value1)
                 }
             }
     }

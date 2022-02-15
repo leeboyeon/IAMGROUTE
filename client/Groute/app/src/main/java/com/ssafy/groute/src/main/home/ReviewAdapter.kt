@@ -16,9 +16,7 @@ import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.RecyclerviewPlacereviewItemBinding
 import com.ssafy.groute.src.dto.PlaceReview
-import com.ssafy.groute.src.dto.Review
 import com.ssafy.groute.src.dto.User
-import com.ssafy.groute.src.main.board.BoardRecyclerviewAdapter
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.src.viewmodel.PlaceViewModel
@@ -40,17 +38,7 @@ class ReviewAdapter(var owner: LifecycleOwner, var context:Context, val placeVie
             )
             binding.placeReview = data
             binding.executePendingBindings()
-//            itemView.findViewById<RatingBar>(R.id.review_rb_rating).rating = data.rate.toFloat()
-//            if(data.img != null){
-//                itemView.findViewById<ImageView>(R.id.review_iv_reviewimg).visibility = View.VISIBLE
-//                Glide.with(itemView)
-//                    .load("${ApplicationClass.IMGS_URL}${data.img}")
-//                    .into(itemView.findViewById(R.id.review_iv_reviewimg))
-//            }
-//            if(data.img == null || data.img == ""){
-//                itemView.findViewById<ImageView>(R.id.review_iv_reviewimg).visibility = View.GONE
-//            }
-//            itemView.findViewById<TextView>(R.id.review_tv_content).text = data.content
+
             more.isVisible = data.userId == ApplicationClass.sharedPreferencesUtil.getUser().id
 
         }
@@ -58,17 +46,13 @@ class ReviewAdapter(var owner: LifecycleOwner, var context:Context, val placeVie
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReviewHolder {
-//        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_placereview_item,parent,false)
-//        return ReviewHolder(view)
         return ReviewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.recyclerview_placereview_item, parent, false))
     }
 
     override fun onBindViewHolder(holder: ReviewHolder, position: Int) {
         holder.apply {
             bindInfo(list[position])
-//            itemView.setOnClickListener {
-//                itemClickListener.onClick(it, position, list[position].id)
-//            }
+
             more.setOnClickListener{
                 val popup = PopupMenu(context,more)
                 MenuInflater(context).inflate(R.menu.board_menu_item,popup.menu)
@@ -96,11 +80,11 @@ class ReviewAdapter(var owner: LifecycleOwner, var context:Context, val placeVie
         return list.size
     }
 
-    interface ItemClickListener{
+    interface ItemClickListener {
         fun onClick(view: View, position: Int, id:Int)
     }
     private lateinit var itemClickListener : ItemClickListener
-    fun setItemClickListener(itemClickListener: ItemClickListener){
+    fun setItemClickListener(itemClickListener: ItemClickListener) {
         this.itemClickListener = itemClickListener
     }
 
@@ -108,7 +92,7 @@ class ReviewAdapter(var owner: LifecycleOwner, var context:Context, val placeVie
         fun onClick(position: Int)
     }
     private lateinit var modifyClickListener: ModifyClickListener
-    fun setModifyClickListener(modifyClickListener: ModifyClickListener){
+    fun setModifyClickListener(modifyClickListener: ModifyClickListener) {
         this.modifyClickListener = modifyClickListener
     }
 

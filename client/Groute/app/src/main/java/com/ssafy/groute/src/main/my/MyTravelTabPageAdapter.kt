@@ -5,6 +5,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class MyTravelTabPageAdapter(fragmnet: Fragment) : FragmentStateAdapter(fragmnet) {
     var fragments : ArrayList<Fragment> = ArrayList()
+
     override fun getItemCount(): Int {
         return fragments.size
     }

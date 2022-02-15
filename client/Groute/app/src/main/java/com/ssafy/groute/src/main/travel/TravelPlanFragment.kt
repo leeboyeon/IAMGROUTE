@@ -6,7 +6,6 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -27,33 +26,22 @@ import com.ssafy.groute.src.viewmodel.PlanViewModel
 import kotlinx.coroutines.runBlocking
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.google.android.material.datepicker.*
 import com.google.android.material.tabs.TabLayout
-import com.kakao.kakaonavi.Destination.newBuilder
 import com.kakao.kakaonavi.KakaoNaviParams
 import com.kakao.kakaonavi.KakaoNaviService
-import com.kakao.kakaonavi.Location.newBuilder
 import com.kakao.kakaonavi.NaviOptions
 import com.kakao.kakaonavi.options.CoordType
 import com.kakao.kakaonavi.options.RpOption
 import com.kakao.kakaonavi.options.VehicleType
 
-import com.kakao.sdk.navi.model.Location
-import com.kakao.sdk.navi.model.NaviOption
 import com.ssafy.groute.config.ApplicationClass
-import com.ssafy.groute.src.dto.Place
-import com.ssafy.groute.src.dto.Route
-import com.ssafy.groute.src.dto.RouteDetail
-import com.ssafy.groute.src.dto.UserPlan
 import com.ssafy.groute.src.service.RouteDetailService
 import com.ssafy.groute.src.service.RouteService
-import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.viewmodel.HomeViewModel
 import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.util.RetrofitCallback
@@ -61,9 +49,9 @@ import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapPolyline
 import net.daum.mf.map.api.MapView
-import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.kakao.kakaonavi.Destination
+import com.ssafy.groute.src.dto.*
 import java.lang.Exception
 
 
@@ -134,7 +122,16 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 share.progress = animation.animatedValue as Float
             }
             animator.start()
-            mainActivity.moveFragment(18,"planId",planId)
+
+            if(planViewModel.planList.value!!.userId == ApplicationClass.sharedPreferencesUtil.getUser().id){
+                mainActivity.moveFragment(18,"planId",planId)
+
+            }else{
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("일정에 대한 생성자만 공유하실 수 있습니다.")
+                    .setNeutralButton("확인",null)
+                builder.show()
+            }
         }
         binding.travelplanCalcBtn.setOnClickListener {
             val money = binding.travelplanCalcIv
@@ -153,14 +150,8 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 member.progress = animation.animatedValue as Float
             }
             animator.start()
-            if(planViewModel.planList.value!!.userId == ApplicationClass.sharedPreferencesUtil.getUser().id){
-                mainActivity.moveFragment(17,"planId",planId)
-            }else{
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setTitle("일정에 대한 생성자만 공유하실 수 있습니다.")
-                    .setNeutralButton("확인",null)
-                builder.show()
-            }
+
+            mainActivity.moveFragment(17,"planId",planId)
         }
         binding.travelPlanIbtnMemo.setOnClickListener {
             var routes = planViewModel.routeList.value!!

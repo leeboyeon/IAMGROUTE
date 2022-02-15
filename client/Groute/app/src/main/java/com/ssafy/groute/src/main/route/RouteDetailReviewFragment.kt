@@ -1,14 +1,11 @@
 package com.ssafy.groute.src.main.route
 
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,16 +14,16 @@ import androidx.lifecycle.Observer
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentRouteDetailReviewBinding
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.main.home.ReviewAdapter
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import kotlinx.coroutines.runBlocking
 
-private const val TAG = "RouteDetailReviewFragment"
+//private const val TAG = "RouteDetailReviewF"
 class RouteDetailReviewFragment : BaseFragment<FragmentRouteDetailReviewBinding>(FragmentRouteDetailReviewBinding::bind, R.layout.fragment_route_detail_review) {
     private lateinit var mainActivity: MainActivity
     private lateinit var routeDetailReviewAdapter: RouteDetailReviewAdapter
     private val planViewModel: PlanViewModel by activityViewModels()
     private var planId = -1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -41,21 +38,23 @@ class RouteDetailReviewFragment : BaseFragment<FragmentRouteDetailReviewBinding>
         mainActivity = context as MainActivity
     }
 
-    @SuppressLint("LongLogTag")
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = planViewModel
+
         runBlocking {
             planViewModel.getPlanReviewListbyId(planId)
         }
-        Log.d(TAG, "onViewCreated: ")
+
         initAdapter()
+
         binding.routedetailReviewIbtnWrite.setOnClickListener{
             mainActivity.moveFragment(14, "planId", planId)
         }
     }
 
-    fun initAdapter(){
+    private fun initAdapter(){
         planViewModel.planReviewList.observe(viewLifecycleOwner, Observer {
             routeDetailReviewAdapter = RouteDetailReviewAdapter(viewLifecycleOwner, requireContext())
             routeDetailReviewAdapter.list = it
@@ -82,8 +81,8 @@ class RouteDetailReviewFragment : BaseFragment<FragmentRouteDetailReviewBinding>
         fun newInstance(key: String, value: Int) =
             RouteDetailReviewFragment().apply {
                 arguments = Bundle().apply {
-                putInt(key, value)
-            }
+                    putInt(key, value)
+                }
             }
     }
 }
