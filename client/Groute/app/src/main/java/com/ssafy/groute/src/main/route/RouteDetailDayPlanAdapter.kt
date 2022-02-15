@@ -1,48 +1,29 @@
 package com.ssafy.groute.src.main.route
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.MultiTransformation
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.ssafy.groute.R
-import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.databinding.RecyclerviewRouteDetailDayPerItemItemBinding
 import com.ssafy.groute.src.dto.RouteDetail
 
 class RouteDetailDayPlanAdapter() : RecyclerView.Adapter<RouteDetailDayPlanAdapter.RouteDetailDayPlanHolder>(){
     var list = mutableListOf<RouteDetail>()
-    inner class RouteDetailDayPlanHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val placeName = itemView.findViewById<TextView>(R.id.routedetail_recycler_item_item_day_placeName_tv)
-        val placeType = itemView.findViewById<TextView>(R.id.routedetail_recycler_item_item_day_placeType_tv)
-        val placeImg = itemView.findViewById<ImageView>(R.id.routedetail_recycler_item_item_day_place_img)
-        val placeBtn = itemView.findViewById<ImageView>(R.id.routedetail_recycler_item_item_day_place_iv)
+    inner class RouteDetailDayPlanHolder(private val binding: RecyclerviewRouteDetailDayPerItemItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindInfo(data : RouteDetail, position: Int) {
-            var option2 = MultiTransformation(CenterCrop(), RoundedCorners(10))
+            binding.routeDetail = data
+            binding.executePendingBindings()
 
-            Glide.with(itemView)
-                .load("${ApplicationClass.IMGS_URL_PLACE}${data.place.img}")
-                .apply(RequestOptions.bitmapTransform(option2))
-                .into(placeImg)
-            placeName.text = "${data.place.name}"
-            placeType.text = "${data.place.type}"
-
-            placeBtn.setOnClickListener{
+            binding.routedetailRecyclerItemItemDayPlaceIv.setOnClickListener{
                 itemClickListener.onClick(position, data.placeId)
             }
-
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RouteDetailDayPlanHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_route_detail_day_per_item_item, parent, false)
-        return RouteDetailDayPlanHolder(view)
+        return RouteDetailDayPlanHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.recyclerview_route_detail_day_per_item_item, parent, false))
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -52,7 +33,6 @@ class RouteDetailDayPlanAdapter() : RecyclerView.Adapter<RouteDetailDayPlanAdapt
     override fun onBindViewHolder(holder: RouteDetailDayPlanHolder, position: Int) {
         holder.apply {
             bindInfo(list[position], position)
-
         }
     }
 

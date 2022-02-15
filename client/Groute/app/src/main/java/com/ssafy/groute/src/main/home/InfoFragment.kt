@@ -8,38 +8,29 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import com.bumptech.glide.Glide
 import com.kakao.kakaonavi.options.CoordType
 import com.kakao.kakaonavi.options.RpOption
 import com.kakao.kakaonavi.options.VehicleType
 import com.ssafy.groute.R
-import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentInfoBinding
-import com.ssafy.groute.src.dto.Place
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.viewmodel.PlaceViewModel
-import com.ssafy.groute.src.viewmodel.PlanViewModel
-import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 import java.lang.Exception
-import java.util.*
 import com.kakao.kakaonavi.Destination
 import com.kakao.kakaonavi.KakaoNaviService
 import com.kakao.kakaonavi.KakaoNaviParams
 import com.kakao.kakaonavi.NaviOptions
 
 
-private const val TAG = "InfoFragment"
 class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind, R.layout.fragment_info) {
     private var placeId = -1
     private lateinit var mainActivity : MainActivity
     private val placeViewModel: PlaceViewModel by activityViewModels()
-    private val planViewModel: PlanViewModel by activityViewModels()
     var lat:Double = 0.0
     var lng:Double = 0.0
 
@@ -52,7 +43,6 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
         mainActivity = context as MainActivity
         arguments?.let {
             placeId = it.getInt("placeId", -1)
-            Log.d(TAG, "onAttach: $placeId")
         }
     }
 
@@ -62,7 +52,7 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
         runBlocking {
             placeViewModel.getPlace(placeId)
         }
-//        createMap()
+        createMap()
         binding.infoBtnFindRoad.setOnClickListener {
             placeViewModel.place.observe(viewLifecycleOwner, Observer {
                 lat = it.lat.toDouble()
@@ -72,14 +62,14 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
 
         }
     }
-    fun createMap(){
+
+    private fun createMap(){
         val mapView = MapView(requireContext())
         val marker = MapPOIItem()
         placeViewModel.place.observe(viewLifecycleOwner, Observer {
 
             binding.kakaoMapView.addView(mapView)
             val mapPoint = MapPoint.mapPointWithGeoCoord(it.lat.toDouble(),it.lng.toDouble())
-            Log.d(TAG, "createMap: $lat  // $lng")
             mapView.setMapCenterPoint(mapPoint, true)
             mapView.setZoomLevel(3, true)
             marker.itemName = binding.placeDetailTvBigContent.text.toString()
@@ -92,7 +82,7 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
 
     }
 
-    fun goNavi(destLat:Double, destLng:Double){
+    private fun goNavi(destLat:Double, destLng:Double){
         try {
             if (KakaoNaviService.isKakaoNaviInstalled(requireContext())) {
 
@@ -115,7 +105,6 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
                     Intent.ACTION_VIEW,
                     Uri.parse("https://play.google.com/store/apps/details?id=com.locnall.KimGiSa")
                 )
-                Log.e(TAG, "showNaviKakao: 네비 설치 안됨")
                 startActivity(intent)
             }
         } catch (e: Exception) {
@@ -124,7 +113,6 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
     }
 
     companion object {
-
         @JvmStatic
         fun newInstance(key:String, value:Int) =
             InfoFragment().apply {

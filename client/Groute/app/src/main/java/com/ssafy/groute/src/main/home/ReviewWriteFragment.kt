@@ -1,7 +1,6 @@
 package com.ssafy.groute.src.main.home
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,13 +12,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -35,15 +28,11 @@ import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentReviewWriteBinding
-import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.dto.PlaceReview
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.main.board.BoardWriteFragment
-import com.ssafy.groute.src.service.BoardService
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.util.RetrofitCallback
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -94,7 +83,6 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
         arguments?.let {
             placeId = it.getInt("placeId",-1)
             reviewId = it.getInt("reviewId",-1)
-            Log.d(TAG, "onAttach_ReviewId: ${reviewId}")
         }
     }
 
@@ -106,7 +94,6 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
         runBlocking {
             placeViewModel.getPlace(placeId)
             placeViewModel.getReviewById(reviewId)
-            Log.d(TAG, "onViewCreated: ${placeViewModel.getReviewById(reviewId)}")
         }
 
         // 뒤로가기
@@ -120,7 +107,6 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
             var beforeImg = ""
             binding.reviewWriteBtnWrite.text = "리뷰 수정"
             placeViewModel.review.observe(viewLifecycleOwner, Observer {
-                Log.d(TAG, "onViewCreated: ${it.toString()}")
                 binding.reviewWriteTietContent.setText(it.content)
                 binding.ratingBar.rating = it.rate.toFloat()
                 if(!(it.img == "null" || it.img == "" || it.img == null)) {
@@ -155,15 +141,9 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
             .subscribe {
                 textLengthChk(it.toString())
             }
-//        binding.reviewWriteTietContent.setQueryDebounce {
-//            Log.d(TAG, "initTiedListener: $it")
-//            textLengthChk(it)
-////            getQueryResult(it)
-//        }
     }
 
     private fun textLengthChk(str : String) : Boolean {
-        Log.d(TAG, "textLengthChk: $str")
         if(str.trim().isEmpty()){
             binding.reviewWriteTilContent.error = "Required Field"
             binding.reviewWriteTietContent.requestFocus()
@@ -195,7 +175,6 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
                     beforeImg,
                     reviewId
                 )
-    //            modifyReview(review)
                 setData(review, false)  // false -> review 수정
             } else {
                 showCustomToast("글자 수를 확인해 주세요")
@@ -217,7 +196,6 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
                     rate,
                     ""
                 )
-    //            insertReview(review)
                 setData(review, true)
             } else {
                 showCustomToast("글자 수를 확인해 주세요.")
@@ -234,7 +212,6 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
             Log.d(TAG, "onCreate: $imgUri")
         } else {
             imgUri = Uri.EMPTY
-            Log.d(TAG, "fileUri 초기화  $imgUri")
         }
 
         binding.reviewWriteButtonAddImg.setOnClickListener {
@@ -356,7 +333,6 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
         // 게시글 작성 + 사진 선택한 경우
         else {
             val file = File(imgUri.path!!)
-            Log.d(TAG, "filePath: ${file.path} \n${file.name}\n${fileExtension}")
 
             var inputStream: InputStream? = null
             try {
@@ -391,9 +367,6 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
             if (responseData == true) {
                 mainActivity.moveFragment(4, "placeId", placeId)
                 showCustomToast("리뷰 작성 성공")
-//                runBlocking {
-//                    placeViewModel.getPlaceReviewListbyId(placeId)
-//                }
             }
         }
 
@@ -413,9 +386,6 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
             if (responseData == true) {
                 mainActivity.moveFragment(4,"placeId",placeId)
                 showCustomToast("리뷰 수정 성공")
-//                runBlocking {
-//                    placeViewModel.getPlaceReviewListbyId(placeId)
-//                }
             }
         }
 

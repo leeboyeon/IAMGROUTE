@@ -5,32 +5,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.databinding.RecyclerviewSharedmemberListItemBinding
 import com.ssafy.groute.src.dto.User
 
 class SharedMemberAdapter : RecyclerView.Adapter<SharedMemberAdapter.SharedMemberHolder>(){
     var list = arrayListOf<User>()
-    inner class SharedMemberHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class SharedMemberHolder(private val binding: RecyclerviewSharedmemberListItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindInfo(data : User){
-            itemView.findViewById<TextView>(R.id.sharedMember_tv_userNick).text = data.nickname
-            if(data.img == null || data.img==""){
-                Glide.with(itemView)
-                    .load(R.drawable.defaultimg)
-                    .circleCrop()
-                    .into(itemView.findViewById<ImageView>(R.id.sharedMember_iv_userImg))
-
-            }
-            if(data.img!=null){
-                Glide.with(itemView)
-                    .load("${ApplicationClass.IMGS_URL_USER}${data.img}")
-                    .circleCrop()
-                    .into(itemView.findViewById<ImageView>(R.id.sharedMember_iv_userImg))
-
-            }
-
+            binding.user = data
+            binding.executePendingBindings()
         }
     }
 
@@ -38,14 +27,13 @@ class SharedMemberAdapter : RecyclerView.Adapter<SharedMemberAdapter.SharedMembe
         parent: ViewGroup,
         viewType: Int
     ): SharedMemberAdapter.SharedMemberHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_sharedmember_list_item,parent,false)
-        return SharedMemberHolder(view)
+        return SharedMemberHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.recyclerview_sharedmember_list_item, parent, false))
     }
 
     override fun onBindViewHolder(holder: SharedMemberAdapter.SharedMemberHolder, position: Int) {
         holder.apply {
             bindInfo(list[position])
-            itemView.setOnClickListener {
+            itemView.findViewById<ConstraintLayout>(R.id.sharedMember_cLayout).setOnClickListener {
                 itemClickListener.onClick(it,position,list[position].id)
             }
         }
@@ -54,10 +42,13 @@ class SharedMemberAdapter : RecyclerView.Adapter<SharedMemberAdapter.SharedMembe
     override fun getItemCount(): Int {
         return list.size
     }
+
     interface ItemClickListener{
         fun onClick(view:View, position: Int,id:String)
     }
+
     private lateinit var itemClickListener : ItemClickListener
+
     fun setItemClickListener(itemClickListener: ItemClickListener){
         this.itemClickListener = itemClickListener
     }

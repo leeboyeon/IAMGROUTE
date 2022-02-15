@@ -4,10 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
@@ -35,7 +32,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
-private const val TAG = "PlaceTmpFragment"
+private const val TAG = "PlaceTmpFragment_Groute"
 class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpBinding::bind, R.layout.fragment_place_tmp) {
     private lateinit var mainActivity: MainActivity
     private val planViewModel: PlanViewModel by activityViewModels()
@@ -49,6 +46,7 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
         mainActivity.hideBottomNav(true)
         mainActivity.hideMainProfileBar(true)
     }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
@@ -56,6 +54,7 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
             planId = it.getInt("planId",-1)
         }
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         runBlocking {
@@ -69,7 +68,8 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
             mainActivity.supportFragmentManager.popBackStack()
         }
     }
-    fun initTabLayout(){
+
+    private fun initTabLayout(){
         binding.emptyLayout.isVisible = false
         binding.placeTmpAddCartBtn.isVisible = false
 
@@ -92,7 +92,6 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
                             if(it.isEmpty()){
                                 binding.emptyLayout.isVisible = true
                                 binding.placeTmpAddCartBtn.isVisible = false
-//                                binding.emptyLayout.visibility = View.VISIBLE
                                 initAdapter(it)
                                 binding.goShopBtn.setOnClickListener {
                                     mainActivity.moveFragment(3, "planId", planId)
@@ -100,7 +99,6 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
                             }else{
                                 binding.emptyLayout.isVisible = false
                                 binding.placeTmpAddCartBtn.isVisible = true
-//                                binding.emptyLayout.visibility = View.GONE
                                 initAdapter(it)
                                 binding.placeTmpAddCartBtn.setOnClickListener {
                                     mainActivity.moveFragment(3, "planId", planId)
@@ -122,8 +120,8 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
 
         })
     }
-    fun initAdapter(list:MutableList<Place>){
-        Log.d(TAG, "initAdapter: $list")
+
+    private fun initAdapter(list:MutableList<Place>){
         placeShopAdapter = PlaceShopAdapter()
         placeShopAdapter.list = list
         binding.placeTmpRvList.apply {
@@ -141,23 +139,23 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun showDatePicker(placeId:Int){
+    private fun showDatePicker(placeId:Int){
         planViewModel.planList.observe(viewLifecycleOwner, Observer { it ->
-            var formmater = SimpleDateFormat("yyyy-MM-dd")
-            var sDate = formmater.parse(it.startDate)
-            var eDate = formmater.parse(it.endDate)
+            val formmater = SimpleDateFormat("yyyy-MM-dd")
+            val sDate = formmater.parse(it.startDate)
+            val eDate = formmater.parse(it.endDate)
 
-            var builder = MaterialDatePicker.Builder.datePicker()
+            val builder = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("추가하실 날짜를 선택하세요")
                 .setSelection(sDate.time)
-            var cBuilderRange = CalendarConstraints.Builder()
-            var dateMin = DateValidatorPointForward.from(sDate.time)
-            var dateMax = DateValidatorPointBackward.before(eDate.time)
+            val cBuilderRange = CalendarConstraints.Builder()
+            val dateMin = DateValidatorPointForward.from(sDate.time)
+            val dateMax = DateValidatorPointBackward.before(eDate.time)
 
-            var listValidator = ArrayList<CalendarConstraints.DateValidator>()
+            val listValidator = ArrayList<CalendarConstraints.DateValidator>()
             listValidator.add(dateMin)
             listValidator.add(dateMax)
-            var validators = CompositeDateValidator.allOf(listValidator)
+            val validators = CompositeDateValidator.allOf(listValidator)
             cBuilderRange.setValidator(validators)
             builder.setCalendarConstraints(cBuilderRange.build())
             val picker = builder.build()
@@ -166,7 +164,6 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
             picker.addOnPositiveButtonClickListener { hey ->
                 val calendar = Calendar.getInstance()
                 calendar.time = Date(hey)
-                var calendarMilli = calendar.timeInMillis
                 planViewModel.routeList.observe(viewLifecycleOwner, Observer { it2 ->
                     var sdateTmp = LocalDate.parse(it.startDate, DateTimeFormatter.ISO_DATE)
                     var selectDay = ""
@@ -175,7 +172,6 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
                         var month = "0${calendar.get(Calendar.MONTH)+1}"
                         if(calendar.get(Calendar.DATE) < 10){
                             var day = "0${calendar.get(Calendar.DATE)}"
-                            Log.d(TAG, "showDatePicker_DAy: $day")
                             selectDay = "${calendar.get(Calendar.YEAR)}-$month-$day"
                         }else{
                             selectDay = "${calendar.get(Calendar.YEAR)}-$month-${calendar.get(
@@ -187,14 +183,9 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
 
                     }
                     for(i in 0..it.totalDate-1){
-
-                        Log.d(TAG, "showDatePicker: ${sdateTmp.plusDays(i.toLong()).toString()}")
-                        Log.d(TAG, "showDatePicker__: ${selectDay}")
-
                         if(sdateTmp.plusDays(i.toLong()).toString().equals(selectDay)){
                             for(j in 0..it2.size-1){
                                 if(it2[j].day == i+1){
-                                    Log.d(TAG, "showDataRangePicker: ${it2[j].day}//${i+1}")
                                     insertPlace(it2[j].day, placeId)
                                 }
                             }
@@ -204,9 +195,9 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
             }
         })
     }
-    fun insertPlace(day:Int,placeId:Int){
+
+    private fun insertPlace(day:Int,placeId:Int){
         //placeId, priority,routeId
-        Log.d(TAG, "insertPlace: GOOD ${day}")
         planViewModel.routeList.observe(viewLifecycleOwner, Observer {
             var routeId = 0
             var priority = 0
@@ -216,8 +207,8 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
                     priority = it.get(i).routeDetailList.size+1
                 }
             }
-            var place: Place = Place()
-            var routeDatil = RouteDetail(
+
+            val routeDatil = RouteDetail(
                 placeId = placeId,
                 priority = priority,
                 routeId = routeId,
@@ -230,7 +221,7 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
 
                 override fun onSuccess(code: Int, responseData: Boolean) {
                     planViewModel.removePlaceShopList(placeId)
-                    Toast.makeText(requireContext(), "추가되었습니다.", Toast.LENGTH_SHORT).show()
+                    showCustomToast("추가 되었습니다.")
                     Log.d(TAG, "onSuccess: $responseData")
 
                 }
@@ -242,6 +233,7 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
             })
         })
     }
+
     companion object {
         @JvmStatic
         fun newInstance(key: String, value: Int) =

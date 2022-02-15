@@ -16,22 +16,23 @@ import com.ssafy.groute.databinding.RecyclerviewNotificationListItemBinding
 import com.ssafy.groute.src.dto.Notification
 import com.ssafy.groute.src.viewmodel.NotificationViewModel
 
-class NotificationAdapter(var notificationList : MutableList<Notification>, var lifecycleOwner: LifecycleOwner, val notificationViewModel: NotificationViewModel) : RecyclerView.Adapter<NotificationAdapter.NotificationHolder>(){
+class NotificationAdapter(var notificationList : MutableList<Notification>) : RecyclerView.Adapter<NotificationAdapter.NotificationHolder>(){
 
     inner class NotificationHolder(private val binding: RecyclerviewNotificationListItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindInfo(data : Notification) {
+
             binding.notification = data
-            if(data.category.equals("User")){
+
+            if (data.category.equals("User")) {
                 Glide.with(itemView)
                     .load(R.drawable.usernoti)
                     .circleCrop()
-                    .into(itemView.findViewById<ImageView>(R.id.noti_icon))
-            }
-            else{
+                    .into(binding.notiIcon)
+            } else {
                 Glide.with(itemView)
                     .load(R.drawable.eventnoti)
                     .circleCrop()
-                    .into(itemView.findViewById<ImageView>(R.id.noti_icon))
+                    .into(binding.notiIcon)
             }
             binding.executePendingBindings()
         }
@@ -66,12 +67,13 @@ class NotificationAdapter(var notificationList : MutableList<Notification>, var 
         return notificationList.size
     }
 
-    interface ItemClickListener{
+    interface ItemClickListener {
         fun onClick(view: View, position: Int, id:Int)
     }
+
     private lateinit var itemClickListener : ItemClickListener
 
-    fun setItemClickListener(itemClickListener: ItemClickListener){
+    fun setItemClickListener(itemClickListener: ItemClickListener) {
         this.itemClickListener = itemClickListener
     }
 }

@@ -17,21 +17,14 @@ import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentRouteBinding
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.dto.PlanLike
-import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.viewmodel.HomeViewModel
 import com.ssafy.groute.src.viewmodel.PlanViewModel
-import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
 
-private const val TAG = "RouteFragment_Groute"
-
-class RouteFragment :
-    BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::bind, R.layout.fragment_route) {
-    //    lateinit var binding: FragmentRouteBinding
+//private const val TAG = "RouteFragment_Groute"
+class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::bind, R.layout.fragment_route) {
     private lateinit var mainActivity: MainActivity
     lateinit var pagerAdapter: RouteTabPageAdapter
-    private var days = 0
     lateinit var routeAreaAdapter: RoutePageAreaAdapter
     private val homeViewModel: HomeViewModel by activityViewModels()
     private val planViewModel: PlanViewModel by activityViewModels()
@@ -43,6 +36,7 @@ class RouteFragment :
     private var planId = -1 // TravelPlanFragment에서 넘어오는 사용자의 일정 아이디
     private var flag = -1  // 장소별루트추천, 장소제외루트추천, 전체루트추천 판별
     lateinit var userId: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -63,7 +57,6 @@ class RouteFragment :
             flag = it.getInt("flag", -1)
         }
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -97,7 +90,8 @@ class RouteFragment :
             }
         })
     }
-    fun getListInit() {
+
+    private fun getListInit() {
         runBlocking {
             planViewModel.getUserPlanList()
             planViewModel.getThemeList()
@@ -106,7 +100,7 @@ class RouteFragment :
         }
     }
 
-    fun getListInitByPlace(serverFlag: Int) {
+    private fun getListInitByPlace(serverFlag: Int) {
         runBlocking {
             planViewModel.getUserPlanList()
             planViewModel.getPlanByPlace(planId, serverFlag)
@@ -114,12 +108,11 @@ class RouteFragment :
             homeViewModel.getAreaLists()
             planViewModel.getPlanLikeList(userId)
         }
-
     }
 
-    fun initAdapter() {
+    private fun initAdapter() {
         homeViewModel.areaList.observe(viewLifecycleOwner, Observer {
-            var selectList = arrayListOf<Int>()
+            val selectList = arrayListOf<Int>()
             selectList.add(1) // 제주도에 클릭이 되어있도록
             for(i in 1 until it.size) {
                 selectList.add(0)
@@ -127,7 +120,6 @@ class RouteFragment :
             routeAreaAdapter = RoutePageAreaAdapter(it, selectList, requireContext())
             routeAreaAdapter.setItemClickListener(object : RoutePageAreaAdapter.ItemClickListener {
                 override fun onClick(view: View, position: Int, name: String, id: Int) {
-                    Log.d(TAG, "onClick: ${id}")
                     routeAreaAdapter.notifyDataSetChanged()
                     areaId = id
                 }
@@ -156,10 +148,8 @@ class RouteFragment :
                         selectedTheme.add(i + 1)
                     }
                 }
-                Log.d(TAG, "onClick select List: $selectedTheme")
                 planViewModel.getRoutebyDay(tabPosition, selectedTheme)
             }
-
         })
 
         planViewModel.userPlanByDayList.observe(viewLifecycleOwner, Observer {
@@ -170,8 +160,7 @@ class RouteFragment :
                 binding.routeListNoneTxt.visibility = View.GONE
                 binding.routeListRv.visibility = View.VISIBLE
             }
-            RouteListAdapter = RouteListRecyclerviewAdapter(planViewModel, viewLifecycleOwner)
-            RouteListAdapter.setRouteList(it)
+            RouteListAdapter = RouteListRecyclerviewAdapter(it, planViewModel)
             RouteListAdapter.setHasStableIds(true)
             binding.routeListRv.apply {
                 layoutManager = LinearLayoutManager(requireContext())
@@ -201,9 +190,9 @@ class RouteFragment :
 
     }
 
-    fun showTotalDateOverDialog() {
-        var dialogView:View = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_totaldate_over,null)
-        var dialog = Dialog(requireContext())
+    private fun showTotalDateOverDialog() {
+        val dialogView:View = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_totaldate_over,null)
+        val dialog = Dialog(requireContext())
         dialog.setContentView(dialogView)
         dialogView.findViewById<Button>(R.id.btn).setOnClickListener {
             dialog.dismiss()
@@ -212,7 +201,7 @@ class RouteFragment :
         dialog.show()
     }
 
-    fun initTab() {
+    private fun initTab() {
         binding.routeTabLayout.addTab(binding.routeTabLayout.newTab().setText("2박3일"))
         binding.routeTabLayout.addTab(binding.routeTabLayout.newTab().setText("3박4일"))
         binding.routeTabLayout.addTab(binding.routeTabLayout.newTab().setText("4박5일"))
@@ -221,7 +210,7 @@ class RouteFragment :
             runBlocking {
                 planViewModel.getPlanById(planId, 1)
             }
-            var totalDate = planViewModel.currentUserPlan.value!!.totalDate
+            val totalDate = planViewModel.currentUserPlan.value!!.totalDate
             binding.routeTabLayout.getTabAt(totalDate)!!.select()
             tabPosition = totalDate
             planViewModel.getRoutebyDay(totalDate, selectedTheme)
@@ -278,13 +267,5 @@ class RouteFragment :
                 }
             }
     }
-
-    fun initRouteListAdapter() {
-        planViewModel.userPlanList.observe(viewLifecycleOwner, Observer {
-
-        })
-
-    }
-
 
 }

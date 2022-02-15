@@ -95,11 +95,11 @@
                 <ImageView
                     android:id="@+id/item_board_iv"
                     android:layout_width="match_parent"
-                    android:layout_height="169.8dp"
+                    android:layout_height="200dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="10dp"
-                    android:scaleType="fitXY"
+                    android:scaleType="fitCenter"
                     android:visibility="visible"
                     app:imageUrlBoardPost="@{board.img}"
                     app:layout_constraintEnd_toEndOf="parent"

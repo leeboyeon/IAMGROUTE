@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
@@ -50,6 +51,7 @@ class BestRouteAdapter(var list: MutableList<UserPlan>, val planViewModel: PlanV
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BestRouteHolder {
+//        return BestRouteHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.recyclerview_bestroute_item, parent, false))
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_bestroute_item,parent,false)
         return BestRouteHolder(view)
     }

@@ -23,7 +23,7 @@ import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
 
-private const val TAG = "SharedMemberFragment"
+private const val TAG = "SharedMemberF_Groute"
 class SharedMemberFragment: BaseFragment<FragmentSharedMemberBinding>(FragmentSharedMemberBinding::bind, R.layout.fragment_shared_member)  {
     private lateinit var mainActivity : MainActivity
     private val planViewModel: PlanViewModel by activityViewModels()
@@ -32,11 +32,13 @@ class SharedMemberFragment: BaseFragment<FragmentSharedMemberBinding>(FragmentSh
     val member = arrayListOf<User>()
     val ids = arrayListOf<String>()
     private var checkFlag=false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
         mainActivity.hideBottomNav(true)
     }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
@@ -48,11 +50,15 @@ class SharedMemberFragment: BaseFragment<FragmentSharedMemberBinding>(FragmentSh
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = planViewModel
+
         runBlocking {
             planViewModel.getShareUserbyPlanId(planId)
         }
+
         initAdapter()
+
         var flag = false
+
         planViewModel.planList.observe(viewLifecycleOwner, Observer {
             if( ApplicationClass.sharedPreferencesUtil.getUser().id == it.userId ){
                 binding.shareMemberBtnLayout.isVisible = true
@@ -91,10 +97,10 @@ class SharedMemberFragment: BaseFragment<FragmentSharedMemberBinding>(FragmentSh
             mainActivity.supportFragmentManager.popBackStack()
         }
 
-
     }
-    fun checkUser(){
-        var userId = binding.sharedMemberEtUserId.text.toString()
+
+    private fun checkUser() {
+        val userId = binding.sharedMemberEtUserId.text.toString()
         UserService().isUsedId(userId, object : RetrofitCallback<Boolean> {
             override fun onError(t: Throwable) {
                 Log.d(TAG, "onError: ")
@@ -124,7 +130,7 @@ class SharedMemberFragment: BaseFragment<FragmentSharedMemberBinding>(FragmentSh
         })
     }
 
-    fun initAdapter(){
+    private fun initAdapter(){
         planViewModel.shareUserList.observe(viewLifecycleOwner, Observer {
             sharedMemberAdapter = SharedMemberAdapter()
             sharedMemberAdapter.list = it as ArrayList<User>
@@ -143,19 +149,21 @@ class SharedMemberFragment: BaseFragment<FragmentSharedMemberBinding>(FragmentSh
             binding.sharedMemberTvSize.text = "함께하는 여행친구 총 ${it.size}명"
         })
     }
-    fun showDeleteDialog(userId:String){
-        var builder = AlertDialog.Builder(requireContext())
+
+    private fun showDeleteDialog(userId:String){
+        val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("${userId}를 정말로 삭제하시겠습니까?")
         builder.setPositiveButton("확인",DialogInterface.OnClickListener { dialog, which ->
             deleteUser(userId)
         })
         builder.setNeutralButton("취소",null)
-        var dialog = builder.create()
+        val dialog = builder.create()
         dialog.show()
 
     }
-    fun deleteUser(userId:String){
-        var shareUser = SharedUser(
+
+    private fun deleteUser(userId:String){
+        val shareUser = SharedUser(
             planId = planId,
             userId = userId
         )
@@ -165,7 +173,6 @@ class SharedMemberFragment: BaseFragment<FragmentSharedMemberBinding>(FragmentSh
             }
 
             override fun onSuccess(code: Int, responseData: Boolean) {
-                Log.d(TAG, "onSuccess: ")
                 showCustomToast("삭제되었습니다.")
                 runBlocking {
                     planViewModel.getShareUserbyPlanId(planId)
@@ -178,9 +185,10 @@ class SharedMemberFragment: BaseFragment<FragmentSharedMemberBinding>(FragmentSh
 
         })
     }
-    fun insertUser(userId:String){
 
-        var shareUser = SharedUser(
+    private fun insertUser(userId:String){
+
+        val shareUser = SharedUser(
             planId= planId,
             userId = userId
         )
@@ -190,7 +198,6 @@ class SharedMemberFragment: BaseFragment<FragmentSharedMemberBinding>(FragmentSh
             }
 
             override fun onSuccess(code: Int, responseData: Boolean) {
-                Log.d(TAG, "onSuccess: ")
                 runBlocking {
                     planViewModel.getShareUserbyPlanId(planId)
                 }
@@ -202,6 +209,7 @@ class SharedMemberFragment: BaseFragment<FragmentSharedMemberBinding>(FragmentSh
 
         })
     }
+
     companion object {
         @JvmStatic
         fun newInstance(key: String, value: Int) =

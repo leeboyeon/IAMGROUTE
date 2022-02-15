@@ -2,10 +2,7 @@ package com.ssafy.groute.src.main.my
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,11 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
-import com.ssafy.groute.databinding.FragmentSaveTravelBinding
 import com.ssafy.groute.databinding.FragmentSharedTravelBinding
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.main.home.BestRoute
-import com.ssafy.groute.src.viewmodel.MyViewModel
+import com.ssafy.groute.src.dto.BestRoute
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import kotlinx.coroutines.runBlocking
 
@@ -26,6 +21,7 @@ class SharedTravelFragment : BaseFragment<FragmentSharedTravelBinding>(FragmentS
     private lateinit var sharedAdapter: SharedTravelAdapter
     private val planViewModel: PlanViewModel by activityViewModels()
     val lists = mutableListOf<BestRoute>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,9 +42,8 @@ class SharedTravelFragment : BaseFragment<FragmentSharedTravelBinding>(FragmentS
         initAdapter()
     }
     fun initAdapter(){
-        sharedAdapter = SharedTravelAdapter(planViewModel)
         planViewModel.sharedTravelList.observe(viewLifecycleOwner, Observer {
-            sharedAdapter.setShareTravelList(it)
+            sharedAdapter = SharedTravelAdapter(it, planViewModel)
             sharedAdapter.notifyDataSetChanged()
             binding.myRvShared.apply {
                 layoutManager = GridLayoutManager(context, 3)

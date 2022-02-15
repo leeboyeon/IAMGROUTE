@@ -37,21 +37,16 @@ import kotlinx.coroutines.runBlocking
 
 // place 하나 선택 했을 때 장소에 대한 정보를 보여주는 화면
 private const val TAG = "PlaceDetailF_Groute"
-
-class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(
-    FragmentPlaceDetailBinding::bind,
-    R.layout.fragment_place_detail
-) {
-    //    private lateinit var binding: FragmentPlaceDetailBinding
+class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPlaceDetailBinding::bind, R.layout.fragment_place_detail) {
     private lateinit var mainActivity: MainActivity
     private val placeViewModel: PlaceViewModel by activityViewModels()
     private val planViewModel: PlanViewModel by activityViewModels()
     private var placeId = -1
     private var planId = -1
-    private lateinit var place: Place
     private var addDay = -1 // 선택한 day에 루트 추가
     private var selectUserPlan = UserPlan() // 선택한 userPlan에 루트 추가
     private lateinit var bottomSheetRecyclerviewAdapter: BottomSheetRecyclerviewAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -63,8 +58,6 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(
         arguments?.let {
             placeId = it.getInt("placeId", -1)
             planId = it.getInt("planId", -1)
-            Log.d(TAG, "onAttach: $placeId")
-            Log.d(TAG, "onAttach_PLAN: ${planId}")
         }
     }
 
@@ -77,10 +70,10 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(
             placeViewModel.getPlace(placeId)
             planViewModel.getPlanMyList(ApplicationClass.sharedPreferencesUtil.getUser().id)
         }
+
         binding.placeDetailAbtnHeart.progress = 0.5f
         val areaTabPagerAdapter = AreaTabPagerAdapter(this)
         val tabList = arrayListOf("Info", "Review")
-
 
         areaTabPagerAdapter.addFragment(InfoFragment.newInstance("placeId", placeId))
         areaTabPagerAdapter.addFragment(ReviewFragment.newInstance("placeId", placeId))
@@ -95,7 +88,6 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(
             mainActivity.supportFragmentManager.popBackStack()
         }
 
-        Log.d(TAG, "onViewCreated: $planId")
         if (planId == -1) { // 홈에서 플레이스 디테일 페이지로 왔을 때
             binding.textView14.text = "내 여행에 추가하기"
             binding.placeDetailBtnAddList.setOnClickListener {
@@ -126,8 +118,8 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(
     /**
      * 내 일정에 추가하기 클릭 후 BottomSheet show
      */
-    fun showRouteAddBottomSheet() {
-        var dialogView: View =
+    private fun showRouteAddBottomSheet() {
+        val dialogView: View =
             LayoutInflater.from(requireContext()).inflate(R.layout.plan_add_bottom_sheet, null)
         Log.d(TAG, "showRouteAddBottomSheet: $planId")
         runBlocking {
@@ -140,7 +132,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(
             bottomSheetRecyclerviewAdapter.setUserPlanList(it)
             Log.d(TAG, "showRouteAddBottomSheet: $it")
 
-            var recyclerview =
+            val recyclerview =
                 dialogView.findViewById<RecyclerView>(R.id.bottom_sheet_recyclerview)
             recyclerview.apply {
                 layoutManager =
@@ -158,9 +150,9 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(
                 }
 
             })
-
         })
-        var dialog = Dialog(requireContext())
+
+        val dialog = Dialog(requireContext())
         dialog.setContentView(dialogView)
 
         // 일정 등록 버튼을 눌렀을때
@@ -168,6 +160,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(
             dialog.dismiss()
             mainActivity.moveFragment(1)
         }
+
         // 일정에 추가하기 버튼을 눌렀을때
         dialogView.findViewById<ConstraintLayout>(R.id.bottom_sheet_route_add_btn)
             .setOnClickListener {
@@ -195,19 +188,18 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(
 
     }
 
-    fun insertPlace(day:Int,placeId:Int){
+    private fun insertPlace(day:Int,placeId:Int){
         //placeId, priority,routeId
-        Log.d(TAG, "insertPlace: GOOD ${day}")
         runBlocking {
             planViewModel.getPlanById(selectUserPlan.id, 2)
         }
         planViewModel.routeList.observe(viewLifecycleOwner, Observer {
             var routeId = 0
             var priority = 0
-            for(i in 0..it.size-1){
-                if(it.get(i).day == day){
-                    routeId = it.get(i).id
-                    priority = it.get(i).routeDetailList.size+1
+            for(i in 0 until it.size){
+                if(it[i].day == day){
+                    routeId = it[i].id
+                    priority = it[i].routeDetailList.size+1
                 }
             }
             var routeDatil = RouteDetail(
@@ -223,7 +215,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(
 
                 override fun onSuccess(code: Int, responseData: Boolean) {
                     //planViewModel.removePlaceShopList(placeId)
-                    Toast.makeText(requireContext(), "일정에 추가되었습니다.", Toast.LENGTH_SHORT).show()
+                    showCustomToast("일정에 추가되었습니다.")
                     Log.d(TAG, "onSuccess: $responseData")
 
                 }
@@ -247,6 +239,5 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(
                 }
             }
     }
-
 
 }
