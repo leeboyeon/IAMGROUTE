@@ -25,6 +25,10 @@ import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.RetrofitCallback
+import com.ssafy.groute.util.RetrofitUtil
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 private const val TAG = "RouteDetailF_Groute"
