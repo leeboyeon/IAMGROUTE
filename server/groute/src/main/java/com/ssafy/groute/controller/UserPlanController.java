@@ -154,7 +154,7 @@ public class UserPlanController {
     public ResponseEntity<?> deletePlace(@PathVariable("id") int id){
 
         try {
-            routeDetailService.deleteRouteDetail(id);
+            userPlanService.deleteRouteDetail(id);
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
