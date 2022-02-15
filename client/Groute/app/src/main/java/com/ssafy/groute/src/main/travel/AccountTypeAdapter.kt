@@ -1,5 +1,6 @@
 package com.ssafy.groute.src.main.travel
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
@@ -14,6 +15,7 @@ import java.io.FilterReader
 class AccountTypeAdapter(var list:MutableList<Account>) : RecyclerView.Adapter<AccountTypeAdapter.AccountTypeHolder>(),Filterable{
     var filteredList = list
     var unfilteredList = list
+    var size = -1
     inner class AccountTypeHolder(private var binding:RecyclerviewAccountBycategorybyListItemBinding):RecyclerView.ViewHolder(binding.root){
         fun bindInfo(data:Account){
             binding.account = data
@@ -33,6 +35,8 @@ class AccountTypeAdapter(var list:MutableList<Account>) : RecyclerView.Adapter<A
     }
 
     override fun getItemCount(): Int {
+//        Log.d("AccountTypeAdatper", "getItemCount: ${filteredList.size}")
+
         return filteredList.size
     }
 
@@ -51,6 +55,7 @@ class AccountTypeAdapter(var list:MutableList<Account>) : RecyclerView.Adapter<A
                 }
                 val filterResults = FilterResults()
                 filterResults.values = filteredList
+                size = filteredList.size
                 return filterResults
             }
 

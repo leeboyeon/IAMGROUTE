@@ -1,5 +1,6 @@
 package com.ssafy.groute.src.main.travel
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -13,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +34,7 @@ import com.github.mikephil.charting.utils.MPPointF
 import com.github.mikephil.charting.utils.Utils
 import com.github.mikephil.charting.utils.ViewPortHandler
 import com.google.android.material.tabs.TabLayout
+import com.jakewharton.rxbinding3.material.selections
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
@@ -44,6 +47,7 @@ import kotlinx.coroutines.runBlocking
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import kotlin.math.cos
+import kotlin.math.log
 import kotlin.math.sin
 
 private const val TAG = "TypeByAccountFragment"
@@ -55,6 +59,8 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
     var sum = 0
     var cnt = 0
     var curPos = 0
+//    lateinit var listsize :LiveData<Int>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -74,14 +80,38 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
         runBlocking {
             planViewModel.getCategoryChart(planId)
             planViewModel.getAccountList(planId)
+            planViewModel.getCategory()
         }
         initChart()
         initTab()
         initAdatper()
-
-
+        initItem(0)
     }
-    fun initItem(){
+    fun initItem(pos:Int){
+        Log.d(TAG, "initItem: ${curPos}")
+        if(pos == 0){
+            Glide.with(requireContext())
+                .load(R.drawable.all)
+                .circleCrop()
+                .into(binding.accountTypeIvCate)
+
+            binding.accountTypeTvCateName.text = "전체"
+            binding.accountTypeTvTotalMoney.text = CommonUtils.makeComma(sum)
+        }
+        if(pos >= 1){
+            Glide.with(requireContext())
+                .load("${ApplicationClass.IMGS_URL}${planViewModel.accountCategoryList.value!!.get(pos-1)?.img}")
+                .circleCrop()
+                .into(binding.accountTypeIvCate)
+
+            binding.accountTypeTvCateName.text = planViewModel.accountCategoryList.value!!.get(pos-1)?.name
+
+            binding.accountTypeTvTotalMoney.text =
+                planViewModel.accountPriceList!!.value?.get(pos-1)
+                    ?.let { CommonUtils.makeComma(it) }
+        }
+
+//        binding.accountTypeTvTotalSize.text = "총 ${listsize}건"
 
     }
     fun initTab(){
@@ -92,36 +122,50 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
         binding.accountCategoryTabLayout.addTab(binding.accountCategoryTabLayout.newTab().setText("숙소"))
         binding.accountCategoryTabLayout.addTab(binding.accountCategoryTabLayout.newTab().setText("기타"))
 
+        binding.accountCategoryTabLayout.getTabAt(0)!!.select()
         binding.accountCategoryTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            @SuppressLint("SetTextI18n")
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                curPos = tab?.position!!
+                curPos = tab!!.position
+                initItem(tab!!.position)
                 when(tab?.position){
                     0->{
                         accountTypeAdapter.filter.filter("")
+//                        listsize = accountTypeAdapter.itemCount
+
+
                     }
                     1->{
                         accountTypeAdapter.filter.filter("카페")
+//                        listsize = accountTypeAdapter.itemCount
                     }
                     2->{
                         accountTypeAdapter.filter.filter("식당")
+//                        listsize = accountTypeAdapter.itemCount
                     }
                     3->{
                         accountTypeAdapter.filter.filter("쇼핑")
+//                        listsize = accountTypeAdapter.itemCount
                     }
                     4->{
                         accountTypeAdapter.filter.filter("항공")
+//                        listsize = accountTypeAdapter.itemCount
                     }
                     5->{
                         accountTypeAdapter.filter.filter("교통")
+//                        listsize = accountTypeAdapter.itemCount
                     }
                     6->{
                         accountTypeAdapter.filter.filter("관광")
+//                        listsize = accountTypeAdapter.itemCount
                     }
                     7->{
                         accountTypeAdapter.filter.filter("숙소")
+//                        binding.accountTypeTvTotalSize.text = "총 ${accountTypeAdapter.itemCount}건"
                     }
                     8->{
                         accountTypeAdapter.filter.filter("기타")
+//                        binding.accountTypeTvTotalSize.text = "총 ${accountTypeAdapter.itemCount}건"
                     }
                 }
 
@@ -144,19 +188,6 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
                 adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
 
-//            Glide.with(requireContext())
-//                .load("${ApplicationClass.IMGS_URL_PLACE}${it[curPos].img}")
-//                .circleCrop()
-//                .into(binding.accountTypeIvCate)
-
-            binding.accountTypeTvTotalSize.text = "총 ${accountTypeAdapter.filteredList.size}건"
-            var totalmoney = 0
-            for(i in 0..it.size-1){
-                if(it[i].categoryId == curPos){
-                    totalmoney += it[i].spentMoney
-                }
-            }
-            binding.accountTypeTvTotalMoney.text = totalmoney.toString()
         })
     }
     fun sumPrice(){
