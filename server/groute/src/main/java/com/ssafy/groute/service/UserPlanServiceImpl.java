@@ -214,11 +214,21 @@ public class UserPlanServiceImpl implements UserPlanService {
         return userPlans;
     }
 
+    @Override
+    public void deleteRouteDetail(int routeDetailId) throws Exception {
+        RouteDetail routeDetail = routeDetailMapper.selectRouteDetail(routeDetailId);
+        routeDetailMapper.deleteRouteDetail(routeDetailId);
+        List<RouteDetail> routeDetailList = routeDetailMapper.selectByRouteId(routeDetail.getRouteId());
+        for(int i=1;i<=routeDetailList.size();i++){
+            routeDetailList.get(i-1).setPriority(i);
+            routeDetailMapper.updatePriority(routeDetailList.get(i-1));
+        }
+
+    }
+
 
     private List<RouteDetail> routeDetailList;
     private List<Place> placeList;
-    private Place startPlace;
-    private Place endPlace;
     private double min;
     private int[] minArr;
     private boolean[] isSelected;
