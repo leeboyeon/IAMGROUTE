@@ -158,7 +158,7 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
     }
 
     interface SwapListener{
-        fun onSwap(fromPos: Int, toPos: Int)
+        fun onSwap(fromPos: Int, toPos: Int, routeDetailList:MutableList<RouteDetail>)
     }
 
     private lateinit var swapListener: SwapListener
