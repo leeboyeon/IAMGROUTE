@@ -84,9 +84,7 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
             planViewModel.getCategory()
 
         }
-        planViewModel.categoryByaccountList.observe(viewLifecycleOwner,{
-            binding.accountTypeTvTotalSize.text = "총 ${it}건"
-        })
+
         initChart()
         initTab()
         initAdatper()
@@ -182,7 +180,7 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
                 adapter = accountTypeAdapter
                 adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
-
+            planViewModel.setCategoryByAccount(it.size)
         })
     }
     fun sumPrice(){
