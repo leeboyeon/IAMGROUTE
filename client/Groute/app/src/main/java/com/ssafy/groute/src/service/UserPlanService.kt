@@ -112,6 +112,26 @@ class UserPlanService {
             })
     }
 
+    fun deletePlaceInUserPlan(id: Int, callback: RetrofitCallback<Boolean>) {
+        RetrofitUtil.userPlanService.deletePlaceInUserPlan(id).enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                val res = response.body()
+                if (response.code() == 200) {
+                    if (res == true) {
+                        callback.onSuccess(response.code(), res)
+                        Log.d(TAG, "onResponse: delete Success!")
+                    } else {
+                        Log.d(TAG, "onResponse: delete fail")
+                    }
+                }
+            }
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                Log.d(TAG, "onFailure: $t")
+            }
+
+        })
+    }
+
     /**
      * update PlanReview
      * @param review

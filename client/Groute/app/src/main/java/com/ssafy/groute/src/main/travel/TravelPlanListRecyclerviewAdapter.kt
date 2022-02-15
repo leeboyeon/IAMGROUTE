@@ -93,7 +93,7 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
     fun swapData(fromPos: Int, toPos: Int) {
         Collections.swap(routeDetailList, fromPos, toPos)
         notifyItemMoved(fromPos, toPos)
-
+        swapListener.onSwap(fromPos, toPos)
         val detailList = arrayListOf<RouteDetail>()
         for(i in 0..routeDetailList.size-1){
 
@@ -155,6 +155,15 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
             }
 
         }
+    }
+
+    interface SwapListener{
+        fun onSwap(fromPos: Int, toPos: Int)
+    }
+
+    private lateinit var swapListener: SwapListener
+    fun setSwapListener(swapListener: SwapListener) {
+        this.swapListener = swapListener
     }
 
     interface MemoClickListener {

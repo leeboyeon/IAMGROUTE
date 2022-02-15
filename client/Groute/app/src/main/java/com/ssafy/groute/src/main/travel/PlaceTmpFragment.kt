@@ -143,15 +143,19 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
         planViewModel.planList.observe(viewLifecycleOwner, Observer { it ->
             val formmater = SimpleDateFormat("yyyy-MM-dd")
             val sDate = formmater.parse(it.startDate)
-            val eDate = formmater.parse(it.endDate)
-
+            var eDate = formmater.parse(it.endDate)
+            val cal = Calendar.getInstance()
+            cal.time = eDate
+            cal.add(Calendar.DATE, 1)
+            eDate = cal.time
             val builder = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("추가하실 날짜를 선택하세요")
                 .setSelection(sDate.time)
             val cBuilderRange = CalendarConstraints.Builder()
             val dateMin = DateValidatorPointForward.from(sDate.time)
+            Log.d(TAG, "showDatePicker: ${eDate}")
             val dateMax = DateValidatorPointBackward.before(eDate.time)
-
+            
             val listValidator = ArrayList<CalendarConstraints.DateValidator>()
             listValidator.add(dateMin)
             listValidator.add(dateMax)

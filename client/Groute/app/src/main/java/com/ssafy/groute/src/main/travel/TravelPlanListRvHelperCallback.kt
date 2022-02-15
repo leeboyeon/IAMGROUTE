@@ -112,7 +112,7 @@ class TravelPlanListRvHelperCallback(private val recyclerViewAdapter: TravelPlan
             if (isCurrentlyActive)
                 if (dX < 0) dX/3 - clamp
                 else dX - clamp
-            else -clamp
+            else (-2 * clamp) * 2 / 3
         }
         else dX / 2
 
