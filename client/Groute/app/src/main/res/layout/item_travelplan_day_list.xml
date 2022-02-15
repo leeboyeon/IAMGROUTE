@@ -1,207 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:paddingHorizontal="20dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<layout>
+    <data>
+        <variable
+            name="routeDetail"
+            type="com.ssafy.groute.src.dto.RouteDetail" />
+    </data>
 
-    <RelativeLayout
-        android:id="@+id/item_travelplan_dotted_line1"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:paddingHorizontal="20dp"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:visibility="visible"
-        android:background="@drawable/dotted_line_vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/frame"/>
+        android:layout_height="wrap_content">
 
-    <FrameLayout
-        android:id="@+id/frame"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardview_delete"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="0dp"
-        app:strokeColor="@color/grey"
-        app:strokeWidth="1dp"
-        >
-
-        <LinearLayout
-            android:id="@+id/item_swipe_layout"
+        <RelativeLayout
+            android:id="@+id/item_travelplan_dotted_line1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
+            android:layout_height="20dp"
+            android:visibility="visible"
+            android:background="@drawable/dotted_line_vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/frame"/>
+
+        <FrameLayout
+            android:id="@+id/frame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-               >
-
-            </LinearLayout>
-            <!--                android:background="@color/red"-->
-            <TextView
-                android:id="@+id/item_swipe_memo_tv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="메모"
-                android:gravity="end|center_vertical"
-                android:textSize="16sp"
-                android:paddingRight="20dp"
-                android:background="@color/grey"
-                android:includeFontPadding="false"
-                android:layout_weight="2"/>
-            <TextView
-                android:id="@+id/item_swipe_delete_tv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingRight="20dp"
-                android:text="삭제"
-                android:textColor="@color/white"
-                android:background="@drawable/corner_radius"
-                android:textSize="16sp"
-                android:gravity="end|center_vertical"
-                android:includeFontPadding="false"
-                android:layout_weight="2"
-                />
-
-
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardview_item"
+            android:id="@+id/cardview_delete"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
             app:strokeColor="@color/grey"
             app:strokeWidth="1dp"
-            android:clickable="true"
-            android:focusable="true"
             >
 
+            <LinearLayout
+                android:id="@+id/item_swipe_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/item_board_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                   >
 
-            <RelativeLayout
-                android:id="@+id/item_travelplan_num_layout"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:gravity="center"
-                android:layout_marginStart="20dp"
-                android:background="@drawable/circle_back"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                </LinearLayout>
+                <!--                android:background="@color/red"-->
+                <TextView
+                    android:id="@+id/item_swipe_memo_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="메모"
+                    android:gravity="end|center_vertical"
+                    android:textSize="16sp"
+                    android:paddingRight="20dp"
+                    android:background="@color/grey"
+                    android:includeFontPadding="false"
+                    android:layout_weight="2"/>
+                <TextView
+                    android:id="@+id/item_swipe_delete_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingRight="20dp"
+                    android:text="삭제"
+                    android:textColor="@color/white"
+                    android:background="@drawable/corner_radius"
+                    android:textSize="16sp"
+                    android:gravity="end|center_vertical"
+                    android:includeFontPadding="false"
+                    android:layout_weight="2"
+                    />
+
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardview_item"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/grey"
+                app:strokeWidth="1dp"
+                android:clickable="true"
+                android:focusable="true"
+                >
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/item_board_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                <RelativeLayout
+                    android:id="@+id/item_travelplan_num_layout"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:gravity="center"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/circle_back"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <TextView
+                        android:id="@+id/item_travelplan_num_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:textColor="@color/white"
+                        android:textStyle="bold" />
+
+
+                </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/item_travelplan_num_tv"
+                    android:id="@+id/item_travelplan_day_list_place_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@{routeDetail.place.name}"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/item_travelplan_num_layout"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView10"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    app:layout_constraintStart_toEndOf="@+id/item_travelplan_num_layout"
+                    app:layout_constraintTop_toBottomOf="@+id/item_travelplan_day_list_place_tv"
+                    app:srcCompat="@drawable/loc" />
+
+                <TextView
+                    android:id="@+id/item_travelplan_day_list_loc_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="20dp"
+                    android:ellipsize="end"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:text="@{routeDetail.place.address}"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView10"
+                    app:layout_constraintTop_toBottomOf="@id/item_travelplan_day_list_place_tv" />
+
+                <ImageView
+                    android:id="@+id/imageView9"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    app:layout_constraintBottom_toBottomOf="@+id/item_travel_memo"
+                    app:layout_constraintStart_toEndOf="@+id/item_travelplan_num_layout"
+                    app:layout_constraintTop_toBottomOf="@+id/item_travelplan_day_list_loc_tv"
+                    app:srcCompat="@drawable/pin" />
+
+                <TextView
+                    android:id="@+id/item_travel_memo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@{routeDetail.memo}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView9"
+                    app:layout_constraintTop_toBottomOf="@+id/item_travelplan_day_list_loc_tv" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            </RelativeLayout>
+        </com.google.android.material.card.MaterialCardView>
+        </FrameLayout>
 
-            <TextView
-                android:id="@+id/item_travelplan_day_list_place_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:text="협재 해수욕장"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/item_travelplan_num_layout"
-                app:layout_constraintTop_toTopOf="parent" />
+        <RelativeLayout
+            android:id="@+id/item_travelplan_dotted_line2"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:visibility="visible"
+            android:background="@drawable/dotted_line_vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/frame"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <ImageView
-                android:id="@+id/imageView10"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/transparent"
-                android:scaleType="centerInside"
-                app:layout_constraintStart_toEndOf="@+id/item_travelplan_num_layout"
-                app:layout_constraintTop_toBottomOf="@+id/item_travelplan_day_list_place_tv"
-                app:srcCompat="@drawable/loc" />
-
-            <TextView
-                android:id="@+id/item_travelplan_day_list_loc_tv"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="20dp"
-                android:ellipsize="end"
-                android:includeFontPadding="false"
-                android:maxLines="1"
-                android:text="애월 한림"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView10"
-                app:layout_constraintTop_toBottomOf="@id/item_travelplan_day_list_place_tv" />
-
-            <ImageView
-                android:id="@+id/imageView9"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/transparent"
-                android:scaleType="centerInside"
-                app:layout_constraintBottom_toBottomOf="@+id/item_travel_memo"
-                app:layout_constraintStart_toEndOf="@+id/item_travelplan_num_layout"
-                app:layout_constraintTop_toBottomOf="@+id/item_travelplan_day_list_loc_tv"
-                app:srcCompat="@drawable/pin" />
-
-            <TextView
-                android:id="@+id/item_travel_memo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                android:text="memo"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView9"
-                app:layout_constraintTop_toBottomOf="@+id/item_travelplan_day_list_loc_tv" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </com.google.android.material.card.MaterialCardView>
-    </FrameLayout>
-
-    <RelativeLayout
-        android:id="@+id/item_travelplan_dotted_line2"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:visibility="visible"
-        android:background="@drawable/dotted_line_vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frame"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
