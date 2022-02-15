@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 import com.ssafy.groute.src.viewmodel.MainViewModel
 import com.ssafy.groute.util.LoadingDialog
+import io.reactivex.disposables.CompositeDisposable
 
 
 // 액티비티의 기본을 작성, 뷰 바인딩 활용
@@ -44,5 +45,4 @@ abstract class BaseActivity<B : ViewBinding>(private val inflate: (LayoutInflate
     fun showCustomToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-
 }

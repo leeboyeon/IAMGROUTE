@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.contains
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.groute.R
@@ -22,6 +23,7 @@ import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapPolyline
 import net.daum.mf.map.api.MapView
+import java.lang.RuntimeException
 import java.util.ArrayList
 
 private const val TAG = "RouteDetailInfoFragment_groute"
@@ -148,5 +150,32 @@ class RouteDetailInfoFragment : BaseFragment<FragmentRouteDetailInfoBinding>(Fra
                     putInt(key, value)
                 }
             }
+    }
+    @SuppressLint("LongLogTag")
+    override fun onResume() {
+        super.onResume()
+        if(binding.RouteDetailMap?.contains(mapView)!!){
+            try{
+                findArea()
+            }catch (re: RuntimeException){
+                Log.d(TAG, "onResume: ${re.printStackTrace()}")
+            }
+        }
+        mapView.onResume()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        binding.RouteDetailMap.removeView(mapView)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mapView.onSurfaceDestroyed()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.onPause()
     }
 }

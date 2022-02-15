@@ -29,6 +29,9 @@ import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 private const val TAG = "RouteDetailFragment"
@@ -113,12 +116,10 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         }
         binding.routeDetailAbtnHeart.setOnClickListener {
             if(binding.routeDetailAbtnHeart.progress > 0F){
-                Log.d(TAG, "onBindViewHolder: 이미 클릭됨")
                 binding.routeDetailAbtnHeart.pauseAnimation()
                 binding.routeDetailAbtnHeart.progress = 0F
                 planLike(PlanLike(userId, planIdDetail))
             }else{
-                Log.d(TAG, "onBindViewHolder: 클릭할거얌")
                 val animator = ValueAnimator.ofFloat(0f,0.5f).setDuration(500)
                 animator.addUpdateListener { animation ->
                     binding.routeDetailAbtnHeart.progress = animation.animatedValue as Float
