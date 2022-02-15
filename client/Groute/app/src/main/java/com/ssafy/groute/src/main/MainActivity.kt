@@ -58,6 +58,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
@@ -111,9 +114,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     true
                 }
                 R.id.Route -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_main_layout, RouteFragment())
-                        .commit()
+                    GlobalScope.launch {
+                        delay(1000L)
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.frame_main_layout, RouteFragment())
+                            .commit()
+                        dismissLoadingDialog()
+                    }
+                    showLoadingDialog(this)
                     true
                 }
                 R.id.Board -> {

@@ -6,6 +6,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.RelativeLayout
+import androidx.core.view.contains
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.kakao.kakaonavi.options.CoordType
@@ -25,6 +27,7 @@ import com.kakao.kakaonavi.Destination
 import com.kakao.kakaonavi.KakaoNaviService
 import com.kakao.kakaonavi.KakaoNaviParams
 import com.kakao.kakaonavi.NaviOptions
+import java.lang.RuntimeException
 
 
 class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind, R.layout.fragment_info) {
@@ -33,7 +36,8 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
     private val placeViewModel: PlaceViewModel by activityViewModels()
     var lat:Double = 0.0
     var lng:Double = 0.0
-
+    var mapViewcontainer:RelativeLayout? = null
+    private lateinit var mapView:MapView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -62,9 +66,8 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
 
         }
     }
-
-    private fun createMap(){
-        val mapView = MapView(requireContext())
+    fun createMap(){
+        mapView = MapView(requireContext())
         val marker = MapPOIItem()
         placeViewModel.place.observe(viewLifecycleOwner, Observer {
 
@@ -122,4 +125,27 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
             }
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        binding.kakaoMapView.removeView(mapView)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mapView.onSurfaceDestroyed()
+    }
 }

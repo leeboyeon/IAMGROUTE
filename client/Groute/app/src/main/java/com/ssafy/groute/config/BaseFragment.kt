@@ -11,6 +11,7 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.ssafy.groute.util.LoadingDialog
+import io.reactivex.disposables.CompositeDisposable
 
 
 // Fragment의 기본을 작성, 뷰 바인딩 활용
@@ -23,7 +24,7 @@ abstract class BaseFragment<B : ViewBinding>(
 //    val viewModel: MainViewModel by activityViewModels()
 //    lateinit var con:ViewGroup
     protected val binding get() = _binding!!
-
+    private val compositeDisposable = CompositeDisposable()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,4 +53,5 @@ abstract class BaseFragment<B : ViewBinding>(
             mLoadingDialog.dismiss()
         }
     }
+
 }
