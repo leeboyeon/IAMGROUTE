@@ -208,8 +208,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .addToBackStack(null)
             }
             4 -> {  // 하나의 장소에 대한 상세 정보 출력 화면
-                transaction.replace(R.id.frame_main_layout, PlaceDetailFragment.newInstance(key1, value1,key2,value2))
-                    .addToBackStack(null)
+                if(fm.findFragmentByTag("ReviewWriteFragment") != null) {
+                    fm.popBackStack("TO_REVIEWWRITE_TAG", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                } else {
+                    transaction.replace(R.id.frame_main_layout, PlaceDetailFragment.newInstance(key1, value1, key2, value2))
+                        .addToBackStack(null)
+                }
             }
             5->{    // 자유 or 질문 게시판 화면
                 if(fm.findFragmentByTag("BoardWriteFragment") != null) {
@@ -240,8 +244,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 logout()
             }
             11->{
-                transaction.replace(R.id.frame_main_layout, ReviewWriteFragment.newInstance(key1,value1,key2,value2))
-                    .addToBackStack(null)
+                transaction.replace(R.id.frame_main_layout, ReviewWriteFragment.newInstance(key1,value1,key2,value2), "ReviewWriteFragment")
+                    .addToBackStack("TO_REVIEWWRITE_TAG")
             }
 
             12-> {
