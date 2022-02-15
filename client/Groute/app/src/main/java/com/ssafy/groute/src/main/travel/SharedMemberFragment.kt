@@ -140,7 +140,7 @@ class SharedMemberFragment: BaseFragment<FragmentSharedMemberBinding>(FragmentSh
                 }
 
             })
-
+            binding.sharedMemberTvSize.text = "함께하는 여행친구 총 ${it.size}명"
         })
     }
     fun showDeleteDialog(userId:String){
@@ -167,7 +167,7 @@ class SharedMemberFragment: BaseFragment<FragmentSharedMemberBinding>(FragmentSh
             override fun onSuccess(code: Int, responseData: Boolean) {
                 Log.d(TAG, "onSuccess: ")
                 showCustomToast("삭제되었습니다.")
-                suspend {
+                runBlocking {
                     planViewModel.getShareUserbyPlanId(planId)
                 }
             }
@@ -191,7 +191,7 @@ class SharedMemberFragment: BaseFragment<FragmentSharedMemberBinding>(FragmentSh
 
             override fun onSuccess(code: Int, responseData: Boolean) {
                 Log.d(TAG, "onSuccess: ")
-                suspend {
+                runBlocking {
                     planViewModel.getShareUserbyPlanId(planId)
                 }
             }

@@ -54,20 +54,10 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <ImageButton
-                    android:id="@+id/imageButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/search" />
-
-                <ImageButton
-                    android:id="@+id/imageButton2"
+                <Space
                     android:layout_width="20dp"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/morecion" />
+                    android:layout_height="20dp" />
+
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView

@@ -134,7 +134,16 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 share.progress = animation.animatedValue as Float
             }
             animator.start()
-            mainActivity.moveFragment(18,"planId",planId)
+
+            if(planViewModel.planList.value!!.userId == ApplicationClass.sharedPreferencesUtil.getUser().id){
+                mainActivity.moveFragment(18,"planId",planId)
+
+            }else{
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("일정에 대한 생성자만 공유하실 수 있습니다.")
+                    .setNeutralButton("확인",null)
+                builder.show()
+            }
         }
         binding.travelplanCalcBtn.setOnClickListener {
             val money = binding.travelplanCalcIv
@@ -153,14 +162,8 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 member.progress = animation.animatedValue as Float
             }
             animator.start()
-            if(planViewModel.planList.value!!.userId == ApplicationClass.sharedPreferencesUtil.getUser().id){
-                mainActivity.moveFragment(17,"planId",planId)
-            }else{
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setTitle("일정에 대한 생성자만 공유하실 수 있습니다.")
-                    .setNeutralButton("확인",null)
-                builder.show()
-            }
+
+            mainActivity.moveFragment(17,"planId",planId)
         }
         binding.travelPlanIbtnMemo.setOnClickListener {
             var routes = planViewModel.routeList.value!!

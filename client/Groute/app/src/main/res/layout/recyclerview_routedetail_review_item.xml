@@ -80,11 +80,12 @@
                         android:max="5"
                         android:numStars="5"
                         android:stepSize="0.5"
-                        app:setRating="@{planReview.rate}"
+                        android:theme="@style/ratingBar"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/routeDetail_review_recycler_item_ib_more"
                         app:layout_constraintStart_toEndOf="@+id/space"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:setRating="@{planReview.rate}" />
 
                     <ImageButton
                         android:id="@+id/routeDetail_review_recycler_item_ib_more"

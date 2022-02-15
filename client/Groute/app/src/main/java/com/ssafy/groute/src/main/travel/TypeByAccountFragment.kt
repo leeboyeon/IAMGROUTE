@@ -82,7 +82,11 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
             planViewModel.getCategoryChart(planId)
             planViewModel.getAccountList(planId)
             planViewModel.getCategory()
+
         }
+        planViewModel.categoryByaccountList.observe(viewLifecycleOwner,{
+            binding.accountTypeTvTotalSize.text = "총 ${it}건"
+        })
         initChart()
         initTab()
         initAdatper()

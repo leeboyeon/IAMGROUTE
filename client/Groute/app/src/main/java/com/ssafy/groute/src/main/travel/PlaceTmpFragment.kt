@@ -63,6 +63,11 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
         }
 
         initTabLayout()
+
+        binding.tmpPlaceIbtnBack.setOnClickListener {
+            mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
+            mainActivity.supportFragmentManager.popBackStack()
+        }
     }
     fun initTabLayout(){
         binding.emptyLayout.isVisible = false
