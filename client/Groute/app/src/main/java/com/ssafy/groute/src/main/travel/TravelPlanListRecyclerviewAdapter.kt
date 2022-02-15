@@ -93,10 +93,9 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
     fun swapData(fromPos: Int, toPos: Int) {
         Collections.swap(routeDetailList, fromPos, toPos)
         notifyItemMoved(fromPos, toPos)
-        swapListener.onSwap(fromPos, toPos)
+
         val detailList = arrayListOf<RouteDetail>()
         for(i in 0..routeDetailList.size-1){
-
             val details = RouteDetail(
                 routeDetailList[i].id,
                 i+1
@@ -120,6 +119,7 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
             }
 
         })
+        swapListener.onSwap(fromPos, toPos)
     }
 
     override fun getFilter(): Filter {

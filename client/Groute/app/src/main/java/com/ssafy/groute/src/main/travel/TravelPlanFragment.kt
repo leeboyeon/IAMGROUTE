@@ -645,9 +645,9 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             })
             travelPlanListRecyclerviewAdapter.setSwapListener(object : TravelPlanListRecyclerviewAdapter.SwapListener {
                 override fun onSwap(fromPos: Int, toPos: Int) {
-                    Log.d(TAG, "onSwap: $fromPos $toPos")
+                    removePing()
+                    addPing(curPos)
                 }
-
             })
 
 
