@@ -27,7 +27,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
-import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.config.BaseActivity
 import com.ssafy.groute.databinding.ActivityProfileEditBinding
 import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.response.UserInfoResponse
@@ -46,26 +46,22 @@ import java.util.regex.Pattern
 
 
 private const val TAG = "ProfileEditA_groute"
-class ProfileEditActivity : AppCompatActivity() {
-    lateinit var binding: ActivityProfileEditBinding
+class ProfileEditActivity : BaseActivity<ActivityProfileEditBinding>(ActivityProfileEditBinding::inflate) {
+
     private var userEmail : String = ""
     private var userBirth : String = ""
     private var userGender : String = ""
     private lateinit var imgUri: Uri
     private var fileExtension : String? = ""
-    private val OPEN_GALLERY = 1
-    private val PERMISSION_GALLERY = 101
     private val mainViewModel : MainViewModel by viewModels()
 
-    @SuppressLint("LongLogTag")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityProfileEditBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
 
-
         val userData = intent.getSerializableExtra("userData") as UserInfoResponse
-        Log.d(TAG, "onCreate: $userData")
+
         initData(userData)
         initListeners()
         userBirth = userData.birth
@@ -77,15 +73,14 @@ class ProfileEditActivity : AppCompatActivity() {
             Log.d(TAG, "onCreate: $imgUri")
         } else {
             imgUri = Uri.EMPTY
-            Log.d(TAG, "fileUri가 초기화  $imgUri")
         }
 
         binding.profileEditFinish.setOnClickListener {
-            var user = isAvailable(userData)
+            val user = isAvailable(userData)
             if(user != null) {
                 updateUser(user)
             } else {
-                Toast.makeText(this, "입력 값을 다시 확인해 주세요", Toast.LENGTH_LONG).show()
+                showCustomToast("입력 값을 다시 확인해 주세요")
             }
         }
 
@@ -112,10 +107,7 @@ class ProfileEditActivity : AppCompatActivity() {
                 try {
                     currentImageUri?.let {
                         if(Build.VERSION.SDK_INT < 28) {
-                            val bitmap = MediaStore.Images.Media.getBitmap(
-                                this.contentResolver,
-                                currentImageUri
-                            )
+
                             Glide.with(this)
                                 .load(currentImageUri)
                                 .circleCrop()
@@ -123,23 +115,16 @@ class ProfileEditActivity : AppCompatActivity() {
                             imgUri = currentImageUri
 
                             fileExtension = contentResolver.getType(currentImageUri)
-                            Log.d(TAG, "filterActivityLauncher_1:$currentImageUri\n$imgUri\n$fileExtension")
 
                         } else {
-                            val source = ImageDecoder.createSource(this.contentResolver, currentImageUri)
-                            val bitmap = ImageDecoder.decodeBitmap(source)
-                            Log.d(TAG, "filterActivityLauncher_2 :$currentImageUri ${bitmap.width} ")
-                            //binding.profileEditImg.setImageBitmap(bitmap)
+
                             Glide.with(this)
                                 .load(currentImageUri)
                                 .circleCrop()
                                 .into(binding.profileEditImg)
-                            imgUri = currentImageUri
-//                            Log.d(TAG, "filterAL: ${imgUri}")
-                            fileExtension = contentResolver.getType(currentImageUri)
-                            Log.d(TAG, "filterActivityLauncher_1:$currentImageUri\n$imgUri\n" +
-                                    "$fileExtension")
 
+                            imgUri = currentImageUri
+                            fileExtension = contentResolver.getType(currentImageUri)
                         }
                     }
 
@@ -147,7 +132,7 @@ class ProfileEditActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
             } else if(it.resultCode == RESULT_CANCELED){
-                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
+                showCustomToast("사진 선택 취소")
                 imgUri = Uri.EMPTY
             }else{
                 Log.d("ActivityResult","something wrong")
@@ -161,8 +146,8 @@ class ProfileEditActivity : AppCompatActivity() {
         if(focusView != null) {
             val rect = Rect()
             focusView.getGlobalVisibleRect(rect)
-            var x = ev?.x
-            var y = ev?.y
+            val x = ev?.x
+            val y = ev?.y
             if(!rect.contains(x!!.toInt(), y!!.toInt())) {
                 val imm : InputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 if(imm != null)
@@ -174,12 +159,12 @@ class ProfileEditActivity : AppCompatActivity() {
     }
 
     // 사용자 정보 화면에 초기화
-    fun initData(user: UserInfoResponse) {
+    private fun initData(user: UserInfoResponse) {
 
-        var id = user.id
-        var password = user.password
-        var nickname = user.nickname
-        var phone = user.phone
+        val id = user.id
+        val password = user.password
+        val nickname = user.nickname
+        val phone = user.phone
         val u = User(id, password, nickname, phone, user.img.toString())
         binding.user = u
 
@@ -268,18 +253,14 @@ class ProfileEditActivity : AppCompatActivity() {
     private fun updateUser(user: User) {
         // 사진 선택 안하고 사용자 정보 수정 시 user 정보만 서버로 전송
         if(imgUri == Uri.EMPTY) {
-            Log.d(TAG, "updateUser: ${user}")
-            Log.d(TAG, "updateUser: ${user.img}")
             val gson : Gson = Gson()
-            var json = gson.toJson(user)
-            var requestBody_user = RequestBody.create(MediaType.parse("text/plain"), json)
-            Log.d(TAG, "updateUser_requestBodyUser: ${requestBody_user.contentType()}, ${json}")
+            val json = gson.toJson(user)
+            val requestBody_user = RequestBody.create(MediaType.parse("text/plain"), json)
             UserService().updateUserInfo(requestBody_user, null, UserUpdateCallback(user.id))
         }
         // 사진 선택 + 사용자 정보 수정 시 사용자 정보와 파일 같이 서버로 전송
         else {
             val file = File(imgUri.path!!)
-            Log.d(TAG, "filePath: ${file.path} \n${file.name}\n${fileExtension}")
 
             var inputStream: InputStream? = null
             try {
@@ -305,22 +286,20 @@ class ProfileEditActivity : AppCompatActivity() {
     inner class UserUpdateCallback(val userId: String): RetrofitCallback<Boolean> {
         override fun onSuccess(code: Int, responseData: Boolean) {
             if(responseData) {
-                Toast.makeText(this@ProfileEditActivity, "프로필 정보가 수정되었습니다.", Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "onSuccess: 사용자 정보 수정 완료")
+                showCustomToast("프로필 정보가 수정되었습니다.")
                 finish()
                 runBlocking {
                     mainViewModel.getUserInformation(userId, true)
                 }
             } else {
-                Toast.makeText(this@ProfileEditActivity, "프로필 정보 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                showCustomToast("프로필 정보 수정에 실패했습니다.")
             }
         }
-        @SuppressLint("LongLogTag")
+
         override fun onError(t: Throwable) {
             Log.d(TAG, t.message ?: "프로필 정보 수정 중 통신오류")
         }
 
-        @SuppressLint("LongLogTag")
         override fun onFailure(code: Int) {
             Log.d(TAG, "onResponse: Error Code $code")
         }
@@ -331,16 +310,11 @@ class ProfileEditActivity : AppCompatActivity() {
      * 선택 데이터 email, birth, gender 데이터 형식 확인 후 가입 가능한 상태인지 최종 판단
      * @return 가입 가능한 상태이면 user 객체를 반환
      */
-    @SuppressLint("LongLogTag")
     private fun isAvailable(user: UserInfoResponse) : User? {
         if(validatedNickname() && validatedPhone()) {
             val nickname = binding.profileEditNicknameEt.text.toString()
             val phone = binding.profileEditPhoneEt.text.toString()
-            Log.d(TAG, "isAvailable 사용자 비밀번호: ${user.password}")
-            Log.d(TAG, "isAvailable: ${phone}")
-            Log.d(TAG, "isAvailable: ${userEmail}")
-            Log.d(TAG, "isAvailable: ${userBirth}")
-            Log.d(TAG, "isAvailable: ${userGender}")
+
             if(userEmail == null)
                 userEmail = ""
             if(userBirth == null)
@@ -364,7 +338,7 @@ class ProfileEditActivity : AppCompatActivity() {
     /**
      * 사용자의 Birth가 null이 아니면 Spinner에 초기값 표시해줄 Index 반환
      */
-    fun getSpinnerIndex(spinner: Spinner, str: String) : Int{
+    private fun getSpinnerIndex(spinner: Spinner, str: String) : Int{
 
         for(i in 0 until spinner.count) {
             if(spinner.getItemAtPosition(i).toString().equals(str)) {
@@ -450,9 +424,9 @@ class ProfileEditActivity : AppCompatActivity() {
      */
     private fun initDomain() {
         // 자동완성으로 보여줄 내용들
-        var domains = arrayOf("gmail.com", "naver.com", "nate.com", "daum.net")
+        val domains = arrayOf("gmail.com", "naver.com", "nate.com", "daum.net")
 
-        var adapter = ArrayAdapter<String>(this, R.layout.simple_dropdown_item_1line, domains)
+        val adapter = ArrayAdapter<String>(this, R.layout.simple_dropdown_item_1line, domains)
         binding.profileEditEmailDomain.setAdapter(adapter)
     }
 
@@ -470,7 +444,6 @@ class ProfileEditActivity : AppCompatActivity() {
         val daySpinner = binding.profileEditSpinnerDay
 
         // year
-
         yearSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -493,7 +466,6 @@ class ProfileEditActivity : AppCompatActivity() {
         }
 
         // month
-
         monthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -516,7 +488,6 @@ class ProfileEditActivity : AppCompatActivity() {
         }
 
         // day
-
         daySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -532,7 +503,6 @@ class ProfileEditActivity : AppCompatActivity() {
                         // birth 형식 맞추기
                         if(year != "" && month != "" && day != "") {  // 전부 선택 되어 데이터가 들어있으면
                             userBirth = "$year-$month-$day"
-                            Log.d(TAG, "onItemSelected: ${userBirth}")
                         }
                     }
                 }

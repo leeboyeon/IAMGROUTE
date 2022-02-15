@@ -3,12 +3,11 @@ package com.ssafy.groute.src.main.my
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.ssafy.groute.R
-import com.ssafy.groute.config.ApplicationClass
+import com.ssafy.groute.databinding.RecyclerviewTravleingItemBinding
+import com.ssafy.groute.src.dto.BestRoute
 import com.ssafy.groute.src.dto.UserPlan
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.CommonUtils
@@ -16,8 +15,8 @@ import kotlinx.coroutines.runBlocking
 
 class MyTravelAdapter(val planViewModel: PlanViewModel) : RecyclerView.Adapter<MyTravelAdapter.MyTravelHolder>(){
     var list = mutableListOf<UserPlan>()
-    inner class MyTravelHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val routeImg = itemView.findViewById<ImageView>(R.id.mytravel_iv_img)
+    inner class MyTravelHolder(private val binding: RecyclerviewTravleingItemBinding) : RecyclerView.ViewHolder(binding.root){
+
         fun bindInfo(data:UserPlan){
             runBlocking {
                 planViewModel.getPlanById(data.id, 2)
@@ -32,23 +31,17 @@ class MyTravelAdapter(val planViewModel: PlanViewModel) : RecyclerView.Adapter<M
                     }
                 }
             }
-            if(imgUrl == "") {
-                routeImg.setImageResource(R.drawable.defaultimg)
-            } else {
-                Glide.with(itemView)
-                    .load("${ApplicationClass.IMGS_URL_PLACE}${imgUrl}")
-                    .into(routeImg)
-            }
 
-            itemView.findViewById<TextView>(R.id.mytravel_tv_title).text = data.title
-            itemView.findViewById<TextView>(R.id.mytravel_tv_due).text = CommonUtils.getFormattedDueDate(data.startDate,data.endDate)
+            binding.mytravelTvDue.text = CommonUtils.getFormattedDueDate(data.startDate, data.endDate)
 
+            val tmp = BestRoute(imgUrl, data.title)
+            binding.tmp = tmp
+            binding.executePendingBindings()
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyTravelHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_travleing_item,parent,false)
-        return MyTravelHolder(view)
+        return MyTravelHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.recyclerview_travleing_item, parent, false))
     }
 
     override fun onBindViewHolder(holder: MyTravelHolder, position: Int) {
