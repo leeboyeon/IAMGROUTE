@@ -54,8 +54,8 @@ class PlanViewModel : ViewModel() {
     private val _sharedTravelListResponse = MutableLiveData<MutableList<UserPlan>>()
     private val _bestPriorityResponse = MutableLiveData<MutableList<RouteDetail>>()
     private val _accountAllListResponse = MutableLiveData<MutableList<Account>>()
-    //    private val _routeResponse = MutableLiveData<MutableList<>>
-//    private val _routeDetailResponse = MutableLiveData<MutableList<>>
+    private val _categoryByaccountResponse = MutableLiveData<Int>()
+
     val planBestList: LiveData<MutableList<UserPlan>>
         get() = _planBestResponse
     val planMyList: LiveData<MutableList<UserPlan>>
@@ -102,6 +102,8 @@ class PlanViewModel : ViewModel() {
         get() = _bestPriorityResponse
     val accountAllList :LiveData<MutableList<Account>>
         get() = _accountAllListResponse
+    val categoryByaccountList : LiveData<Int>
+        get() = _categoryByaccountResponse
 
     fun setPlanBestList(plan: MutableList<UserPlan>) = viewModelScope.launch {
         _planBestResponse.value = plan
@@ -219,6 +221,9 @@ class PlanViewModel : ViewModel() {
     }
     fun setBestPriority(routeDetail:MutableList<RouteDetail>) = viewModelScope.launch {
         _bestPriorityResponse.value = routeDetail
+    }
+    fun setCategoryByAccount(size:Int) = viewModelScope.launch {
+        _categoryByaccountResponse.value = size
     }
 
     suspend fun getPlanBestList() {

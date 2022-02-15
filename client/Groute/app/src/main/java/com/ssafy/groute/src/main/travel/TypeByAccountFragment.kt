@@ -45,6 +45,7 @@ import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.CommonUtils
 import kotlinx.coroutines.runBlocking
 import java.text.DecimalFormat
+import java.text.Normalizer
 import java.text.NumberFormat
 import kotlin.math.cos
 import kotlin.math.log
@@ -59,7 +60,7 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
     var sum = 0
     var cnt = 0
     var curPos = 0
-//    lateinit var listsize :LiveData<Int>
+    var listsize = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,8 +112,9 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
                     ?.let { CommonUtils.makeComma(it) }
         }
 
-//        binding.accountTypeTvTotalSize.text = "총 ${listsize}건"
-
+        planViewModel.categoryByaccountList.observe(viewLifecycleOwner,{
+            binding.accountTypeTvTotalSize.text = "총 ${it}건"
+        })
     }
     fun initTab(){
         binding.accountCategoryTabLayout.addTab(binding.accountCategoryTabLayout.newTab().setText("쇼핑"))
@@ -131,41 +133,30 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
                 when(tab?.position){
                     0->{
                         accountTypeAdapter.filter.filter("")
-//                        listsize = accountTypeAdapter.itemCount
-
-
                     }
                     1->{
                         accountTypeAdapter.filter.filter("카페")
-//                        listsize = accountTypeAdapter.itemCount
                     }
                     2->{
                         accountTypeAdapter.filter.filter("식당")
-//                        listsize = accountTypeAdapter.itemCount
                     }
                     3->{
                         accountTypeAdapter.filter.filter("쇼핑")
-//                        listsize = accountTypeAdapter.itemCount
                     }
                     4->{
                         accountTypeAdapter.filter.filter("항공")
-//                        listsize = accountTypeAdapter.itemCount
                     }
                     5->{
                         accountTypeAdapter.filter.filter("교통")
-//                        listsize = accountTypeAdapter.itemCount
                     }
                     6->{
                         accountTypeAdapter.filter.filter("관광")
-//                        listsize = accountTypeAdapter.itemCount
                     }
                     7->{
                         accountTypeAdapter.filter.filter("숙소")
-//                        binding.accountTypeTvTotalSize.text = "총 ${accountTypeAdapter.itemCount}건"
                     }
                     8->{
                         accountTypeAdapter.filter.filter("기타")
-//                        binding.accountTypeTvTotalSize.text = "총 ${accountTypeAdapter.itemCount}건"
                     }
                 }
 
@@ -181,7 +172,7 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
     }
     fun initAdatper(){
         planViewModel.accountAllList.observe(viewLifecycleOwner,{
-            accountTypeAdapter = AccountTypeAdapter(it)
+            accountTypeAdapter = AccountTypeAdapter(it,planViewModel,viewLifecycleOwner)
             binding.accountTypeRvList.apply {
                 layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
                 adapter = accountTypeAdapter
@@ -269,7 +260,8 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
                     yValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
                     xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
                     valueTextSize = 14f
-                    valueTypeface = Typeface.DEFAULT_BOLD
+                    valueTypeface = Typeface.create("font_family_groute",Typeface.NORMAL)
+//                    valueTypeface = Typeface.DEFAULT_BOLD
                     selectionShift = 3f
                 }
 
@@ -282,6 +274,7 @@ class TypeByAccountFragment : BaseFragment<FragmentTypeByAccountBinding>(Fragmen
                 setCenterTextTypeface(Typeface.DEFAULT_BOLD)
                 setCenterTextColor(Color.parseColor("#222222"))
                 centerText = "총금액\n ${CommonUtils.makeComma(sum)}"
+                setCenterTextTypeface(Typeface.create("font_family_groute",Typeface.NORMAL))
                 legend.isEnabled = true
                 description = null
                 var l = legend

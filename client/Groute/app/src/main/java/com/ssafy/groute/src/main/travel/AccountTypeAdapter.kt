@@ -6,13 +6,15 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.RecyclerviewAccountBycategorybyListItemBinding
 import com.ssafy.groute.src.dto.Account
+import com.ssafy.groute.src.viewmodel.PlanViewModel
 import java.io.FilterReader
 
-class AccountTypeAdapter(var list:MutableList<Account>) : RecyclerView.Adapter<AccountTypeAdapter.AccountTypeHolder>(),Filterable{
+class AccountTypeAdapter(var list:MutableList<Account>,var planViewModel: PlanViewModel, var owner: LifecycleOwner) : RecyclerView.Adapter<AccountTypeAdapter.AccountTypeHolder>(),Filterable{
     var filteredList = list
     var unfilteredList = list
     var size = -1
@@ -35,8 +37,6 @@ class AccountTypeAdapter(var list:MutableList<Account>) : RecyclerView.Adapter<A
     }
 
     override fun getItemCount(): Int {
-//        Log.d("AccountTypeAdatper", "getItemCount: ${filteredList.size}")
-
         return filteredList.size
     }
 
@@ -56,6 +56,8 @@ class AccountTypeAdapter(var list:MutableList<Account>) : RecyclerView.Adapter<A
                 val filterResults = FilterResults()
                 filterResults.values = filteredList
                 size = filteredList.size
+                planViewModel.setCategoryByAccount(size)
+                Log.d("ADAPTER", "performFiltering: ${size}")
                 return filterResults
             }
 
