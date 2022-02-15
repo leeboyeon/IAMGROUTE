@@ -27,24 +27,14 @@ import com.ssafy.groute.util.RetrofitCallback
 import com.ssafy.groute.util.RetrofitUtil
 import kotlinx.coroutines.runBlocking
 
-
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 private const val TAG = "NotificationF_Groute"
 class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentNotificationBinding::bind, R.layout.fragment_notification) {
-    private var param1: String? = null
-    private var param2: String? = null
     private lateinit var mainActivity: MainActivity
     private val notiViewModel : NotificationViewModel by activityViewModels()
     private lateinit var notiAdapter : NotificationAdapter
     var curPos = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
         mainActivity.hideMainProfileBar(true)
     }
 
@@ -61,7 +51,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
 
         binding.notiViewModel = notiViewModel
         initSpinner()
-
+        initAdapter(0)
         binding.notiBack.setOnClickListener {
             mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
             mainActivity.supportFragmentManager.popBackStack()
@@ -69,6 +59,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
     }
     fun initAdapter(type:Int){
         notiViewModel.notificationList.observe(viewLifecycleOwner, {
+            Log.d(TAG, "initAdapter: ${it}")
             binding.notiRvNotiList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             if(type == 1){
                 //event
@@ -147,7 +138,6 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
             }
 
         }
@@ -159,8 +149,6 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
         fun newInstance(param1: String, param2: String) =
             NotificationFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
                 }
             }
     }
