@@ -35,9 +35,15 @@ fun bindImageArea(imgView: ImageView, imgUrl: String?) {
 
 @BindingAdapter("imageUrlPlace")
 fun bindImagePlace(imgView: ImageView, imgUrl: String?) {
-    Glide.with(imgView.context)
-        .load("${ApplicationClass.IMGS_URL_PLACE}${imgUrl}")
-        .into(imgView)
+    if (imgUrl == "null" || imgUrl == null || imgUrl.isEmpty()) {
+        Glide.with(imgView.context)
+            .load(R.drawable.defaultimg)
+            .into(imgView)
+    } else {
+        Glide.with(imgView.context)
+            .load("${ApplicationClass.IMGS_URL_PLACE}${imgUrl}")
+            .into(imgView)
+    }
 }
 
 @BindingAdapter("imageUrlBestPlace")
