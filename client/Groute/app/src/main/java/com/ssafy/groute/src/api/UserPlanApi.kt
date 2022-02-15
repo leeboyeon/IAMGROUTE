@@ -48,6 +48,9 @@ interface UserPlanApi {
     @POST("/plan/place")
     fun insertPlaceToUserPlan(@Body routeDetail: RouteDetail) : Call<Boolean>
 
+    @DELETE("/plan/place/{id}")
+    fun deletePlaceInUserPlan(@Path("id") id: Int) : Call<Boolean>
+
     @GET("/plan/list")
     suspend fun getPlanList() : Response<MutableList<UserPlan>>
 
