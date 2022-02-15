@@ -50,6 +50,7 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(false)
+        mainActivity.hideBottomNav(false)
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -59,6 +60,7 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         mainActivity.hideMainProfileBar(false)
+        mainActivity.hideBottomNav(false)
     }
 
     override fun onCreateView(
