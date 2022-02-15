@@ -79,7 +79,6 @@
                     android:id="@+id/boardDetail_iv_userImg"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:src="@drawable/circle_back"
                     app:imageUrlUser="@{writeUser.img}"/>
 
                 <TextView
@@ -112,7 +111,6 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="30dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/jejuplace4"
                 app:imageUrlBoardPost="@{boardDetail.img}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -259,7 +257,6 @@
                     android:layout_marginStart="40dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:src="@drawable/circle_back"
                     app:imageUrlUser="@{loginUser.img}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

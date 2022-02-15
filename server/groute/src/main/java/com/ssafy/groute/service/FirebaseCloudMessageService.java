@@ -111,7 +111,6 @@ public class FirebaseCloudMessageService {
 
         if(response.isSuccessful()) {
             User user = userService.selectUserByToken(targetToken);
-            log.info("USERID  "+ user);
             notiService.insertNotification(new Notification(0, user.getId(), title, body, null));  // title == category
         }
     }

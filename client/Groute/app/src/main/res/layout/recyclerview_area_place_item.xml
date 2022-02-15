@@ -24,7 +24,6 @@
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/jejuplace1"
             app:imageUrlPlace="@{place.img}"/>
 
         <TextView

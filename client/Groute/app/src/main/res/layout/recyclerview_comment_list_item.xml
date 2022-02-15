@@ -29,8 +29,7 @@
         android:scaleType="centerInside"
         app:imageUrlUser="@{writeUser.img}"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/circle_back" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/comment_detail_tv_userNick"

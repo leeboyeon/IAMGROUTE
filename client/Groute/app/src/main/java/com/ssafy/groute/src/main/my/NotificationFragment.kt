@@ -72,8 +72,8 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
             binding.notiRvNotiList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             if(type == 1){
                 //event
-                    var eventList = arrayListOf<Notification>()
-                for(i in 0..it.size-1){
+                val eventList = arrayListOf<Notification>()
+                for(i in 0 until it.size){
                     if(it[i].category.equals("Event")){
                         eventList.add(it[i])
                     }
@@ -82,13 +82,13 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
             }
             if(type == 2){
                 //user
-                var UserList = arrayListOf<Notification>()
-                for(i in 0..it.size-1){
+                val userList = arrayListOf<Notification>()
+                for(i in 0 until it.size){
                     if(it[i].category.equals("User")){
-                        UserList.add(it[i])
+                        userList.add(it[i])
                     }
                 }
-                notiAdapter = NotificationAdapter(UserList,viewLifecycleOwner,notiViewModel)
+                notiAdapter = NotificationAdapter(userList,viewLifecycleOwner,notiViewModel)
             }
             if(type == 0){
                 notiAdapter = NotificationAdapter(it, viewLifecycleOwner, notiViewModel)
@@ -121,15 +121,16 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(FragmentN
             Log.d(TAG, "onFailure: ")
         }
     }
-    fun initSpinner(){
+
+    private fun initSpinner(){
         val spinnerArray = arrayListOf<String>()
         spinnerArray.apply {
             add("전체")
             add("이벤트")
             add("개인")
         }
-        var spinner = binding.notiSpinnerCategory
-        var spinnerAdapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,spinnerArray)
+        val spinner = binding.notiSpinnerCategory
+        val spinnerAdapter = ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, spinnerArray)
         spinner.adapter = spinnerAdapter
 
         spinner.setSelection(0,false)
