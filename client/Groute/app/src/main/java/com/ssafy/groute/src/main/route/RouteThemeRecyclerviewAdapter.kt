@@ -4,9 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.ssafy.groute.R
@@ -30,11 +27,8 @@ class RouteThemeRecyclerviewAdapter(val context : Context) : RecyclerView.Adapte
     }
 
     inner class RouteThemeHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-//        val themeTv = itemView.findViewById<TextView>(R.id.themeTxt)
-//        val cardView = itemView.findViewById<CardView>(R.id.cardview)
         val chip = itemView.findViewById<Chip>(R.id.chiplayout)
         fun bindInfo(theme : Theme, position: Int) {
-//            themeTv.text = theme.name
             chip.text = theme.name
             if(selectCheck[position] == 1) {
                 chip.isChecked = true

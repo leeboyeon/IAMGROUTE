@@ -62,7 +62,6 @@ class RoutePageAreaAdapter(private val areaList: MutableList<Area>, val selectLi
                 areaTxt.setTextColor(ContextCompat.getColor(context, R.color.black))
             }
         }
-
     }
 
     interface ItemClickListener{

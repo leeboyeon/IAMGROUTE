@@ -47,7 +47,7 @@ import java.io.File
 import java.io.IOException
 import java.io.InputStream
 
-private const val TAG = "RouteReviewWriteFrament"
+private const val TAG = "RouteReviewWriteFragment"
 class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(FragmentRouteReviewWriteBinding::bind, R.layout.fragment_route_review_write) {
     private lateinit var mainActivity: MainActivity
     private val planViewModel: PlanViewModel by activityViewModels()

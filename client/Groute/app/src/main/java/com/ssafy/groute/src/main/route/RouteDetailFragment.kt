@@ -1,7 +1,6 @@
 package com.ssafy.groute.src.main.route
 
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
@@ -21,18 +20,14 @@ import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentRouteDetailBinding
 import com.ssafy.groute.src.dto.PlanLike
-import com.ssafy.groute.src.dto.RouteDetail
 import com.ssafy.groute.src.dto.UserPlan
 import com.ssafy.groute.src.main.MainActivity
-import com.ssafy.groute.src.main.home.AreaTabPagerAdapter
 import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.RetrofitCallback
-import com.ssafy.groute.util.RetrofitUtil
 import kotlinx.coroutines.runBlocking
 
-private const val TAG = "RouteDetailFragment"
-
+private const val TAG = "RouteDetailF_Groute"
 class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
     FragmentRouteDetailBinding::bind,
     R.layout.fragment_route_detail
@@ -48,7 +43,6 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
     private var isAddPlan = false
     lateinit var userId: String
 
-    @SuppressLint("LongLogTag")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -57,7 +51,6 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
             planIdDetail = it.getInt("planIdDetail", -1)
             planIdUser = it.getInt("planIdUser", -1)
         }
-        Log.d(TAG, "onCreate: ${planIdDetail}")
     }
 
     override fun onAttach(context: Context) {
@@ -113,12 +106,10 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         }
         binding.routeDetailAbtnHeart.setOnClickListener {
             if(binding.routeDetailAbtnHeart.progress > 0F){
-                Log.d(TAG, "onBindViewHolder: 이미 클릭됨")
                 binding.routeDetailAbtnHeart.pauseAnimation()
                 binding.routeDetailAbtnHeart.progress = 0F
                 planLike(PlanLike(userId, planIdDetail))
             }else{
-                Log.d(TAG, "onBindViewHolder: 클릭할거얌")
                 val animator = ValueAnimator.ofFloat(0f,0.5f).setDuration(500)
                 animator.addUpdateListener { animation ->
                     binding.routeDetailAbtnHeart.progress = animation.animatedValue as Float
@@ -133,11 +124,9 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
         }
     }
 
-    fun initAdapter() {
+    private fun initAdapter() {
             planViewModel.theme.observe(viewLifecycleOwner, Observer {
-                routeDetailThemeAdapter = RouteDetailThemeAdapter(viewLifecycleOwner, planViewModel)
-                Log.d(TAG, "initAdapter Theme: ")
-                routeDetailThemeAdapter.setThemeList(it)
+                routeDetailThemeAdapter = RouteDetailThemeAdapter(it)
                 routeDetailThemeAdapter.setHasStableIds(true)
                 binding.RouteDetailThemeRv.apply {
                     layoutManager =
@@ -148,7 +137,7 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
 
     }
 
-    fun initData() {
+    private fun initData() {
         UserPlanService().planIsLike(PlanLike(userId, planIdDetail), object : RetrofitCallback<Boolean> {
             override fun onError(t: Throwable) {
                 Log.d(TAG, "onError: 찜하기 여부 에러")
@@ -170,10 +159,9 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
     /**
      * 내 일정에 추가하기 클릭 후 BottomSheet show
      */
-    fun showRouteAddBottomSheet() {
-        var dialogView: View =
+    private fun showRouteAddBottomSheet() {
+        val dialogView: View =
             LayoutInflater.from(requireContext()).inflate(R.layout.plan_add_bottom_sheet, null)
-        Log.d(TAG, "showRouteAddBottomSheet: $planIdUser")
         if (planIdUser == -1) { // 그냥 루트 페이지에서 넘어왔을때 진행중인 일정들 다 보여주기
             runBlocking {
                 planViewModel.getMyNotendPlan(ApplicationClass.sharedPreferencesUtil.getUser().id)
@@ -190,9 +178,8 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
             bottomSheetRecyclerviewAdapter =
                 BottomSheetRecyclerviewAdapter(viewLifecycleOwner, planViewModel, requireContext(), true)
             bottomSheetRecyclerviewAdapter.setUserPlanList(it)
-            Log.d(TAG, "showRouteAddBottomSheet: $it")
 
-            var recyclerview =
+            val recyclerview =
                 dialogView.findViewById<RecyclerView>(R.id.bottom_sheet_recyclerview)
             recyclerview.apply {
                 layoutManager =
@@ -204,17 +191,13 @@ class RouteDetailFragment : BaseFragment<FragmentRouteDetailBinding>(
 
             bottomSheetRecyclerviewAdapter.setItemClickListener(object : BottomSheetRecyclerviewAdapter.ItemClickListener {
                 override fun onClickDay(position: Int, day: Int, userPlan: UserPlan) {
-                    Log.d(TAG, "onClick day: $day")
                     addDay = day
                     selectUserPlan = userPlan
 
                 }
-
-
             })
-
         })
-        var dialog = Dialog(requireContext())
+        val dialog = Dialog(requireContext())
         dialog.setContentView(dialogView)
 
         // 일정 등록 버튼을 눌렀을때
