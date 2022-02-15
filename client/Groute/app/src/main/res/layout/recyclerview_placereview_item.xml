@@ -82,6 +82,7 @@
                         android:numStars="5"
                         android:stepSize="0.5"
                         app:setRating="@{placeReview.rate}"
+                        android:theme="@style/ratingBar"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/reviewItem_ib_more"
                         app:layout_constraintStart_toEndOf="@+id/space"
