@@ -2,28 +2,20 @@ package com.ssafy.groute.src.main.home
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.config.BaseFragment
-import com.ssafy.groute.databinding.FragmentInfoBinding
 import com.ssafy.groute.databinding.FragmentReviewBinding
-import com.ssafy.groute.src.dto.PlaceReview
-import com.ssafy.groute.src.dto.Review
 import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import kotlinx.coroutines.runBlocking
 
 private const val TAG = "ReviewFragment"
 class ReviewFragment : BaseFragment<FragmentReviewBinding>(FragmentReviewBinding::bind, R.layout.fragment_review) {
-//    private lateinit var binding: FragmentReviewFragmentBinding
     private lateinit var mainActivity: MainActivity
     private lateinit var reviewAdapter:ReviewAdapter
     private val placeViewModel: PlaceViewModel by activityViewModels()
@@ -44,25 +36,26 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(FragmentReviewBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = placeViewModel
+
         runBlocking {
             placeViewModel.getPlaceReviewListbyId(placeId)
         }
+
         initAdapter()
+
         binding.reviewIbtnWrite.setOnClickListener {
-            Log.d(TAG, "onViewCreated: ${placeId}")
             mainActivity.moveFragment(11,"placeId",placeId)
         }
     }
-    fun initAdapter(){
+
+    private fun initAdapter(){
         placeViewModel.placeReviewList.observe(viewLifecycleOwner, Observer {
             reviewAdapter = ReviewAdapter(viewLifecycleOwner,requireContext(), placeViewModel)
             reviewAdapter.list = it
             reviewAdapter.setModifyClickListener(object: ReviewAdapter.ModifyClickListener{
                 override fun onClick(position: Int) {
                     mainActivity.moveFragment(11,"placeId",placeId,"reviewId",it[position].id)
-
                 }
-
             })
             binding.reviewRvList.apply{
                 layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
@@ -71,8 +64,8 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(FragmentReviewBinding
             }
         })
     }
-    companion object {
 
+    companion object {
         @JvmStatic
         fun newInstance(key1:String, value1:Int) =
             ReviewFragment().apply {
