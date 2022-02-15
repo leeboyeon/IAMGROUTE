@@ -3,14 +3,10 @@ package com.ssafy.groute.src.main.route
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.RecyclerviewRouteAddmemberItemBinding
-import com.ssafy.groute.src.dto.Member
 import com.ssafy.groute.src.dto.User
 
 class MemberAdapter : RecyclerView.Adapter<MemberAdapter.MemberHolder>(){

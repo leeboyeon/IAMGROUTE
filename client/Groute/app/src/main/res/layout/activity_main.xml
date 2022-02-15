@@ -93,7 +93,6 @@
                 android:layout_height="100dp"
                 android:layout_margin="10dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/user"
                 app:imageUrlUser="@{user.img}" />
         </LinearLayout>
 

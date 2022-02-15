@@ -17,7 +17,6 @@ import com.ssafy.groute.databinding.FragmentRouteCreateBinding
 import com.ssafy.groute.src.main.MainActivity
 import java.text.SimpleDateFormat
 import java.util.*
-import com.ssafy.groute.src.dto.Member
 import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.dto.UserPlan
 import com.ssafy.groute.src.service.UserPlanService
@@ -91,7 +90,6 @@ class RouteCreateFragment : BaseFragment<FragmentRouteCreateBinding>(FragmentRou
 
         if(userInfo!=null){
             userInfo.observe(viewLifecycleOwner, {
-                val user = User(it.id, it.nickname, it.img.toString())
                 member.apply {
                     if(it.img != null){
                         add(User(it.id, it.nickname, it.img.toString()))

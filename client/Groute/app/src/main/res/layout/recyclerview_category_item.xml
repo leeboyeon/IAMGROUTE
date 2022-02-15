@@ -32,8 +32,7 @@
             app:layout_constraintBottom_toTopOf="@+id/main_tv_category"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/busan" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/main_tv_category"
