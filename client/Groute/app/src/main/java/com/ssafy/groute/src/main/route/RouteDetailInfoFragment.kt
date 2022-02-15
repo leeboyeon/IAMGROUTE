@@ -24,7 +24,7 @@ import net.daum.mf.map.api.MapView
 import java.lang.RuntimeException
 import java.util.ArrayList
 
-//private const val TAG = "RouteDetailInfoFragment_groute"
+private const val TAG = "RouteDetailInfoFragment_groute"
 class RouteDetailInfoFragment : BaseFragment<FragmentRouteDetailInfoBinding>(FragmentRouteDetailInfoBinding::bind, R.layout.fragment_route_detail_info) {
     private lateinit var routeDetailDayPerAdapter: RouteDetailDayPerAdapter
     private lateinit var mainActivity: MainActivity

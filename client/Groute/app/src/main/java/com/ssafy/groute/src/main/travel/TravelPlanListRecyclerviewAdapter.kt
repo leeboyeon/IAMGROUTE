@@ -39,9 +39,6 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
 
             binding.itemTravelplanNumTv.text = "${this.layoutPosition + 1}"
 
-//            placeTv.text = data.place.name
-//            locTv.text = data.place.address
-//            memo.text = data.memo
 
             // item의 위치에 따라 점선 보이거나 안보이거나 처리
             if(flag == 0) {
@@ -68,8 +65,6 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TravelPlanListHolder {
-//        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_travelplan_day_list, parent, false)
-//        return TravelPlanListHolder(view)
         return TravelPlanListHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_travelplan_day_list, parent, false))
     }
 
@@ -101,6 +96,7 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
 
         val detailList = arrayListOf<RouteDetail>()
         for(i in 0..routeDetailList.size-1){
+
             val details = RouteDetail(
                 routeDetailList[i].id,
                 i+1

@@ -243,9 +243,11 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         dialogView.findViewById<AppCompatButton>(R.id.bestPriority_btn_ok).setOnClickListener {
             routeId = routeDetailList!!.id
             Log.d(TAG, "showBestPriorityDialog: ${endId},${startId},${routeId}")
+            removePing()
             runBlocking {
                 planViewModel.getBestPriority(endId, startId,routeId,curPos)
             }
+            addPing(curPos)
             dialog.dismiss()
         }
     }
