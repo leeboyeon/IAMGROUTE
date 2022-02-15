@@ -7,10 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.RecyclerviewFindlocationListItemBinding
 import com.ssafy.groute.src.dto.Place
-import com.ssafy.groute.src.dto.RouteDetail
 
-class FindLocationAdapter : RecyclerView.Adapter<FindLocationAdapter.LocationHolder>(){
+class FindLocationAdapter : RecyclerView.Adapter<FindLocationAdapter.LocationHolder>() {
+
     var list = listOf<Place>()
+
     inner class LocationHolder(private var binding:RecyclerviewFindlocationListItemBinding):RecyclerView.ViewHolder(binding.root){
         fun bindInfo(data: Place){
             binding.place = data

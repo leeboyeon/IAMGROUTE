@@ -1,21 +1,15 @@
 package com.ssafy.groute.src.main.travel
 
-import android.annotation.SuppressLint
-import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.PaintDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.R
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentAccountBinding
@@ -24,7 +18,6 @@ import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.CommonUtils
 import kotlinx.coroutines.runBlocking
 
-private const val TAG = "AccountFragment"
 class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBinding::bind,R.layout.fragment_account) {
     private lateinit var mainActivity: MainActivity
     private val planViewModel: PlanViewModel by activityViewModels()
@@ -41,7 +34,6 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
         arguments?.let {
             planId = it.getInt("planId",-1)
         }
-        Log.d(TAG, "onAttach: ${planId}")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,11 +52,11 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
 
         binding.accountToggleDay.setOnClickListener {
             //날짜별 클릭시
-            ToggleClick(true)
+            toggleClick(true)
             binding.accountvp.currentItem = 1
         }
         binding.accountToggleCate.setOnClickListener {
-            ToggleClick(false)
+            toggleClick(false)
             binding.accountvp.currentItem = 0
         }
         binding.accountFabWrite.setOnClickListener {
@@ -79,8 +71,9 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
             mainActivity.supportFragmentManager.popBackStack()
         }
     }
-    @SuppressLint("SetTextI18n")
-    fun showDivDialog(){
+
+
+    private fun showDivDialog(){
 //        shareuser
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_div_account,null)
         val dialog = BottomSheetDialog(requireContext())
@@ -89,10 +82,10 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
         }
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        var param = WindowManager.LayoutParams()
+        val param = WindowManager.LayoutParams()
         param.width = WindowManager.LayoutParams.MATCH_PARENT
         param.height = WindowManager.LayoutParams.MATCH_PARENT
-        var window = dialog.window
+        val window = dialog.window
         window?.attributes = param
         dialog.setContentView(dialogView)
         dialogView.findViewById<TextView>(R.id.accountDia_tv_date).text = "${planViewModel.planList.value!!.startDate} ~ ${planViewModel.planList.value!!.endDate}"
@@ -105,14 +98,14 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
         var member = planViewModel.shareUserList.value!!.size
         dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text = member.toString()
         maxMember = member
-        var div = total/member
+        val div = total/member
         dialogView.findViewById<TextView>(R.id.accountDia_tv_total).text = "1인, ${CommonUtils.makeComma(div)}"
 
         dialogView.findViewById<ImageButton>(R.id.accountDia_ibtn_minus).setOnClickListener {
             if(member > 1){
                 member -= 1
                 dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text = member.toString()
-                var div = total/dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text.toString().toInt()
+                val div = total/dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text.toString().toInt()
                 dialogView.findViewById<TextView>(R.id.accountDia_tv_total).text = "1인, ${CommonUtils.makeComma(div)}"
             }
         }
@@ -120,8 +113,7 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
             if(member <= maxMember - 1) {
                 member += 1
                 dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text = member.toString()
-                var div = total / dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text.toString()
-                        .toInt()
+                val div = total / dialogView.findViewById<TextView>(R.id.accountDia_tv_count).text.toString().toInt()
                 dialogView.findViewById<TextView>(R.id.accountDia_tv_total).text = "1인, ${CommonUtils.makeComma(div)}"
             }
         }
@@ -130,7 +122,8 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
             dialog.dismiss()
         }
     }
-    fun ToggleClick(clicked:Boolean){
+
+    private fun toggleClick(clicked:Boolean){
         if(clicked){
             //일자별 클릭시
             binding.accountToggleCate.setBackgroundResource(0)

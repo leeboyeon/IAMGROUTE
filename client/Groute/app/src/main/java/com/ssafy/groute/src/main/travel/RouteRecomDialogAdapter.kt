@@ -11,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.ssafy.groute.R
+import com.ssafy.groute.src.dto.RouteRecom
 
 private const val TAG = "RouteRecomDialogAdapter"
 class RouteRecomDialogAdapter(val context: Context) : RecyclerView.Adapter<RouteRecomDialogAdapter.RouteRecomHolder>(){
@@ -18,7 +19,7 @@ class RouteRecomDialogAdapter(val context: Context) : RecyclerView.Adapter<Route
 
     inner class RouteRecomHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
-        fun bindInfo(data:RouteRecom){
+        fun bindInfo(data: RouteRecom){
 
             itemView.findViewById<LottieAnimationView>(R.id.routeRom_lottie_fileName).setAnimation(data.lottie)
             itemView.findViewById<TextView>(R.id.routeRom_tv_type).text = data.typeName

@@ -27,8 +27,6 @@ class SearchAdapter(var places: List<Place>) : RecyclerView.Adapter <SearchAdapt
         fun bindInfo(data: Place){
             binding.place = data
             binding.executePendingBindings()
-//            itemView.findViewById<TextView>(R.id.search_tv_type).text = data.type
-//            itemView.findViewById<TextView>(R.id.search_tv_Name).text = data.name
         }
     }
 

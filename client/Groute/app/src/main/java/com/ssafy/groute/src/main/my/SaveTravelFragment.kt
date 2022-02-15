@@ -43,9 +43,8 @@ class SaveTravelFragment : BaseFragment<FragmentSaveTravelBinding>(FragmentSaveT
     }
 
     fun initAdapter(){
-        routeListAdapter = RouteListRecyclerviewAdapter(planViewModel, viewLifecycleOwner)
         planViewModel.planLikeList.observe(viewLifecycleOwner, Observer {
-            routeListAdapter.setRouteList(it)
+            routeListAdapter = RouteListRecyclerviewAdapter(it, planViewModel)
 
             binding.myRvSave.apply {
                 layoutManager = LinearLayoutManager(requireContext())

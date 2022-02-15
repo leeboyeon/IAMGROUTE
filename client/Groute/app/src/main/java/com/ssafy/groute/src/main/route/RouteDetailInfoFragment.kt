@@ -140,6 +140,8 @@ class RouteDetailInfoFragment : BaseFragment<FragmentRouteDetailInfoBinding>(Fra
         mapView.addPolyline(polyLine)
     }
 
+
+
     companion object {
 
         @JvmStatic
