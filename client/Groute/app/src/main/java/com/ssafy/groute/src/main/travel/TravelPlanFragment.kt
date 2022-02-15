@@ -644,10 +644,15 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 }
             })
             travelPlanListRecyclerviewAdapter.setSwapListener(object : TravelPlanListRecyclerviewAdapter.SwapListener {
-                override fun onSwap(fromPos: Int, toPos: Int) {
+                override fun onSwap(
+                    fromPos: Int,
+                    toPos: Int,
+                    routeDetailList: MutableList<RouteDetail>
+                ) {
                     removePing()
                     addPing(curPos)
                 }
+
             })
 
 

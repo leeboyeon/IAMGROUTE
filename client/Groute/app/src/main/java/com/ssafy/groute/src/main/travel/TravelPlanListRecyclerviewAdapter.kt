@@ -119,7 +119,7 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
             }
 
         })
-        swapListener.onSwap(fromPos, toPos)
+        swapListener.onSwap(fromPos, toPos, routeDetailList)
     }
 
     override fun getFilter(): Filter {
