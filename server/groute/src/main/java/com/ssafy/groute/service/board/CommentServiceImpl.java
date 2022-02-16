@@ -21,6 +21,10 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public void insertComment(Comment comment) throws Exception {
         BoardDetail boardDetail = boardDetailMapper.selectBoardDetail(comment.getBoardDetailId());
+        int groupNum = commentMapper.selectAllByBoardDetailId(comment.getBoardDetailId()).size();
+        if(comment.getLevel()==0) {
+            comment.setGroupNum(groupNum + 1);
+        }
         boardDetail.setCommentCnt(boardDetail.getCommentCnt()+1);
         commentMapper.insertComment(comment);
         boardDetailMapper.updateBoardDetailHitCntOrLikeOrCommentCnt(boardDetail);
@@ -38,11 +42,17 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public void deleteComment(int id) throws Exception {
-        int boardDetailId = commentMapper.selectComment(id).getBoardDetailId();
+        Comment comment = commentMapper.selectComment(id);
+        int boardDetailId = comment.getBoardDetailId();
         BoardDetail boardDetail = boardDetailMapper.selectBoardDetail(boardDetailId);
-        boardDetail.setCommentCnt(boardDetail.getCommentCnt()-1);
+        if(comment.getLevel()==1){
+            commentMapper.deleteReComment(id);
+            boardDetail.setCommentCnt(boardDetail.getCommentCnt()-1);
+        }else {
+            int cnt = commentMapper.deleteComment(comment);
+            boardDetail.setCommentCnt(boardDetail.getCommentCnt()-cnt);
+        }
         boardDetailMapper.updateBoardDetailHitCntOrLikeOrCommentCnt(boardDetail);
-        commentMapper.deleteComment(id);
     }
 
     @Override

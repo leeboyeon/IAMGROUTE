@@ -67,12 +67,12 @@
     </delete>
 
     <delete id="deletePlaceReviewByPlaceId" parameterType="int">
-        delete from placereiview
+        delete from placereview
         where place_id = #{placeId}
     </delete>
 
     <delete id="deletePlaceReviewByUserId" parameterType="String">
-        delete from placereiview
+        delete from placereview
         where user_id = #{userId}
     </delete>
 

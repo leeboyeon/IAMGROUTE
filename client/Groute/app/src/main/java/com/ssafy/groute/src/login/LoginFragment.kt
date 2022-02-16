@@ -248,7 +248,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
                             phone = ""
                         }
                         Log.d(TAG, "firebaseAuthWithGoogle: $image")
-                        val newUser = User(id, pw, nickname, phone, id, "", "", "sns", image)
+                        val newUser = User(id, pw, nickname, phone, id, "", "", "google", image)
                         UserService().isUsedId(user.email!!, isUsedIdCallback(newUser))
                     }
                 } else {
@@ -297,7 +297,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
                     val birthDay = response.getString("birthday")
                     var image = response.getString("profile_image")
                     image = image.replace("\\", "")
-                    val newUser = User(id, pw, nickname, mobile, id, "$birthYear-$birthDay", gender, "sns", image)
+                    val newUser = User(id, pw, nickname, mobile, id, "$birthYear-$birthDay", gender, "naver", image)
                     UserService().isUsedId(id, isUsedIdCallback(newUser))
                 }
             } catch (e: JSONException) {
@@ -341,7 +341,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
                 if(gender.equals("null")) {
                     gender = ""
                 }
-                val newUser = User(id, pw, nickname, "", id, "", gender, "sns", image)
+                val newUser = User(id, pw, nickname, "", id, "", gender, "kakao", image)
                 UserService().isUsedId(id, isUsedIdCallback(newUser))
             }, { error ->
                 Log.e(TAG, "사용자 정보 요청 실패", error)
