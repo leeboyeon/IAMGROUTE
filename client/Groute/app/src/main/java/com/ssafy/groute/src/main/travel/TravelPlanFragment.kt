@@ -644,17 +644,6 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
 
                 }
             })
-            val travelPlanListRvHelperCallback = TravelPlanListRvHelperCallback(travelPlanListRecyclerviewAdapter).apply {
-                setClamp(resources.displayMetrics.widthPixels.toFloat() / 4)
-            }
-
-            ItemTouchHelper(travelPlanListRvHelperCallback).attachToRecyclerView(binding.travelplanListRv)
-
-            binding.travelplanListRv.setOnTouchListener{ _, _ ->
-                travelPlanListRvHelperCallback.removePreviousClamp(binding.travelplanListRv)
-                false
-            }
-
         })
         travelPlanListRecyclerviewAdapter.setSwapListener(object : TravelPlanListRecyclerviewAdapter.SwapListener {
             override fun onSwap(
@@ -677,10 +666,11 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
 
                     override fun onSuccess(code: Int, responseData: Boolean) {
                         Log.d(TAG, "onSuccess: Update Success")
-                        removePing()
+
                         runBlocking {
                             planViewModel.getPlanById(planId, 2)
                         }
+                        removePing()
                         addPing(curPos)
 
                     }
@@ -693,6 +683,16 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             }
 
         })
+        val travelPlanListRvHelperCallback = TravelPlanListRvHelperCallback(travelPlanListRecyclerviewAdapter).apply {
+            setClamp(resources.displayMetrics.widthPixels.toFloat() / 4)
+        }
+
+        ItemTouchHelper(travelPlanListRvHelperCallback).attachToRecyclerView(binding.travelplanListRv)
+
+        binding.travelplanListRv.setOnTouchListener{ _, _ ->
+            travelPlanListRvHelperCallback.removePreviousClamp(binding.travelplanListRv)
+            false
+        }
 
     }
     fun insertMemo(placeId:Int , flag : Int){
