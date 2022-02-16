@@ -4,7 +4,7 @@ data class PlanReview(
     val content: String,
     val createDate: String,
     val id: Int,
-    val img: String,
+    var img: String,
     val planId: Int,
     val rate: Double,
     val title: String,

@@ -53,6 +53,7 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
     private val planViewModel: PlanViewModel by activityViewModels()
     private var planId = -1
     private var reviewId = -1
+    private var imgSelectedChk = false
 
     private lateinit var editTextSubscription: Disposable // edit text subscribe
 
@@ -129,7 +130,7 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
 
         selectImgBtnEvent()
         initTiedListener()
-
+        imgDeleteBtnEvent()
     }
 
     // init TextInputEditText Listener
@@ -143,7 +144,6 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
 
     // planReview Content Text 길이 체크
     private fun textLengthChk(str : String) : Boolean {
-        Log.d(TAG, "textLengthChk: $str")
         if(str.trim().isEmpty()){
             binding.planReviewWriteTilContent.error = "Required Field"
             binding.planReviewWriteTietContent.requestFocus()
@@ -203,6 +203,16 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
             }
         }
     }
+
+    // 사진 삭제 버튼 클릭 이벤트
+    private fun imgDeleteBtnEvent() {
+        binding.planReviewWriteIbDeletedImg.setOnClickListener {
+            imgUri = Uri.EMPTY
+            imgSelectedChk = true
+            binding.planReviewWriteLLayoutSetImg.visibility = View.GONE
+        }
+    }
+
     /**
      * 사진 선택 버튼 클릭 이벤트
      */
@@ -266,6 +276,7 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if(it.resultCode == AppCompatActivity.RESULT_OK && it.data != null) {
                 binding.planReviewWriteLLayoutSetImg.visibility = View.VISIBLE
+                imgSelectedChk = false
                 val currentImageUri = it.data?.data
 
                 try {
@@ -322,6 +333,9 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
 
         // 게시글만 작성한 경우
         if(imgUri == Uri.EMPTY) {
+            if(imgSelectedChk == true) {
+                planReview.img = ""
+            }
             val gson : Gson = Gson()
             val json = gson.toJson(planReview)
             val rBody_planReivew = RequestBody.create(MediaType.parse("text/plain"), json)

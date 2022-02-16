@@ -199,7 +199,7 @@
                             android:layout_margin="20dp"
                             android:background="@drawable/edittext_background"
                             android:orientation="horizontal"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             app:layout_constraintBottom_toTopOf="@+id/reviewWrite_button_addImg"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
