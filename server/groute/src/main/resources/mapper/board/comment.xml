@@ -26,9 +26,14 @@
         where boardDetail_id = #{id}
     </select>
 
-    <delete id="deleteComment" parameterType="int">
+    <delete id="deleteComment" parameterType="Comment">
         delete from comment
         where groupnum = #{groupNum} and boardDetail_id = #{boardDetailId}
+    </delete>
+
+    <delete id="deleteReComment" parameterType="int">
+        delete from comment
+        where id = #{id}
     </delete>
 
     <update id="updateComment" parameterType="Comment">

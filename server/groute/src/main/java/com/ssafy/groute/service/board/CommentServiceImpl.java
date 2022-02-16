@@ -45,9 +45,14 @@ public class CommentServiceImpl implements CommentService{
         Comment comment = commentMapper.selectComment(id);
         int boardDetailId = comment.getBoardDetailId();
         BoardDetail boardDetail = boardDetailMapper.selectBoardDetail(boardDetailId);
-        boardDetail.setCommentCnt(boardDetail.getCommentCnt()-1);
+        if(comment.getLevel()==1){
+            commentMapper.deleteReComment(id);
+            boardDetail.setCommentCnt(boardDetail.getCommentCnt()-1);
+        }else {
+            int cnt = commentMapper.deleteComment(comment);
+            boardDetail.setCommentCnt(boardDetail.getCommentCnt()-cnt);
+        }
         boardDetailMapper.updateBoardDetailHitCntOrLikeOrCommentCnt(boardDetail);
-        commentMapper.deleteComment(comment);
     }
 
     @Override
