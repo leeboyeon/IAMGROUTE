@@ -49,7 +49,7 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>(FragmentAccountBind
         pagerAdapter.addFragment(DayByAccountFragment.newInstance("planId",planId))
 
         binding.accountvp.adapter = pagerAdapter
-
+        binding.accountvp.currentItem = 0
         binding.accountToggleDay.setOnClickListener {
             //날짜별 클릭시
             toggleClick(true)
