@@ -669,12 +669,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                     }
 
                     override fun onSuccess(code: Int, responseData: Boolean) {
-<<<<<<< HEAD
                         Log.d(TAG, "onSuccess: Update Success")
-
-=======
-                        removePing()
->>>>>>> 71f6fe6824a47b1a3680c822a7cbeadad0dc2d66
                         runBlocking {
                             planViewModel.getPlanById(planId, 2)
                         }
