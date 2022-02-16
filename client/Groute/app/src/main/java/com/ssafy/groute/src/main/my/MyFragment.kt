@@ -12,6 +12,8 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.rx
 import com.nhn.android.naverlogin.OAuthLogin
@@ -130,19 +132,35 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
             .setMessage("정말로 탈퇴하시겠습니까?")
             .setPositiveButton("YES",DialogInterface.OnClickListener{dialogInterface, id ->
                 // 탈퇴기능구현
-                UserService().deleteUser(ApplicationClass.sharedPreferencesUtil.getUser().id, DeleteCallback())
+                mainViewModel.loginUserInfo.observe(viewLifecycleOwner, {
+                    val type = it.type
 
-                val disposables = CompositeDisposable()
+                     if(type == "kakao") {
+                        val disposables = CompositeDisposable()
+                        // 연결 끊기
+                        UserApiClient.rx.unlink()
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({
+                                Log.i(TAG, "연결 끊기 성공. SDK에서 토큰 삭제 됨")
+                            }, { error ->
+                                Log.e(TAG, "연결 끊기 실패", error)
+                            }).addTo(disposables)
+                    } else if(type == "google") {
+                        FirebaseAuth.getInstance().currentUser?.delete()!!.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                //로그아웃처리
+                                FirebaseAuth.getInstance().signOut()
+                                Log.i(TAG, " 구글 로그인 연결 끊기 성공")
+                            } else {
+                                Log.i(TAG, "구글 로그인 user 삭제 실패")
+                            }
+                        }
+                    } else if(type == "naver") {
 
-                // 연결 끊기
-                UserApiClient.rx.unlink()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        Log.i(TAG, "연결 끊기 성공. SDK에서 토큰 삭제 됨")
-                    }, { error ->
-                        Log.e(TAG, "연결 끊기 실패", error)
-                    }).addTo(disposables)
+                    }
+                    UserService().deleteUser(ApplicationClass.sharedPreferencesUtil.getUser().id, DeleteCallback())
+                })
             })
             .setNeutralButton("NO", null)
             .create()
