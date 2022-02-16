@@ -70,17 +70,17 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
                     mainActivity.moveFragment(4,"placeId", placeId,"planId",planId)
                 }
             })
-            areaFilterAdapter.setHeartClickListener(object :PlaceFilterAdapter.HeartClickListener{
-                override fun onClick(view: View, position: Int, placeId: Int) {
-                    val placeLike = PlaceLikeResponse(
-                        0,
-                        ApplicationClass.sharedPreferencesUtil.getUser().id,
-                        placeId
-                    )
-                    placeGoLike(placeLike)
-                }
-
-            })
+//            areaFilterAdapter.setHeartClickListener(object :PlaceFilterAdapter.HeartClickListener{
+//                override fun onClick(view: View, position: Int, placeId: Int) {
+//                    val placeLike = PlaceLikeResponse(
+//                        0,
+//                        ApplicationClass.sharedPreferencesUtil.getUser().id,
+//                        placeId
+//                    )
+//                    placeGoLike(placeLike)
+//                }
+//
+//            })
             binding.areaRvPlaceitem.apply{
                 layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
                 adapter = areaFilterAdapter
@@ -129,24 +129,24 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
         })
     }
 
-    private fun placeGoLike(placeLike: PlaceLikeResponse){
-        PlaceService().placeLike(placeLike, object :RetrofitCallback<Boolean> {
-            override fun onError(t: Throwable) {
-                Log.d(TAG, "onError: ")
-            }
-
-            override fun onSuccess(code: Int, responseData: Boolean) {
-                if(responseData){
-                    Log.d(TAG, "onSuccessLIKE: ")
-                }
-            }
-
-            override fun onFailure(code: Int) {
-                Log.d(TAG, "onFailure: ")
-            }
-
-        })
-    }
+//    private fun placeGoLike(placeLike: PlaceLikeResponse){
+//        PlaceService().placeLike(placeLike, object :RetrofitCallback<Boolean> {
+//            override fun onError(t: Throwable) {
+//                Log.d(TAG, "onError: ")
+//            }
+//
+//            override fun onSuccess(code: Int, responseData: Boolean) {
+//                if(responseData){
+//                    Log.d(TAG, "onSuccessLIKE: ")
+//                }
+//            }
+//
+//            override fun onFailure(code: Int) {
+//                Log.d(TAG, "onFailure: ")
+//            }
+//
+//        })
+//    }
 
 
     companion object {

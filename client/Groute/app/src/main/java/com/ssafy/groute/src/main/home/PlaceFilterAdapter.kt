@@ -62,21 +62,6 @@ class PlaceFilterAdapter(var placeList : MutableList<Place>, var likeList: LiveD
                 itemClickListener.onClick(it,position, filteredList[position].id)
             }
 
-            val heart = itemView.findViewById<LottieAnimationView>(R.id.area_abtn_heart)
-
-            heart.setOnClickListener {
-                heartClickListener.onClick(it,position,filteredList[position].id)
-                if(heart.progress > 0F){
-                    heart.pauseAnimation()
-                    heart.progress = 0F
-                }else{
-                    val animator = ValueAnimator.ofFloat(0f,0.5f).setDuration(500)
-                    animator.addUpdateListener { animation ->
-                        heart.progress = animation.animatedValue as Float
-                    }
-                    animator.start()
-                }
-            }
         }
     }
 
@@ -129,13 +114,13 @@ class PlaceFilterAdapter(var placeList : MutableList<Place>, var likeList: LiveD
     fun setItemClickListener(itemClickListener: ItemClickListener){
         this.itemClickListener = itemClickListener
     }
-    interface HeartClickListener{
-        fun onClick(view:View, position: Int, placeId: Int)
-    }
-    private lateinit var heartClickListener : HeartClickListener
-    fun setHeartClickListener(heartClickListener: HeartClickListener){
-        this.heartClickListener = heartClickListener
-    }
+//    interface HeartClickListener{
+//        fun onClick(view:View, position: Int, placeId: Int)
+//    }
+//    private lateinit var heartClickListener : HeartClickListener
+//    fun setHeartClickListener(heartClickListener: HeartClickListener){
+//        this.heartClickListener = heartClickListener
+//    }
 
     object DiffCallback : DiffUtil.ItemCallback<Place>() {
         override fun areItemsTheSame(oldItem: Place, newItem: Place): Boolean {

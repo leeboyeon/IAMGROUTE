@@ -129,32 +129,11 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
             } else {
                 likeBtn.setColorFilter(context.resources.getColor(R.color.black))
             }
-//            BoardService().isBoardLike(data.id, userId, object : RetrofitCallback<Boolean> {
-//                override fun onError(t: Throwable) {
-//                    Log.d(TAG, "onError: 찜하기 여부 에러")
-//                }
-//
-//                override fun onSuccess(code: Int, responseData: Boolean) {
-//                    if(responseData) {
-//                        likeBtn.setColorFilter(context.resources.getColor(R.color.red))
-//                    } else {
-//                        likeBtn.setColorFilter(context.resources.getColor(R.color.black))
-//                    }
-//                }
-//                override fun onFailure(code: Int) {
-//                    Log.d(TAG, "onFailure: ")
-//                }
-//            })
 
-//            likeBtn.setOnClickListener{
-//                itemClickListener.isLIke(it, layoutPosition, data.id)
-//            }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoardRecyclerHolder {
-//        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_board, parent, false)
-//        return BoardHolder(view)
         return BoardRecyclerHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(
@@ -205,7 +184,6 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
     }
     interface ItemClickListener{
         fun onClick(view:View, position: Int)
-//        fun isLIke(view: View, position: Int, id:Int)
     }
 
     private lateinit var itemClickListener : ItemClickListener

@@ -137,25 +137,9 @@ class PlaceService {
         })
     }
 
-    //place like check
-    fun placeIsLike(placelike: PlaceLikeResponse ,callback: RetrofitCallback<Boolean>){
-        RetrofitUtil.placeService.placeIsLike(placelike).enqueue(object : Callback<Boolean> {
-            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                val res = response.body()
-                if(response.code() == 200){
-                    Log.d(TAG, "onResponse: UpdateSuccess!!")
-                }else{
-                    Log.d(TAG, "onResponse: FAIL")
-                }
-            }
-
-            override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                Log.d(TAG, "onFailure: $t")
-            }
-
-        })
+    suspend fun placeisLike(placelike: PlaceLikeResponse) :Response<Boolean>{
+        return RetrofitUtil.placeService.placeIsLike(placelike)
     }
-
     suspend fun getPlaceLikeList(userId: String) : Response<MutableList<Place>>{
         return RetrofitUtil.placeService.getPlaceLikeListbyUserId(userId)
     }

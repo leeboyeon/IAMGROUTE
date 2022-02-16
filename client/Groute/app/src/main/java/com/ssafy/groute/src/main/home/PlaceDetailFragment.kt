@@ -15,6 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
@@ -64,14 +65,53 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.placeViewModel = placeViewModel
-
         runBlocking {
             placeViewModel.getPlace(placeId)
             planViewModel.getPlanMyList(ApplicationClass.sharedPreferencesUtil.getUser().id)
+            placeViewModel.getPlaceIsLike(PlaceLikeResponse(0,ApplicationClass.sharedPreferencesUtil.getUser().id,placeId))
+        }
+        placeViewModel.place.observe(viewLifecycleOwner, {
+            binding.dto = it
+            Log.d(TAG, "onViewCreated: ${it}")
+        })
+//
+        val res = placeViewModel.isPlaceLike.value
+        var heart = binding.placeDetailAbtnHeart
+
+        if(res == true){
+            heart.setOnClickListener {
+                val animator = ValueAnimator.ofFloat(1f,0f).setDuration(500)
+                animator.addUpdateListener { animation ->
+                    heart.progress = animation.animatedValue as Float
+                }
+                animator.start()
+
+                val placeLike = PlaceLikeResponse(
+                    0,
+                    ApplicationClass.sharedPreferencesUtil.getUser().id,
+                    placeId
+                )
+                placeGoLike(placeLike)
+            }
+
+        }else{
+            heart.setOnClickListener {
+                val animator = ValueAnimator.ofFloat(0f,0.4f).setDuration(500)
+                animator.addUpdateListener { animation ->
+                    heart.progress = animation.animatedValue as Float
+                }
+                animator.start()
+
+                val placeLike = PlaceLikeResponse(
+                    0,
+                    ApplicationClass.sharedPreferencesUtil.getUser().id,
+                    placeId
+                )
+                placeGoLike(placeLike)
+            }
         }
 
-        binding.placeDetailAbtnHeart.progress = 0.5f
+
         val areaTabPagerAdapter = AreaTabPagerAdapter(this)
         val tabList = arrayListOf("Info", "Review")
 
@@ -112,7 +152,34 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
                 }
             })
         }
+        placeViewModel.placeLikeList.observe(viewLifecycleOwner, {
+            for(i in 0..it.size-1){
+                if(placeId == it[i].id){
+                    heart.progress = 0.5F
+                }
+            }
+        })
+        placeViewModel.place.observe(viewLifecycleOwner, {
+            binding.placeDetailTvHeart.text = it.heartCnt.toString()
+        })
+    }
+    private fun placeGoLike(placeLike: PlaceLikeResponse){
+        PlaceService().placeLike(placeLike, object :RetrofitCallback<Boolean> {
+            override fun onError(t: Throwable) {
+                Log.d(TAG, "onError: ")
+            }
 
+            override fun onSuccess(code: Int, responseData: Boolean) {
+                runBlocking {
+                    placeViewModel.getPlace(placeId)
+                }
+            }
+
+            override fun onFailure(code: Int) {
+                Log.d(TAG, "onFailure: ")
+            }
+
+        })
     }
 
     /**

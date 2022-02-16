@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="placeViewModel"
-            type="com.ssafy.groute.src.viewmodel.PlaceViewModel" />
+            name="dto"
+            type="com.ssafy.groute.src.dto.Place" />
     </data>
     <FrameLayout
         android:layout_width="match_parent"
@@ -55,7 +55,7 @@
                         android:layout_marginBottom="15dp"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@{placeViewModel.place.name}"
+                        android:text="@{dto.name}"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -92,7 +92,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:text="@{String.valueOf(placeViewModel.place.rate)}"
+                        android:text="@{String.valueOf(dto.rate)}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/placeDetail_abtn_star"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -117,7 +117,7 @@
                         android:layout_marginStart="5dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:text="@{String.valueOf(placeViewModel.place.heartCnt)}"
+                        android:text="@{String.valueOf(dto.heartCnt)}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/placeDetail_abtn_heart"
                         app:layout_constraintTop_toTopOf="parent" />
