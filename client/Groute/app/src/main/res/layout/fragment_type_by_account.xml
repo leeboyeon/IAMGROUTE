@@ -38,6 +38,8 @@
                 android:layout_width="409dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/accountChart"
