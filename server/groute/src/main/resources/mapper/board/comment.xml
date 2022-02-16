@@ -28,7 +28,7 @@
 
     <delete id="deleteComment" parameterType="int">
         delete from comment
-        where id = #{id}
+        where groupnum = #{groupNum}
     </delete>
 
     <update id="updateComment" parameterType="Comment">
@@ -46,4 +46,12 @@
         delete from comment
         where user_id = #{userId}
     </delete>
+
+    <select id="selectLastGroupNum" parameterType="int" resultType="int">
+        select groupnum from comment
+        where boardDetail_id = #{boardDetailId}
+        order by groupNum desc
+        limit 1;
+    </select>
+
 </mapper>

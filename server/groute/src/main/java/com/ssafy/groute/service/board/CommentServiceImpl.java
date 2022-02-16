@@ -21,6 +21,8 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public void insertComment(Comment comment) throws Exception {
         BoardDetail boardDetail = boardDetailMapper.selectBoardDetail(comment.getBoardDetailId());
+        int groupNum = commentMapper.selectAllByBoardDetailId(comment.getBoardDetailId()).size();
+        comment.setGroupNum(groupNum+1);
         boardDetail.setCommentCnt(boardDetail.getCommentCnt()+1);
         commentMapper.insertComment(comment);
         boardDetailMapper.updateBoardDetailHitCntOrLikeOrCommentCnt(boardDetail);
@@ -42,7 +44,7 @@ public class CommentServiceImpl implements CommentService{
         BoardDetail boardDetail = boardDetailMapper.selectBoardDetail(boardDetailId);
         boardDetail.setCommentCnt(boardDetail.getCommentCnt()-1);
         boardDetailMapper.updateBoardDetailHitCntOrLikeOrCommentCnt(boardDetail);
-        commentMapper.deleteComment(id);
+        commentMapper.deleteComment(boardDetailId);
     }
 
     @Override
