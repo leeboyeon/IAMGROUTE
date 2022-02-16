@@ -52,6 +52,7 @@ import net.daum.mf.map.api.MapView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.kakao.kakaonavi.Destination
 import com.ssafy.groute.src.dto.*
+import com.ssafy.groute.src.service.UserPlanService
 import java.lang.Exception
 
 
@@ -79,10 +80,8 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     private lateinit var routeRecomDialogAdapter:RouteRecomDialogAdapter
     private lateinit var travelPlanListRecyclerviewAdapter: TravelPlanListRecyclerviewAdapter
     private lateinit var findLocationAdapter: FindLocationAdapter
-    private lateinit var memoAdapter: MemoAdapter
 
-    private var AreaLat = 0.0
-    private var AreaLng = 0.0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideBottomNav(true)
@@ -95,7 +94,6 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         arguments?.let {
             planId = it.getInt("planId",-1)
         }
-        Log.d(TAG, "onAttach: ${planId}")
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -154,7 +152,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             mainActivity.moveFragment(17,"planId",planId)
         }
         binding.travelPlanIbtnMemo.setOnClickListener {
-            var routes = planViewModel.routeList.value!!
+            val routes = planViewModel.routeList.value!!
             if(routes[curPos].memo == null || routes[curPos].memo == ""){
                 showCustomToast("메모가 없습니다")
             }else{
@@ -162,7 +160,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             }
         }
         binding.findLocationBtn.setOnClickListener {
-            var routeId = planViewModel.routeList.value?.get(curPos)?.id
+            val routeId = planViewModel.routeList.value?.get(curPos)?.id
             if (routeId != null) {
                 showFindLocation()
             }
@@ -171,8 +169,9 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             showBestPriorityDialog()
         }
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
-    fun showBestPriorityDialog(){
+    private fun showBestPriorityDialog(){
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_best_priority,null)
         val dialog = BottomSheetDialog(requireContext())
         if(dialogView.parent != null){
@@ -180,9 +179,9 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         }
         dialog.setContentView(dialogView)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        var placeInfo = arrayListOf<RouteDetail>()
-        var places = arrayListOf<String>()
-        var routeDetailList = planViewModel.routeList.value?.get(curPos)
+        val placeInfo = arrayListOf<RouteDetail>()
+        val places = arrayListOf<String>()
+        val routeDetailList = planViewModel.routeList.value?.get(curPos)
         
         places.add("선택안함")
         if(routeDetailList!=null){
@@ -191,10 +190,10 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 places.add(routeDetailList.routeDetailList[i].place.name)
             }
         }
-        var startAdapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,places)
-        var endAdapter =  ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,places)
-        var startSpinner = dialogView.findViewById<Spinner>(R.id.startSpinner)
-        var endSpinner = dialogView.findViewById<Spinner>(R.id.endSpinner)
+        val startAdapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,places)
+        val endAdapter =  ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,places)
+        val startSpinner = dialogView.findViewById<Spinner>(R.id.startSpinner)
+        val endSpinner = dialogView.findViewById<Spinner>(R.id.endSpinner)
 
         startSpinner.adapter = startAdapter
         endSpinner.adapter = endAdapter
@@ -251,7 +250,8 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             dialog.dismiss()
         }
     }
-    fun showFindLocation(){
+
+    private fun showFindLocation(){
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_location_find, null)
         val dialog = Dialog(requireContext())
         if(dialogView.parent != null){
@@ -260,7 +260,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         planViewModel.removeAllViaList()
         dialog.setContentView(dialogView)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        var params = dialog.window?.attributes
+        val params = dialog.window?.attributes
         params?.width = WindowManager.LayoutParams.MATCH_PARENT
         params?.height = WindowManager.LayoutParams.MATCH_PARENT
         dialog.window?.attributes = params
@@ -268,18 +268,18 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         val destinationInfo = arrayListOf<Place>()
         val destinations = arrayListOf<String>()
         destinations.add("선택안함")
-        var routeDetail = planViewModel.routeList.value?.get(curPos)
+        val routeDetail = planViewModel.routeList.value?.get(curPos)
         if (routeDetail != null) {
             for(i in 0..routeDetail.routeDetailList.size-1){
                 destinationInfo.add(routeDetail.routeDetailList[i].place)
                 destinations.add(routeDetail.routeDetailList[i].place.name)
             }
         }
-        var spinnerAdapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,destinations)
-        var viaAdapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,destinations)
+        val spinnerAdapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,destinations)
+        val viaAdapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,destinations)
 
-        var destSpinner = dialogView.findViewById<Spinner>(R.id.destination_spinner)
-        var viaSpinner = dialogView.findViewById<Spinner>(R.id.via_spinner)
+        val destSpinner = dialogView.findViewById<Spinner>(R.id.destination_spinner)
+        val viaSpinner = dialogView.findViewById<Spinner>(R.id.via_spinner)
 
         destSpinner.adapter = spinnerAdapter
         viaSpinner.adapter = viaAdapter
@@ -348,7 +348,8 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             goNavi(destLat,destLng)
         }
     }
-    fun goNavi(destLat:Double, destLng:Double){
+
+    private fun goNavi(destLat:Double, destLng:Double){
         try {
             if (KakaoNaviService.isKakaoNaviInstalled(requireContext())) {
 
@@ -387,8 +388,9 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             Log.e("네비연동 에러", e.toString() + "")
         }
     }
-    fun initMemo(){
-        var routes = planViewModel.routeList.value!!
+
+    private fun initMemo(){
+        val routes = planViewModel.routeList.value!!
         if(routes[curPos].memo != null){
             val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_show_memo,null)
             val dialog = Dialog(requireContext())
@@ -423,16 +425,15 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 dialog.dismiss()
             }
         }
-
     }
-    fun updateMemo(route:Route,flag:Int){
+
+    private fun updateMemo(route:Route,flag:Int){
         //flag 1 : insert/ 2:modify 3:delete
         RouteService().updateRoute(route, object:RetrofitCallback<Boolean> {
             override fun onError(t: Throwable) {
                 Log.d(TAG, "onError: ")
             }
             override fun onSuccess(code: Int, responseData: Boolean) {
-                Log.d(TAG, "onSuccess: ")
                 if(flag == 1){
                     showCustomToast("추가되었습니다")
                 }
@@ -452,53 +453,54 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             }
         })
     }
-    fun findArea(){
-        var area = homeViewModel.areaList.value!!
-        var plan = planViewModel.planList.value!!
+
+    private  fun findArea(){
+        val area = homeViewModel.areaList.value!!
+        val plan = planViewModel.planList.value!!
         for(i in 0 until area.size){
             if(area[i].id == plan.areaId){
                 initKakaoMap(area[i].lat.toDouble(), area[i].lng.toDouble())
             }
         }
     }
-    fun initKakaoMap(lat:Double, lng:Double){
+
+    private fun initKakaoMap(lat:Double, lng:Double){
         mapView = MapView(requireContext())
         if(mapView.parent!=null){
             (mapView.parent as ViewGroup).removeView(mapView)
         }
         binding.travelplanMapview.addView(mapView)
-        var mapPoint = MapPoint.mapPointWithGeoCoord(lat, lng)
+        val mapPoint = MapPoint.mapPointWithGeoCoord(lat, lng)
         mapView.setMapCenterPoint(mapPoint,true)
         mapView.setZoomLevel(9, true)
     }
 
-    fun addPing(day:Int){
+    private fun addPing(day:Int){
         markerArr = arrayListOf()
         planViewModel.routeList.observe(viewLifecycleOwner, {
-            var dayList = it[day].routeDetailList
-//            Log.d(TAG, "addPing: ${dayList}")
+            val dayList = it[day].routeDetailList
             for(i in 0..dayList.size-1){
-                var lat = dayList[i].place.lat.toDouble()
-                var lng = dayList[i].place.lng.toDouble()
-                var mapPoint = MapPoint.mapPointWithGeoCoord(lat,lng)
+                val lat = dayList[i].place.lat.toDouble()
+                val lng = dayList[i].place.lng.toDouble()
+                val mapPoint = MapPoint.mapPointWithGeoCoord(lat,lng)
                 markerArr.add(mapPoint)
             }
             setPing(markerArr)
             addPolyLine(markerArr)
         })
-
     }
-    fun setPing(markerArr:ArrayList<MapPoint>){
+
+    private fun setPing(markerArr:ArrayList<MapPoint>){
         removePing()
         var res = ""
-        var list = arrayListOf<MapPOIItem>()
+        val list = arrayListOf<MapPOIItem>()
         for(i in 0..markerArr.size-1){
-            var marker = MapPOIItem()
+            val marker = MapPOIItem()
             res = "number${i+1}"
             marker.itemName = (i+1).toString()
             marker.mapPoint = markerArr[i]
             marker.markerType = MapPOIItem.MarkerType.CustomImage
-            var resources = requireContext().resources.getIdentifier("@drawable/"+res,"drawable",requireContext().packageName)
+            val resources = requireContext().resources.getIdentifier("@drawable/"+res,"drawable",requireContext().packageName)
             marker.customImageResourceId = resources
             marker.isCustomImageAutoscale = false
             marker.setCustomImageAnchor(0.5f,1.0f)
@@ -507,12 +509,14 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         mapView.addPOIItems(list.toArray(arrayOfNulls(list.size)))
 
     }
-    fun removePing(){
+
+    private fun removePing(){
         mapView.removeAllPOIItems()
         mapView.removeAllPolylines()
     }
-    fun addPolyLine(markerArr: ArrayList<MapPoint>){
-        var polyLine = MapPolyline()
+
+    private fun addPolyLine(markerArr: ArrayList<MapPoint>){
+        val polyLine = MapPolyline()
         polyLine.tag = 1000
         polyLine.lineColor = Color.parseColor("#2054B3")
         polyLine.addPoints(markerArr.toArray(arrayOfNulls(markerArr.size)))
@@ -520,7 +524,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     }
 
     // 플로팅 버튼 이벤트 처리
-    fun floatingButtonEvent() {
+    private fun floatingButtonEvent() {
         addButton = binding.travelplanAddFb
         //val closeButton = binding.travelplanCloseFb
         memoAddButton = binding.travelplanAddMemoFb
@@ -533,7 +537,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         }
         memoAddButton.setOnClickListener{
             fbAnim()
-            var placeId = 0
+            val placeId = 0
             insertMemo(placeId,1)
         }
         routeRecomButton.setOnClickListener {
@@ -547,7 +551,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     }
 
     // 플로팅 버튼 애니메이션 처리
-    fun fbAnim() {
+    private fun fbAnim() {
         val memoAddLayout = binding.travelplanAddMemoLayout
         val routeRecomLayout = binding.travelplanRecomRouteLayout
         val placeAddLayout = binding.travelplanAddPlaceLayout
@@ -579,7 +583,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun initTabLayout(){
+    private fun initTabLayout(){
         binding.travelplanTabLayout.removeAllTabs()
 
         for(i in 0 until planViewModel.routeList.value!!.size){
@@ -605,13 +609,14 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         })
 
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility")
-    fun initPlaceListAdapter(){
-        planViewModel.routeList.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "initPlaceListAdapter: 실행되니?")
-            travelPlanListRecyclerviewAdapter = TravelPlanListRecyclerviewAdapter(requireContext(),it,planViewModel,viewLifecycleOwner,planId)
+    private fun initPlaceListAdapter(){
+        travelPlanListRecyclerviewAdapter = TravelPlanListRecyclerviewAdapter(requireContext(),planViewModel,viewLifecycleOwner,planId)
 
+        planViewModel.routeList.observe(viewLifecycleOwner, Observer {
+            travelPlanListRecyclerviewAdapter.setDataList(it)
             initTabLayout()
             binding.travelplanListRv.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
@@ -619,21 +624,21 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             }
             travelPlanListRecyclerviewAdapter.setMemoClickListener(object:TravelPlanListRecyclerviewAdapter.MemoClickListener{
                 override fun onClick(view: View, position: Int, placeId: Int) {
-                    Log.d(TAG, "onClick: memo button Click")
                     var memo = ""
                     var routes = planViewModel.routeList.value!!
                     val details = routes[curPos].routeDetailList
 
                     for(i in 0.. details.size-1){
                         if (details[i].placeId == placeId) {
-                            Log.d(TAG, "onClick: findPlace")
-                            Log.d(TAG, "onClick_MEMO: ${details[i].memo}")
-                            memo = details[i].memo
+                            if(details[i].memo != null) {
+                                memo = details[i].memo
+                            }
                             break;
                         }
                     }
 
-                    if(memo.equals("")|| memo.isEmpty() || memo.length == 0){
+
+                    if(memo == null || memo.equals("")|| memo.isEmpty() || memo.length == 0 || memo == "null"){
                         //메모가 없으면
                         insertMemo(placeId,1)
                     }
@@ -643,36 +648,58 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
 
                 }
             })
-            travelPlanListRecyclerviewAdapter.setSwapListener(object : TravelPlanListRecyclerviewAdapter.SwapListener {
-                override fun onSwap(
-                    fromPos: Int,
-                    toPos: Int,
-                    routeDetailList: MutableList<RouteDetail>
-                ) {
-                    removePing()
-                    addPing(curPos)
+        })
+        travelPlanListRecyclerviewAdapter.setSwapListener(object : TravelPlanListRecyclerviewAdapter.SwapListener {
+            override fun onSwap(
+                fromPos: Int,
+                toPos: Int,
+                routeDetailList: MutableList<RouteDetail>
+            ) {
+                val detailList = arrayListOf<RouteDetail>()
+                for(i in 0..routeDetailList.size-1){
+                    val details = RouteDetail(
+                        routeDetailList[i].id,
+                        i+1
+                    )
+                    detailList.add(details)
                 }
+                UserPlanService().updatePriority(detailList, object : RetrofitCallback<Boolean> {
+                    override fun onError(t: Throwable) {
+                        Log.d(TAG, "onError: ")
+                    }
 
-            })
+                    override fun onSuccess(code: Int, responseData: Boolean) {
+                        Log.d(TAG, "onSuccess: Update Success")
+                        runBlocking {
+                            planViewModel.getPlanById(planId, 2)
+                        }
+                        removePing()
+                        addPing(curPos)
 
+                    }
 
+                    override fun onFailure(code: Int) {
+                        Log.d(TAG, "onFailure: ")
+                    }
 
-            val travelPlanListRvHelperCallback = TravelPlanListRvHelperCallback(travelPlanListRecyclerviewAdapter).apply {
-                setClamp(resources.displayMetrics.widthPixels.toFloat() / 4)
-            }
-
-            ItemTouchHelper(travelPlanListRvHelperCallback).attachToRecyclerView(binding.travelplanListRv)
-
-            binding.travelplanListRv.setOnTouchListener{ _, _ ->
-                travelPlanListRvHelperCallback.removePreviousClamp(binding.travelplanListRv)
-                false
+                })
             }
 
         })
+        val travelPlanListRvHelperCallback = TravelPlanListRvHelperCallback(travelPlanListRecyclerviewAdapter).apply {
+            setClamp(resources.displayMetrics.widthPixels.toFloat() / 4)
+        }
+
+        ItemTouchHelper(travelPlanListRvHelperCallback).attachToRecyclerView(binding.travelplanListRv)
+
+        binding.travelplanListRv.setOnTouchListener{ _, _ ->
+            travelPlanListRvHelperCallback.removePreviousClamp(binding.travelplanListRv)
+            false
+        }
 
     }
-    fun insertMemo(placeId:Int , flag : Int){
-        Log.d(TAG, "insertMemo: ${flag}")
+
+    private fun insertMemo(placeId:Int , flag : Int){
         // flag 1 -> insert 2-> modify
 
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_insert_memo,null)
@@ -682,8 +709,8 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         val dialog = Dialog(requireContext())
         dialog.setContentView(dialogView)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        var routes = planViewModel.routeList.value!!
-        var details = routes[curPos].routeDetailList!!
+        val routes = planViewModel.routeList.value!!
+        val details = routes[curPos].routeDetailList!!
         if(flag == 2){
             if(placeId == 0){
                 dialogView.findViewById<TextView>(R.id.memo_tv_content).text = routes[curPos].memo
@@ -709,7 +736,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                 val memo = dialogView.findViewById<TextView>(R.id.memo_tv_content).text.toString()
 
                 if(placeId == 0){
-                    var route = Route(
+                    val route = Route(
                         day = routes[curPos].day,
                         id = routes[curPos].id,
                         isCustom = routes[curPos].isCustom,
@@ -798,7 +825,8 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
         }
 
     }
-    fun showRouteSelectDialog(){
+
+    private fun showRouteSelectDialog(){
         routeRecomDialogAdapter = RouteRecomDialogAdapter(requireContext())
         routeSelectList.apply {
             add(RouteRecom(lottie="location.json",typeName="장소 필터링",typeDescript="추가하신 장소를 포함한 일정을 추천해드립니다."))
@@ -809,8 +837,8 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             routeRecomDialogAdapter.notifyDataSetChanged()
         }
 
-        var dialogView:View = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_select_the_recomroute,null)
-        var dialogRv = dialogView.findViewById<RecyclerView>(R.id.routeRecom_rv_typeSelect)
+        val dialogView:View = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_select_the_recomroute,null)
+        val dialogRv = dialogView.findViewById<RecyclerView>(R.id.routeRecom_rv_typeSelect)
         dialogRv.apply {
             layoutManager = GridLayoutManager(requireContext(),1,LinearLayoutManager.HORIZONTAL,false)
             adapter = routeRecomDialogAdapter
@@ -823,7 +851,7 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             }
         })
 
-        var dialog = Dialog(requireContext())
+        val dialog = Dialog(requireContext())
         dialog.setContentView(dialogView)
         dialogView.findViewById<Button>(R.id.routeRecom_btn_cancle).setOnClickListener {
             dialog.dismiss()

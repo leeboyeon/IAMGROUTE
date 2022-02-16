@@ -18,6 +18,8 @@ public class RouteDetailServiceImpl implements RouteDetailService{
 
     @Override
     public void insertRouteDetail(RouteDetail routeDetail) throws Exception {
+        int cnt = routeDetailMapper.selectByRouteId(routeDetail.getRouteId()).size();
+        routeDetail.setPriority(cnt+1);
         routeDetailMapper.insertRouteDetail(routeDetail);
     }
 

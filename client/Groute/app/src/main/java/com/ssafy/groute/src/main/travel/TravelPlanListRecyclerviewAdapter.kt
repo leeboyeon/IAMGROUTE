@@ -23,11 +23,18 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 private const val TAG = "TPlanListRvAd_Groute"
-class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableList<Route>,var planViewModel: PlanViewModel,val owner:LifecycleOwner,var planId:Int) : RecyclerView.Adapter<TravelPlanListRecyclerviewAdapter.TravelPlanListHolder>(),
+class TravelPlanListRecyclerviewAdapter(val context: Context,var planViewModel: PlanViewModel,val owner:LifecycleOwner,var planId:Int) : RecyclerView.Adapter<TravelPlanListRecyclerviewAdapter.TravelPlanListHolder>(),
     Filterable {
-    private var dayFilterList = list
+
+    private var dayFilterList = mutableListOf<Route>()
     private var route:Route = Route()
     var routeDetailList = mutableListOf<RouteDetail>()
+
+    var list = mutableListOf<Route>()
+    fun setDataList(list: MutableList<Route>){
+        this.dayFilterList = list
+        this.list = list
+    }
 
     inner class TravelPlanListHolder(private val binding: ItemTravelplanDayListBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -95,32 +102,32 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
     fun swapData(fromPos: Int, toPos: Int) {
         Collections.swap(routeDetailList, fromPos, toPos)
         notifyItemMoved(fromPos, toPos)
-
-        val detailList = arrayListOf<RouteDetail>()
-        for(i in 0..routeDetailList.size-1){
-            val details = RouteDetail(
-                routeDetailList[i].id,
-                i+1
-            )
-            detailList.add(details)
-        }
-        UserPlanService().updatePriority(detailList, object : RetrofitCallback<Boolean> {
-            override fun onError(t: Throwable) {
-                Log.d(TAG, "onError: ")
-            }
-
-            override fun onSuccess(code: Int, responseData: Boolean) {
-                Log.d(TAG, "onSuccess: Update Success")
-                runBlocking {
-                    planViewModel.getPlanById(planId, 2)
-                }
-            }
-
-            override fun onFailure(code: Int) {
-                Log.d(TAG, "onFailure: ")
-            }
-
-        })
+//
+//        val detailList = arrayListOf<RouteDetail>()
+//        for(i in 0..routeDetailList.size-1){
+//            val details = RouteDetail(
+//                routeDetailList[i].id,
+//                i+1
+//            )
+//            detailList.add(details)
+//        }
+//        UserPlanService().updatePriority(detailList, object : RetrofitCallback<Boolean> {
+//            override fun onError(t: Throwable) {
+//                Log.d(TAG, "onError: ")
+//            }
+//
+//            override fun onSuccess(code: Int, responseData: Boolean) {
+//                Log.d(TAG, "onSuccess: Update Success")
+//                runBlocking {
+//                    planViewModel.getPlanById(planId, 2)
+//                }
+//            }
+//
+//            override fun onFailure(code: Int) {
+//                Log.d(TAG, "onFailure: ")
+//            }
+//
+//        })
         swapListener.onSwap(fromPos, toPos, routeDetailList)
     }
 

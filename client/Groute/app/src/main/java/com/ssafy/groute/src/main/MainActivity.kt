@@ -114,14 +114,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     true
                 }
                 R.id.Route -> {
-                    GlobalScope.launch {
-                        delay(1000L)
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.frame_main_layout, RouteFragment())
-                            .commit()
-                        dismissLoadingDialog()
-                    }
-                    showLoadingDialog(this)
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame_main_layout, RouteFragment())
+                        .commit()
                     true
                 }
                 R.id.Board -> {
