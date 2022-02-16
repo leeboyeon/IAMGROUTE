@@ -52,6 +52,7 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
     private val placeViewModel: PlaceViewModel by activityViewModels()
     private var placeId = -1
     private var reviewId = -1
+    private var imgSelectedChk = false
 
     private lateinit var editTextSubscription: Disposable
 
@@ -131,6 +132,7 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
         }
         selectImgBtnEvent()
         initTiedListener()
+        imgDeleteBtnEvent()
 
     }
 
@@ -203,6 +205,15 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
         }
     }
 
+    // 사진 삭제 버튼 클릭 이벤트
+    private fun imgDeleteBtnEvent() {
+        binding.reviewWriteIbDeletedImg.setOnClickListener {
+            imgUri = Uri.EMPTY
+            imgSelectedChk = true
+            binding.reviewWriteLLayoutSetImg.visibility = View.GONE
+        }
+    }
+
     /**
      * 사진 선택 버튼 클릭 이벤트
      */
@@ -265,6 +276,7 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if(it.resultCode == AppCompatActivity.RESULT_OK && it.data != null) {
                 binding.reviewWriteLLayoutSetImg.visibility = View.VISIBLE
+                imgSelectedChk = false
                 val currentImageUri = it.data?.data
 
                 try {
@@ -321,6 +333,9 @@ class ReviewWriteFragment : BaseFragment<FragmentReviewWriteBinding>(FragmentRev
 
         // 게시글만 작성한 경우
         if(imgUri == Uri.EMPTY) {
+            if(imgSelectedChk == true) {
+                placeReview.img = ""
+            }
             val gson : Gson = Gson()
             val json = gson.toJson(placeReview)
             val rBody_placeReivew = RequestBody.create(MediaType.parse("text/plain"), json)

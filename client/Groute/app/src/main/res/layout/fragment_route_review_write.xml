@@ -207,20 +207,29 @@
 
                     <ImageView
                         android:id="@+id/planReviewWrite_iv_selectImg"
-                        android:layout_width="80dp"
+                        android:layout_width="150dp"
                         android:layout_height="80dp"
                         android:layout_margin="10dp"
-                        android:layout_weight="1"
-                        android:scaleType="centerInside"/>
+                        android:scaleType="centerInside" />
 
                     <TextView
                         android:id="@+id/planReviewWrite_tv_imgName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginStart="20dp"
                         android:layout_weight="1"
                         android:text="" />
+
+                    <ImageButton
+                        android:id="@+id/planReviewWrite_ib_deletedImg"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/close_btn_img_black" />
+
                 </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatButton
