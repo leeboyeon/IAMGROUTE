@@ -148,7 +148,7 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
 //        }
         boardViewModel.commentList.observe(viewLifecycleOwner, {
             Log.d(TAG, "initCommentAdapter: $it")
-            commentAdapter = CommentAdapter(requireContext(), viewLifecycleOwner, boardViewModel, mainViewModel)
+            commentAdapter = CommentAdapter(requireContext(), viewLifecycleOwner, boardViewModel, mainViewModel, boardDetailId)
             commentAdapter.setCommentListData(it)
 
             binding.boardDetailRvComment.apply{

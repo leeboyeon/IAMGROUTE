@@ -34,7 +34,7 @@ import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
 
 private const val TAG = "CommentAdapter_groute"
-class CommentAdapter( val context: Context, val lifecycleOwner: LifecycleOwner, val boardViewModel: BoardViewModel, val mainViewModel: MainViewModel) : RecyclerView.Adapter<CommentAdapter.CommentHolder>(){
+class CommentAdapter( val context: Context, val lifecycleOwner: LifecycleOwner, val boardViewModel: BoardViewModel, val mainViewModel: MainViewModel, var boardDetailId: Int) : RecyclerView.Adapter<CommentAdapter.CommentHolder>(){
 //class CommentAdapter(val commentList : MutableList<Comment>, val context: Context, val lifecycleOwner: LifecycleOwner, val boardViewModel: BoardViewModel, val mainViewModel: MainViewModel)
 //    : ListAdapter<Comment, CommentAdapter.CommentHolder>(DiffCallback){
     var commentList = mutableListOf<Comment>()
@@ -180,6 +180,9 @@ class CommentAdapter( val context: Context, val lifecycleOwner: LifecycleOwner, 
                 Toast.makeText(context,"삭제되었습니다.", Toast.LENGTH_SHORT).show()
                 commentList.removeAt(position)
                 notifyDataSetChanged()
+                runBlocking {
+                    boardViewModel.getBoardDetail(boardDetailId)
+                }
             }
         }
 
