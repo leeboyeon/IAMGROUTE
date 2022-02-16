@@ -28,7 +28,7 @@
 
     <delete id="deleteComment" parameterType="int">
         delete from comment
-        where groupnum = #{groupNum}
+        where groupnum = #{groupNum} and boardDetail_id = #{boardDetailId}
     </delete>
 
     <update id="updateComment" parameterType="Comment">

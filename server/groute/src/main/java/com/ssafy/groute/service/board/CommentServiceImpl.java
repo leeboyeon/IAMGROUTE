@@ -40,11 +40,12 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     public void deleteComment(int id) throws Exception {
-        int boardDetailId = commentMapper.selectComment(id).getBoardDetailId();
+        Comment comment = commentMapper.selectComment(id);
+        int boardDetailId = comment.getBoardDetailId();
         BoardDetail boardDetail = boardDetailMapper.selectBoardDetail(boardDetailId);
         boardDetail.setCommentCnt(boardDetail.getCommentCnt()-1);
         boardDetailMapper.updateBoardDetailHitCntOrLikeOrCommentCnt(boardDetail);
-        commentMapper.deleteComment(boardDetailId);
+        commentMapper.deleteComment(comment);
     }
 
     @Override
