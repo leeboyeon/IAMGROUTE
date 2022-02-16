@@ -196,7 +196,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
 
         mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
-
         mAuth = FirebaseAuth.getInstance()
         signIn()
     }
@@ -263,7 +262,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
      * sns Login - Naver
      */
     // ---------------------------------------------------------------------------------------------
-    @SuppressLint("HandlerLeak")
     val mOAuthLoginHandler: OAuthLoginHandler = object : OAuthLoginHandler() {
         override fun run(success: Boolean) {
             if (success) {
@@ -319,7 +317,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
      */
     // ---------------------------------------------------------------------------------------------
     private fun successKakao() {
-        var disposables = CompositeDisposable()
+        val disposables = CompositeDisposable()
         // 사용자 정보 요청 (기본)
         UserApiClient.rx.me()
             .subscribeOn(Schedulers.io())

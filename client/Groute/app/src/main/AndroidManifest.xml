@@ -36,7 +36,8 @@
             android:exported="false" />
         <activity
             android:name=".src.main.my.ProfileEditActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".src.main.MainActivity"
             android:exported="false"

@@ -397,32 +397,31 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun logout(){
+
+        viewModel.loginUserInfo.observe(this, {
+            val type = it.type
+            Log.d(TAG, "logout: type : $type")
+            if(type == "google") {
+                //google Logout
+                FirebaseAuth.getInstance().signOut()
+            } else if(type == "kakao") {
+                //kakao Logout
+                val disposables = CompositeDisposable()
+
+                UserApiClient.rx.logout()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제 됨")
+                    }, { error ->
+                        Log.e(TAG, "로그아웃 실패. SDK에서 토큰 삭제 됨", error)
+                    }).addTo(disposables)
+            }
+        })
+
         ApplicationClass.sharedPreferencesUtil.deleteUser()
         ApplicationClass.sharedPreferencesUtil.deleteUserCookie()
         ApplicationClass.sharedPreferencesUtil.deleteAutoLogin()
-
-        //google Logout
-        FirebaseAuth.getInstance().signOut()
-
-        //kakao Logout
-        val disposables = CompositeDisposable()
-
-        UserApiClient.rx.logout()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                Log.i(TAG, "로그아웃 성공. SDK에서 토큰 삭제 됨")
-            }, { error ->
-                Log.e(TAG, "로그아웃 실패. SDK에서 토큰 삭제 됨", error)
-            }).addTo(disposables)
-
-        //naver Logout
-        if (mOAuthLoginInstance != null) {
-            mOAuthLoginInstance.logout(this)
-            showCustomToast("로그아웃 하셨습니다.")
-            DeleteTokenTask(this, mOAuthLoginInstance).execute()
-        }
-
         //화면이동
         val intent = Intent(this, LoginActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -452,6 +451,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
      * #S06P12D109-151
      * SNS Naver Logout delete Token
      */
+
+    fun naverTokenDelete() {
+        DeleteTokenTask(this, mOAuthLoginInstance).execute()
+    }
+
     inner class DeleteTokenTask(private val mContext: Context, private val mOAuthLoginModule: OAuthLogin) : AsyncTask<Void?, Void?, Boolean>() {
         override fun onPostExecute(isSuccessDeleteToken: Boolean) {}
         override fun doInBackground(vararg params: Void?): Boolean {
