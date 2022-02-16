@@ -67,7 +67,9 @@ public class UserController {
         if(user.getBirth() != null && user.getBirth().equals("")) {
             user.setBirth(null);
         }
-        user.setImg("default.png");
+        if(user.getType().equals("none")) {
+            user.setImg("default.png");
+        }
         userService.registerUser(user);
         return true;
     }
