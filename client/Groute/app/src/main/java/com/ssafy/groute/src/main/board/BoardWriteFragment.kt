@@ -60,6 +60,7 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
     private var boardDetailId = -1
     private var boardId = -1
     private var placeId = -1
+    private var imgSelectedChk = false
 
     private lateinit var searchAdapter: SearchAdapter
 
@@ -122,6 +123,7 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
         cancelButtonEvent()
         selectPlaceBtnEvent()
         selectImgBtnEvent()
+        imgDeleteBtnEvent()
 
     }
 
@@ -217,6 +219,14 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
                 )
                 setData(boardDetail, chk)
             }
+        }
+    }
+
+    private fun imgDeleteBtnEvent() {
+        binding.boardWriteIbDeletedImg.setOnClickListener {
+            imgUri = Uri.EMPTY
+            imgSelectedChk = true
+            binding.boardWriteLLayoutSetImg.visibility = View.GONE
         }
     }
 
@@ -361,6 +371,7 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if(it.resultCode == AppCompatActivity.RESULT_OK && it.data != null) {
                 binding.boardWriteLLayoutSetImg.visibility = View.VISIBLE
+                imgSelectedChk = false
                 val currentImageUri = it.data?.data
 
                 try {
@@ -414,8 +425,9 @@ class BoardWriteFragment : BaseFragment<FragmentBoardWriteBinding>(FragmentBoard
 
         // 게시글만 작성한 경우
         if(imgUri == Uri.EMPTY) {
-            Log.d(TAG, "insertBoard: ${boardDetail}")
-            Log.d(TAG, "insertBoard: ${boardDetail.img}")
+            if(imgSelectedChk == true) {
+                boardDetail.img = ""
+            }
             val gson : Gson = Gson()
             var json = gson.toJson(boardDetail)
             var rBody_boardDetail = RequestBody.create(MediaType.parse("text/plain"), json)

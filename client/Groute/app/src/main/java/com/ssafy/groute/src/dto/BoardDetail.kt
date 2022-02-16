@@ -4,7 +4,7 @@ data class BoardDetail(
     val id: Int,
     var title: String,
     var content: String,
-    val img: String,
+    var img: String,
     val createDate: String,
     val updateDate: String,
     var heartCnt: Int,
