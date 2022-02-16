@@ -92,8 +92,9 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var planViewModel: 
     }
 
     fun removeData(position: Int) {
-        routeDetailList.removeAt(position)
-        notifyItemRemoved(position)
+//        routeDetailList.removeAt(position)
+//        notifyItemRemoved(position)
+        removeListener.onRemove(routeDetailList[position].id)
     }
 
 
@@ -162,6 +163,14 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var planViewModel: 
             }
 
         }
+    }
+
+    interface RemoveListener{
+        fun onRemove(routeDetailId: Int)
+    }
+    private lateinit var removeListener : RemoveListener
+    fun setRemoveListener(removeListener: RemoveListener) {
+        this.removeListener = removeListener
     }
 
     interface SwapListener{

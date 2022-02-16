@@ -686,6 +686,31 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             }
 
         })
+
+        travelPlanListRecyclerviewAdapter.setRemoveListener(object: TravelPlanListRecyclerviewAdapter.RemoveListener {
+            override fun onRemove(routeDetailId: Int) {
+                UserPlanService().deletePlaceInUserPlan(routeDetailId, object : RetrofitCallback<Boolean> {
+                    override fun onError(t: Throwable) {
+                        Log.d(TAG, "onError: ")
+                    }
+
+                    override fun onSuccess(code: Int, responseData: Boolean) {
+                        Log.d(TAG, "onSuccess: ")
+                        runBlocking {
+                            planViewModel.getPlanById(planId, 2)
+                        }
+                        removePing()
+                        addPing(curPos)
+                    }
+
+                    override fun onFailure(code: Int) {
+                        Log.d(TAG, "onFailure: ")
+                    }
+
+                })
+            }
+
+        })
         val travelPlanListRvHelperCallback = TravelPlanListRvHelperCallback(travelPlanListRecyclerviewAdapter).apply {
             setClamp(resources.displayMetrics.widthPixels.toFloat() / 4)
         }
