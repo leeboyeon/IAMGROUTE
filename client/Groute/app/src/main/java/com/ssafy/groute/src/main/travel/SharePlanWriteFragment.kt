@@ -85,7 +85,12 @@ class SharePlanWriteFragment : BaseFragment<FragmentSharePlanWriteBinding>(Fragm
         var formatter = SimpleDateFormat("yyyy-MM-dd")
         var eDate = formatter.parse(userPlan.endDate)
         val caldate = (now.time.time - eDate.time) / (60 * 60 * 24 * 1000)
-        if(planViewModel.routeDetailList.value!!.size > 2){
+        var routeDetailSize = 0
+        for(i in 0 until planViewModel.routeList.value!!.size) {
+            var routeDetailList = planViewModel.routeList.value!!.get(i).routeDetailList
+            routeDetailSize += routeDetailList.size
+        }
+        if(routeDetailSize > 2){
             if(caldate > 0){
                 if(binding.planShareEtContent.text.toString().length > 30){
                     UserPlanService().updateUserPlan(plan, object: RetrofitCallback<Boolean> {
