@@ -123,10 +123,12 @@ class UserPlanService {
                     } else {
                         Log.d(TAG, "onResponse: delete fail")
                     }
+                } else {
+                    callback.onFailure(response.code())
                 }
             }
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                Log.d(TAG, "onFailure: $t")
+                callback.onError(t)
             }
 
         })

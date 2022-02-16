@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.groute.R
+import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.databinding.ItemTravelplanDayListBinding
 import com.ssafy.groute.src.dto.Route
 import com.ssafy.groute.src.dto.RouteDetail
@@ -85,6 +86,7 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
     }
 
     fun removeData(position: Int) {
+        UserPlanService().deletePlaceInUserPlan(dayFilterList[position].id, DeletePlaceCallBack())
         routeDetailList.removeAt(position)
         notifyItemRemoved(position)
     }
@@ -174,5 +176,24 @@ class TravelPlanListRecyclerviewAdapter(val context: Context,var list:MutableLis
 
     fun setMemoClickListener(memoClickListener: MemoClickListener) {
         this.memoClickListener = memoClickListener
+    }
+
+    inner class DeletePlaceCallBack() : RetrofitCallback<Boolean> {
+        override fun onError(t: Throwable) {
+            Log.d(TAG, "onError: ")
+        }
+
+        override fun onSuccess(code: Int, responseData: Boolean) {
+            if(responseData){
+                Toast.makeText(context, "삭제되었습니다", Toast.LENGTH_SHORT).show()
+//                runBlocking {
+//                    planViewModel
+//                }
+            }
+        }
+
+        override fun onFailure(code: Int) {
+            Log.d(TAG, "onFailure: ")
+        }
     }
 }
