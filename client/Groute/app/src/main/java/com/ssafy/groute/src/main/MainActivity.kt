@@ -405,6 +405,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private fun logout(){
         ApplicationClass.sharedPreferencesUtil.deleteUser()
         ApplicationClass.sharedPreferencesUtil.deleteUserCookie()
+        ApplicationClass.sharedPreferencesUtil.deleteAutoLogin()
 
         //google Logout
         FirebaseAuth.getInstance().signOut()
