@@ -629,12 +629,15 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
                         if (details[i].placeId == placeId) {
                             Log.d(TAG, "onClick: findPlace")
                             Log.d(TAG, "onClick_MEMO: ${details[i].memo}")
-                            memo = details[i].memo
+                            if(details[i].memo != null) {
+                                memo = details[i].memo
+                            }
                             break;
                         }
                     }
 
-                    if(memo.equals("")|| memo.isEmpty() || memo.length == 0){
+
+                    if(memo == null || memo.equals("")|| memo.isEmpty() || memo.length == 0 || memo == "null"){
                         //메모가 없으면
                         insertMemo(placeId,1)
                     }
