@@ -4,7 +4,7 @@ data class PlaceReview(
     val content: String,
     val createDate: String,
     val id: Int,
-    val img: String,
+    var img: String,
     val placeId: Int,
     val rate: Double,
     val title: String,
