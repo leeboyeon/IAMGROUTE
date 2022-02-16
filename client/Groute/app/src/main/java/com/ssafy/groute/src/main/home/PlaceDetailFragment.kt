@@ -68,48 +68,42 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
         runBlocking {
             placeViewModel.getPlace(placeId)
             planViewModel.getPlanMyList(ApplicationClass.sharedPreferencesUtil.getUser().id)
-            placeViewModel.getPlaceIsLike(PlaceLikeResponse(0,ApplicationClass.sharedPreferencesUtil.getUser().id,placeId))
+            placeViewModel.getPlaceIsLike(PlaceLikeResponse(0,ApplicationClass.sharedPreferencesUtil.getUser().id, placeId))
         }
+
         placeViewModel.place.observe(viewLifecycleOwner, {
             binding.dto = it
-            Log.d(TAG, "onViewCreated: ${it}")
         })
-//
-        val res = placeViewModel.isPlaceLike.value
-        var heart = binding.placeDetailAbtnHeart
 
-        if(res == true){
-            heart.setOnClickListener {
-                val animator = ValueAnimator.ofFloat(1f,0f).setDuration(500)
-                animator.addUpdateListener { animation ->
-                    heart.progress = animation.animatedValue as Float
-                }
-                animator.start()
+        val heart = binding.placeDetailAbtnHeart
 
-                val placeLike = PlaceLikeResponse(
-                    0,
-                    ApplicationClass.sharedPreferencesUtil.getUser().id,
-                    placeId
-                )
-                placeGoLike(placeLike)
-            }
+        heart.setOnClickListener {
+            val placeLike = PlaceLikeResponse(
+                0,
+                ApplicationClass.sharedPreferencesUtil.getUser().id,
+                placeId
+            )
+            PlaceService().placeLike(placeLike, PlaceLikeCallback())
+        }
 
-        }else{
-            heart.setOnClickListener {
+        placeViewModel.isPlaceLike.observe(viewLifecycleOwner, {
+            Log.d(TAG, "onViewCreated: $it")
+            if (it == true) {
                 val animator = ValueAnimator.ofFloat(0f,0.4f).setDuration(500)
                 animator.addUpdateListener { animation ->
                     heart.progress = animation.animatedValue as Float
                 }
                 animator.start()
 
-                val placeLike = PlaceLikeResponse(
-                    0,
-                    ApplicationClass.sharedPreferencesUtil.getUser().id,
-                    placeId
-                )
-                placeGoLike(placeLike)
+            } else {
+                val animator = ValueAnimator.ofFloat(1f,0f).setDuration(500)
+                animator.addUpdateListener { animation ->
+                    heart.progress = animation.animatedValue as Float
+                }
+                animator.start()
             }
-        }
+        })
+
 
 
         val areaTabPagerAdapter = AreaTabPagerAdapter(this)
@@ -161,24 +155,6 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
         })
         placeViewModel.place.observe(viewLifecycleOwner, {
             binding.placeDetailTvHeart.text = it.heartCnt.toString()
-        })
-    }
-    private fun placeGoLike(placeLike: PlaceLikeResponse){
-        PlaceService().placeLike(placeLike, object :RetrofitCallback<Boolean> {
-            override fun onError(t: Throwable) {
-                Log.d(TAG, "onError: ")
-            }
-
-            override fun onSuccess(code: Int, responseData: Boolean) {
-                runBlocking {
-                    placeViewModel.getPlace(placeId)
-                }
-            }
-
-            override fun onFailure(code: Int) {
-                Log.d(TAG, "onFailure: ")
-            }
-
         })
     }
 
@@ -295,6 +271,28 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
 
         })
     }
+
+    inner class PlaceLikeCallback() : RetrofitCallback<Boolean> {
+        override fun onError(t: Throwable) {
+            Log.d(TAG, "onError: ")
+        }
+
+        override fun onSuccess(code: Int, responseData: Boolean) {
+            Log.d(TAG, "onSuccess: $responseData")
+            if(responseData == true) {
+                runBlocking {
+                    placeViewModel.getPlace(placeId)
+                    placeViewModel.getPlaceIsLike(PlaceLikeResponse(0,ApplicationClass.sharedPreferencesUtil.getUser().id, placeId))
+                }
+            }
+        }
+
+        override fun onFailure(code: Int) {
+            Log.d(TAG, "onFailure: ")
+        }
+
+    }
+
 
     companion object {
         @JvmStatic

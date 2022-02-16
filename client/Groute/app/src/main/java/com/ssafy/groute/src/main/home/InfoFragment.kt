@@ -53,9 +53,9 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModels = placeViewModel
-        runBlocking {
-            placeViewModel.getPlace(placeId)
-        }
+//        runBlocking {
+//            placeViewModel.getPlace(placeId)
+//        }
         createMap()
         binding.infoBtnFindRoad.setOnClickListener {
             placeViewModel.place.observe(viewLifecycleOwner, Observer {
@@ -69,17 +69,18 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
     fun createMap(){
         mapView = MapView(requireContext())
         val marker = MapPOIItem()
-        placeViewModel.place.observe(viewLifecycleOwner, Observer {
+        val placeInfo = placeViewModel.place.value!!
+//        placeViewModel.place.observe(viewLifecycleOwner, Observer {
 
             binding.kakaoMapView.addView(mapView)
-            val mapPoint = MapPoint.mapPointWithGeoCoord(it.lat.toDouble(),it.lng.toDouble())
+            val mapPoint = MapPoint.mapPointWithGeoCoord(placeInfo.lat.toDouble(), placeInfo.lng.toDouble())
             mapView.setMapCenterPoint(mapPoint, true)
             mapView.setZoomLevel(3, true)
             marker.itemName = binding.placeDetailTvBigContent.text.toString()
             marker.mapPoint = mapPoint
             marker.markerType = MapPOIItem.MarkerType.BluePin
             marker.selectedMarkerType = MapPOIItem.MarkerType.RedPin
-        })
+//        })
 
         mapView.addPOIItem(marker)
 

@@ -124,14 +124,18 @@ class PlaceService {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 val res = response.body()
                 if(response.code() == 200){
-                    Log.d(TAG, "onResponse: UpdateSuccess22!!")
-                }else{
-                    Log.d(TAG, "onResponse: FAIL")
+                    if(res != null) {
+                        callback.onSuccess(response.code(), res)
+                    } else {
+                        Log.d(TAG, "onResponse: res == null")
+                    }
+                } else{
+                    callback.onFailure(response.code())
                 }
             }
 
             override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                Log.d(TAG, "onFailure: $t")
+                callback.onError(t)
             }
 
         })

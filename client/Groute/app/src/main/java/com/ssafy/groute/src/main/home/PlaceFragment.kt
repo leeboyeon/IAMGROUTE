@@ -51,6 +51,7 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
         runBlocking {
             placeViewModel.getPlaceList()
         }
+
         runBlocking {
             placeViewModel.getPlaceLikeList(ApplicationClass.sharedPreferencesUtil.getUser().id)
         }

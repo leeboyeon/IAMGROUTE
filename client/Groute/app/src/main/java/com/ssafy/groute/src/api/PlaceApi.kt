@@ -43,11 +43,11 @@ interface PlaceApi {
 
     //place 좋아요 혹은 취소
     @POST("/place/like")
-    fun placeLike(@Body placelike:PlaceLikeResponse) : Call<Boolean>
+    fun placeLike(@Body placeLike:PlaceLikeResponse) : Call<Boolean>
 
     //place 좋아요 했는지
     @POST("/place/isLike")
-    suspend fun placeIsLike(@Body placelike: PlaceLikeResponse) : Response<Boolean>
+    suspend fun placeIsLike(@Body placeLike: PlaceLikeResponse) : Response<Boolean>
 
     @GET("/place/like/{userId}")
     suspend fun getPlaceLikeListbyUserId(@Path("userId")userId:String) : Response<MutableList<Place>>

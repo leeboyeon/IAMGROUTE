@@ -159,10 +159,13 @@ class PlaceViewModel : ViewModel() {
             }
         }
     }
+
     suspend fun getPlaceIsLike(placelike:PlaceLikeResponse){
         val response = PlaceService().placeisLike(placelike)
         viewModelScope.launch { 
             val res = response.body()
+            Log.d(TAG, "PlaceDetailF: $res ${response.code()}")
+
             if(response.code() == 200){
                 if(res!=null){
                     setIsPlaceLike(res)
