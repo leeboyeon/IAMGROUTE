@@ -151,11 +151,11 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::b
                 Log.d(TAG, "onSuccess: ${user.id}")
                 Toast.makeText(context,"로그인 되었습니다.", Toast.LENGTH_SHORT).show()
                 ApplicationClass.sharedPreferencesUtil.addUser(user)
-                loginActivity.openFragment(1)
-                if(binding.autocheck.isChecked){
-                    Log.d(TAG, "onSuccess: 자동로그인확인")
-                    loginActivity.autoLoginCheck(true)
+                if(binding.autocheck.isChecked) {   // 자동 로그인이 체크되어 있으면
+                    ApplicationClass.sharedPreferencesUtil.setAutoLogin(user.id)
+                    Log.d(TAG, "onSuccess: ${ ApplicationClass.sharedPreferencesUtil.getAutoLogin()}")
                 }
+                loginActivity.openFragment(1)
             }else{
                 Toast.makeText(context,"ID 또는 패스워드를 확인해 주세요.", Toast.LENGTH_SHORT).show()
             }
