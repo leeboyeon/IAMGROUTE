@@ -11,6 +11,9 @@
             name="writeUser"
             type="com.ssafy.groute.src.dto.User" />
         <variable
+            name="place"
+            type="com.ssafy.groute.src.dto.Place" />
+        <variable
             name="boardDetail"
             type="com.ssafy.groute.src.dto.BoardDetail" />
         <variable
@@ -32,11 +35,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="30dp"
                 android:orientation="horizontal"
-                android:paddingLeft="20dp"
-                android:paddingTop="5dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="5dp"
+                android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -46,29 +48,23 @@
                     android:id="@+id/boardDetail_ibtn_back"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
+                    android:layout_gravity="center"
                     android:background="@android:color/transparent"
                     android:scaleType="centerInside"
-                    android:src="@drawable/backicon" />
+                    android:src="@drawable/left" />
 
                 <Space
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
-                <ImageButton
-                    android:id="@+id/imageButton2"
-                    android:layout_width="20dp"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/morecion" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linearLayout6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -93,13 +89,14 @@
 
             <TextView
                 android:id="@+id/boardDtail_tv_title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="28dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
                 android:text="@{boardDetail.title}"
                 android:textColor="@color/black"
-                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/boardDetail_iv_img" />
 
@@ -108,13 +105,52 @@
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:layout_marginStart="30dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="30dp"
                 android:scaleType="fitCenter"
                 app:imageUrlBoardPost="@{boardDetail.img}"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/boardDetail_cL_place"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="30dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/boardDetail_tv_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/boardDtail_tv_title">
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/place" />
+
+                <TextView
+                    android:id="@+id/boardDetail_tv_placeName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@{place.name}"
+                    android:layout_marginStart="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView4"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
             <TextView
                 android:id="@+id/boardDetail_tv_content"
@@ -127,7 +163,7 @@
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/boardDtail_tv_title" />
+                app:layout_constraintTop_toBottomOf="@+id/boardDetail_cL_place" />
 
             <LinearLayout
                 android:id="@+id/linearLayout7"
@@ -149,7 +185,7 @@
                     android:id="@+id/boardDetail_iv_heart"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="5dp"
                     android:src="@drawable/boardheartcnt"
                     android:scaleType="centerInside"/>
 
@@ -162,9 +198,9 @@
 
                 <ImageView
                     android:id="@+id/boardDetail_iv_commentCnt"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_width="18dp"
+                    android:layout_height="15dp"
+                    android:layout_marginRight="5dp"
                     app:srcCompat="@drawable/boardcommentcnt" />
 
                 <TextView
@@ -178,7 +214,7 @@
                     android:id="@+id/BoardDtail_iv_hitCnt"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="5dp"
                     app:srcCompat="@drawable/boardhitcnt" />
 
                 <TextView

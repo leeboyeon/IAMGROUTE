@@ -121,7 +121,11 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
                 binding.boardDetailRvListitem.adapter = boardRecyclerAdapter
                 boardRecyclerAdapter.setItemClickListener(object:BoardRecyclerviewAdapter.ItemClickListener{
                     override fun onClick(view: View, position: Int) {
-                        mainActivity.moveFragment(6,"boardDetailId", it[position].id)
+                        var placeId = -1
+                        if(it[position].placeId != null) {
+                            placeId = it[position].placeId
+                        }
+                        mainActivity.moveFragment(6,"boardDetailId", it[position].id, "placeId", placeId)
                     }
 //                    override fun isLIke(view: View, position: Int, id: Int) {
 //                        boardLike(id, userId)
