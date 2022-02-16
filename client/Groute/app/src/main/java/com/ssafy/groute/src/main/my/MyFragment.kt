@@ -11,6 +11,9 @@ import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
@@ -42,9 +45,25 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
     private lateinit var intent: Intent
     private val mainViewModel : MainViewModel by activityViewModels()
 
+    // Naver Logout 인증 변수
+    lateinit var mOAuthLoginInstance : OAuthLogin
+
+    // firebase authentication
+    var mGoogleSignInClient: GoogleSignInClient? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
+        // Naver Logout init
+        mOAuthLoginInstance = OAuthLogin.getInstance()
+        mOAuthLoginInstance.init(requireContext(), getString(R.string.naver_client_id), getString(R.string.naver_client_secret), getString(R.string.naver_client_name))
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.google_login_key))
+            .requestEmail()
+            .build()
+
+        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
     }
 
     override fun onAttach(context: Context) {
@@ -134,32 +153,36 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind, R.la
                 // 탈퇴기능구현
                 mainViewModel.loginUserInfo.observe(viewLifecycleOwner, {
                     val type = it.type
-
-                     if(type == "kakao") {
-                        val disposables = CompositeDisposable()
-                        // 연결 끊기
-                        UserApiClient.rx.unlink()
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe({
-                                Log.i(TAG, "연결 끊기 성공. SDK에서 토큰 삭제 됨")
+                    Log.d(TAG, "showDeleteUserDialog: $type")
+                    if(type == "kakao") {
+                    val disposables = CompositeDisposable()
+                    // 연결 끊기
+                    UserApiClient.rx.unlink()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            Log.i(TAG, "연결 끊기 성공. SDK에서 토큰 삭제 됨")
                             }, { error ->
                                 Log.e(TAG, "연결 끊기 실패", error)
                             }).addTo(disposables)
                     } else if(type == "google") {
                         FirebaseAuth.getInstance().currentUser?.delete()!!.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                //로그아웃처리
-                                FirebaseAuth.getInstance().signOut()
-                                Log.i(TAG, " 구글 로그인 연결 끊기 성공")
+                            //로그아웃처리
+                            FirebaseAuth.getInstance().signOut()
+                            mGoogleSignInClient?.signOut()
+                            Log.i(TAG, " 구글 로그인 연결 끊기 성공")
                             } else {
                                 Log.i(TAG, "구글 로그인 user 삭제 실패")
                             }
                         }
                     } else if(type == "naver") {
-
+                        mainActivity.naverTokenDelete()
                     }
                     UserService().deleteUser(ApplicationClass.sharedPreferencesUtil.getUser().id, DeleteCallback())
+                    ApplicationClass.sharedPreferencesUtil.deleteUser()
+                    ApplicationClass.sharedPreferencesUtil.deleteUserCookie()
+                    ApplicationClass.sharedPreferencesUtil.deleteAutoLogin()
                 })
             })
             .setNeutralButton("NO", null)
