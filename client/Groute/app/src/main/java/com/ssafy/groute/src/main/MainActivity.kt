@@ -3,7 +3,6 @@ package com.ssafy.groute.src.main
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.NotificationManager.IMPORTANCE_HIGH
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
@@ -25,7 +24,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
@@ -58,14 +56,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Math.abs
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.SimpleDateFormat
@@ -228,7 +222,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
             }
             6->{    // 게시글 1개에 대한 화면
-                transaction.replace(R.id.frame_main_layout,BoardDetailDetailFragment.newInstance(key1, value1))
+                transaction.replace(R.id.frame_main_layout,BoardPostDetailFragment.newInstance(key1, value1, key2, value2))
                     .addToBackStack(null)
             }
             7->{    // 사용자 여행 일정 계획 화면

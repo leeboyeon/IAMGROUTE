@@ -30,26 +30,30 @@
 
         <TextView
             android:id="@+id/comment_nested_tv_userNick"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="30dp"
             android:text="@{user.nickname}"
             android:textColor="@color/black"
+            app:layout_constraintEnd_toStartOf="@+id/comment_nested_more_iv"
             app:layout_constraintStart_toEndOf="@+id/comment_nested_iv_userImg"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/comment_nested_tv_comment"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="60dp"
+            android:layout_marginEnd="50dp"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:text="@{comment.content}"
             android:textColor="@color/black"
             android:textSize="12sp"
-            android:text="@{comment.content}"
-            android:layout_marginBottom="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/comment_nested_tv_userNick" />
 <!--            android:text="최지우진짜진짜 자닌해....자닌해진쨔..."-->

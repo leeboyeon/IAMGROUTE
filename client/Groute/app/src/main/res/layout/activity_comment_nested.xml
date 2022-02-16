@@ -30,10 +30,10 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
             android:scaleType="centerInside"
-            android:src="@drawable/backicon" />
+            android:src="@drawable/left" />
 
         <ImageView
             android:id="@+id/comment_nested_detail_iv_userImg"
@@ -48,24 +48,28 @@
 
         <TextView
             android:id="@+id/comment_nested_detail_tv_userNick"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="50dp"
+            android:layout_marginEnd="30dp"
             android:text="@{writeUser.nickname}"
             android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/comment_nested_detail_iv_userImg"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/comment_nested_detail_tv_comment"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:text="@{comment.content}"
             android:textColor="@color/black"
             android:textSize="12sp"
-            android:text="@{comment.content}"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/comment_nested_detail_tv_userNick" />
 <!--            android:text="최지우진짜진짜 자닌해....자닌해진쨔..."-->

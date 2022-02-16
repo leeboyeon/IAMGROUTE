@@ -7,13 +7,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -21,7 +20,6 @@ import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentBoardPostDetailBinding
-import com.ssafy.groute.src.dto.BoardDetail
 import com.ssafy.groute.src.dto.Comment
 import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.main.MainActivity
@@ -30,40 +28,42 @@ import com.ssafy.groute.src.service.CommentService
 import com.ssafy.groute.src.service.UserService
 import com.ssafy.groute.src.viewmodel.BoardViewModel
 import com.ssafy.groute.src.viewmodel.MainViewModel
+import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
-import org.json.JSONObject
 
 private const val TAG = "BoardDetailDF_Groute"
-class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(FragmentBoardPostDetailBinding::bind, R.layout.fragment_board_post_detail) {
+class BoardPostDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(FragmentBoardPostDetailBinding::bind, R.layout.fragment_board_post_detail) {
     private lateinit var mainActivity: MainActivity
     private lateinit var commentAdapter:CommentAdapter
     private var userId : Any= ""
     val boardViewModel: BoardViewModel by activityViewModels()
     val mainViewModel: MainViewModel by activityViewModels()
+    val placeViewModel: PlaceViewModel by activityViewModels()
+
     val loginUserId: String = ApplicationClass.sharedPreferencesUtil.getUser().id    // 로그인한 userId
     private lateinit var intent: Intent
 
     private var boardDetailId = -1
+    private var placeId = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
         arguments?.let {
             boardDetailId = it.getInt("boardDetailId", -1)
-            Log.d(TAG, "onCreate: $boardDetailId")
+            placeId = it.getInt("placeId",-1)
+            Log.d(TAG, "onCreate: $boardDetailId $placeId")
         }
         mainActivity.hideBottomNav(true)
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "onResume: ")
         runBlocking {
             boardViewModel.getBoardDetailNoHit(boardDetailId)
         }
         boardViewModel.commentList.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "onResume: ${it}")
             commentAdapter.setCommentListData(it)
         })
     }
@@ -76,6 +76,18 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if(placeId != -1) {
+            binding.boardDetailCLPlace.isVisible = true
+            runBlocking {
+                placeViewModel.getPlace(placeId)
+            }
+            placeViewModel.place.observe(viewLifecycleOwner, {
+                binding.place = it
+//                binding.boardDetailTvPlaceName.text = it.name
+            })
+        } else {
+            binding.boardDetailCLPlace.isVisible = false
+        }
         initDataBinding()
 
         initBtnEvent()
@@ -94,10 +106,10 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
             boardViewModel.getBoardDetail(boardDetailId)
         }
 
-
         boardViewModel.boardDetail.observe(viewLifecycleOwner,{
             binding.boardDetail = it
         })
+
         val writeUserId = boardViewModel.boardDetail.value!!.userId
         runBlocking {
             mainViewModel.getUserInformation(writeUserId, false)
@@ -356,10 +368,11 @@ class BoardDetailDetailFragment : BaseFragment<FragmentBoardPostDetailBinding>(F
 
     companion object {
         @JvmStatic
-        fun newInstance(key: String, value:Int) =
-            BoardDetailDetailFragment().apply {
+        fun newInstance(key: String, value: Int, key2: String, value2: Int) =
+            BoardPostDetailFragment().apply {
                 arguments = Bundle().apply {
                     putInt(key, value)
+                    putInt(key2, value2)
                 }
             }
     }

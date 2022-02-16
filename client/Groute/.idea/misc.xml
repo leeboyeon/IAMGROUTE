@@ -33,7 +33,7 @@
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/fragment_board.xml" value="0.536" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/fragment_board_detail.xml" value="0.2" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/fragment_board_detail_detail.xml" value="0.176" />
-        <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/fragment_board_post_detail.xml" value="0.264" />
+        <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/fragment_board_post_detail.xml" value="0.4" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/fragment_board_write.xml" value="0.264" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/fragment_day_by_account.xml" value="0.128125" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/fragment_home.xml" value="0.136" />
@@ -67,7 +67,7 @@
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/item_layout_banner.xml" value="0.128125" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/item_travelplan_day_list.xml" value="0.37259615384615385" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/item_travelplan_tab.xml" value="0.128125" />
-        <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/list_item_board.xml" value="0.264" />
+        <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/list_item_board.xml" value="0.36745886654478976" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/list_item_route.xml" value="0.128125" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/list_item_route_theme.xml" value="0.264" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/list_item_theme.xml" value="0.72" />
@@ -88,7 +88,7 @@
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/recyclerview_findlocation_list_item.xml" value="0.128125" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/recyclerview_item_notification.xml" value="0.1640625" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/recyclerview_memo_list_item.xml" value="0.128125" />
-        <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/recyclerview_nested_comment_list_item.xml" value="0.4" />
+        <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/recyclerview_nested_comment_list_item.xml" value="0.264" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/recyclerview_notification_list_item.xml" value="0.22184300341296928" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/recyclerview_place_search.xml" value="1.0" />
         <entry key="..\:/SSAFY/GIT/S06P12D109/client/Groute/app/src/main/res/layout/recyclerview_placereview_item.xml" value="0.14537037037037037" />
