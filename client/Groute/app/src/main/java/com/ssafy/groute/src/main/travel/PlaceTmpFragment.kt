@@ -76,6 +76,7 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
         placeViewModel.placeLikeList.observe(viewLifecycleOwner, Observer {
             initAdapter(it)
         })
+        binding.placetmpTabLayout.getTabAt(0)?.select()
         binding.placetmpTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when(tab?.position){
