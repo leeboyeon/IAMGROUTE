@@ -22,15 +22,15 @@ class MyTravelAdapter(val planViewModel: PlanViewModel) : RecyclerView.Adapter<M
                 planViewModel.getPlanById(data.id, 2)
             }
             var imgUrl = ""
-            for(i in 0 until planViewModel.routeList.value!!.size) {
-                for(j in 0 until planViewModel.routeList.value!!.get(i).routeDetailList.size) {
-                    var type = planViewModel.routeList.value!!.get(i).routeDetailList.get(j).place.type
-                    if(type == "관광지" || type == "레포츠" || type == "문화시설") {
-                        imgUrl = planViewModel.routeList.value!!.get(i).routeDetailList.get(j).place.img
-                        break
-                    }
-                }
-            }
+//            for(i in 0 until planViewModel.routeList.value!!.size) {
+//                for(j in 0 until planViewModel.routeList.value!!.get(i).routeDetailList.size) {
+//                    var type = planViewModel.routeList.value!!.get(i).routeDetailList.get(j).place.type
+//                    if(type == "관광지" || type == "레포츠" || type == "문화시설") {
+//                        imgUrl = planViewModel.routeList.value!!.get(i).routeDetailList.get(j).place.img
+//                        break
+//                    }
+//                }
+//            }
 
             binding.mytravelTvDue.text = CommonUtils.getFormattedDueDate(data.startDate, data.endDate)
 

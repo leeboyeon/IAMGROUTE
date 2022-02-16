@@ -52,6 +52,7 @@ import net.daum.mf.map.api.MapView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.kakao.kakaonavi.Destination
 import com.ssafy.groute.src.dto.*
+import com.ssafy.groute.src.service.UserPlanService
 import java.lang.Exception
 
 
@@ -608,10 +609,10 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility")
     fun initPlaceListAdapter(){
-        planViewModel.routeList.observe(viewLifecycleOwner, Observer {
-            Log.d(TAG, "initPlaceListAdapter: 실행되니?")
-            travelPlanListRecyclerviewAdapter = TravelPlanListRecyclerviewAdapter(requireContext(),it,planViewModel,viewLifecycleOwner,planId)
+        travelPlanListRecyclerviewAdapter = TravelPlanListRecyclerviewAdapter(requireContext(),planViewModel,viewLifecycleOwner,planId)
 
+        planViewModel.routeList.observe(viewLifecycleOwner, Observer {
+            travelPlanListRecyclerviewAdapter.setDataList(it)
             initTabLayout()
             binding.travelplanListRv.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
@@ -643,20 +644,6 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
 
                 }
             })
-            travelPlanListRecyclerviewAdapter.setSwapListener(object : TravelPlanListRecyclerviewAdapter.SwapListener {
-                override fun onSwap(
-                    fromPos: Int,
-                    toPos: Int,
-                    routeDetailList: MutableList<RouteDetail>
-                ) {
-                    removePing()
-                    addPing(curPos)
-                }
-
-            })
-
-
-
             val travelPlanListRvHelperCallback = TravelPlanListRvHelperCallback(travelPlanListRecyclerviewAdapter).apply {
                 setClamp(resources.displayMetrics.widthPixels.toFloat() / 4)
             }
@@ -666,6 +653,43 @@ class TravelPlanFragment : BaseFragment<FragmentTravelPlanBinding>(FragmentTrave
             binding.travelplanListRv.setOnTouchListener{ _, _ ->
                 travelPlanListRvHelperCallback.removePreviousClamp(binding.travelplanListRv)
                 false
+            }
+
+        })
+        travelPlanListRecyclerviewAdapter.setSwapListener(object : TravelPlanListRecyclerviewAdapter.SwapListener {
+            override fun onSwap(
+                fromPos: Int,
+                toPos: Int,
+                routeDetailList: MutableList<RouteDetail>
+            ) {
+                val detailList = arrayListOf<RouteDetail>()
+                for(i in 0..routeDetailList.size-1){
+                    val details = RouteDetail(
+                        routeDetailList[i].id,
+                        i+1
+                    )
+                    detailList.add(details)
+                }
+                UserPlanService().updatePriority(detailList, object : RetrofitCallback<Boolean> {
+                    override fun onError(t: Throwable) {
+                        Log.d(TAG, "onError: ")
+                    }
+
+                    override fun onSuccess(code: Int, responseData: Boolean) {
+                        Log.d(TAG, "onSuccess: Update Success")
+                        removePing()
+                        runBlocking {
+                            planViewModel.getPlanById(planId, 2)
+                        }
+                        addPing(curPos)
+
+                    }
+
+                    override fun onFailure(code: Int) {
+                        Log.d(TAG, "onFailure: ")
+                    }
+
+                })
             }
 
         })

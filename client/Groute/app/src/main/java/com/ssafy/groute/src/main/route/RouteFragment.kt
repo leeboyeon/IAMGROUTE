@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
+import com.jakewharton.rxbinding3.material.selections
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
@@ -81,14 +82,6 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             mainActivity.moveFragment(1)
         }
 
-        // Loading Dialog
-        planViewModel.isLoading.observe(viewLifecycleOwner, Observer {
-            if(it) {
-                mainActivity.showLoadingDialog(requireContext())
-            } else {
-                mainActivity.dismissLoadingDialog()
-            }
-        })
     }
 
     private fun getListInit() {
@@ -211,7 +204,11 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
                 planViewModel.getPlanById(planId, 1)
             }
             val totalDate = planViewModel.currentUserPlan.value!!.totalDate
-            binding.routeTabLayout.getTabAt(totalDate)!!.select()
+//            binding.routeTabLayout.getTabAt(totalDate)!!.select()
+            var tab = binding.routeTabLayout.getTabAt(totalDate)
+            tab?.select()
+            Log.d("TAG", "initTab: ${totalDate}")
+
             tabPosition = totalDate
             planViewModel.getRoutebyDay(totalDate, selectedTheme)
         }
@@ -233,6 +230,7 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
                         planViewModel.getRoutebyDay(2, selectedTheme)
                     }
                     3 -> {
+                        Log.d("TAG", "onTabSelected: 넘어오니?")
                         tabPosition = 3
                         planViewModel.getRoutebyDay(3, selectedTheme)
                     }
