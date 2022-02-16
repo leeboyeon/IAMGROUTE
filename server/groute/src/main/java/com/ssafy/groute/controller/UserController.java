@@ -17,9 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -76,7 +73,8 @@ public class UserController {
 
     @ApiOperation(value="로그인", notes="로그인")
     @GetMapping("/login")
-    public ResponseEntity<?> login(User req, HttpServletResponse response) throws Exception{
+//    public ResponseEntity<?> login(User req, HttpServletResponse response) throws Exception{
+    public ResponseEntity<?> login(User req) throws Exception{
 
         User selected = userService.findByUidType(req.getId(), req.getType());
 
@@ -93,9 +91,9 @@ public class UserController {
 
         selected.setToken(req.getToken());
 
-        Cookie cookie = new Cookie("loginId", URLEncoder.encode(selected.getId(), "utf-8"));
-        cookie.setMaxAge(1000 * 1000);
-        response.addCookie(cookie);
+//        Cookie cookie = new Cookie("loginId", URLEncoder.encode(selected.getId(), "utf-8"));
+//        cookie.setMaxAge(1000 * 1000);
+//        response.addCookie(cookie);
 //        userService.saveUser(selected);
 
         return new ResponseEntity<Map<String, Object>>(resultMap,HttpStatus.OK);
