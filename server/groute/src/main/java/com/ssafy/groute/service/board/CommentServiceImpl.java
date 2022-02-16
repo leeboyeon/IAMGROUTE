@@ -22,7 +22,9 @@ public class CommentServiceImpl implements CommentService{
     public void insertComment(Comment comment) throws Exception {
         BoardDetail boardDetail = boardDetailMapper.selectBoardDetail(comment.getBoardDetailId());
         int groupNum = commentMapper.selectAllByBoardDetailId(comment.getBoardDetailId()).size();
-        comment.setGroupNum(groupNum+1);
+        if(comment.getLevel()==0) {
+            comment.setGroupNum(groupNum + 1);
+        }
         boardDetail.setCommentCnt(boardDetail.getCommentCnt()+1);
         commentMapper.insertComment(comment);
         boardDetailMapper.updateBoardDetailHitCntOrLikeOrCommentCnt(boardDetail);
