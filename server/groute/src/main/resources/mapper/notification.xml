@@ -34,4 +34,9 @@
         set title = #{title}, category = #{category}, content = #{content}
         where id = #{id}
     </update>
+
+    <delete id="deleteNotificationByUserId" parameterType="String">
+        delete from notification
+        where user_id = #{userId}
+    </delete>
 </mapper>

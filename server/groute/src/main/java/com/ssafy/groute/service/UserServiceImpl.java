@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final UserPlanMapper userPlanMapper;
     private final PlaceMapper placeMapper;
     private final PlaceReviewMapper placeReviewMapper;
+    private final NotificationMapper notificationMapper;
 
     private final BoardDetailService boardDetailService;
     private final PlaceService placeService;
@@ -78,6 +79,8 @@ public class UserServiceImpl implements UserService {
         for (int placeId: placeIds) {
             placeService.deletePlace(placeId);
         }
+        // user_id로 notification 삭제
+        notificationMapper.deleteNotificationByUserId(userId);
 
         // 유저 삭제
         userMapper.deleteUser(userId);

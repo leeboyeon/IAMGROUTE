@@ -10,4 +10,5 @@ public interface NotificationMapper {
     List<Notification> selectNotificationByUserId(String userId) throws Exception;
     void deleteNotification(int id) throws Exception;
     void updateNotification(Notification notification) throws Exception;
+    void deleteNotificationByUserId(String userId) throws Exception;
 }
