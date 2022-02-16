@@ -228,6 +228,7 @@ class PlaceTmpFragment : BaseFragment<FragmentPlaceTmpBinding>(FragmentPlaceTmpB
                     planViewModel.removePlaceShopList(placeId)
                     showCustomToast("추가 되었습니다.")
                     Log.d(TAG, "onSuccess: $responseData")
+                    binding.placetmpTabLayout.getTabAt(0)?.select()
 
                 }
 
