@@ -110,8 +110,12 @@ public class FirebaseCloudMessageService {
         log.info(response.body().string());
 
         if(response.isSuccessful()) {
+            Notification noti = new Notification();
             User user = userService.selectUserByToken(targetToken);
-            notiService.insertNotification(new Notification(0, user.getId(), title, body, null));  // title == category
+            noti.setUserId(user.getId());
+            noti.setCategory(title);
+            noti.setContent(body);
+            notiService.insertNotification(noti);  // title == category
         }
     }
 

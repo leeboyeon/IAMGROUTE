@@ -99,7 +99,7 @@ CREATE TABLE `area` (
 
 LOCK TABLES `area` WRITE;
 /*!40000 ALTER TABLE `area` DISABLE KEYS */;
-INSERT INTO `area` VALUES (1,'제주도','jeju.png','33.390375','126.481075'),(2,'부산','busan.png','1','1'),(3,'충북','chungbuk.png','1','1'),(4,'대구','daegu.png','1','1'),(5,'인천','incheon.png','1','1'),(6,'전주','jeonju.png','1','11'),(7,'강원','kangwondo.png','1','1'),(8,'경주','keungju.png','1','1'),(9,'여수','yeosu.png','1','1'),(10,'경기','keongkido.png','1','1');
+INSERT INTO `area` VALUES (1,'제주','jeju.png','33.390375','126.481075'),(2,'부산','busan.png','1','1'),(3,'충북','chungbuk.png','1','1'),(4,'대구','daegu.png','1','1'),(5,'인천','incheon.png','1','1'),(6,'전주','jeonju.png','1','11'),(7,'강원','kangwondo.png','1','1'),(8,'경주','keungju.png','1','1'),(9,'여수','yeosu.png','1','1'),(10,'경기','keongkido.png','1','1');
 /*!40000 ALTER TABLE `area` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -237,8 +237,8 @@ CREATE TABLE `notification` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` varchar(100) NOT NULL,
   `category` varchar(20) NOT NULL,
-  `content` varchar(200) NOT NULL,
-  `date` timestamp NOT NULL,
+  `content` varchar(200) NOT NULL ,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `fk_user_notification_idx` (`user_id`),
   CONSTRAINT `fk_user_notification` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
