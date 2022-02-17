@@ -9,11 +9,11 @@
 
 
 
-2. 메인화면 소개
+## 2. 메인화면 소개
 
-   * 메인화면에서 D-day, 지역 카테고리, 인기 경로, 인기 장소 설명합니다.
+   ###  ▫ 메인화면에서 D-day, 지역 카테고리, 인기 경로, 인기 장소 설명합니다.
 
-     <img src="scenario_image/main_1.jpg" alt="image" style="zoom:50%" width="250" height="500" />
+  <img src="scenario_image/main_1.jpg" alt="image" style="zoom:50%" width="250" height="500" />
 
    
 
