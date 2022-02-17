@@ -1,0 +1,87 @@
+{
+  "project_info": {
+    "project_number": "664097318377",
+    "project_id": "iamgroute-a57c7",
+    "storage_bucket": "iamgroute-a57c7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664097318377:android:e0e2be705f7e38f10a9778",
+        "android_client_info": {
+          "package_name": "com.ssafy.groute"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664097318377-4ram4aro3ghe8480r560uc6akr0vqeo6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ssafy.groute",
+            "certificate_hash": "7911a82fb567fc6b5e399d9fca4acc64ab4bc9ce"
+          }
+        },
+        {
+          "client_id": "664097318377-d7m08ikqh7q132hkcmlbmv69fh1vfdrv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ssafy.groute",
+            "certificate_hash": "fa27691bc3fd1e4b859977509bd0e59a9e61f6d0"
+          }
+        },
+        {
+          "client_id": "664097318377-g4vkrvq960h5j0j2i2frgshvudmpko1m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ssafy.groute",
+            "certificate_hash": "292430648c7d83a9ffe2ccfdf62a8e7429d44d82"
+          }
+        },
+        {
+          "client_id": "664097318377-gsbqr8mgo336rhfts6l869hngp9o4q2p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ssafy.groute",
+            "certificate_hash": "952f7d6e75792df13e120bbc270521a9714978dc"
+          }
+        },
+        {
+          "client_id": "664097318377-o6hinsh5oclhpgt3jtqni6iddcaf47r8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ssafy.groute",
+            "certificate_hash": "4f4326915f494259bb664265dc4735be076dbd20"
+          }
+        },
+        {
+          "client_id": "664097318377-rl22t50kcta86lnq9vhmji6aup53g97t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ssafy.groute",
+            "certificate_hash": "ca776b41f1354c4502fb5f01ac6fcd8136bb9089"
+          }
+        },
+        {
+          "client_id": "664097318377-l0dhckmh95ghghsphho582oro6bcd8fe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJULDPPi2bJ62rr1mCS8qg4Zz4X_yy49c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "664097318377-l0dhckmh95ghghsphho582oro6bcd8fe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

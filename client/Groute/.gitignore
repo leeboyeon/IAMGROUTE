@@ -16,7 +16,7 @@ local.properties
 captures/
 .externalNativeBuild/
 .cxx/
-*.apk
+#*.apk
 output.json
 
 # IntelliJ
@@ -27,8 +27,8 @@ output.json
 *.jks
 *.keystore
 
-# Google Services (e.g. APIs or Firebase)
-google-services.json
+## Google Services (e.g. APIs or Firebase)
+#google-services.json
 
 # Android Profiling
 *.hprof
@@ -43,8 +43,8 @@ gen-external-apklibs
 # Covers files to be ignored for android development using Android Studio.
 
 # Built application files
-*.ap_
-*.aab
+#*.ap_
+#*.aab
 
 # Files for the ART/Dalvik VM
 *.dex
