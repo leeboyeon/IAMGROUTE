@@ -346,7 +346,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
                 Log.d(TAG, "initProfileBar: ${calcur}")
                 if(calcur>= 0){
-                    binding.mainTvDday.text = "여행까지 D-${calcur}"
+                    binding.mainTvDday.text = "여행까지 D-${calcur+1}"
                     binding.progressBar.max = 30
                     var myprogress = kotlin.math.abs(30 - calcur)
                     Log.d(TAG, "initProfileBar: ${myprogress}")
