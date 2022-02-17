@@ -18,14 +18,13 @@ public class WebController {
     @Value("${spring.http.multipart.location}")
     private String path;
 
-    String splitPath = path.substring(6);
-
     @ApiOperation(value = "파일 다운로드",notes = "파일 다운로드")
     @GetMapping(value = "/download")
     public void downloadFile(HttpServletResponse response) throws Exception{
 //        Path root = Paths.get(URI.create(path + fileName));
         // 프로젝트 폴더의 temp.jpg 파일 로드
         String fileName = "app-universal-release.apk";
+        String splitPath = path.substring(6);
         File file = new File(splitPath + fileName);
         // 클라이언트에서 아래의 이름으로 파일이 받아진다.
         String newFileName = "app-universal-release.apk";
