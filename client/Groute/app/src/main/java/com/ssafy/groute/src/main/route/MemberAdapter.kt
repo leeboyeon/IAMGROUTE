@@ -26,9 +26,9 @@ class MemberAdapter : RecyclerView.Adapter<MemberAdapter.MemberHolder>(){
     override fun onBindViewHolder(holder: MemberHolder, position: Int) {
         holder.apply {
             bindInfo(list[position])
-            itemView.setOnClickListener {
-                itemClickListener.onClick(it, position, list[position].nickname)
-            }
+//            itemView.setOnClickListener {
+//                itemClickListener.onClick(it, position, list[position].nickname)
+//            }
         }
     }
 
@@ -36,11 +36,11 @@ class MemberAdapter : RecyclerView.Adapter<MemberAdapter.MemberHolder>(){
         return list.size
     }
 
-    interface ItemClickListener{
-        fun onClick(view: View, position: Int, name: String)
-    }
-    private lateinit var itemClickListener : ItemClickListener
-    fun setItemClickListener(itemClickListener: ItemClickListener){
-        this.itemClickListener = itemClickListener
-    }
+//    interface ItemClickListener{
+//        fun onClick(view: View, position: Int, name: String)
+//    }
+//    private lateinit var itemClickListener : ItemClickListener
+//    fun setItemClickListener(itemClickListener: ItemClickListener){
+//        this.itemClickListener = itemClickListener
+//    }
 }
