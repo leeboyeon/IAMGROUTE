@@ -36,7 +36,7 @@ spring:
       location: file:///iamgroute/imgs/  # aws ubuntu
 
   firebase-sdk-path: firebase/firebase_service_key.json
-
+  file-loc: ../groute/src/main/resources/
 
 
 mybatis:

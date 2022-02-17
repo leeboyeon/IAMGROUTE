@@ -15,7 +15,7 @@ import java.io.*;
 @RequestMapping("/web")
 public class WebController {
 
-    @Value("${spring.http.multipart.location}")
+    @Value("${spring.file-loc}")
     private String path;
 
     @ApiOperation(value = "파일 다운로드",notes = "파일 다운로드")
