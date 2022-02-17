@@ -29,7 +29,7 @@ import com.kakao.kakaonavi.KakaoNaviParams
 import com.kakao.kakaonavi.NaviOptions
 import java.lang.RuntimeException
 
-
+private const val TAG = "InfoFragment_싸피"
 class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind, R.layout.fragment_info) {
     private var placeId = -1
     private lateinit var mainActivity : MainActivity
@@ -66,6 +66,7 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
 
         }
     }
+
     fun createMap(){
         mapView = MapView(requireContext())
         val marker = MapPOIItem()
@@ -128,25 +129,37 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
 
     override fun onStart() {
         super.onStart()
+        Log.d(TAG, "onStart: ")
     }
 
     override fun onResume() {
         super.onResume()
+        if(binding.kakaoMapView.contains(mapView)!!){
+            try{
+                createMap()
+            }catch (re: RuntimeException){
+                Log.d(TAG, "onResume: ${re.printStackTrace()}")
+            }
+        }
         mapView.onResume()
+        Log.d(TAG, "onResume: ")
     }
 
     override fun onPause() {
         super.onPause()
         mapView.onPause()
+        Log.d(TAG, "onPause: ")
     }
 
     override fun onStop() {
         super.onStop()
-        binding.kakaoMapView.removeView(mapView)
+//        binding.kakaoMapView.removeView(mapView)
+        Log.d(TAG, "onStop: ")
     }
 
     override fun onDestroy() {
         super.onDestroy()
         mapView.onSurfaceDestroyed()
+        Log.d(TAG, "onDestroy: ")
     }
 }
