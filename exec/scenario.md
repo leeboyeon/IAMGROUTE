@@ -1,6 +1,6 @@
 <div align=center> <h1> 🗺 IAMGROUTE 시나리오 작성 🗺 </h1> </div>
 
-### 1. 로그인 진행
+> ### 1. 로그인 진행
 | STEP 1 |
 |:---:|
 |<img src="scenario_image/login.jpg" alt="image" style="zoom:50%" width="250" height="500"/>|
@@ -8,7 +8,7 @@
 
 ----
 
-### 2. 메인화면 소개
+> ### 2. 메인화면 소개
 | STEP 1 |
 |:---:|
 |<img src="scenario_image/main_1.jpg" alt="image" style="zoom:50%" width="250" height="500" />|
@@ -16,7 +16,7 @@
 
 ----
 
-### 3. 관광지 화면 소개
+> ### 3. 관광지 화면 소개
 | STEP 1 | STEP 2 | 
 |:---:|:---:|
 |<img src="scenario_image/main_2.jpg" alt="image" style="zoom:50%;" width="250" height="500" />|<img src="scenario_image/place.jpg" alt="image" style="zoom:50%;" width="250" height="500" />|
@@ -24,7 +24,7 @@
 
 ----
 
-### 4. 관광지 상세화면 소개
+> ### 4. 관광지 상세화면 소개
 
 | STEP 1 | STEP 2 | STEP 3 |
 |:---:|:---:|:---:|
@@ -33,7 +33,7 @@
 
 ----
 
-### 5. 루트 화면
+> ### 5. 루트 화면
 
 | STEP 1 | STEP 2 |
 |:---:|:---:|
@@ -42,7 +42,7 @@
 
 ----
 
-### 6. 루트 생성 화면 설명
+> ### 6. 루트 생성 화면 설명
 
 | STEP 1 | STEP 2 |
 |:---:|:---:|
@@ -51,14 +51,14 @@
 
 ----
 
-### 7. 루트 상세 페이지 소개
+> ### 7. 루트 상세 페이지 소개
 
 | STEP 1 | STEP 2 | STEP 3 | STEP 4 |
 |:---:|:---:|:---:|:---:|
 |<img src="scenario_image/route_detail_1.jpg" alt="image" style="zoom:50%" width="250" height="500"/>|<img src="scenario_image/route_detail_2.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|<img src="scenario_image/route_detail_3.jpg" alt="image" style="zoom:50%;" width="250" height="500" />|<img src="scenario_image/route_detail_4.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|
 | 원하는 여행일정을 조회하여 여행에 <br> 대한 상세정보를 확인할 수 있습니다.| 관광지에서 해당 버튼을 클릭하여 <br> 관광지 상세페이지로 이동할 수 있습니다.| 여행일정에 포함된 장소에 대한 <br> 상세화면을 확인할 수 있습니다.| 여행에 대한 리뷰를 확인 및 <br>작성할 수 있습니다.|
 
-### 7-1. 루트 일정에 추가하기
+> ### 7-1. 루트 일정에 추가하기
 | STEP 1 | STEP 2 |
 |:---:|:---:|
 | <img src="scenario_image/route_detail_5.jpg" alt="image" style="zoom:50%;" width="250" height="500"/> |<img src="scenario_image/route_detail_6.jpg" alt="image" style="zoom:50%;" width="250" height="500" />|
@@ -66,14 +66,14 @@
 
 ----
 
-### 8. 마이페이지 소개
+> ### 8. 마이페이지 소개
 | STEP 1 | STEP 2 | STEP 3 |
 |:---:|:---:|:---:|
 |<img src="scenario_image/mypage_1.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|<img src="scenario_image/mypage_2.jpg" alt="image" style="zoom:50%;" width="250" height="500"/> | <img src="scenario_image/mypage_3.jpg" alt="image" style="zoom:50%;" width="250" height="500"/> |
 |네비게이션 버튼을 통해 마이페이지로 <br> 넘어올 수 있습니다.|좌측상단 버튼을 클릭하여 <br>로그아웃 및 회원탈퇴를 하실 수 있습니다.| 프로필 편집버튼을 통해 회원정보를 <br> 수정할 수 있고, 상단의 알림버튼을 통해 <br> 현재까지의 유저 알림내역을 확인하실 수 있습니다.|
 
      
-#### 8-1. 마이페이지 탭레이아웃
+> #### 8-1. 마이페이지 탭레이아웃
 |STEP 1 | STEP 2 | STEP 3 |
 |:---:|:---:|:---:|
 |<img src="scenario_image/mypage_4.jpg" alt="image" style="zoom:50%;" width="250" height="500" />| <img src="scenario_image/mypage_5.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|  <img src="scenario_image/mypage_6.jpg" alt="image" style="zoom:50%;" width="250" height="500" />|
@@ -81,53 +81,53 @@
 
 ----
 
-### 9. 일정 상세페이지 소개
+> ### 9. 일정 상세페이지 소개
 |STEP 1 | STEP 2 |
 |:---:|:---:|
 |<img src="scenario_image/myroute_detail_1.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|<img src="scenario_image/myroute_detail_2.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|
 |여행일정을 클릭하면 일정 상세페이지로 넘어가게 됩니다.| 좌측하단 버튼을 클릭하면 플로팅버튼을 통해 <br>메모,여행추천,관광지를 추가하실 수 있습니다.|
 
-#### 9-1. 관광지 추가
+> #### 9-1. 관광지 추가
 |STEP 1 | STEP 2 | STEP 3|
 |:---:|:---:|:---:|
 |<img src="scenario_image/myroute_detail_3.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>| <img src="scenario_image/myroute_detail_4.jpg" alt="image" style="zoom:50%;" width="250" height="500" />| <img src="scenario_image/myroute_detail_5.jpg" alt="image" style="zoom:50%;" width="250" height="500" />|
 |플로팅버튼을 클릭합니다.| 추가한 장소가 없다면 <br> 추가하기 버튼을 클릭합니다.| 장소 상세화면으로 넘어와 내카트에 담기를 <br>클릭하면 임시저장소에 저장됩니다.|
    
 
-##### 9-1-1. 관광지 추가
+> ##### 9-1-1. 관광지 추가
 |STEP 1 | STEP 2 | STEP 3|
 |:---:|:---:|:---:|
 |<img src="scenario_image/myroute_detail_6.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|<img src="scenario_image/myroute_detail_7.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|<img src="scenario_image/myroute_detail_8.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|
 |카트에 저장된 장소를 확인합니다.| 장소를 클릭하여 Data Picker를 통해 <br>장소를 추가할 날짜를 선택합니다.|추가된 장소를 확인하실 수 있습니다.|
 
 
-#### 9-2. 루트추천
+> #### 9-2. 루트추천
 |STEP 1 | STEP 2 | STEP 3| STEP 4|
 |:---:|:---:|:---:|:---:|
 |<img src="scenario_image/myroute_detail_9.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|<img src="scenario_image/myroute_detail_14.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|<img src="scenario_image/myroute_detail_10.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|<img src="scenario_image/myroute_detail_15.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|
 |     루트추천 버튼을 클릭합니다.    | 장소제외 필터링을 통해 이미 추가된 장소가 제외된 루트들을 보여줍니다. | 장소필터링을 통해 추가된 장소를 포함한 루트들을 추천해드립니다. | 마지막으로 전체일정다이얼로그를 클릭하면<br> 내가 생성한 day수에 해당하는 루트를 나타냅니다.|
    
      
-#### 9-3. 최적경로 정렬
+> #### 9-3. 최적경로 정렬
 |STEP 1 | STEP 2|
 |:---:|:---:|
 |<img src="scenario_image/myroute_detail_16.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|<img src="scenario_image/myroute_detail_17.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|
 |최적경로 버튼을 클릭합니다.| 클릭 시, 바텀다이얼로그를 통해 출발지와 목적지를 선택하면<br> 장소들이 출발지 기준부터 목적지까지의 최단경로로 정렬됩니다.|
 
 
-#### 9-4. 길찾기
+> #### 9-4. 길찾기
 |STEP 1 | STEP 2|
 |:---:|:---:|
 |<img src="scenario_image/myroute_detail_18.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|<img src="scenario_image/myroute_detail_19.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|
 |길찾기 버튼을 클릭합니다.|도착지와 경유지(최대 3개)를 입력하고<br> 길안내를 클릭하면 KaKao Navi로 이동됩니다.<br> 카카오네비 미설치 시, 설치화면으로 이동됩니다.|
 
-#### 9-5. 가계부
+> #### 9-5. 가계부
 |STEP 1 | STEP 2|STEP 3|STEP 4|
 |:---:|:---:|:---:|:---:|
 |<img src="scenario_image/myroute_detail_20.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|<img src="scenario_image/myroute_detail_21.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|<img src="scenario_image/myroute_detail_22.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|<img src="scenario_image/myroute_detail_23.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|
 |가계부를 클릭합니다.|분류별 항목을 통해 지출금액을 차트로 조회합니다.|하단 플로팅버튼을 클릭합니다.| 가계부 작성을 하실 수있습니다|
 
-#### 9-6. 공유하기
+> #### 9-6. 공유하기
 |STEP 1|
 |:---:|
 |<img src="scenario_image/myroute_detail_24.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|
@@ -136,21 +136,21 @@
 
 ----
 
-### 10. board 페이지 소개
+> ### 10. board 페이지 소개
 |STEP 1|
 |:---:|
 |<img src="scenario_image/board_2.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|
 | 각 게시판의 more than버튼을 통해 <br>게시판의 전체 목록을 조회하실 수 있습니다.|
 
 
-#### 10-1. 글쓰기
+> #### 10-1. 글쓰기
 |STEP 1|STEP 2|
 |:---:|:---:|
 |<img src="scenario_image/board_3.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|<img src="scenario_image/board_4.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|
 |게시판 내의 하단 글쓰기 버튼을 클릭합니다.| 특정장소를 선택하여 장소에 대한 질문을 하실 수 있습니다.|
 
 
-#### 10-2. 게시글 상세정보
+> #### 10-2. 게시글 상세정보
 |STEP 1|
 |:---:|
 |<img src="scenario_image/board_5.jpg" alt="image" style="zoom:50%;" width="250" height="500"/>|   
