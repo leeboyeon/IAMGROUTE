@@ -1,6 +1,6 @@
 ## 1. 로그인 진행
 
-   #  ✏ 자신이 가입한 유저 정보를 입력 후 로그인 합니다.
+   ###  ✏ 자신이 가입한 유저 정보를 입력 후 로그인 합니다.
 
      <img src="scenario_image/login.jpg" alt="image" style="zoom:50%" width="250" height="500"/>
 
