@@ -2,21 +2,21 @@ package com.ssafy.groute.controller;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/web")
 public class WebController {
+
+    @Value("${spring.http.multipart.location}")
+    private String path;
 
     @ApiOperation(value = "파일 다운로드",notes = "파일 다운로드")
     @GetMapping(value = "/download")
@@ -24,7 +24,7 @@ public class WebController {
 
         // 프로젝트 폴더의 temp.jpg 파일 로드
         String fileName = "app-universal-release.apk";
-        File file = new File("./" + fileName);
+        File file = new File(path + fileName);
 
         // 클라이언트에서 아래의 이름으로 파일이 받아진다.
         String newFileName = "app-universal-release.apk";
