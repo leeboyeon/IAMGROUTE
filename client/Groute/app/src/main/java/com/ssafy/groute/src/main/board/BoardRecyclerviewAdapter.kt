@@ -63,6 +63,7 @@ class BoardRecyclerviewAdapter(var lifecycleOwner: LifecycleOwner, var boardList
         fun bindInfo(data: BoardDetail) {
             more.isVisible = data.userId == ApplicationClass.sharedPreferencesUtil.getUser().id
             if(boardType == 2 && data.placeId > 0) {
+                binding.locationLayout.visibility = View.VISIBLE
                 Log.d(TAG, "bindInfo_Place: ${data.placeId}")
                 val placeInfo = PlaceService().getPlace(data.placeId)
                 placeInfo.observe(lifecycleOwner, {

@@ -34,11 +34,11 @@ class BoardDetailFragment : BaseFragment<FragmentBoardDetailBinding>(FragmentBoa
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainActivity.hideMainProfileBar(true)
         arguments?.let {
             boardId = it.getInt("boardId", -1)
             Log.d(TAG, "onCreate: $boardId")
         }
+        mainActivity.hideMainProfileBar(true)
         mainActivity.hideBottomNav(true)
 
     }
