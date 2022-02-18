@@ -30,4 +30,26 @@ public class FcmServiceTest extends AbstractServiceTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    @Order(3)
+    void sendMsgEndTravel() {
+        User user = userService.findById("song");
+        try {
+            fcmService.sendMessageTo(user.getToken(), "User", "아이엠그루트 속에서 여행은 즐거우셨나요?●'◡'●\n" + user.getNickname() + "님의 소중한 추억을 공유해보세요!", "UserPlanFragment");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    @Order(4)
+    void sendMsg() {
+        User user = userService.findById("song");
+        try {
+            fcmService.sendMessageTo(user.getToken(), "User", "여행 1일 전입니다! 준비물은 다 챙기셨나요?\n" + user.getNickname() + " 님, 안전하고 즐거운 여행 다녀오세요( ღ'ᴗ'ღ )", "UserPlanFragment");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
