@@ -246,8 +246,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             }
 
             12-> {
-                transaction.replace(R.id.frame_main_layout, RouteDetailFragment.newInstance(key1,value1,key2,value2))
-                    .addToBackStack(null)
+                if(fm.findFragmentByTag("RouteReviewWriteFragment") != null) {
+                    fm.popBackStack("TO_ROUTEREVIEWWRITE_TAG", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                } else {
+                    transaction.replace(R.id.frame_main_layout, RouteDetailFragment.newInstance(key1,value1,key2,value2))
+                        .addToBackStack(null)
+                }
             }
             13 ->{
                 fm.popBackStack()
@@ -258,9 +262,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             14 -> {
                 transaction.replace(
                     R.id.frame_main_layout,
-                    RouteReviewWriteFragment.newInstance(key1, value1, key2, value2)
-                )
-                    .addToBackStack(null)
+                    RouteReviewWriteFragment.newInstance(key1, value1, key2, value2),"RouteReviewWriteFragment"
+                ).addToBackStack("TO_ROUTEREVIEWWRITE_TAG")
             }
             15 -> {
                 transaction.replace(R.id.frame_main_layout, PlaceTmpFragment.newInstance(key1,value1))

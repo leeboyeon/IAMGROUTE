@@ -348,7 +348,6 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
         // 게시글 작성 + 사진 선택한 경우
         else {
             val file = File(imgUri.path!!)
-            Log.d(TAG, "filePath: ${file.path} \n${file.name}\n${fileExtension}")
 
             var inputStream: InputStream? = null
             try {
@@ -371,6 +370,7 @@ class RouteReviewWriteFragment : BaseFragment<FragmentRouteReviewWriteBinding>(F
                 UserPlanService().updatePlanReview(rBody_planReivew, uploadFile, UpdatePlanReviewCallback())
             }
         }
+
     }
 
 
