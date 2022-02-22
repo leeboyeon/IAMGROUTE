@@ -34,7 +34,7 @@ public class FcmServiceTest extends AbstractServiceTest {
     @Test
     @Order(3)
     void sendMsgEndTravel() {
-        User user = userService.findById("song");
+        User user = userService.findById("jiwoo");
         try {
             fcmService.sendMessageTo(user.getToken(), "User", "아이엠그루트 속에서 여행은 즐거우셨나요?●'◡'●\n" + user.getNickname() + "님의 소중한 추억을 공유해보세요!", "UserPlanFragment");
         } catch (Exception e) {

@@ -32,7 +32,7 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
 #      location: ../groute/src/main/resources/static/imgs # server static
-#      location: file:///C:/SSAFY/iamgroute/imgs/ # jiwoo local
+#      location: file:///C:/SSAFY/iamgroute/imgs/ # local
       location: file:///iamgroute/imgs/  # aws ubuntu
 
   firebase-sdk-path: firebase/firebase_service_key.json

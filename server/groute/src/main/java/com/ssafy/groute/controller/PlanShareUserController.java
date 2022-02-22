@@ -2,9 +2,8 @@ package com.ssafy.groute.controller;
 
 import com.ssafy.groute.dto.PlanShareUser;
 import com.ssafy.groute.dto.User;
-import com.ssafy.groute.dto.UserPlan;
+import com.ssafy.groute.service.FirebaseCloudMessageService;
 import com.ssafy.groute.service.PlanShareUserService;
-import com.ssafy.groute.service.UserPlanService;
 import com.ssafy.groute.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +21,20 @@ public class PlanShareUserController {
 
     @Autowired
     PlanShareUserService planShareUserService;
+
     @Autowired
     UserService userService;
+
+    @Autowired
+    FirebaseCloudMessageService fcmService;
 
     @ApiOperation(value = "planShareUser 추가",notes = "planShareUser 추가")
     @PostMapping(value = "/insert")
     public ResponseEntity<?> insertPlanShareUser(@RequestBody PlanShareUser req){
-
+        User userInfo = userService.findById(req.getUserId());
         try {
             planShareUserService.insertPlanShareUser(req);
+            fcmService.sendMessageTo(userInfo.getToken(), "User", userInfo.getNickname() + "님, 공유된 여행 일정이 있습니다.\n 아이엠그루트에서 확인해볼까요?(☞ﾟヮﾟ☜)", "");
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
