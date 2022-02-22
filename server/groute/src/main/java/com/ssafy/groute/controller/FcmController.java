@@ -1,6 +1,8 @@
 package com.ssafy.groute.controller;
 
+import com.ssafy.groute.dto.User;
 import com.ssafy.groute.service.FirebaseCloudMessageService;
+import com.ssafy.groute.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +25,19 @@ public class FcmController {
     @Autowired
     FirebaseCloudMessageService fcmService;
 
+    @Autowired
+    UserService userService;
+
     @PostMapping("/token")
     public ResponseEntity<?> registToken(String token, String userId) {
         log.info("registToken : token:{} {}", token, userId);
         try {
+            // token이 업데이트 될 때 중복되는 토큰 값이 있으면 이 전 토큰 값 삭제
+            User user = userService.selectUserByToken(token);
+            if(user != null) {
+                user.setToken(null);
+                userService.updateTokenByUserId(user);
+            }
             fcmService.updateToken(token, userId);
         } catch (Exception e) {
             e.printStackTrace();
