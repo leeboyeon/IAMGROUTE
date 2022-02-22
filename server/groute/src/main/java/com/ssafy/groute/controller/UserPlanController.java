@@ -50,6 +50,9 @@ public class UserPlanController {
             userPlanService.insertUserPlan(req, userIds, planId);
             for (int i = 0; i < userIds.size(); i++) {
                 User userInfo = userService.findById(userIds.get(i));
+                if(req.getUserId().equals(userInfo.getId())) {
+                    continue;
+                }
                 fcmService.sendMessageTo(userInfo.getToken(), "User", userInfo.getNickname() + " 님, 공유된 여행 일정이 있습니다.\n아이엠그루트에서 확인해볼까요? (☞ﾟヮﾟ)☞", "");
             }
         }catch (Exception e){
