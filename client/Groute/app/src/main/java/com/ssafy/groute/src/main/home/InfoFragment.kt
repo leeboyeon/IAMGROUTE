@@ -36,8 +36,9 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
     private val placeViewModel: PlaceViewModel by activityViewModels()
     var lat:Double = 0.0
     var lng:Double = 0.0
-    var mapViewcontainer:RelativeLayout? = null
+    var mapViewContainer:RelativeLayout? = null
     private lateinit var mapView:MapView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
@@ -141,18 +142,20 @@ class InfoFragment : BaseFragment<FragmentInfoBinding>(FragmentInfoBinding::bind
                 Log.d(TAG, "onResume: ${re.printStackTrace()}")
             }
         }
-        mapView.onResume()
+//        mapView.onResume()
         Log.d(TAG, "onResume: ")
     }
 
     override fun onPause() {
         super.onPause()
-        mapView.onPause()
+        binding.kakaoMapView.removeView(mapView)
+//        mapView.onPause()
         Log.d(TAG, "onPause: ")
     }
 
     override fun onStop() {
         super.onStop()
+        mapView.onSurfaceDestroyed()
 //        binding.kakaoMapView.removeView(mapView)
         Log.d(TAG, "onStop: ")
     }

@@ -11,6 +11,7 @@ import android.view.*
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.contains
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +20,6 @@ import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
-
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentPlaceDetailBinding
 import com.ssafy.groute.src.dto.Place
@@ -34,10 +34,11 @@ import com.ssafy.groute.src.viewmodel.PlaceViewModel
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.RetrofitCallback
 import kotlinx.coroutines.runBlocking
+import java.lang.RuntimeException
 
 
 // place 하나 선택 했을 때 장소에 대한 정보를 보여주는 화면
-private const val TAG = "PlaceDetailF_Groute"
+private const val TAG = "PlaceDetailF_싸피"
 class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPlaceDetailBinding::bind, R.layout.fragment_place_detail) {
     private lateinit var mainActivity: MainActivity
     private val placeViewModel: PlaceViewModel by activityViewModels()
@@ -51,6 +52,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideMainProfileBar(true)
+        Log.d(TAG, "onCreate: ")
     }
 
     override fun onAttach(context: Context) {
