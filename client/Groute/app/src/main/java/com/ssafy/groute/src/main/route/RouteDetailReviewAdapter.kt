@@ -105,6 +105,7 @@ class RouteDetailReviewAdapter(var owner: LifecycleOwner, var context: Context, 
         override fun onSuccess(code: Int, responseData: Boolean) {
             if(responseData){
                 runBlocking {
+                    planViewModel.getPlanById(list[position].planId, 2)
                     planViewModel.getPlanReviewListbyId(list[position].planId)
                 }
                 Toast.makeText(context,"삭제되었습니다.", Toast.LENGTH_SHORT).show()

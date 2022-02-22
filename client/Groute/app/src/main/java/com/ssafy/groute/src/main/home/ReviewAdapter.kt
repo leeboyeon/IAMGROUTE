@@ -104,6 +104,7 @@ class ReviewAdapter(var owner: LifecycleOwner, var context:Context, val placeVie
         override fun onSuccess(code: Int, responseData: Boolean) {
             if(responseData){
                 runBlocking {
+                    placeViewModel.getPlace(list[position].placeId)
                     placeViewModel.getPlaceReviewListbyId(list[position].placeId)
                 }
                 Toast.makeText(context,"삭제되었습니다.",Toast.LENGTH_SHORT).show()
