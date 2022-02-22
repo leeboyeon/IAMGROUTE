@@ -242,6 +242,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="10dp"
                         android:background="@drawable/edittext_background"
                         android:drawableLeft="@drawable/button_in_camera"
                         android:paddingLeft="20dp"

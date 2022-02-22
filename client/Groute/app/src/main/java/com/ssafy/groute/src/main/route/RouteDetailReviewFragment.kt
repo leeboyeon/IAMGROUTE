@@ -56,7 +56,7 @@ class RouteDetailReviewFragment : BaseFragment<FragmentRouteDetailReviewBinding>
 
     private fun initAdapter(){
         planViewModel.planReviewList.observe(viewLifecycleOwner, Observer {
-            routeDetailReviewAdapter = RouteDetailReviewAdapter(viewLifecycleOwner, requireContext())
+            routeDetailReviewAdapter = RouteDetailReviewAdapter(viewLifecycleOwner, requireContext(), planViewModel)
             routeDetailReviewAdapter.list = it
             routeDetailReviewAdapter.setModifyClickListener(object : RouteDetailReviewAdapter.ModifyClickListener {
                 override fun onClick(position: Int) {

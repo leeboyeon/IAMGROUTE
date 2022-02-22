@@ -34,7 +34,7 @@ public class PlanShareUserController {
         User userInfo = userService.findById(req.getUserId());
         try {
             planShareUserService.insertPlanShareUser(req);
-            fcmService.sendMessageTo(userInfo.getToken(), "User", userInfo.getNickname() + "님, 공유된 여행 일정이 있습니다.\n 아이엠그루트에서 확인해볼까요?(☞ﾟヮﾟ☜)", "");
+            fcmService.sendMessageTo(userInfo.getToken(), "User", userInfo.getNickname() + " 님, 공유된 여행 일정이 있습니다.\n아이엠그루트에서 확인해볼까요? (☞ﾟヮﾟ)☞", "");
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);
