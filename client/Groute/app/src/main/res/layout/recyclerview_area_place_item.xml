@@ -82,8 +82,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:text="@{place.type}"
             android:textSize="10sp"
+            app:layout_constraintBottom_toTopOf="@+id/view3"
             app:layout_constraintStart_toEndOf="@+id/areaPlace_iv_img"
             app:layout_constraintTop_toBottomOf="@+id/areaPlace_rb_rating" />
 <!--        android:text="관광명소 | 애월한림"-->
