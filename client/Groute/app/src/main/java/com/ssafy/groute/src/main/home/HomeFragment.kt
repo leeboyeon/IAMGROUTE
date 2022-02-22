@@ -18,6 +18,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.ssafy.groute.R
 import com.ssafy.groute.databinding.FragmentHomeBinding
 import com.ssafy.groute.src.main.MainActivity
+import com.ssafy.groute.src.main.board.SearchAdapter
 import com.ssafy.groute.src.viewmodel.HomeViewModel
 import com.ssafy.groute.src.viewmodel.MainViewModel
 import com.ssafy.groute.src.viewmodel.PlaceViewModel
@@ -35,7 +36,6 @@ class HomeFragment : Fragment() {
     private lateinit var homeAreaAdapter:HomeAreaAdapter
     private lateinit var bestPlaceAdapter:BestPlaceAdapter
     private lateinit var bestrouteAdatper: BestRouteAdapter
-
 
     private lateinit var mainActivity : MainActivity
 

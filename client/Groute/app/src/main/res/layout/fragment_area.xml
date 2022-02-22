@@ -29,7 +29,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <SearchView
-                android:id="@+id/searchView"
+                android:id="@+id/place_sv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toTopOf="@+id/area_rv_placeitem"
@@ -71,7 +71,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/searchView"
+                app:layout_constraintTop_toBottomOf="@+id/place_sv"
                 app:placeListData="@{viewModel.placeList}"
                 tools:listitem="@layout/recyclerview_area_place_item" />
 

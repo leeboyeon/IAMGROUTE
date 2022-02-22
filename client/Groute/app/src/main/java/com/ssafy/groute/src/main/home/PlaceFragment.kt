@@ -2,8 +2,10 @@ package com.ssafy.groute.src.main.home
 
 import android.content.Context
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.widget.SearchView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +16,7 @@ import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
 import com.ssafy.groute.databinding.FragmentAreaBinding
 import com.ssafy.groute.src.main.MainActivity
+import com.ssafy.groute.src.main.board.SearchAdapter
 import com.ssafy.groute.src.response.PlaceLikeResponse
 import com.ssafy.groute.src.service.PlaceService
 import com.ssafy.groute.src.viewmodel.PlaceViewModel
@@ -28,6 +31,7 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
     private lateinit var mainActivity : MainActivity
     private lateinit var areaFilterAdapter : PlaceFilterAdapter
     private var planId = -1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,22 +75,29 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
                     mainActivity.moveFragment(4,"placeId", placeId,"planId",planId)
                 }
             })
-//            areaFilterAdapter.setHeartClickListener(object :PlaceFilterAdapter.HeartClickListener{
-//                override fun onClick(view: View, position: Int, placeId: Int) {
-//                    val placeLike = PlaceLikeResponse(
-//                        0,
-//                        ApplicationClass.sharedPreferencesUtil.getUser().id,
-//                        placeId
-//                    )
-//                    placeGoLike(placeLike)
-//                }
-//
-//            })
             binding.areaRvPlaceitem.apply{
                 layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
                 adapter = areaFilterAdapter
                 adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
+        })
+
+        binding.placeSv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if(TextUtils.isEmpty(newText)){
+                    areaFilterAdapter.filter.filter("")
+                }else{
+                    areaFilterAdapter.filter.filter(newText.toString())
+                    areaFilterAdapter.notifyDataSetChanged()
+                }
+
+                return false
+            }
+
         })
     }
 
@@ -103,21 +114,27 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
                 when(tab?.position){
                     0 ->{
                         areaFilterAdapter.filter.filter("")
+                        binding.placeSv.visibility = View.VISIBLE
                     }
                     1->{
                         areaFilterAdapter.filter.filter("관광지")
+                        binding.placeSv.visibility = View.GONE
                     }
                     2->{
                         areaFilterAdapter.filter.filter("레포츠")
+                        binding.placeSv.visibility = View.GONE
                     }
                     3->{
                         areaFilterAdapter.filter.filter("문화시설")
+                        binding.placeSv.visibility = View.GONE
                     }
                     4->{
                         areaFilterAdapter.filter.filter("음식점")
+                        binding.placeSv.visibility = View.GONE
                     }
                     5->{
                         areaFilterAdapter.filter.filter("숙박")
+                        binding.placeSv.visibility = View.GONE
                     }
                 }
             }
@@ -130,26 +147,9 @@ class PlaceFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bin
         })
     }
 
-//    private fun placeGoLike(placeLike: PlaceLikeResponse){
-//        PlaceService().placeLike(placeLike, object :RetrofitCallback<Boolean> {
-//            override fun onError(t: Throwable) {
-//                Log.d(TAG, "onError: ")
-//            }
-//
-//            override fun onSuccess(code: Int, responseData: Boolean) {
-//                if(responseData){
-//                    Log.d(TAG, "onSuccessLIKE: ")
-//                }
-//            }
-//
-//            override fun onFailure(code: Int) {
-//                Log.d(TAG, "onFailure: ")
-//            }
-//
-//        })
-//    }
+    fun searchInit(){
 
-
+    }
     companion object {
         @JvmStatic
         fun newInstance(key:String, value:Int) =

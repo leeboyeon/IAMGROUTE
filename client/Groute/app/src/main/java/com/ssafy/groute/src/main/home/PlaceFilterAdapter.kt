@@ -35,6 +35,7 @@ class PlaceFilterAdapter(var placeList : MutableList<Place>, var likeList: LiveD
                     val filteringList = ArrayList<Place>()
                     for(item in unFilteredList){
                         if(item.type.contains(charString)) filteringList.add(item)
+                        if(item.name.contains(charString)) filteringList.add(item)
                     }
                     filteringList
                 }
