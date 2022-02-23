@@ -6,6 +6,7 @@ import com.ssafy.groute.mapper.UserPlanMapper;
 import com.ssafy.groute.mapper.PlanReviewMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -44,9 +45,14 @@ public class PlanReviewServiceImpl implements PlanReviewService {
         userPlanMapper.updateUserPlan(userPlan);
     }
 
+    @Transactional
     @Override
     public void updatePlanReview(PlanReview planReview) throws Exception {
         planReviewMapper.updatePlanReview(planReview);
+        UserPlan userPlan = userPlanMapper.selectUserPlan(planReview.getPlanId());
+        double rate = planReviewMapper.selectAvgRateByPlanId(planReview.getPlanId());
+        userPlan.setRate(rate);
+        userPlanMapper.updateUserPlan(userPlan);
     }
 
     @Override

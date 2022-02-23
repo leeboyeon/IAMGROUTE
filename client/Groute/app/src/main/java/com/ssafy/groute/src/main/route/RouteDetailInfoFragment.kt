@@ -157,19 +157,19 @@ class RouteDetailInfoFragment : BaseFragment<FragmentRouteDetailInfoBinding>(Fra
     @SuppressLint("LongLogTag")
     override fun onResume() {
         super.onResume()
-        if(binding.RouteDetailMap?.contains(mapView)!!){
+        if(binding.RouteDetailMap.contains(mapView)){
             try{
                 findArea()
             }catch (re: RuntimeException){
                 Log.d(TAG, "onResume: ${re.printStackTrace()}")
             }
         }
-        mapView.onResume()
+//        mapView.onResume()
     }
 
     override fun onStop() {
         super.onStop()
-        binding.RouteDetailMap.removeView(mapView)
+        mapView.onSurfaceDestroyed()
     }
 
     override fun onDestroy() {
@@ -179,6 +179,8 @@ class RouteDetailInfoFragment : BaseFragment<FragmentRouteDetailInfoBinding>(Fra
 
     override fun onPause() {
         super.onPause()
-        mapView.onPause()
+        binding.RouteDetailMap.removeView(mapView)
+
+//        mapView.onPause()
     }
 }

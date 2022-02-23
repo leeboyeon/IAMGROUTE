@@ -47,9 +47,14 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
         placeMapper.updatePlace(place);
     }
 
+    @Transactional
     @Override
     public void updatePlaceReview(PlaceReview placeReview) throws Exception {
         placeReviewMapper.updatePlaceReview(placeReview);
+        Place place = placeMapper.selectPlace(placeReview.getPlaceId());
+        double rate = placeReviewMapper.selectAvgRateByPlaceId(placeReview.getPlaceId());
+        place.setRate(rate);
+        placeMapper.updatePlace(place);
     }
 
     @Override

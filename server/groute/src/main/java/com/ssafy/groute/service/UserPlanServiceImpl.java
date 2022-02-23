@@ -15,6 +15,8 @@ public class UserPlanServiceImpl implements UserPlanService {
     @Autowired
     PlanShareUserMapper planShareUserMapper;
     @Autowired
+    PlanShareUserService planShareUserService;
+    @Autowired
     RouteMapper routeMapper;
     @Autowired
     RoutesMapper routesMapper;

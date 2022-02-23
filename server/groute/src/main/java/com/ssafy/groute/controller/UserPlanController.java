@@ -2,10 +2,7 @@ package com.ssafy.groute.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.groute.dto.*;
-import com.ssafy.groute.service.PlanReviewService;
-import com.ssafy.groute.service.RouteDetailService;
-import com.ssafy.groute.service.StorageService;
-import com.ssafy.groute.service.UserPlanService;
+import com.ssafy.groute.service.*;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +25,13 @@ public class UserPlanController {
     @Autowired
     RouteDetailService routeDetailService;
     @Autowired
+
     PlanReviewService planReviewService;
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    FirebaseCloudMessageService fcmService;
 
     @Autowired
     private ObjectMapper mapper;
@@ -45,6 +48,13 @@ public class UserPlanController {
 
         try {
             userPlanService.insertUserPlan(req, userIds, planId);
+            for (int i = 0; i < userIds.size(); i++) {
+                User userInfo = userService.findById(userIds.get(i));
+                if(req.getUserId().equals(userInfo.getId())) {
+                    continue;
+                }
+                fcmService.sendMessageTo(userInfo.getToken(), "User", userInfo.getNickname() + " 님, 공유된 여행 일정이 있습니다.\n아이엠그루트에서 확인해볼까요? (☞ﾟヮﾟ)☞", "");
+            }
         }catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<Boolean>(false, HttpStatus.NOT_ACCEPTABLE);

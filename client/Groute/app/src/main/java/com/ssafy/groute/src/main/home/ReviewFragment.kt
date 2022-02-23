@@ -41,6 +41,10 @@ class ReviewFragment : BaseFragment<FragmentReviewBinding>(FragmentReviewBinding
             placeViewModel.getPlaceReviewListbyId(placeId)
         }
 
+        placeViewModel.placeReviewList.observe(viewLifecycleOwner, {
+            binding.reviewSize = it.size
+        })
+
         initAdapter()
 
         binding.reviewIbtnWrite.setOnClickListener {

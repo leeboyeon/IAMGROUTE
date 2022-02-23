@@ -67,7 +67,8 @@
     </delete>
 
     <select id="selectAvgRateByPlanId" parameterType="int" resultType="double">
-        select avg(rate) rate from planreview where userplan_id = #{planId}
+<!--        select avg(rate) rate from planreview where userplan_id = #{planId}-->
+        select ifnull(avg(rate), 0.0) from planreview where userplan_id = #{planId}
     </select>
 
     <select id="selectCntRateByPlanId" parameterType="int" resultType="int">

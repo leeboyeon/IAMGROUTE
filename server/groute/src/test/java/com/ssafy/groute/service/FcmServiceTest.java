@@ -44,6 +44,7 @@ public class FcmServiceTest extends AbstractServiceTest {
 
     @Test
     @Order(4)
+    // 일정 새로 추가 후 장소 추가할 때 noti 전송하기
     void sendMsg() {
         User user = userService.findById("song");
         try {

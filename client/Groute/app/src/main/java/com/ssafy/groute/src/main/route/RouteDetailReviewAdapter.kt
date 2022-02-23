@@ -18,10 +18,12 @@ import com.ssafy.groute.src.dto.PlanReview
 import com.ssafy.groute.src.dto.User
 import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.service.UserService
+import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.RetrofitCallback
+import kotlinx.coroutines.runBlocking
 
 private const val TAG = "RDReviewAdapter"
-class RouteDetailReviewAdapter(var owner: LifecycleOwner, var context: Context) : RecyclerView.Adapter<RouteDetailReviewAdapter.RouteDetailReviewHolder>(){
+class RouteDetailReviewAdapter(var owner: LifecycleOwner, var context: Context, val planViewModel: PlanViewModel) : RecyclerView.Adapter<RouteDetailReviewAdapter.RouteDetailReviewHolder>(){
     var list = mutableListOf<PlanReview>()
     inner class RouteDetailReviewHolder(private val binding : RecyclerviewRoutedetailReviewItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -102,6 +104,10 @@ class RouteDetailReviewAdapter(var owner: LifecycleOwner, var context: Context) 
 
         override fun onSuccess(code: Int, responseData: Boolean) {
             if(responseData){
+                runBlocking {
+                    planViewModel.getPlanById(list[position].planId, 2)
+                    planViewModel.getPlanReviewListbyId(list[position].planId)
+                }
                 Toast.makeText(context,"삭제되었습니다.", Toast.LENGTH_SHORT).show()
                 list.removeAt(position)
                 notifyDataSetChanged()

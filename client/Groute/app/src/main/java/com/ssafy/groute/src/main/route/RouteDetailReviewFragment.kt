@@ -39,6 +39,7 @@ class RouteDetailReviewFragment : BaseFragment<FragmentRouteDetailReviewBinding>
     }
 
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = planViewModel
@@ -52,11 +53,14 @@ class RouteDetailReviewFragment : BaseFragment<FragmentRouteDetailReviewBinding>
         binding.routedetailReviewIbtnWrite.setOnClickListener{
             mainActivity.moveFragment(14, "planId", planId)
         }
+        planViewModel.planReviewList.observe(viewLifecycleOwner,{
+            binding.routedetailReviewTvCount.text = "총 ${it.size}건"
+        })
     }
 
     private fun initAdapter(){
         planViewModel.planReviewList.observe(viewLifecycleOwner, Observer {
-            routeDetailReviewAdapter = RouteDetailReviewAdapter(viewLifecycleOwner, requireContext())
+            routeDetailReviewAdapter = RouteDetailReviewAdapter(viewLifecycleOwner, requireContext(), planViewModel)
             routeDetailReviewAdapter.list = it
             routeDetailReviewAdapter.setModifyClickListener(object : RouteDetailReviewAdapter.ModifyClickListener {
                 override fun onClick(position: Int) {

@@ -9,6 +9,9 @@
         <variable
             name="review"
             type="com.ssafy.groute.src.dto.PlaceReview" />
+        <variable
+            name="reviewSize"
+            type="int" />
     </data>
     <FrameLayout
         android:layout_width="match_parent"
@@ -38,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
-                    android:text="@{@string/convert_review_count(viewModel.placeReviewList.size())}" />
+                    android:text="@{@string/convert_review_count(reviewSize)}" />
 
                 <ImageButton
                     android:id="@+id/review_ibtn_write"

@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.ssafy.groute.R
 import com.ssafy.groute.config.ApplicationClass
 import com.ssafy.groute.config.BaseFragment
@@ -21,6 +22,7 @@ import com.ssafy.groute.src.main.MainActivity
 import com.ssafy.groute.src.service.UserPlanService
 import com.ssafy.groute.src.viewmodel.PlanViewModel
 import com.ssafy.groute.util.RetrofitCallback
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -31,6 +33,8 @@ class SharePlanWriteFragment : BaseFragment<FragmentSharePlanWriteBinding>(Fragm
     private lateinit var mainActivity: MainActivity
     private val planViewModel: PlanViewModel by activityViewModels()
     private var planId = -1
+
+    private lateinit var editTextSubscription: Disposable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +54,7 @@ class SharePlanWriteFragment : BaseFragment<FragmentSharePlanWriteBinding>(Fragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.plan = planViewModel
+
         runBlocking {
             planViewModel.getPlanById(planId, 2)
         }
@@ -57,18 +62,22 @@ class SharePlanWriteFragment : BaseFragment<FragmentSharePlanWriteBinding>(Fragm
         binding.planShareBtnComplete.setOnClickListener {
             updatePlan()
         }
+
         binding.sharePlanIbtnBack.setOnClickListener {
             mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
             mainActivity.supportFragmentManager.popBackStack()
         }
+
+        initTiedListener()
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
-    fun updatePlan(){
+    private fun updatePlan(){
         var userPlan = planViewModel.planList.value!!
 
         var plan = UserPlan(
             areaId = userPlan.areaId,
-            description = binding.planShareEtContent.text.toString(),
+            description = binding.sharePlanTietContent.text.toString(),
             endDate = userPlan.endDate,
             heartCnt = 0,
             id = userPlan.id,
@@ -92,7 +101,7 @@ class SharePlanWriteFragment : BaseFragment<FragmentSharePlanWriteBinding>(Fragm
         }
         if(routeDetailSize > 2){
             if(caldate > 0){
-                if(binding.planShareEtContent.text.toString().length > 30){
+                if(textLengthChk(binding.sharePlanTietContent.text.toString()) == true){
                     UserPlanService().updateUserPlan(plan, object: RetrofitCallback<Boolean> {
                         override fun onError(t: Throwable) {
                             Log.d(TAG, "onError: ")
@@ -128,8 +137,40 @@ class SharePlanWriteFragment : BaseFragment<FragmentSharePlanWriteBinding>(Fragm
 
             builder.show()
         }
-
     }
+
+    // init TextInputEditText Listener
+    private fun initTiedListener() {
+        editTextSubscription = binding.sharePlanTietContent
+            .textChanges()
+            .subscribe {
+                textLengthChk(it.toString())
+            }
+    }
+
+    private fun textLengthChk(str : String) : Boolean {
+        if(str.trim().isEmpty()){
+            binding.sharePlanTilContent.error = "Required Field"
+            binding.sharePlanTietContent.requestFocus()
+            return false
+        } else if(str.length <= 30 || str.length >= 255) {
+            binding.sharePlanTilContent.error = "30자 이상 255자 이하로 작성해주세요."
+            binding.sharePlanTietContent.requestFocus()
+            return false
+        }
+        else {
+            binding.sharePlanTilContent.error = null
+            return true
+        }
+    }
+
+
+    override fun onDestroy() {
+        editTextSubscription.dispose()
+        mainActivity.hideBottomNav(false)
+        super.onDestroy()
+    }
+
     companion object {
         @JvmStatic
         fun newInstance(key1: String, value1: Int) =

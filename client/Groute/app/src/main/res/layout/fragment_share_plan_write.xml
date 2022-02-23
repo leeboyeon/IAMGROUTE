@@ -68,32 +68,64 @@
 
             <TextView
                 android:id="@+id/textView34"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
                 android:text="@{plan.planList.title}"
                 android:textColor="@color/black"
                 android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView33"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
 
-            <EditText
-                android:id="@+id/planShare_et_content"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/sharePlan_til_content"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="30dp"
                 android:background="@android:color/transparent"
-                android:ems="10"
-                android:gravity="start|top"
+                android:maxLength="255"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:errorEnabled="true"
+                android:layout_marginBottom="20dp"
                 android:hint="여행에 대한 팁, 특별한 점 등을 알려주세요"
-                android:inputType="textMultiLine"
-                android:padding="10dp"
+                app:layout_constraintBottom_toTopOf="@+id/planShare_btn_complete"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView33" />
+                app:layout_constraintTop_toBottomOf="@+id/textView33">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/sharePlan_tiet_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/edittext_background"
+                    android:inputType="textMultiLine"
+                    android:lines="20"
+                    android:scrollbars="vertical" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+<!--            <EditText-->
+<!--                android:id="@+id/planShare_et_content"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_marginStart="30dp"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:layout_marginEnd="30dp"-->
+<!--                android:background="@android:color/transparent"-->
+<!--                android:ems="10"-->
+<!--                android:gravity="start|top"-->
+<!--                android:hint="여행에 대한 팁, 특별한 점 등을 알려주세요"-->
+<!--                android:inputType="textMultiLine"-->
+<!--                android:padding="10dp"-->
+<!--                app:layout_constraintBottom_toTopOf="@+id/planShare_btn_complete"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/textView33" />-->
 
             <Button
                 android:id="@+id/planShare_btn_complete"
