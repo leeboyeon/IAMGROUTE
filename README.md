@@ -90,6 +90,7 @@ If the api is external, link to api documentation. If not describe your api incl
 and more [DataBase](https://github.com/leeboyeon/iamgroute/blob/c659993bfa96e365a0f8bce253b6945fb76e1520/database)
 
 ## Licensing
-
-State what the license is and how to find the text version of the license.
+- android library
+  - beacon : https://mvnrepository.com/artifact/org.altbeacon/android-beacon-library
+  - chart : https://github.com/ybq/Android-SpinKit
 
