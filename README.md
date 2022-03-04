@@ -7,6 +7,8 @@
 
 please read this [presentation](https://github.com/leeboyeon/iamgroute/blob/10c034e923835d983a7106f9ffa8d1caae5652c5/document/%EC%B5%9C%EC%A2%85_%EA%B5%AC%EB%AF%B8_1%EB%B0%98_D109_%EB%B0%9C%ED%91%9C%EC%9E%90%EB%A3%8C.pptx) 
 
+<img src="exec/scenario_image/main_1.jpg" width="300">
+
 ## Installing / Getting started
 
 [➡ 포팅메뉴얼 바로가기](https://github.com/leeboyeon/iamgroute/blob/79ec5c5fef404fbff48d05d5721eb32c61bcc9bb/exec/%ED%8F%AC%ED%8C%85%20%EB%A7%A4%EB%89%B4%EC%96%BC.md)
