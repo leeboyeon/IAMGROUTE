@@ -12,10 +12,17 @@
 ## Developing
 
 ### Built With
-List main libraries, frameworks used including versions (React, Angular etc...)
+- android compileSdkVersion 30
+- android buildToolsVersion 30.0.3
+- android minSdkVersion 21
+- android targetSdkVersion 30
+- Java Version 1.8
+
 
 ### Prerequisites
-What is needed to set up the dev environment. For instance, global dependencies or any other tools. include download links.
+- android minSdkVer : Oreo 8.0 이상
+- android API Level : 26 이상
+- Android version 5.0, API 레벨 21도 설치는 가능하나 많은 기능에 제약이 있음.
 
 
 ### Setting up Dev
@@ -24,13 +31,11 @@ Here's a brief intro about what a developer must do in order to start developing
 the project further:
 
 ```shell
-git clone https://github.com/your/your-project.git
+git clone https://github.com/leeboyeon/iamgroute.git
 cd your-project/
 packagemanager install
 ```
-
-And state what happens step-by-step. If there is any virtual environment, local server or database feeder needed, explain here.
-
+Please refer to the [portingmanual](https://github.com/leeboyeon/iamgroute/blob/79ec5c5fef404fbff48d05d5721eb32c61bcc9bb/exec/%ED%8F%AC%ED%8C%85%20%EB%A7%A4%EB%89%B4%EC%96%BC.md) for detailed explanation.
 ### Building
 
 If your project needs some additional steps for the developer to build the
@@ -67,16 +72,11 @@ Here you should write what are all of the configurations a user can enter when u
 
 ## Tests
 
-Describe and show how to run the tests with code examples.
-Explain what these tests test and why.
+테스트를 위한 시나리오를 참고해주세요
+Please refer to the scenario for testing
 
-```shell
-Give an example
-```
+[➡ 테스트시나리오 바로가기](https://github.com/leeboyeon/iamgroute/blob/c659993bfa96e365a0f8bce253b6945fb76e1520/exec/scenario.md)
 
-## Style guide
-
-Explain your code style and show how to check it.
 
 ## Api Reference
 
@@ -85,8 +85,9 @@ If the api is external, link to api documentation. If not describe your api incl
 
 ## Database
 
-Explaining what database (and version) has been used. Provide download links.
-Documents your database design and schemas, relations etc... 
+- data base : MySQL
+
+and more [DataBase](https://github.com/leeboyeon/iamgroute/blob/c659993bfa96e365a0f8bce253b6945fb76e1520/database)
 
 ## Licensing
 
